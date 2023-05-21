@@ -1,5 +1,7 @@
 server:
   port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: '/api'
 spring:
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost/gelecekbilimde}
