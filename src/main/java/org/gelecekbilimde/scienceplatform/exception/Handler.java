@@ -13,7 +13,10 @@ import java.util.HashMap;
 @ControllerAdvice
 public class Handler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Handler.class);
+	private static final Logger LOGGER 	= LoggerFactory.getLogger(Handler.class);
+	private static final String ERROR 	= "error";
+	private static final String WARN 	= "warn";
+	private static final String INFO 	= "info";
 
 	@ExceptionHandler(value = {ClientException.class})
 	public ResponseEntity<Object> handleClientException(ClientException e, HttpServletRequest request) {
@@ -21,8 +24,7 @@ public class Handler {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		String message = e.getMessage();
 
-		LOGGER.info(message);
-		return trowException(request, status, message);
+		return trowException(request, status, message,INFO);
 	}
 
 	@ExceptionHandler(value = {NotAllowedException.class})
@@ -31,18 +33,16 @@ public class Handler {
 		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
 		String message = e.getMessage();
 
-		LOGGER.info(message);
-		return trowException(request, status, message);
+		return trowException(request, status, message,WARN);
 	}
 
 	@ExceptionHandler(value = {NotFoundException.class})
 	public ResponseEntity<Object> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
 
-		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+		HttpStatus status = HttpStatus.NOT_FOUND;
 		String message = e.getMessage();
 
-		LOGGER.info(message);
-		return trowException(request, status, message);
+		return trowException(request, status, message,INFO);
 	}
 
 	@ExceptionHandler(value = {UnAuthorizedException.class})
@@ -51,27 +51,41 @@ public class Handler {
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
 		String message = e.getMessage();
 
-		LOGGER.info(message);
-		return trowException(request, status, message);
+		return trowException(request, status, message,WARN);
 	}
 
 	@ExceptionHandler(value = {ServerException.class})
 	public ResponseEntity<Object> handleServerException(ServerException e, HttpServletRequest request) {
 
-		HttpStatus status = HttpStatus.BAD_REQUEST;
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String message = e.getMessage();
 
-		LOGGER.error(message);
-		return trowException(request, status, message);
+		return trowException(request, status, message,ERROR);
 	}
 
-	private ResponseEntity<Object> trowException(HttpServletRequest request, HttpStatus status, String message) {
+	private ResponseEntity<Object> trowException(HttpServletRequest request, HttpStatus status, String message,String logLevel) {
 
 		String path = request.getRequestURI();
 		String method = request.getMethod();
 
 		Exception exception = new Exception(path, status, method, message, new HashMap<>());
+		writeLog(logLevel, exception.errorCode, message);
 
 		return new ResponseEntity<>(exception, status);
+	}
+
+	private void writeLog(String level, String errorCode, String message)
+	{
+		String formatMessage = messageFormat(message,errorCode);
+		switch (level) {
+			case "warn" -> LOGGER.warn(formatMessage);
+			case "error" -> LOGGER.error(formatMessage);
+			default -> LOGGER.info(formatMessage);
+		}
+	}
+
+	private String messageFormat(String message, String errorCode)
+	{
+		return  String.format("ErrorId :: %5s | %s", errorCode, message);
 	}
 }

@@ -18,16 +18,19 @@ public class Exception {
 
 	private final Map<String, Object> args;
 
-	public Exception(String path, HttpStatus httpStatus, String httpMethod, String message, @Nullable Map<String, Object> args) {
-		this.path = path;
-		this.message = message;
-		this.statusText = httpStatus;
-		this.status = httpStatus.value();
-		this.method = httpMethod;
-		this.args = args != null ? args : new HashMap<>();
+	public  String errorCode;
 
-		String errorId = getErrorId();
-		String timestamp = getTimestamp();
+	public Exception(String path, HttpStatus httpStatus, String httpMethod, String message, @Nullable Map<String, Object> args) {
+		this.path 			= path;
+		this.message 		= message;
+		this.statusText 	= httpStatus;
+		this.status 		= httpStatus.value();
+		this.method 		= httpMethod;
+		this.args = args 	!= null ? args : new HashMap<>();
+
+		setErrorCode();
+		this.errorCode 		= getErrorCode();
+		String timestamp 	= getTimestamp();
 
 		//	Map<String, Object> request = getRequest(args);
 	}
@@ -54,8 +57,11 @@ public class Exception {
 		return ZonedDateTime.now(ZoneId.of("Z")).format(formatter);
 	}
 
-	public String getErrorId() {
-		return UUID.randomUUID().toString();
+	public String getErrorCode() {
+		return errorCode;
+	}
+	public void setErrorCode() {
+		this.errorCode =  UUID.randomUUID().toString();
 	}
 
 	public String getMethod() {
