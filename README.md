@@ -26,3 +26,57 @@ Gelecek bilimde topluluğu, Bilim ileşimi
 [Frontend](https://github.com/gelecekbilimde/gelecek-bilimde-frontend)
 
 [Android](https://github.com/gelecekbilimde/Android-Application)
+
+
+## Commit Mesajları
+### Git mejlarında bir starndartda yazmak için en başına commit ne ile alakalı ise onun başlığını yazarız. (feat,imp,fix) Genellikle bir commitin içerisnde tek tip başlık olması daha düzenli versiyon yönetimi için önemlidir.
+```text
+feat : Yeni bir özellik geliştirildiğini bildirmek için. Açılımı : feature 
+imp  : Var olan bir özellik üzerinde refactor yapıldıysa veya ek bir alt özellik geliştirildiyse kullanılır. Açılımı : improve
+fix  : Var olan bir özellikte hata düzeltmelerini belirtmek için (hotfix gibi durumlarıda içerir) Açılımı:fix
+```
+
+### Örnek Git Mesajı;
+```text
+feat : Post servisi geliştirldi
+imp  : Api dönüşlerine timestamp eklendi
+fix  : Kullanıcı kendi yorumunu düzenlerken yetki hatası sorunu düzeltildi
+```
+
+## Örnek Api Dönüşleri 
+### Başarılı (200 , 201, 207)
+``` json
+{
+    "statusText": "OK",
+    "status": 200,
+    "list": {
+        "message": "API version: 0.0.1"
+    },
+    "count": 1,
+    "timestamp": "2023-05-31 21:58:45",
+    "request": {
+        "args": {
+            "v":"v1"
+        },
+        "path": "http://localhost:8057/api/version",
+        "params": {
+            "param1": "44",
+            "param2": "123"
+        }
+    },
+    "responseCode": "43e9f812-8a7c-49f9-812e-024ee0705f9b"
+}
+```
+### Başarısız (400, 401, 404, 405, 422, 500, 503)
+``` json
+{
+    "path": "/api/version",
+    "message": "Versiyon Alınamadı",
+    "status": 400,
+    "statusText": "BAD_REQUEST",
+    "method": "GET",
+    "args": {},
+    "errorCode": "0ada5a5c-6834-4df6-9452-ddf6c64b03a8",
+    "timestamp": "2023-05-31 22:19:07"
+}
+```
