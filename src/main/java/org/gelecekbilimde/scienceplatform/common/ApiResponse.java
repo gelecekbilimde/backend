@@ -108,6 +108,10 @@ public class ApiResponse {
 		HashMap<String, String> params = new HashMap<>();
 
 		String queryString = httpRequest.getQueryString();
+		if (queryString == null){
+			return params;
+		}
+
 		String[] parameters = queryString.split("&");
 
 		for (String parameter : parameters) {
