@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 /runtime/
+/src/main/resources/certs/
