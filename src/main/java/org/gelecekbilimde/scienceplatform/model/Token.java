@@ -1,11 +1,11 @@
-package org.gelecekbilimde.scienceplatform.token;
+package org.gelecekbilimde.scienceplatform.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.user.User;
+import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
 
 @Data
 @Builder
@@ -18,7 +18,7 @@ public class Token {
 	@GeneratedValue
 	public Integer id;
 
-	@Column(unique = true)
+	@Column(columnDefinition = "text")
 	public String token;
 
 	@Enumerated(EnumType.STRING)
@@ -31,4 +31,5 @@ public class Token {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	public User user;
+
 }

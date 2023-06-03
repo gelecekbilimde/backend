@@ -1,13 +1,12 @@
-package org.gelecekbilimde.scienceplatform.user;
+package org.gelecekbilimde.scienceplatform.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.post.Post;
-import org.gelecekbilimde.scienceplatform.token.Token;
+import org.gelecekbilimde.scienceplatform.model.enums.Degree;
+import org.gelecekbilimde.scienceplatform.model.enums.Gender;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -33,7 +32,6 @@ public class User implements UserDetails {
 
 	private String email;
 
-	@JsonIgnore
 	@Column(name = "password", nullable = false)
 	private String password;
 
@@ -44,9 +42,13 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
+	@OneToOne
+	@JoinColumn(name = "role",referencedColumnName = "role")
+	private Role role;
 
 	@OneToMany(mappedBy = "user")
 	private List<Token> tokens;
+
 
 	@ManyToMany
 	@JoinTable(
@@ -55,10 +57,10 @@ public class User implements UserDetails {
 		inverseJoinColumns = @JoinColumn(name = "followed_id"))
 	private Set<User> followedUsers = new HashSet<>();
 
-
+	@Column(columnDefinition = "text")
 	private String avatarPath;
 
-	@Lob
+	@Column(columnDefinition = "text")
 	private String bio;
 
 	@Column(columnDefinition = "INTEGER")
@@ -74,7 +76,7 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return role.getPermissions();
 	}
 
 	@Override
@@ -87,23 +89,29 @@ public class User implements UserDetails {
 		return email;
 	}
 
+
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return true;
+
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return false;
+		return true;
+	}
+
+	public Role getRole() {
+		return role;
 	}
 }

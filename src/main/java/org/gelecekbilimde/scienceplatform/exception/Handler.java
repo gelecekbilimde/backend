@@ -60,6 +60,14 @@ public class Handler {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String message = e.getMessage();
 
+		return trowException(request, status, message, ERROR);
+	}
+	@ExceptionHandler(value = {UserNotFoundException.class})
+	public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException e, HttpServletRequest request) {
+
+		HttpStatus status = HttpStatus.UNAUTHORIZED;
+		String message = e.getMessage();
+
 		return trowException(request, status, message,ERROR);
 	}
 
@@ -68,8 +76,14 @@ public class Handler {
 		String path = request.getRequestURI();
 		String method = request.getMethod();
 
+		String originalMessage = message;
+		if (status == HttpStatus.INTERNAL_SERVER_ERROR){
+			message = "Beklenmeyen bir hata oldu Hemen ilgileneceğiz";
+		}
+
 		Exception exception = new Exception(path, status, method, message, new HashMap<>());
-		writeLog(logLevel, exception.errorCode, message);
+
+		writeLog(logLevel, exception.errorCode, originalMessage);
 
 		return new ResponseEntity<>(exception, status);
 	}
