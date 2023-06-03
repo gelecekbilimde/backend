@@ -19,6 +19,32 @@ Gelecek bilimde topluluğu, Bilim ileşimi
   docker compose up
 ```
 
+Secret Key işlemleri 
+``` bash
+mkdir resource/certs
+```
+``` bash
+openssl genrsa -out privatepair.key 2048
+```
+
+``` bash
+openssl rsa -in privatepair.key -pubout -out public.key
+```
+
+``` bash
+openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in privatepair.key -out private.key
+```
+
+``` bash
+rm privatepair.key
+```
+
+``` bash
+chmod 660 private.key public.key
+```
+
+db seeding 
+resource/db/seed.sql çaliştırılmalı
 
 
 ## İlişkili Projeler

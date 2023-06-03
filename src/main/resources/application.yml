@@ -18,10 +18,15 @@ spring:
     database: ${DATABASE:postgresql}
     database-platform: ${DATABASE_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
 
-#application:
-#  security:
-#    jwt:
-#      secret-key:
-#      expiration:
-#     refresh-token:
-#       expiration:
+
+application:
+  security:
+    jwt:
+      private-key: ${PRIVATE_KEY_PATH}
+      public-key: ${PUBLIC_KEY_PATH}
+      expiration: ${TOKEN_EXPIRE_MILLISECOND:86400000} # day
+      refresh-token:
+        expiration: ${REFRESH_TOKEN_EXPIRE_MILLISECOND:604800000} # 7 day
+      guest-token:
+        expiration: ${GUEST_TOKEN_EXPIRE_MILLISECOND:604800000} # 7 day
+
