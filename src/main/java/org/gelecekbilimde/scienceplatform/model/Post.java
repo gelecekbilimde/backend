@@ -1,9 +1,7 @@
-package org.gelecekbilimde.scienceplatform.post;
+package org.gelecekbilimde.scienceplatform.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.gelecekbilimde.scienceplatform.comment.Comment;
-import org.gelecekbilimde.scienceplatform.user.User;
 
 import java.util.*;
 
@@ -22,8 +20,7 @@ public class Post {
 	@Column(nullable = false)
 	private String header;
 
-	@Lob
-	@Column(nullable = false)
+	@Column(columnDefinition = "text", nullable = false)
 	private String content;
 
 	@Column(columnDefinition = "boolean default false")
