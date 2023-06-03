@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.user;
+package org.gelecekbilimde.scienceplatform.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

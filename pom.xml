@@ -6,7 +6,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>3.0.6</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath/>
   </parent>
   <groupId>org.gelecekbilimde.science.platform</groupId>
   <artifactId>science-platform</artifactId>
@@ -51,7 +51,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
@@ -87,6 +86,11 @@
       <version>0.11.5</version>
     </dependency>
     <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>8.0.0.Final</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
       <exclusions>
@@ -96,7 +100,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-log4j2</artifactId>
@@ -106,7 +109,6 @@
       <artifactId>slf4j-api</artifactId>
       <version>2.0.7</version>
     </dependency>
-
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
@@ -122,7 +124,6 @@
       <artifactId>log4j-slf4j-impl</artifactId>
       <version>2.20.0</version>
     </dependency>
-
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-yaml</artifactId>

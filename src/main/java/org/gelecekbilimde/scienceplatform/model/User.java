@@ -1,13 +1,12 @@
-package org.gelecekbilimde.scienceplatform.user;
+package org.gelecekbilimde.scienceplatform.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.post.Post;
-import org.gelecekbilimde.scienceplatform.token.Role;
-import org.gelecekbilimde.scienceplatform.token.Token;
+import org.gelecekbilimde.scienceplatform.model.enums.Degree;
+import org.gelecekbilimde.scienceplatform.model.enums.Gender;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -58,10 +57,10 @@ public class User implements UserDetails {
 		inverseJoinColumns = @JoinColumn(name = "followed_id"))
 	private Set<User> followedUsers = new HashSet<>();
 
-	@Lob
+	@Column(columnDefinition = "text")
 	private String avatarPath;
 
-	@Lob
+	@Column(columnDefinition = "text")
 	private String bio;
 
 	@Column(columnDefinition = "INTEGER")
@@ -90,10 +89,10 @@ public class User implements UserDetails {
 		return email;
 	}
 
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
-
 	}
 
 	@Override

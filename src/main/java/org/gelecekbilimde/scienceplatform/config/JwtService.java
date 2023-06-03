@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
-import org.gelecekbilimde.scienceplatform.user.User;
+import org.gelecekbilimde.scienceplatform.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -74,9 +74,7 @@ public class JwtService {
 	}
 
 
-	public String generateRefreshToken(
-		User user
-	) {
+	public String generateRefreshToken(User user) {
 		return buildToken(new HashMap<>(), user.getUsername(), refreshExpiration );
 	}
 

@@ -1,7 +1,10 @@
-package org.gelecekbilimde.scienceplatform.auth;
+package org.gelecekbilimde.scienceplatform.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.dto.AuthenticationRequest;
+import org.gelecekbilimde.scienceplatform.service.AuthenticationService;
+import org.gelecekbilimde.scienceplatform.dto.RegisterRequest;
 import org.gelecekbilimde.scienceplatform.common.ApiResponse;
 import org.gelecekbilimde.scienceplatform.common.Response;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +26,9 @@ public class AuthController {
 		return Response.ok(httpServletRequest, service.register(request));
 	}
 
-	@PostMapping("/authenticate")
-	public ResponseEntity<ApiResponse> authenticate(HttpServletRequest httpServletRequest, @RequestBody AuthenticationRequest request) {
-		return Response.ok(httpServletRequest, service.authenticate(request));
+	@PostMapping("/login")
+	public ResponseEntity<ApiResponse> login(HttpServletRequest httpServletRequest, @RequestBody AuthenticationRequest request) {
+		return Response.ok(httpServletRequest, service.login(request));
 	}
 
 	@PostMapping("/refresh-token")
