@@ -1,9 +1,9 @@
-package org.gelecekbilimde.scienceplatform.config;
+package org.gelecekbilimde.scienceplatform.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.token.TokenRepository;
+import org.gelecekbilimde.scienceplatform.repository.TokenRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,14 +1,22 @@
-package org.gelecekbilimde.scienceplatform.auth;
+package org.gelecekbilimde.scienceplatform.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.config.JwtService;
+import org.gelecekbilimde.scienceplatform.dto.AuthenticationRequest;
+import org.gelecekbilimde.scienceplatform.dto.AuthenticationResponse;
+import org.gelecekbilimde.scienceplatform.dto.RegisterRequest;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
-import org.gelecekbilimde.scienceplatform.token.*;
-import org.gelecekbilimde.scienceplatform.user.User;
-import org.gelecekbilimde.scienceplatform.user.UserRepository;
+import org.gelecekbilimde.scienceplatform.model.Permission;
+import org.gelecekbilimde.scienceplatform.model.Role;
+import org.gelecekbilimde.scienceplatform.model.Token;
+import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
+import org.gelecekbilimde.scienceplatform.repository.RoleRepository;
+import org.gelecekbilimde.scienceplatform.repository.TokenRepository;
+import org.gelecekbilimde.scienceplatform.model.User;
+import org.gelecekbilimde.scienceplatform.repository.UserRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -62,7 +70,7 @@ public class AuthenticationService {
 			.build();
 	}
 
-	public AuthenticationResponse authenticate(AuthenticationRequest request) {
+	public AuthenticationResponse login(AuthenticationRequest request) {
 		try {
 
 			authenticationManager.authenticate(
@@ -93,6 +101,7 @@ public class AuthenticationService {
 				.build();
 
 		} catch (Exception e) {
+
 			throw new ServerException(e.getMessage());
 		}
 

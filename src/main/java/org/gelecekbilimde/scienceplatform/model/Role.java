@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.token;
+package org.gelecekbilimde.scienceplatform.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

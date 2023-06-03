@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.auth;
+package org.gelecekbilimde.scienceplatform.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
