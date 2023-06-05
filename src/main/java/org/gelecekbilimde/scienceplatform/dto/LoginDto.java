@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Email;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class LoginDto {
 
 	@NotNull(message = "Email cannot be null")
 	@Email(message = "Email should be valid")
@@ -21,6 +21,5 @@ public class AuthenticationRequest {
 	@NotNull(message = "Password cannot be null")
 	@Min(value = 8, message = "Password should not be less than 8")
 	private String password;
-
 
 }

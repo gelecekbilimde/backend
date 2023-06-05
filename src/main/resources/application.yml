@@ -1,32 +1,41 @@
-server:
-  port: ${SERVER_PORT:8080}
-  servlet:
-    context-path: '/api'
+
+environment:
+  path_folder: C:\Users\ferhatozcelik\Desktop\local_environment\
+  env_name: env.properties
+  private_key_path: ${environment.path_folder}certs\private.key
+  public_key_path: ${environment.path_folder}certs\public.key
+
 spring:
+  config:
+    import: file:${environment.path_folder}${environment.env_name}
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost/gelecekbilimde}
-    username: ${DATABASE_USER:postgres}
-    password: ${DATABASE_PASSWORD:password}
-    driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: ${DATABASE_DRIVER}
   jpa:
     hibernate:
-      ddl-auto: ${DATABASE_DDL_AUTO:create-drop}
-    show-sql: ${SHOW_SQL:false}
+      ddl-auto: ${DATABASE_DDL_AUTO}
+    database-platform: ${DATABASE_PLATFORM}
+    database: ${DATABASE}
+    show-sql: ${SHOW_SQL}
     properties:
       hibernate:
         format_sql: true
-    database: ${DATABASE:postgresql}
-    database-platform: ${DATABASE_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
 
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    context-path: '/api'
 
 application:
   security:
     jwt:
-      private-key: ${PRIVATE_KEY_PATH}
-      public-key: ${PUBLIC_KEY_PATH}
-      expiration: ${TOKEN_EXPIRE_MILLISECOND:86400000} # day
+      private-key: ${environment.private_key_path}
+      public-key: ${environment.public_key_path}
+      expiration: ${TOKEN_EXPIRE_MILLISECOND}
       refresh-token:
-        expiration: ${REFRESH_TOKEN_EXPIRE_MILLISECOND:604800000} # 7 day
+        expiration: ${REFRESH_TOKEN_EXPIRE_MILLISECOND}
       guest-token:
-        expiration: ${GUEST_TOKEN_EXPIRE_MILLISECOND:604800000} # 7 day
+        expiration: ${GUEST_TOKEN_EXPIRE_MILLISECOND}
 

@@ -20,10 +20,10 @@ public class Comment {
 	@Column(columnDefinition = "text", nullable = false)
 	private String comment;
 
+	@Column(columnDefinition = "integer", nullable = false)
 	private Integer likeCount;
 
 	@ManyToMany(mappedBy = "comments")
 	private Set<Post> posts = new HashSet<>();
-
 
 }
