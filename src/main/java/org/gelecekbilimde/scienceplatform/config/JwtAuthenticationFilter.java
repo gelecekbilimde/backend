@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		// todo many to many yapılandırmasında boş sonuç döndüğü için böyle !!!!! Düzeltilmeli!!!!!!!
 		Role role = roleRepository.findByRole(roleName).orElseThrow(()->new ServerException("Role bilgisine ulaşılamadı"));
-		Set<Permission>  permissions = new HashSet<>(roleRepository.findPermissionsByRole(roleName));
+		Set<Permission> permissions = new HashSet<>(roleRepository.findPermissionsByRole(roleName));
 		role.setPermissions(permissions);
 
 		if (jwtService.GUEST_USERNAME.equals(roleName) && jwtService.isGuestTokenValid(jwt)){
