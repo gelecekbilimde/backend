@@ -98,11 +98,7 @@ public class AuthenticationService {
 
 		var refreshToken = jwtService.generateRefreshToken(user);
 
-		return TokenDto
-			.builder()
-			.accessToken(jwtToken)
-			.refreshToken(refreshToken)
-			.build();
+		return new TokenDto(jwtToken, refreshToken).getTokenBuilder();
 	}
 
 	public TokenDto login(LoginDto request) {
@@ -137,12 +133,7 @@ public class AuthenticationService {
 			revokeAllUserTokens(user);
 			saveUserToken(user,jwtToken);
 
-			return TokenDto
-				.builder()
-				.accessToken(jwtToken)
-				.refreshToken(refreshToken)
-				.build();
-
+			return new TokenDto(jwtToken, refreshToken).getTokenBuilder();
 		} catch (Exception e) {
 			throw new ServerException(e.getMessage());
 		}
@@ -211,14 +202,12 @@ public class AuthenticationService {
 		revokeAllUserTokens(user);
 		saveUserToken(user, accessToken);
 
-		return TokenDto.builder()
-			.accessToken(accessToken)
-			.refreshToken(refreshToken)
-			.build();
+		return new TokenDto(accessToken, refreshToken).getTokenBuilder();
+
 	}
 
 	private List<String> scopeList(String role) {
-		List<Permission> rolePermission =roleRepository.findPermissionsByRole(role);
+		List<Permission> rolePermission = roleRepository.findPermissionsByRole(role);
 		return rolePermission.stream().map(Permission::getPermission).toList();
 	}
 

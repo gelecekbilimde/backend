@@ -14,4 +14,8 @@ public class TokenDto {
 	private String accessToken;
 	private String refreshToken;
 
+	public TokenDto getTokenBuilder() {
+		return TokenDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+	}
+
 }
