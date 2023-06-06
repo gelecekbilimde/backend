@@ -21,7 +21,6 @@ public class Handler {
 	@ExceptionHandler(value = {ClientException.class})
 	public ResponseEntity<Object> handleClientException(ClientException e, HttpServletRequest request) {
 
-		// IS_ALREADT_REGISTER
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String message = e.getMessage();
 
