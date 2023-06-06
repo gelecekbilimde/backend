@@ -52,12 +52,12 @@ public class User implements UserDetails {
 	private String biography;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "date")
+	@Column(columnDefinition = "timestamp")
 	private Date birthDate;
 
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "date")
+	@Column(columnDefinition = "timestamp")
 	private Date createDate;
 
 	@Column(columnDefinition = "boolean default false")
