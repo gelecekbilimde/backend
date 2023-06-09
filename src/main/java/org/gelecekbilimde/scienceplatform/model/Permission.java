@@ -21,10 +21,10 @@ public class Permission {
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "permission", length = 100, nullable = false, unique = true)
+	@Column(columnDefinition = "varchar(255)", nullable = false, unique = true)
 	private String permission;
 
-	@Column(name = "description", length = 255, nullable = true)
+	@Column(columnDefinition = "varchar(255)", nullable = false)
 	private String description;
 
 	@ManyToMany(mappedBy = "permissions", fetch = FetchType.EAGER)

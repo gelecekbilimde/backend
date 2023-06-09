@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class TokenDto {
 
-	private String firstname;
-	private String lastname;
-	private String email;
-	private String password;
+	private String accessToken;
+	private String refreshToken;
+
+	public TokenDto getTokenBuilder() {
+		return TokenDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+	}
 
 }

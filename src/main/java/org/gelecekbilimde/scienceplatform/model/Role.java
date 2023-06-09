@@ -24,18 +24,17 @@ public class Role {
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "role", length = 55, nullable = false, unique = true)
+	@Column(columnDefinition = "varchar(55)", nullable = false, unique = true)
 	private String role;
 
-	@Column(name = "description", length =255, nullable = true)
+	@Column(columnDefinition = "varchar(255)")
 	private String description;
 
+	@Column(columnDefinition = "boolean default false")
 	private Boolean isDefault;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "role_permission",
-		joinColumns = @JoinColumn(name = "role_id"),
-		inverseJoinColumns = @JoinColumn(name = "permission_id"))
+	@JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
 	@Fetch(FetchMode.SELECT)
 	private Set<Permission> permissions = new HashSet<>();
 
@@ -45,8 +44,7 @@ public class Role {
 			.map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
 			.collect(Collectors.toList());
 		authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole()));
-
-
 		return  authorities;
 	}
+
 }

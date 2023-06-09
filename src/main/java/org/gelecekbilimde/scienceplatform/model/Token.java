@@ -12,6 +12,7 @@ import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "tokens")
 public class Token {
 
 	@Id
@@ -24,8 +25,10 @@ public class Token {
 	@Enumerated(EnumType.STRING)
 	public TokenType tokenType = TokenType.BEARER;
 
+	@Column(columnDefinition = "boolean default false")
 	public boolean revoked;
 
+	@Column(columnDefinition = "boolean default false")
 	public boolean expired;
 
 	@ManyToOne(fetch = FetchType.LAZY)

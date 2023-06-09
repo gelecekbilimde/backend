@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.model.enums.Degree;
 import org.gelecekbilimde.scienceplatform.model.enums.Gender;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,67 +18,71 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(name = "users")
 public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "name",length = 25, nullable = false)
+	@Column(columnDefinition = "varchar(25)", nullable = false)
 	private String name;
 
-	@Column(name = "lastname",length = 25, nullable = false)
+	@Column(columnDefinition = "varchar(25)", nullable = false)
 	private String lastname;
 
+	@Column(columnDefinition = "varchar(255)", nullable = false)
 	private String email;
 
-	@Column(name = "password", nullable = false)
+	@Column(columnDefinition = "varchar(255)", nullable = false)
 	private String password;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "birth_date", nullable = true)
-	private Date birthDate;
+	@Column(columnDefinition = "varchar(255)")
+	private String avatarPath;
 
 	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "varchar(255)")
 	private Gender gender;
 
-	@OneToOne
-	@JoinColumn(name = "role",referencedColumnName = "role")
-	private Role role;
+	@Enumerated(EnumType.ORDINAL)
+	@Column(columnDefinition = "integer")
+	private Degree degree;
+
+	@Column(columnDefinition = "text")
+	private String biography;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "timestamp")
+	private Date birthDate;
+
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "timestamp")
+	private Date createDate;
+
+	@Column(columnDefinition = "boolean default false")
+	public boolean emailVerify = false;
+
+	@Column(columnDefinition = "boolean default true")
+	public boolean userEnable = true;
+
+	@Column(columnDefinition = "boolean default false")
+	public boolean userLock = false;
 
 	@OneToMany(mappedBy = "user")
 	private List<Token> tokens;
 
+	@OneToOne
+	@JoinColumn(referencedColumnName = "role")
+	private Role role;
 
 	@ManyToMany
-	@JoinTable(
-		name = "follower",
-		joinColumns = @JoinColumn(name = "follower_id"),
-		inverseJoinColumns = @JoinColumn(name = "followed_id"))
-	private Set<User> followedUsers = new HashSet<>();
+	@JoinTable(name = "follower", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
+	private Set<User> followerUsers = new HashSet<>();
 
-	@Column(columnDefinition = "text")
-	private String avatarPath;
-
-	@Column(columnDefinition = "text")
-	private String bio;
-
-	@Column(columnDefinition = "INTEGER")
-	private Degree degree;
-
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(
-		name = "user_post",
-		joinColumns = @JoinColumn(name = "user_id"),
-		inverseJoinColumns = @JoinColumn(name = "post_id")
-	)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "user_post", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "post_id"))
 	private Set<Post> posts = new HashSet<>();
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return role.getPermissions();
-	}
 
 	@Override
 	public String getPassword() {
@@ -89,6 +94,20 @@ public class User implements UserDetails {
 		return email;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return role.getPermissions();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return userEnable;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return !userLock;
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -96,22 +115,8 @@ public class User implements UserDetails {
 	}
 
 	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
-
 	}
 
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-
-	public Role getRole() {
-		return role;
-	}
 }

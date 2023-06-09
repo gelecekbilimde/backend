@@ -2,9 +2,9 @@ package org.gelecekbilimde.scienceplatform.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.dto.AuthenticationRequest;
+import org.gelecekbilimde.scienceplatform.dto.LoginDto;
 import org.gelecekbilimde.scienceplatform.service.AuthenticationService;
-import org.gelecekbilimde.scienceplatform.dto.RegisterRequest;
+import org.gelecekbilimde.scienceplatform.dto.RegisterDto;
 import org.gelecekbilimde.scienceplatform.common.ApiResponse;
 import org.gelecekbilimde.scienceplatform.common.Response;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,12 @@ public class AuthController {
 	private final AuthenticationService service;
 
 	@PostMapping("/register")
-	public ResponseEntity<ApiResponse> register(HttpServletRequest httpServletRequest, @RequestBody RegisterRequest request) {
+	public ResponseEntity<ApiResponse> register(HttpServletRequest httpServletRequest, @RequestBody RegisterDto request) {
 		return Response.ok(httpServletRequest, service.register(request));
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<ApiResponse> login(HttpServletRequest httpServletRequest, @RequestBody AuthenticationRequest request) {
+	public ResponseEntity<ApiResponse> login(HttpServletRequest httpServletRequest, @RequestBody LoginDto request) {
 		return Response.ok(httpServletRequest, service.login(request));
 	}
 
