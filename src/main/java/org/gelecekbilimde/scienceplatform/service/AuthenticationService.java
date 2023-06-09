@@ -3,16 +3,19 @@ package org.gelecekbilimde.scienceplatform.service;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.config.JwtService;
-import org.gelecekbilimde.scienceplatform.dto.AuthenticationRequest;
-import org.gelecekbilimde.scienceplatform.dto.AuthenticationResponse;
-import org.gelecekbilimde.scienceplatform.dto.RegisterRequest;
+import org.gelecekbilimde.scienceplatform.dto.LoginDto;
+import org.gelecekbilimde.scienceplatform.dto.TokenDto;
+import org.gelecekbilimde.scienceplatform.dto.RegisterDto;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
 import org.gelecekbilimde.scienceplatform.model.Permission;
 import org.gelecekbilimde.scienceplatform.model.Role;
 import org.gelecekbilimde.scienceplatform.model.Token;
+import org.gelecekbilimde.scienceplatform.model.enums.Degree;
+import org.gelecekbilimde.scienceplatform.model.enums.Gender;
 import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
+import org.gelecekbilimde.scienceplatform.repository.BlackListRepository;
 import org.gelecekbilimde.scienceplatform.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.repository.TokenRepository;
 import org.gelecekbilimde.scienceplatform.model.User;
@@ -23,8 +26,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Service
@@ -37,21 +41,52 @@ public class AuthenticationService {
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 	private final RoleRepository roleRepository;
+	private final BlackListRepository blackListRepository;
 
-	public AuthenticationResponse register(RegisterRequest request) {
+	public TokenDto register(RegisterDto request) {
 
-		// todo: burada mail doğrulamayla birlikte varsa ve kitliyse gibi kontroller yapıp belki kilidini açmak lazım
-		if (userRepository.existsByEmail(request.getEmail())){
-			throw new ClientException("Mail sisteme kayıtlı");
+
+		if (blackListRepository.existsByEmail(request.getEmail())){
+			throw new ClientException("This user is black list registered");
 		}
 
-		Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException("Varsayılan Role tanımlanmamış."));
+		if (userRepository.existsByEmail(request.getEmail())){
+			throw new ClientException("This user is already registered");
+		}
+
+		Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException("Default Role is not defined."));
 		List<String> scope = scopeList(role.getRole());
+
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+		Date birthDate = null;
+		try {
+			birthDate = formatter.parse(request.getBirthDate());
+		} catch (ParseException e) {
+			throw new ClientException("BirthDate format is wrong. dd/MM/yyyy");
+		}
+
+		boolean isGenderExists = EnumSet.allOf(Gender.class).stream().anyMatch(e -> e.name().equals(request.getGender()));
+
+		if (!isGenderExists) {
+			throw new ClientException("gender type not found");
+		}
+
+		boolean isDegreeExists = EnumSet.allOf(Degree.class).stream().anyMatch(e -> e.name().equals(request.getDegree()));
+		if (!isDegreeExists) {
+			throw new ClientException("degree type not found");
+		}
+
 		var user = User.builder()
 			.name(request.getFirstname())
 			.lastname(request.getLastname())
 			.email(request.getEmail())
+			.birthDate(birthDate)
+			.biography(request.getBiography())
+			.gender(Gender.valueOf(request.getGender()))
+			.degree(Degree.valueOf(request.getDegree()))
 			.role(role)
+			.userEnable(true).userLock(false).emailVerify(false)
 			.password(passwordEncoder.encode(request.getPassword()))
 			.build();
 
@@ -63,50 +98,47 @@ public class AuthenticationService {
 
 		var refreshToken = jwtService.generateRefreshToken(user);
 
-		return AuthenticationResponse
-			.builder()
-			.accessToken(jwtToken)
-			.refreshToken(refreshToken)
-			.build();
+		return new TokenDto(jwtToken, refreshToken).getTokenBuilder();
 	}
 
-	public AuthenticationResponse login(AuthenticationRequest request) {
+	public TokenDto login(LoginDto request) {
 		try {
 
-			authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-					request.getEmail(),
-					request.getPassword()
-				)
-			);
-			var user = userRepository.findByEmail(request.getEmail())
-				.orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı : " + request.getEmail()));
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
+			var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
 
-			Role role = roleRepository.findByRole(user.getRole().getRole())
-				.orElseThrow(() -> new ServerException("Kullanıcı Scopenda problem var"));
+			if (blackListRepository.existsByEmail(user.getEmail())){
+				throw new ClientException("This user is black list registered");
+			}
+
+			if (!user.isEnabled()){
+				throw new ClientException("This User Not Enabled");
+			}
+
+			if (user.isUserLock()){
+				throw new ClientException("This UserLock");
+			}
+
+			if (!user.isEmailVerify()){
+				throw new ClientException("This Email Not Verify");
+			}
+
+			Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException("User Scope has a problem"));
 			List<String> scope = scopeList(role.getRole());
 
 			var jwtToken = jwtService.generateToken(user,scope);
 			var refreshToken = jwtService.generateRefreshToken(user);
 
-
 			revokeAllUserTokens(user);
 			saveUserToken(user,jwtToken);
 
-			return AuthenticationResponse
-				.builder()
-				.accessToken(jwtToken)
-				.refreshToken(refreshToken)
-				.build();
-
+			return new TokenDto(jwtToken, refreshToken).getTokenBuilder();
 		} catch (Exception e) {
-
 			throw new ServerException(e.getMessage());
 		}
 
 	}
-
 
 	private void revokeAllUserTokens(User user) {
 		var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
@@ -116,6 +148,7 @@ public class AuthenticationService {
 			token.setExpired(true);
 			token.setRevoked(true);
 		});
+
 		tokenRepository.saveAll(validUserTokens);
 	}
 
@@ -132,11 +165,10 @@ public class AuthenticationService {
 		tokenRepository.save(token);
 	}
 
-
-	public AuthenticationResponse generateGuestToken(){
+	public TokenDto generateGuestToken(){
 		var jwtToken = jwtService.generateGuestToken(jwtService.GUEST_USERNAME, scopeList(jwtService.GUEST_USERNAME));
 
-		return AuthenticationResponse
+		return TokenDto
 			.builder()
 			.accessToken(jwtToken)
 			.build();
@@ -158,8 +190,7 @@ public class AuthenticationService {
 			throw new ClientException("Kullanıcı bilgilerinde hata var");
 		}
 
-		var user = this.userRepository.findByEmail(userEmail)
-			.orElseThrow();
+		var user = this.userRepository.findByEmail(userEmail).orElseThrow();
 
 		if (!jwtService.isTokenValid(refreshToken, user)) {
 			throw new ClientException("Oturum bilgisinde hata var");
@@ -171,15 +202,13 @@ public class AuthenticationService {
 		revokeAllUserTokens(user);
 		saveUserToken(user, accessToken);
 
-		return AuthenticationResponse.builder()
-			.accessToken(accessToken)
-			.refreshToken(refreshToken)
-			.build();
+		return new TokenDto(accessToken, refreshToken).getTokenBuilder();
+
 	}
 
-	private List<String> scopeList(String role)
-	{
-		List<Permission> rolePermission =roleRepository.findPermissionsByRole(role);
+	private List<String> scopeList(String role) {
+		List<Permission> rolePermission = roleRepository.findPermissionsByRole(role);
 		return rolePermission.stream().map(Permission::getPermission).toList();
 	}
+
 }

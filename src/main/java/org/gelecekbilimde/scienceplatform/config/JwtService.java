@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
@@ -135,7 +136,7 @@ public class JwtService {
 
 	private PublicKey getSignInPublicKey(){
 		try {
-			String resource = new ClassPathResource(publicKeyPath).getFile().toString();
+			String resource = new File(publicKeyPath).getPath();
 			byte[] keyBytes = Files.readAllBytes(Paths.get(resource));
 			String keyContent = new String(keyBytes);
 			keyContent = keyContent.replaceAll("\\s+|-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----", "");
@@ -150,7 +151,7 @@ public class JwtService {
 	}
 	private PrivateKey getSignInPrivateKey() {
 		try {
-			String resource = new ClassPathResource(privateKeyPath).getFile().toString();
+			String resource = new File(privateKeyPath).getPath();
 			byte[] keyBytes = Files.readAllBytes(Paths.get(resource));
 			String keyContent = new String(keyBytes);
 			keyContent = keyContent.replaceAll("\\s+|-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----", "");

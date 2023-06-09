@@ -1,6 +1,6 @@
 # Gelecek Bilimde Topluluğu Bilim İletişimi Platformu [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)
 
-Gelecek bilimde topluluğu, Bilim ileşimi 
+Gelecek bilimde topluluğu, Bilim iletişimi 
 
 ## Lokal Ortam Kurulumu
 
@@ -17,6 +17,36 @@ Gelecek bilimde topluluğu, Bilim ileşimi
 
 ```bash
   docker compose up
+```
+
+ENV PARAMATERS
+
+path_folder: C:\Users\ferhatozcelik\Desktop\local_environment\
+
+in environment file 
+* **env.properties** 
+* **certs\private.key**
+* **certs\public.key**
+
+These files need to be and **path_folder** pat written here
+
+
+```bash
+    SERVER_PORT=8057
+    REDIS_PORT=6379
+    DATABASE=
+    DATABASE_USER=
+    DATABASE_PASSWORD=
+    DATABASE_URL=jdbc:
+    DATABASE_DDL_AUTO=update
+    DATABASE_DRIVER=org.postgresql.Driver
+    DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+    ELASTICSEARCH_URI=localhost:9200
+    GUEST_TOKEN_EXPIRE_MILLISECOND=604800000
+    REFRESH_TOKEN_EXPIRE_MILLISECOND=604800000
+    TOKEN_EXPIRE_MILLISECOND=86400000
+    REDIS_HOST=localhost
+    SHOW_SQL=false
 ```
 
 Secret Key işlemleri 
