@@ -35,3 +35,5 @@ build/
 /runtime/
 /src/main/resources/certs/
 
+/src/main/resources/dev.properties
+
