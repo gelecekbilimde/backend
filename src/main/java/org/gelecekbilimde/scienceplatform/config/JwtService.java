@@ -136,8 +136,7 @@ public class JwtService {
 
 	private PublicKey getSignInPublicKey(){
 		try {
-			String resource = new File(publicKeyPath).getPath();
-			byte[] keyBytes = Files.readAllBytes(Paths.get(resource));
+			byte[] keyBytes = Files.readAllBytes(Paths.get(publicKeyPath));
 			String keyContent = new String(keyBytes);
 			keyContent = keyContent.replaceAll("\\s+|-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----", "");
 
@@ -151,8 +150,7 @@ public class JwtService {
 	}
 	private PrivateKey getSignInPrivateKey() {
 		try {
-			String resource = new File(privateKeyPath).getPath();
-			byte[] keyBytes = Files.readAllBytes(Paths.get(resource));
+			byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyPath));
 			String keyContent = new String(keyBytes);
 			keyContent = keyContent.replaceAll("\\s+|-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----", "");
 

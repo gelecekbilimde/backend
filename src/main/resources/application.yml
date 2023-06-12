@@ -1,13 +1,8 @@
-
-environment:
-  path_folder: C:\Users\ferhatozcelik\Desktop\local_environment\
-  env_name: env.properties
-  private_key_path: ${environment.path_folder}certs\private.key
-  public_key_path: ${environment.path_folder}certs\public.key
+env: classpath:dev.properties
 
 spring:
   config:
-    import: file:${environment.path_folder}${environment.env_name}
+    import: ${env:classpath:dev.properties}
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USER}
@@ -26,13 +21,14 @@ spring:
 server:
   port: ${SERVER_PORT}
   servlet:
-    context-path: '/api'
+    context-path: ${CONTEXT_PATH}
+
 
 application:
   security:
     jwt:
-      private-key: ${environment.private_key_path}
-      public-key: ${environment.public_key_path}
+      private-key: ${RESOURCE_PATH}${PRIVATE_KEY_PATH}
+      public-key: ${RESOURCE_PATH}${PUBLIC_KEY_PATH}
       expiration: ${TOKEN_EXPIRE_MILLISECOND}
       refresh-token:
         expiration: ${REFRESH_TOKEN_EXPIRE_MILLISECOND}

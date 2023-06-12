@@ -19,35 +19,6 @@ Gelecek bilimde topluluğu, Bilim iletişimi
   docker compose up
 ```
 
-ENV PARAMATERS
-
-path_folder: C:\Users\ferhatozcelik\Desktop\local_environment\
-
-in environment file 
-* **env.properties** 
-* **certs\private.key**
-* **certs\public.key**
-
-These files need to be and **path_folder** pat written here
-
-
-```bash
-    SERVER_PORT=8057
-    REDIS_PORT=6379
-    DATABASE=
-    DATABASE_USER=
-    DATABASE_PASSWORD=
-    DATABASE_URL=jdbc:
-    DATABASE_DDL_AUTO=update
-    DATABASE_DRIVER=org.postgresql.Driver
-    DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
-    ELASTICSEARCH_URI=localhost:9200
-    GUEST_TOKEN_EXPIRE_MILLISECOND=604800000
-    REFRESH_TOKEN_EXPIRE_MILLISECOND=604800000
-    TOKEN_EXPIRE_MILLISECOND=86400000
-    REDIS_HOST=localhost
-    SHOW_SQL=false
-```
 
 Secret Key işlemleri 
 ``` bash
@@ -72,6 +43,15 @@ rm privatepair.key
 ``` bash
 chmod 660 private.key public.key
 ```
+
+
+ENV Yapılandırma
+
+```bash
+  cp resource/dev.properties.example dev.properties
+```
+dev.properties dosyasını kopyaladıktan sonra resource olarak serve edilecek klsörün bulunduğu dizin application.yml dosyasının env değerine yazılır.
+ardından dev.properties bilgileri doldurulduktan sonra proje run edilir.
 
 db seeding 
 resource/db/seed.sql çaliştırılmalı
