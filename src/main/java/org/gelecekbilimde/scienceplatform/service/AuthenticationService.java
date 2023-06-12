@@ -98,7 +98,11 @@ public class AuthenticationService {
 
 		var refreshToken = jwtService.generateRefreshToken(user);
 
-		return new TokenDto(jwtToken, refreshToken).getTokenBuilder();
+		return TokenDto
+			.builder()
+			.accessToken(jwtToken)
+			.refreshToken(refreshToken)
+			.build();
 	}
 
 	public TokenDto login(LoginDto request) {
@@ -133,7 +137,11 @@ public class AuthenticationService {
 			revokeAllUserTokens(user);
 			saveUserToken(user,jwtToken);
 
-			return new TokenDto(jwtToken, refreshToken).getTokenBuilder();
+			return TokenDto
+				.builder()
+				.accessToken(jwtToken)
+				.refreshToken(refreshToken)
+				.build();
 		} catch (Exception e) {
 			throw new ServerException(e.getMessage());
 		}
@@ -197,13 +205,16 @@ public class AuthenticationService {
 		}
 
 		List<String> emptyScope = new ArrayList<>();
-		var accessToken = jwtService.generateToken(user,emptyScope);
+		var jwtToken = jwtService.generateToken(user,emptyScope);
 
 		revokeAllUserTokens(user);
-		saveUserToken(user, accessToken);
+		saveUserToken(user, jwtToken);
 
-		return new TokenDto(accessToken, refreshToken).getTokenBuilder();
-
+		return TokenDto
+			.builder()
+			.accessToken(jwtToken)
+			.refreshToken(refreshToken)
+			.build();
 	}
 
 	private List<String> scopeList(String role) {
