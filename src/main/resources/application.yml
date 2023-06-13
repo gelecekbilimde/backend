@@ -1,6 +1,6 @@
 
 environment:
-  path_folder: C:\Users\ferhatozcelik\Desktop\local_environment\
+  path_folder: C:\Users\cikla\OneDrive\Masaüstü\Programming\gblocalenv\
   env_name: env.properties
   private_key_path: ${environment.path_folder}certs\private.key
   public_key_path: ${environment.path_folder}certs\public.key
