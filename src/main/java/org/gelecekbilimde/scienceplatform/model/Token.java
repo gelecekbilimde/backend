@@ -12,7 +12,7 @@ import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tokens")
+@Table(name = "token")
 public class Token {
 
 	@Id
