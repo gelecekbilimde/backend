@@ -9,18 +9,14 @@ import org.gelecekbilimde.scienceplatform.dto.RegisterDto;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
-import org.gelecekbilimde.scienceplatform.model.Permission;
-import org.gelecekbilimde.scienceplatform.model.Role;
-import org.gelecekbilimde.scienceplatform.model.Token;
+import org.gelecekbilimde.scienceplatform.model.*;
 import org.gelecekbilimde.scienceplatform.model.enums.Degree;
 import org.gelecekbilimde.scienceplatform.model.enums.Gender;
 import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
-import org.gelecekbilimde.scienceplatform.repository.BlackListRepository;
-import org.gelecekbilimde.scienceplatform.repository.RoleRepository;
-import org.gelecekbilimde.scienceplatform.repository.TokenRepository;
-import org.gelecekbilimde.scienceplatform.model.User;
-import org.gelecekbilimde.scienceplatform.repository.UserRepository;
+import org.gelecekbilimde.scienceplatform.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,6 +39,10 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 	private final RoleRepository roleRepository;
 	private final BlackListRepository blackListRepository;
+
+	private final ConfirmationTokenRepository confirmationTokenRepository;
+
+	private final EmailService emailService;
 
 	@Transactional
 	public TokenDto register(RegisterDto request) {
@@ -99,6 +99,8 @@ public class AuthenticationService {
 				.build();
 
 			var savedUser = userRepository.save(user);
+
+			sendVerifyMessage(user);
 
 			var jwtToken = jwtService.generateToken(user,scope);
 
@@ -233,6 +235,20 @@ public class AuthenticationService {
 	private List<String> scopeList(String role) {
 		List<Permission> rolePermission = roleRepository.findPermissionsByRole(role);
 		return rolePermission.stream().map(Permission::getPermission).toList();
+	}
+
+	public void sendVerifyMessage(User user){
+			ConfirmationToken confirmationToken = new ConfirmationToken(user);
+			confirmationTokenRepository.save(confirmationToken);
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setTo(user.getEmail());
+			mailMessage.setSubject("Complete Registration!");
+			mailMessage.setText("To confirm your account, please click here : "
+				+"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
+			emailService.sendEmail(mailMessage);
+
+			System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
+
 	}
 
 }
