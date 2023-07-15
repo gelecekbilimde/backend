@@ -8,6 +8,7 @@ import org.gelecekbilimde.scienceplatform.dto.RegisterDto;
 import org.gelecekbilimde.scienceplatform.common.ApiResponse;
 import org.gelecekbilimde.scienceplatform.common.Response;
 import org.gelecekbilimde.scienceplatform.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +40,14 @@ public class AuthController {
 	public ResponseEntity<ApiResponse> guest(HttpServletRequest httpServletRequest) {
 		return Response.ok(httpServletRequest,  service.generateGuestToken());
 	}
+
 	@RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
 	public ResponseEntity<ApiResponse> confirmUserAccount(HttpServletRequest servletRequest,@RequestParam("token")String confirmationToken) {
-		return Response.ok(servletRequest,userService.confirmEmail(confirmationToken));
+		try {
+			userService.confirmEmail(confirmationToken);
+			return Response.ok(servletRequest,"Verify succesfully");
+		}catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 }

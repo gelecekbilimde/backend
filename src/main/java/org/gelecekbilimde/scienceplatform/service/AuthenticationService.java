@@ -14,7 +14,6 @@ import org.gelecekbilimde.scienceplatform.model.enums.Degree;
 import org.gelecekbilimde.scienceplatform.model.enums.Gender;
 import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
 import org.gelecekbilimde.scienceplatform.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,9 +38,7 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 	private final RoleRepository roleRepository;
 	private final BlackListRepository blackListRepository;
-
 	private final ConfirmationTokenRepository confirmationTokenRepository;
-
 	private final EmailService emailService;
 
 	@Transactional
@@ -244,10 +241,9 @@ public class AuthenticationService {
 			mailMessage.setTo(user.getEmail());
 			mailMessage.setSubject("Complete Registration!");
 			mailMessage.setText("To confirm your account, please click here : "
-				+"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
+				+"http://gelecekbilimde.net/confirm-account?token="+confirmationToken.getConfirmationToken());
 			emailService.sendEmail(mailMessage);
 
-			System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
 
 	}
 
