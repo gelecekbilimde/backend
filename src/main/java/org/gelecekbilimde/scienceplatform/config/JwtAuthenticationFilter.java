@@ -44,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 		final String jwt;
 		final String userName;
+		final Integer userId;
 		final String roleName;
 
 		if (null == authHeader || !authHeader.startsWith("Bearer ")) {
@@ -52,8 +53,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		jwt = authHeader.substring(7);
-		userName = jwtService.extractSubject(jwt);
-		roleName  = jwtService.extractClaim(jwt,"role").toString();
+		userName 	= jwtService.extractSubject(jwt);
+		roleName  	= jwtService.extractClaim(jwt,"role").toString();
+		userId 		= Integer.parseInt(jwtService.extractClaim(jwt,"userId").toString());
 
 		if (null != SecurityContextHolder.getContext().getAuthentication()){
 			filterChain.doFilter(request,response);
@@ -82,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
+		User userDetails = (User) this.userDetailsService.loadUserByUsername(userName);
 
 
 		var isTokenValid = tokenRepository.findByToken(jwt)
@@ -100,7 +102,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			SecurityContextHolder.getContext().setAuthentication(authToken);
 
 		}
-
+		request.setAttribute("userId",userId);
+		request.setAttribute("user",userDetails);
 		filterChain.doFilter(request,response);
 	}
 }

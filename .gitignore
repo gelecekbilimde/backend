@@ -34,6 +34,7 @@ build/
 .vscode/
 /runtime/
 /src/main/resources/certs/
+/src/main/resources/uploads/
 
 /src/main/resources/dev.properties
 
