@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.gelecekbilimde.scienceplatform.model.PostMedia;
 import org.gelecekbilimde.scienceplatform.model.enums.PostProcessEnum;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class PostDTO {
 	private Boolean typoControl = false;
 	private Boolean dangerousControl = false;
 
-	private List<MediaDTO> medias;
+	private List<PostMediaDTO> medias;
 
 	private List<CommentDTO> comments;
 

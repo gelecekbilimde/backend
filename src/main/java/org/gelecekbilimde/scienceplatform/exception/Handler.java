@@ -26,7 +26,7 @@ public class Handler {
 	@ExceptionHandler(value = {ClientException.class})
 	public ResponseEntity<Object> handleClientException(ClientException e, HttpServletRequest request) {
 
-		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		HttpStatus status = HttpStatus.BAD_REQUEST;
 		String message = e.getMessage();
 
 		return trowException(request, status, message,INFO, new HashMap<>());
@@ -129,6 +129,8 @@ public class Handler {
 		String method = request.getMethod();
 
 		String originalMessage = message;
+		message = message.substring(0,message.lastIndexOf("|"));
+
 		if (status == HttpStatus.INTERNAL_SERVER_ERROR){
 			message = "Beklenmeyen bir hata oldu Hemen ilgileneceğiz";
 		}
