@@ -2,6 +2,7 @@ package org.gelecekbilimde.scienceplatform.service;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.dto.MediaDTO;
+import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.model.Media;
 import org.gelecekbilimde.scienceplatform.model.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.model.enums.MediaType;
@@ -64,7 +65,7 @@ public class MediaService {
 	}
 
 	public MediaDTO saveMedia(MediaDTO mediaDTO, User user) {
-		MediaGroup mediaGroup = this.mediaGroupRepository.findById(mediaDTO.getGroupId()).orElseThrow();
+		MediaGroup mediaGroup = this.mediaGroupRepository.findById(mediaDTO.getGroupId()).orElseThrow(()->new ClientException("Klasör Bulunamadı"));
 
 		var media = Media.builder()
 				.url(mediaDTO.getUrl())

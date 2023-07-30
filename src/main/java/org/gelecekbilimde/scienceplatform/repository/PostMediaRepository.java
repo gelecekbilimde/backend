@@ -1,14 +1,12 @@
 package org.gelecekbilimde.scienceplatform.repository;
 
 import org.gelecekbilimde.scienceplatform.model.Post;
+import org.gelecekbilimde.scienceplatform.model.PostMedia;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface PostRepository extends JpaRepository<Post, Integer> {
+public interface PostMediaRepository extends JpaRepository<PostMedia, Integer> {
 
-	Optional<Post> findById(String email);
-	Post getById(Integer postId);
-
-	boolean existsById(Integer postId);
+	Optional<PostMedia> findById(Integer id);
 }

@@ -211,7 +211,7 @@ public class AuthenticationService {
 			throw new ClientException("Kullanıcı bilgilerinde hata var");
 		}
 
-		var user = this.userRepository.findByEmail(userEmail).orElseThrow();
+		var user = this.userRepository.findByEmail(userEmail).orElseThrow(()->new ClientException("Kullanıcı Bulunamadı"));
 
 		if (!jwtService.isTokenValid(refreshToken, user)) {
 			throw new ClientException("Oturum bilgisinde hata var");

@@ -2,6 +2,7 @@ package org.gelecekbilimde.scienceplatform.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "posts_media")

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.ApiResponse;
 import org.gelecekbilimde.scienceplatform.common.Response;
 import org.gelecekbilimde.scienceplatform.dto.PostDTO;
+import org.gelecekbilimde.scienceplatform.dto.PostMediaDTO;
+import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.model.User;
 import org.gelecekbilimde.scienceplatform.repository.UserRepository;
 import org.gelecekbilimde.scienceplatform.service.PostService;
@@ -26,7 +28,15 @@ public class PostController {
 	private final UserRepository userRepository;
 	@PostMapping("")
 	@PreAuthorize("hasAuthority('post:create')")
-	public ResponseEntity<ApiResponse> secretVersionRole(HttpServletRequest httpServletRequest, @RequestBody @Valid PostDTO request)  {
+	public ResponseEntity<ApiResponse> secretVersionRole(HttpServletRequest httpServletRequest, @RequestBody @Valid PostDTO request)
+	{
+		if (!request.getMedias().isEmpty()){
+			for(PostMediaDTO postMediaDTO : request.getMedias()){
+				if (postMediaDTO.getMediaId() == null){
+					throw new ClientException("Posta media yüklerken media id zorunlu |"+request.getMedias().toString());
+				}
+			}
+		}
 
 		postService.save(request,(User)httpServletRequest.getAttribute("user"));
 		return Response.noContent();
