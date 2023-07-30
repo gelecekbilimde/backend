@@ -76,7 +76,10 @@ public class JwtService {
 
 
 	public String generateRefreshToken(User user) {
-		return buildToken(new HashMap<>(), user.getUsername(), refreshExpiration );
+		HashMap<String,Object> claim  = new HashMap<>();
+		claim.put("role",user.getRole().getRole());
+
+		return buildToken(claim, user.getUsername(), refreshExpiration );
 	}
 
 

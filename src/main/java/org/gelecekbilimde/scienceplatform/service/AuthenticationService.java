@@ -217,8 +217,9 @@ public class AuthenticationService {
 			throw new ClientException("Oturum bilgisinde hata var");
 		}
 
-		List<String> emptyScope = new ArrayList<>();
-		var jwtToken = jwtService.generateToken(user,emptyScope);
+		Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+		List<String> scope = scopeList(role.getRole());
+		var jwtToken = jwtService.generateToken(user,scope);
 
 		revokeAllUserTokens(user);
 		saveUserToken(user, jwtToken);

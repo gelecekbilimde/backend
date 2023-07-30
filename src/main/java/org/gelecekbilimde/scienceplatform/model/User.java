@@ -80,9 +80,8 @@ public class User implements UserDetails {
 	@JoinTable(name = "follower", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
 	private Set<User> followerUsers = new HashSet<>();
 
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinTable(name = "user_post", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "post_id"))
-	private Set<Post> posts = new HashSet<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Post> posts;
 
 	@Override
 	public String getPassword() {

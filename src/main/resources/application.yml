@@ -23,6 +23,11 @@ server:
   servlet:
     context-path: ${CONTEXT_PATH}
 
+file:
+  upload:
+    media:
+      path: ${MEDIA_UPLOAD_PATH}
+      size : ${MEDIA_UPLOAD_SIZE}
 
 application:
   security:
