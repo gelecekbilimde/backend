@@ -3,6 +3,7 @@ package org.gelecekbilimde.scienceplatform.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
 import org.gelecekbilimde.scienceplatform.repository.TokenRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,7 @@ public class LogoutService implements LogoutHandler {
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 		final String jwt;
 
-		if (null == authHeader || !authHeader.startsWith("Bearer ")) {
+		if (null == authHeader || !authHeader.startsWith(TokenType.BEARER.name() + " ")) {
 			return;
 		}
 		jwt = authHeader.substring(7);

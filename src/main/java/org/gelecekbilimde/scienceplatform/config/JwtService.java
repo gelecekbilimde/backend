@@ -5,12 +5,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.model.User;
+import org.gelecekbilimde.scienceplatform.util.MessagesUtil;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
@@ -39,6 +38,9 @@ public class JwtService {
 	private String publicKeyPath;
 
 	public  final String  GUEST_USERNAME = "GUEST";
+
+	private final MessagesUtil messagesUtil = new MessagesUtil();
+
 	public String extractSubject(String token) {
 		return extractClaim(token, Claims::getSubject);
 	}
@@ -145,7 +147,7 @@ public class JwtService {
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			return keyFactory.generatePublic(new X509EncodedKeySpec(keyData));
 		}catch (Exception e){
-			throw new ServerException("Public Key Okunurken Hata oldu: " + e.getMessage());
+			throw new ServerException(messagesUtil.getMessage("error_reading_public_key", null) + " " + e.getMessage());
 		}
 	}
 	private PrivateKey getSignInPrivateKey() {
@@ -159,7 +161,7 @@ public class JwtService {
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(keyData));
 		}catch (Exception e){
-			throw new ServerException("Private Key Okunurken Hata oldu: " + e.getMessage());
+			throw new ServerException(messagesUtil.getMessage("error_reading_private_key", null) + e.getMessage());
 		}
 
 	}

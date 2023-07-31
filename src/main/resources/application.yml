@@ -17,7 +17,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
+  messages:
+    basename: lang/messages
 server:
   port: ${SERVER_PORT}
   servlet:

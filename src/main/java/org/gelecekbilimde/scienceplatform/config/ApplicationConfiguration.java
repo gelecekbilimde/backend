@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.exception.NotFoundException;
 import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
 import org.gelecekbilimde.scienceplatform.repository.UserRepository;
+import org.gelecekbilimde.scienceplatform.util.MessagesUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,10 +21,12 @@ public class ApplicationConfiguration {
 
 	private final UserRepository repository;
 
+	private final MessagesUtil messagesUtil = new MessagesUtil();
+
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return username -> repository.findByEmail(username)
-			.orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı"));
+			.orElseThrow(() -> new UserNotFoundException(messagesUtil.getMessage("user_not_found", null)));
 	}
 
 	@Bean

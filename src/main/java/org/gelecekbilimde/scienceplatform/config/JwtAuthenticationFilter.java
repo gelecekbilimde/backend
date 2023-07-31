@@ -10,9 +10,11 @@ import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.exception.UnAuthorizedException;
 import org.gelecekbilimde.scienceplatform.model.Permission;
 import org.gelecekbilimde.scienceplatform.model.Role;
+import org.gelecekbilimde.scienceplatform.model.enums.TokenType;
 import org.gelecekbilimde.scienceplatform.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.repository.TokenRepository;
 import org.gelecekbilimde.scienceplatform.model.User;
+import org.gelecekbilimde.scienceplatform.util.MessagesUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,6 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final TokenRepository tokenRepository;
 	private final RoleRepository roleRepository;
 
+	private final MessagesUtil messagesUtil = new MessagesUtil();
+
 	@Override
 	protected void doFilterInternal(
 		@NonNull HttpServletRequest request,
@@ -46,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		final String userName;
 		final String roleName;
 
-		if (null == authHeader || !authHeader.startsWith("Bearer ")) {
+		if (null == authHeader || !authHeader.startsWith(TokenType.BEARER.name() + " ")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -61,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		// todo many to many yapılandırmasında boş sonuç döndüğü için böyle !!!!! Düzeltilmeli!!!!!!!
-		Role role = roleRepository.findByRole(roleName).orElseThrow(()->new ServerException("Role bilgisine ulaşılamadı"));
+		Role role = roleRepository.findByRole(roleName).orElseThrow(()->new ServerException(messagesUtil.getMessage("message_default_role", null)));
 		Set<Permission> permissions = new HashSet<>(roleRepository.findPermissionsByRole(roleName));
 		role.setPermissions(permissions);
 

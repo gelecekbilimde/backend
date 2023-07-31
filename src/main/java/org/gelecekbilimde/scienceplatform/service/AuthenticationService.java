@@ -20,6 +20,7 @@ import org.gelecekbilimde.scienceplatform.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.repository.TokenRepository;
 import org.gelecekbilimde.scienceplatform.model.User;
 import org.gelecekbilimde.scienceplatform.repository.UserRepository;
+import org.gelecekbilimde.scienceplatform.util.MessagesUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,20 +45,22 @@ public class AuthenticationService {
 	private final RoleRepository roleRepository;
 	private final BlackListRepository blackListRepository;
 
+	private final MessagesUtil messagesUtil = new MessagesUtil();
+
 	@Transactional
-	public TokenDto register(RegisterDto request) {
+	public TokenDto register(String language, RegisterDto request) {
 
 
 		if (blackListRepository.existsByEmail(request.getEmail())){
-			throw new ClientException("This user is black list registered");
+			throw new ClientException(messagesUtil.getMessage("message_black_list", language));
 		}
 
 		if (userRepository.existsByEmail(request.getEmail())){
-			throw new ClientException("This user is already registered");
+			throw new ClientException(messagesUtil.getMessage("message_already_registered", language));
 		}
 		try {
 
-			Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException("Default Role is not defined."));
+			Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException(messagesUtil.getMessage("message_default_role", language)));
 			List<String> scope = scopeList(role.getRole());
 
 
@@ -71,7 +74,7 @@ public class AuthenticationService {
 			if (request.getGender() != null) {
 				boolean isGenderExists = EnumSet.allOf(Gender.class).stream().anyMatch(e -> e.name().equals(request.getGender()));
 				if (!isGenderExists) {
-					throw new ClientException("gender type not found");
+					throw new ClientException(messagesUtil.getMessage("gender_type_not_found", language));
 				}
 				gender = Gender.valueOf(request.getGender());
 			}
@@ -80,7 +83,7 @@ public class AuthenticationService {
 			if (request.getDegree() != null){
 				boolean isDegreeExists = EnumSet.allOf(Degree.class).stream().anyMatch(e -> e.name().equals(request.getDegree()));
 				if (!isDegreeExists) {
-					throw new ClientException("degree type not found");
+					throw new ClientException(messagesUtil.getMessage("degree_type_not_found", language));
 				}
 				degree = Degree.valueOf(request.getDegree());
 			}
@@ -112,36 +115,36 @@ public class AuthenticationService {
 				.refreshToken(refreshToken)
 				.build();
 		}catch (ParseException parseException){
-			throw new ClientException("BirthDate format is wrong. dd/MM/yyyy");
+			throw new ClientException(messagesUtil.getMessage("message_birthDate_wrong", language));
 		}catch (Exception exception){
 			throw new ClientException(exception.getMessage());
 		}
 	}
 
-	public TokenDto login(LoginDto request) {
+	public TokenDto login(String language, LoginDto request) {
 		try {
 
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-			var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
+			var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException(messagesUtil.getMessage("user_not_found", language) + ": " + request.getEmail()));
 
 			if (blackListRepository.existsByEmail(user.getEmail())){
-				throw new ClientException("This user is black list registered");
+				throw new ClientException(messagesUtil.getMessage("message_black_list", language));
 			}
 
 			if (!user.isEnabled()){
-				throw new ClientException("This User Not Enabled");
+				throw new ClientException(messagesUtil.getMessage("this_user_not_enabled", language));
 			}
 
 			if (user.isUserLock()){
-				throw new ClientException("This UserLock");
+				throw new ClientException(messagesUtil.getMessage("this_userlock", language));
 			}
 
 			if (!user.isEmailVerify()){
-				throw new ClientException("This Email Not Verify");
+				throw new ClientException(messagesUtil.getMessage("this_email_not_verify", language));
 			}
 
-			Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+			Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException(messagesUtil.getMessage("user_scope_has_a_problem", language)));
 			List<String> scope = scopeList(role.getRole());
 
 			var jwtToken = jwtService.generateToken(user,scope);
@@ -195,26 +198,26 @@ public class AuthenticationService {
 			.build();
 	}
 
-	public Object refreshToken(HttpServletRequest request)  {
+	public Object refreshToken(String language, HttpServletRequest request)  {
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 		final String refreshToken;
 		final String userEmail;
 
-		if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-			throw new ClientException("Token bilgisine ulaşılamadı");
+		if (authHeader == null ||!authHeader.startsWith(TokenType.BEARER.name() +  " ")) {
+			throw new ClientException(messagesUtil.getMessage("token_information_could_not_be_found", language));
 		}
 		refreshToken = authHeader.substring(7);
 
 		userEmail = jwtService.extractSubject(refreshToken);
 
 		if (userEmail == null) {
-			throw new ClientException("Kullanıcı bilgilerinde hata var");
+			throw new ClientException(messagesUtil.getMessage("there_is_an_error_in_the_user_information", language));
 		}
 
 		var user = this.userRepository.findByEmail(userEmail).orElseThrow();
 
 		if (!jwtService.isTokenValid(refreshToken, user)) {
-			throw new ClientException("Oturum bilgisinde hata var");
+			throw new ClientException(messagesUtil.getMessage("there_is_an_error_in_the_session_information", language));
 		}
 
 		List<String> emptyScope = new ArrayList<>();
