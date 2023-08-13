@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
 	private final AuthenticationService service;
-	private final UserService userService;
 
 	@PostMapping("/register")
 	public ResponseEntity<ApiResponse> register(HttpServletRequest httpServletRequest, @RequestBody RegisterDto request) {
@@ -39,15 +38,5 @@ public class AuthController {
 	@PostMapping("/guest")
 	public ResponseEntity<ApiResponse> guest(HttpServletRequest httpServletRequest) {
 		return Response.ok(httpServletRequest,  service.generateGuestToken());
-	}
-
-	@RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
-	public ResponseEntity<ApiResponse> confirmUserAccount(HttpServletRequest servletRequest,@RequestParam("token")String confirmationToken) {
-		try {
-			userService.confirmEmail(confirmationToken);
-			return Response.ok(servletRequest,"Verify succesfully");
-		}catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
 	}
 }

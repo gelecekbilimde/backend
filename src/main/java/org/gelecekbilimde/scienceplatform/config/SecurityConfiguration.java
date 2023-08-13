@@ -33,7 +33,7 @@ public class SecurityConfiguration {
 			.exceptionHandling()
 			.and()
 			.authorizeHttpRequests()
-			.requestMatchers("/version","/auth/**")
+			.requestMatchers("/version","/auth/**,/mail/**")
 			.permitAll()
 			.anyRequest()
 			.authenticated()
