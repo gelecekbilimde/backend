@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.service;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
-import org.gelecekbilimde.scienceplatform.mail.EmailService;
+import org.gelecekbilimde.scienceplatform.common.mail.EmailService;
 import org.gelecekbilimde.scienceplatform.model.ConfirmationToken;
 import org.gelecekbilimde.scienceplatform.model.User;
 import org.gelecekbilimde.scienceplatform.repository.ConfirmationTokenRepository;
@@ -25,6 +25,4 @@ public class UserService{
 			emailService.sendWelcomeMessage(user);
 		}
 	}
-
-
 }

@@ -1,6 +1,5 @@
 package org.gelecekbilimde.scienceplatform.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +32,7 @@ public class SecurityConfiguration {
 			.exceptionHandling()
 			.and()
 			.authorizeHttpRequests()
-			.requestMatchers("/version","/auth/**,/mail/**")
+			.requestMatchers("/version","/auth/**","/mail/**")
 			.permitAll()
 			.anyRequest()
 			.authenticated()

@@ -36,8 +36,8 @@ server:
   servlet:
     context-path: ${CONTEXT_PATH}
 
-
 application:
+  base-url: ${BASE_URL}
   security:
     jwt:
       private-key: ${RESOURCE_PATH}${PRIVATE_KEY_PATH}

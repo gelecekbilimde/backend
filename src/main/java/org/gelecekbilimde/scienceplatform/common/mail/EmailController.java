@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.mail;
+package org.gelecekbilimde.scienceplatform.common.mail;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

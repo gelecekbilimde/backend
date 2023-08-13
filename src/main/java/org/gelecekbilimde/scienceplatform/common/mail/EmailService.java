@@ -1,8 +1,9 @@
-package org.gelecekbilimde.scienceplatform.mail;
+package org.gelecekbilimde.scienceplatform.common.mail;
 
 import org.gelecekbilimde.scienceplatform.model.ConfirmationToken;
 import org.gelecekbilimde.scienceplatform.model.User;
 import org.gelecekbilimde.scienceplatform.repository.ConfirmationTokenRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -10,14 +11,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
+	@Value("${application.base-url}")
+	public String BASE_URL;
+
 	private final JavaMailSender javaMailSender;
 
-	private ConfirmationTokenRepository confirmationTokenRepository;
+	private final ConfirmationTokenRepository confirmationTokenRepository;
 
-	private String URL = "http://localhost:8080/api/";
-
-	public EmailService(JavaMailSender javaMailSender) {
+	public EmailService(JavaMailSender javaMailSender, ConfirmationTokenRepository confirmationTokenRepository) {
 		this.javaMailSender = javaMailSender;
+		this.confirmationTokenRepository = confirmationTokenRepository;
 	}
 
 	public void sendEmail(SimpleMailMessage email) {
@@ -30,7 +33,7 @@ public class EmailService {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(user.getEmail());
 		mailMessage.setSubject("Complete Registration!");
-		mailMessage.setText("To confirm your account, please click here : " +URL
+		mailMessage.setText("To confirm your account, please click here : " + BASE_URL
 			+"/mail/confirm-account?token="+confirmationToken.getConfirmationToken());
 		sendEmail(mailMessage);
 	}

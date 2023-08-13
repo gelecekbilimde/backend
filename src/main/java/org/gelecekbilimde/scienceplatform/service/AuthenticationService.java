@@ -9,7 +9,7 @@ import org.gelecekbilimde.scienceplatform.dto.RegisterDto;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
-import org.gelecekbilimde.scienceplatform.mail.EmailService;
+import org.gelecekbilimde.scienceplatform.common.mail.EmailService;
 import org.gelecekbilimde.scienceplatform.model.*;
 import org.gelecekbilimde.scienceplatform.model.enums.Degree;
 import org.gelecekbilimde.scienceplatform.model.enums.Gender;
@@ -38,7 +38,6 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 	private final RoleRepository roleRepository;
 	private final BlackListRepository blackListRepository;
-	private final ConfirmationTokenRepository confirmationTokenRepository;
 	private final EmailService emailService;
 
 	@Transactional
