@@ -13,6 +13,8 @@ INSERT INTO permission (id, description, permission) VALUES (7, 'Yorum Yapar', '
 INSERT INTO permission (id, description, permission) VALUES (8, 'Yorum Beğenir', 'comment:like');
 INSERT INTO permission (id, description, permission) VALUES (9, 'Test Versiyonu Görür', 'dev:version');
 
+INSERT INTO permission (id, description, permission) VALUES (10, 'Admin Paneline erişir', 'admin:access');
+
 
 INSERT INTO role_permission (role_id, permission_id) VALUES (1, 1);
 INSERT INTO role_permission (role_id, permission_id) VALUES (2, 2);
@@ -28,3 +30,4 @@ INSERT INTO role_permission (role_id, permission_id) VALUES (3, 6);
 INSERT INTO role_permission (role_id, permission_id) VALUES (3, 7);
 INSERT INTO role_permission (role_id, permission_id) VALUES (3, 8);
 INSERT INTO role_permission (role_id, permission_id) VALUES (2, 9);
+INSERT INTO role_permission (role_id, permission_id) VALUES (2, 10);

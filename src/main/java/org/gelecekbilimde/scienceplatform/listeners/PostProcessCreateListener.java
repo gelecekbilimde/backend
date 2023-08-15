@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.listeners;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.dto.PostDTO;
+import org.gelecekbilimde.scienceplatform.dto.Post.PostCreateDTO;
 import org.gelecekbilimde.scienceplatform.events.PostProcessCreateEvent;
 import org.gelecekbilimde.scienceplatform.model.Post;
 import org.gelecekbilimde.scienceplatform.model.User;
@@ -18,9 +18,9 @@ public class PostProcessCreateListener implements ApplicationListener<PostProces
 	@Override
 	public void onApplicationEvent(PostProcessCreateEvent event) {
 		Post post = event.getPost();
-		PostDTO postDTO = event.getPostDTO();
+		PostCreateDTO postCreateDTO = event.getPostCreateDTO();
 		User user = event.getUser();
 
-		postProcessService.save(post, postDTO, user);
+		postProcessService.save(post, postCreateDTO, user);
 	}
 }
