@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.dto;
+package org.gelecekbilimde.scienceplatform.dto.Post;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.model.PostMedia;
+import org.gelecekbilimde.scienceplatform.dto.CommentDTO;
+import org.gelecekbilimde.scienceplatform.dto.PostMediaDTO;
+import org.gelecekbilimde.scienceplatform.dto.UserDTO;
 import org.gelecekbilimde.scienceplatform.model.enums.PostProcessEnum;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDTO {
+public class PostCreateDTO {
 
 	@NotNull(message = "cannot be null")
 	@NotBlank(message = "cannot be null")

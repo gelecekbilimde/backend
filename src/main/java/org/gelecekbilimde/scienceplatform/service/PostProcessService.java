@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.service;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.dto.PostDTO;
+import org.gelecekbilimde.scienceplatform.dto.Post.PostCreateDTO;
 import org.gelecekbilimde.scienceplatform.model.Post;
 import org.gelecekbilimde.scienceplatform.model.PostProcess;
 import org.gelecekbilimde.scienceplatform.model.User;
@@ -16,16 +16,16 @@ public class PostProcessService {
 	private final PostProcessRepository postProcessRepository;
 
 	@Transactional
-	public void save(Post post, PostDTO postDTO, User user) {
+	public void save(Post post, PostCreateDTO postCreateDTO, User user) {
 
 		var postProcess = PostProcess
 				.builder()
-				.header(postDTO.getHeader())
-				.content(postDTO.getContent())
-				.process(postDTO.getLastProcess())
+				.header(postCreateDTO.getHeader())
+				.content(postCreateDTO.getContent())
+				.process(postCreateDTO.getLastProcess())
 				.postProcess(post)
 				.user(user)
-				.slug(postDTO.getSlug())
+				.slug(postCreateDTO.getSlug())
 				.build();
 
 		postProcessRepository.save(postProcess);

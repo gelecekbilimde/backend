@@ -23,6 +23,7 @@ public class Comment {
 	@Column(columnDefinition = "integer", nullable = false)
 	private Integer likeCount;
 
+	// todo : oneToMany olmalı
 	@ManyToMany(mappedBy = "comments")
 	private Set<Post> posts = new HashSet<>();
 

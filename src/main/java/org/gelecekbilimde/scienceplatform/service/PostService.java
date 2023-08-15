@@ -1,9 +1,12 @@
 package org.gelecekbilimde.scienceplatform.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.gelecekbilimde.scienceplatform.dto.PostDTO;
+import org.gelecekbilimde.scienceplatform.Mapper.AdminPostModelToBusinessMapper;
+import org.gelecekbilimde.scienceplatform.common.Paging;
+import org.gelecekbilimde.scienceplatform.dto.Post.Business.AdminPostListBusinessDTO;
+import org.gelecekbilimde.scienceplatform.dto.Post.PostCreateDTO;
+import org.gelecekbilimde.scienceplatform.dto.Post.Request.AdminPostListRequestDTO;
 import org.gelecekbilimde.scienceplatform.dto.PostMediaDTO;
 import org.gelecekbilimde.scienceplatform.events.PostMediaCreateEvent;
 import org.gelecekbilimde.scienceplatform.events.PostProcessCreateEvent;
@@ -16,8 +19,8 @@ import org.gelecekbilimde.scienceplatform.model.enums.PostProcessEnum;
 import org.gelecekbilimde.scienceplatform.repository.MediaRepository;
 import org.gelecekbilimde.scienceplatform.repository.PostMediaRepository;
 import org.gelecekbilimde.scienceplatform.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,50 +36,42 @@ public class PostService {
 	private final ApplicationContext applicationContext;
 	private final PostMediaRepository postMediaRepository;
 	private final MediaRepository mediaRepository;
-
-	@Autowired
-	public PostService(ApplicationContext applicationContext, PostRepository postRepository, PostMediaRepository postMediaRepository, MediaRepository mediaRepository) {
-		this.applicationContext = applicationContext;
-		this.postRepository = postRepository;
-		this.postMediaRepository = postMediaRepository;
-		this.mediaRepository = mediaRepository;
-	}
+	private static final AdminPostModelToBusinessMapper adminPostModelToBusinessMapper = AdminPostModelToBusinessMapper.initialize();
 
 	@Transactional
-	public PostDTO save (PostDTO postDTO,User user){
+	public PostCreateDTO save (PostCreateDTO postCreateDTO, User user){
 		Helper helper = new Helper();
 
-		postDTO.setLastProcess(PostProcessEnum.CREATE);
-		postDTO.setSlug(helper.slugify(postDTO.getHeader()));
+		postCreateDTO.setLastProcess(PostProcessEnum.CREATE);
+		postCreateDTO.setSlug(helper.slugify(postCreateDTO.getHeader()));
 
 		var post = Post.builder()
-				.header(postDTO.getHeader())
-				.content(postDTO.getContent())
+				.header(postCreateDTO.getHeader())
+				.content(postCreateDTO.getContent())
 				.user(user)
-				.likeCount(postDTO.getLikeCount())
-				.active(postDTO.getActive())
-				.lastProcess(postDTO.getLastProcess())
-				.slug(postDTO.getSlug())
+				.likeCount(postCreateDTO.getLikeCount())
+				.active(postCreateDTO.getActive())
+				.lastProcess(postCreateDTO.getLastProcess())
+				.slug(postCreateDTO.getSlug())
 				.build();
 
 		postRepository.save(post);
-		applicationContext.publishEvent(new PostProcessCreateEvent(post,postDTO, user));
+		applicationContext.publishEvent(new PostProcessCreateEvent(post, postCreateDTO, user));
 
-		if (!postDTO.getMedias().isEmpty()){
-			applicationContext.publishEvent(new PostMediaCreateEvent(this, postDTO.getMedias(), post.getId().intValue(), user));
+		if (postCreateDTO.getMedias() != null){
+			applicationContext.publishEvent(new PostMediaCreateEvent(this, postCreateDTO.getMedias(), post.getId().intValue(), user));
 		}
 
-		return postDTO;
+		return postCreateDTO;
 	}
 
 	@Transactional
 	public void savePostMedia(Integer postId, List<PostMediaDTO> postMediaDTOs, User user) {
 
 		Post post = this.postRepository.findById(postId).orElseThrow(()->new ClientException("Post Bulunamadı"));
-		for (PostMediaDTO postMediaDTO : postMediaDTOs) {
-			this.savePostMediaOne(postMediaDTO,post,user);
-		}
-
+		postMediaDTOs
+			.stream()
+			.map(postMediaDTO -> savePostMediaOne(postMediaDTO,post,user));
 	}
 
 	@Transactional
@@ -101,4 +96,10 @@ public class PostService {
 		return postMediaDTO;
 	}
 
+
+	public Paging<AdminPostListBusinessDTO> getPostListForAdmin(AdminPostListRequestDTO listRequest) {
+		Page<Post> postModels = postRepository.findAll(listRequest.toPageable());
+		List<AdminPostListBusinessDTO> businessDTOList = adminPostModelToBusinessMapper.map(postModels.getContent());
+		return Paging.of(postModels, businessDTOList);
+	}
 }

@@ -2,8 +2,6 @@ package org.gelecekbilimde.scienceplatform.events;
 
 import lombok.Getter;
 import org.gelecekbilimde.scienceplatform.dto.MediaGroupDTO;
-import org.gelecekbilimde.scienceplatform.dto.PostDTO;
-import org.gelecekbilimde.scienceplatform.model.Post;
 import org.gelecekbilimde.scienceplatform.model.User;
 import org.gelecekbilimde.scienceplatform.service.MediaService;
 import org.springframework.context.ApplicationEvent;
@@ -15,7 +13,7 @@ import java.time.Clock;
 public class MediaGroupCreateEvent extends ApplicationEvent {
 
     private final User user;
-    ;
+
     private final MediaGroupDTO mediaGroupDTO;
 
 
