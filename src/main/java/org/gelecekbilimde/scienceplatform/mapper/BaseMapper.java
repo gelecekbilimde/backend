@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.Mapper;
+package org.gelecekbilimde.scienceplatform.mapper;
 
 import java.util.Collection;
 import java.util.List;

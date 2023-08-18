@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.service;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.dto.Post.PostCreateDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.PostCreateDTO;
 import org.gelecekbilimde.scienceplatform.model.Post;
 import org.gelecekbilimde.scienceplatform.model.PostProcess;
 import org.gelecekbilimde.scienceplatform.model.User;

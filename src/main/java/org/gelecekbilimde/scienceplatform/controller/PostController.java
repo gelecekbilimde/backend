@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.Response;
-import org.gelecekbilimde.scienceplatform.dto.Post.PostCreateDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.PostCreateDTO;
 import org.gelecekbilimde.scienceplatform.dto.PostMediaDTO;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.model.User;

@@ -1,16 +1,17 @@
-package org.gelecekbilimde.scienceplatform.dto.Post.Response;
+package org.gelecekbilimde.scienceplatform.dto.post.Domain;
 
-import lombok.Builder;
-import lombok.Getter;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.model.enums.PostProcessEnum;
 
 import java.util.List;
 
 
-@Getter
-@Builder
-public class AdminPostListResponseDTO {
+@Data
+@EqualsAndHashCode()
+@SuperBuilder
+public class AdminPostListDomainDTO {
 
 
 	private String header;
@@ -18,9 +19,10 @@ public class AdminPostListResponseDTO {
 	private String content;
 	private PostProcessEnum lastProcess;
 	private List<String> label;
-	private Integer likeCount;
+	private Integer likeCount ;
 	private Boolean active;
 	private Boolean copyrightControl;
 	private Boolean typoControl;
 	private Boolean dangerousControl;
+
 }

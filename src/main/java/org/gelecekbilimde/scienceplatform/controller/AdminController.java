@@ -3,13 +3,13 @@ package org.gelecekbilimde.scienceplatform.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.Mapper.BusinessToResponseMapper;
+import org.gelecekbilimde.scienceplatform.mapper.DomainToResponseMapper;
 import org.gelecekbilimde.scienceplatform.common.Paging;
 import org.gelecekbilimde.scienceplatform.common.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.Response;
-import org.gelecekbilimde.scienceplatform.dto.Post.Business.AdminPostListBusinessDTO;
-import org.gelecekbilimde.scienceplatform.dto.Post.Request.AdminPostListRequestDTO;
-import org.gelecekbilimde.scienceplatform.dto.Post.Response.AdminPostListResponseDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.Domain.AdminPostListDomainDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.Request.AdminPostListRequestDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.Response.AdminPostListResponseDTO;
 import org.gelecekbilimde.scienceplatform.service.PostService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +20,18 @@ import org.springframework.web.bind.annotation.*;
 class AdminController {
 
 	private final PostService postService;
-	private static final BusinessToResponseMapper businessToResponseMapper = BusinessToResponseMapper.initialize();
+	private static final DomainToResponseMapper domainToResponseMapper = DomainToResponseMapper.initialize();
 
 	@RequestMapping("/admin/post")
-	public Response<PagingResponse<AdminPostListResponseDTO>> getPost(HttpServletRequest httpServletRequest, @ModelAttribute @Valid AdminPostListRequestDTO request) {
+	public Response<PagingResponse<AdminPostListResponseDTO>> getPost(@ModelAttribute @Valid AdminPostListRequestDTO request) {
 
-		final Paging<AdminPostListBusinessDTO> postList = postService.getPostListForAdmin(request);
+		final Paging<AdminPostListDomainDTO> postList = postService.getPostListForAdmin(request);
 
 		final PagingResponse<AdminPostListResponseDTO> pageOfAdminUsersResponse = PagingResponse.<AdminPostListResponseDTO>builder()
 			.of(postList)
-			.content(businessToResponseMapper.map(postList.getContent()))
+			.content(domainToResponseMapper.map(postList.getContent()))
 			.build();
-		return Response.ok(pageOfAdminUsersResponse,httpServletRequest);
+		return Response.ok(pageOfAdminUsersResponse);
 	}
 }
 

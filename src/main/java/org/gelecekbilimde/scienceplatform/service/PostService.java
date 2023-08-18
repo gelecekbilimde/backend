@@ -2,11 +2,11 @@ package org.gelecekbilimde.scienceplatform.service;
 
 import lombok.RequiredArgsConstructor;
 
-import org.gelecekbilimde.scienceplatform.Mapper.AdminPostModelToBusinessMapper;
+import org.gelecekbilimde.scienceplatform.mapper.AdminPostModelToDomainMapper;
 import org.gelecekbilimde.scienceplatform.common.Paging;
-import org.gelecekbilimde.scienceplatform.dto.Post.Business.AdminPostListBusinessDTO;
-import org.gelecekbilimde.scienceplatform.dto.Post.PostCreateDTO;
-import org.gelecekbilimde.scienceplatform.dto.Post.Request.AdminPostListRequestDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.Domain.AdminPostListDomainDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.PostCreateDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.Request.AdminPostListRequestDTO;
 import org.gelecekbilimde.scienceplatform.dto.PostMediaDTO;
 import org.gelecekbilimde.scienceplatform.events.PostMediaCreateEvent;
 import org.gelecekbilimde.scienceplatform.events.PostProcessCreateEvent;
@@ -36,7 +36,7 @@ public class PostService {
 	private final ApplicationContext applicationContext;
 	private final PostMediaRepository postMediaRepository;
 	private final MediaRepository mediaRepository;
-	private static final AdminPostModelToBusinessMapper adminPostModelToBusinessMapper = AdminPostModelToBusinessMapper.initialize();
+	private static final AdminPostModelToDomainMapper adminPostModelToDomainMapper = AdminPostModelToDomainMapper.initialize();
 
 	@Transactional
 	public PostCreateDTO save (PostCreateDTO postCreateDTO, User user){
@@ -97,9 +97,9 @@ public class PostService {
 	}
 
 
-	public Paging<AdminPostListBusinessDTO> getPostListForAdmin(AdminPostListRequestDTO listRequest) {
+	public Paging<AdminPostListDomainDTO> getPostListForAdmin(AdminPostListRequestDTO listRequest) {
 		Page<Post> postModels = postRepository.findAll(listRequest.toPageable());
-		List<AdminPostListBusinessDTO> businessDTOList = adminPostModelToBusinessMapper.map(postModels.getContent());
-		return Paging.of(postModels, businessDTOList);
+		List<AdminPostListDomainDTO> domainDTOList = adminPostModelToDomainMapper.map(postModels.getContent());
+		return Paging.of(postModels, domainDTOList);
 	}
 }

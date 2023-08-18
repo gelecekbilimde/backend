@@ -29,7 +29,6 @@ public class Response<T> {
 	@Builder.Default
 	private LocalDateTime timestamp = LocalDateTime.now();
 
-	private Map<String, Object> request;
 
 	public String responseCode;
 
@@ -38,61 +37,22 @@ public class Response<T> {
 		.status(HttpStatus.NO_CONTENT.value())
 		.build();
 
-	public static <T> Response<T> ok(final T response, HttpServletRequest httpServletRequest) {
+	public static <T> Response<T> ok(final T response) {
 		return Response.<T>builder()
 			.statusText(HttpStatus.OK)
 			.status(HttpStatus.OK.value())
 			.list(response)
 			.responseCode(UUID.randomUUID().toString())
-			.request(buildRequestParams(httpServletRequest))
 			.build();
 	}
 
 
-	public static <T> Response<T> create(final T response, HttpServletRequest httpServletRequest) {
+	public static <T> Response<T> create(final T response) {
 		return Response.<T>builder()
 			.statusText(HttpStatus.CREATED)
 			.status(HttpStatus.CREATED.value())
 			.list(response)
 			.responseCode(UUID.randomUUID().toString())
-			.request(buildRequestParams(httpServletRequest))
 			.build();
-	}
-
-
-	@JsonIgnore
-	private static Map<String, Object> buildRequestParams(HttpServletRequest httpRequest) {
-		Map<String, Object> requestArgs = new HashMap<>();
-		requestArgs.put("params", getRequestParams(httpRequest));
-		requestArgs.put("path", httpRequest.getRequestURL());
-		requestArgs.put("args", getRequestArgs(httpRequest));
-
-		return requestArgs;
-	}
-
-	@JsonIgnore
-	private static Map<String, String> getRequestParams(HttpServletRequest httpRequest) {
-		HashMap<String, String> params = new HashMap<>();
-
-		String queryString = httpRequest.getQueryString();
-		if (queryString == null) {
-			return params;
-		}
-
-		String[] parameters = queryString.split("&");
-
-		for (String parameter : parameters) {
-			String[] keyValue = parameter.split("=");
-			String key = keyValue[0];
-			String value = keyValue[1];
-			params.put(key, value);
-		}
-
-		return params;
-	}
-
-	@JsonIgnore
-	private static Object getRequestArgs(HttpServletRequest httpRequest) {
-		return httpRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 	}
 }

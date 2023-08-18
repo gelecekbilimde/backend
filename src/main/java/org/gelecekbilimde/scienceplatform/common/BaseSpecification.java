@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.repository;
+package org.gelecekbilimde.scienceplatform.common;
 
 import jakarta.persistence.criteria.Predicate;
 import lombok.Builder;
