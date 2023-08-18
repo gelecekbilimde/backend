@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.dto.Post;
+package org.gelecekbilimde.scienceplatform.dto.post;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

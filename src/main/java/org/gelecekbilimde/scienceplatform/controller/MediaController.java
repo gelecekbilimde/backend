@@ -28,6 +28,6 @@ public class MediaController {
 													@RequestParam("groupId") Integer groupId,
 													@RequestParam("type") MediaContentType mediaType) {
 		//todo size kontrol
-		return Response.ok(mediaService.uploadMedia(groupId, mediaType, files, (User) httpServletRequest.getAttribute("user")), httpServletRequest);
+		return Response.ok(mediaService.uploadMedia(groupId, mediaType, files, (User) httpServletRequest.getAttribute("user")));
 	}
 }

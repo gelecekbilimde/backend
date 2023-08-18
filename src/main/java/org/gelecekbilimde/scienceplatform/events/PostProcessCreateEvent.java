@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.events;
 
 import lombok.Getter;
-import org.gelecekbilimde.scienceplatform.dto.Post.PostCreateDTO;
+import org.gelecekbilimde.scienceplatform.dto.post.PostCreateDTO;
 import org.gelecekbilimde.scienceplatform.model.Post;
 import org.gelecekbilimde.scienceplatform.model.User;
 import org.springframework.context.ApplicationEvent;

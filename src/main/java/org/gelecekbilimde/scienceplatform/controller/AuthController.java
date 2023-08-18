@@ -21,22 +21,22 @@ public class AuthController {
 	private final AuthenticationService service;
 
 	@PostMapping("/register")
-	public Response<TokenDto> register(HttpServletRequest httpServletRequest, @RequestBody RegisterDto request) {
-		return Response.ok(service.register(request), httpServletRequest);
+	public Response<TokenDto> register(@RequestBody RegisterDto request) {
+		return Response.ok(service.register(request));
 	}
 
 	@PostMapping("/login")
-	public Response<TokenDto> login(HttpServletRequest httpServletRequest, @RequestBody LoginDto request) {
-		return Response.ok(service.login(request), httpServletRequest);
+	public Response<TokenDto> login(@RequestBody LoginDto request) {
+		return Response.ok(service.login(request));
 	}
 
 	@PostMapping("/refresh-token")
 	public Response<Object> refreshToken(HttpServletRequest request) {
-		return Response.ok(service.refreshToken(request), request);
+		return Response.ok(service.refreshToken(request));
 	}
 
 	@PostMapping("/guest")
-	public Response<TokenDto> guest(HttpServletRequest httpServletRequest) {
-		return Response.ok(service.generateGuestToken(),httpServletRequest);
+	public Response<TokenDto> guest() {
+		return Response.ok(service.generateGuestToken());
 	}
 }
