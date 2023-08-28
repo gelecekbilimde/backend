@@ -6,23 +6,26 @@ import org.springframework.http.ResponseEntity;
 
 public class Response {
 
-	public static ResponseEntity<ApiResponse> ok(HttpServletRequest request, Object response){
+	private Response() {
+		// Private constructor to prevent instantiation
+		throw new UnsupportedOperationException("This class cannot be instantiated");
+	}
 
+	public static ResponseEntity<ApiResponse> ok(HttpServletRequest request, Object response) {
 		ApiResponse apiResponse = new ApiResponse(request,HttpStatus.OK,response);
 		return ResponseEntity.status(apiResponse.getStatus()).body(apiResponse);
 	}
 
-	public static ResponseEntity<ApiResponse> noContent(){
+	public static ResponseEntity<ApiResponse> noContent() {
 		return ResponseEntity.noContent().build();
 	}
 
-	public static ResponseEntity<ApiResponse> created(HttpServletRequest request, Object response){
-
+	public static ResponseEntity<ApiResponse> created(HttpServletRequest request, Object response) {
 		ApiResponse apiResponse = new ApiResponse(request,HttpStatus.CREATED,response);
 		return ResponseEntity.status(apiResponse.getStatus()).body(apiResponse);
 	}
-	public static ResponseEntity<ApiResponse> multiStatus(HttpServletRequest request, Object response){
 
+	public static ResponseEntity<ApiResponse> multiStatus(HttpServletRequest request, Object response) {
 		ApiResponse apiResponse = new ApiResponse(request,HttpStatus.MULTI_STATUS,response);
 		return ResponseEntity.status(apiResponse.getStatus()).body(apiResponse);
 	}

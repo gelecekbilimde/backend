@@ -1,108 +1,67 @@
 package org.gelecekbilimde.scienceplatform.common;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerMapping;
 
-import javax.annotation.Nullable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@Getter
 public class ApiResponse {
 	private final HttpStatus statusText;
 	private final Integer status;
-
-	private Object list;
-
-	protected int count;
-
-	public String timestamp;
-
-	private Map<String, Object> request;
-	public String responseCode;
+	private final Object list;
+	private final int count;
+	private final String timestamp;
+	private final Map<String, Object> request;
+	private final String responseCode;
 
 	public ApiResponse(HttpServletRequest request, HttpStatus status, Object response) {
-
 		this.statusText = status;
 		this.status = status.value();
-		setList(response);
-		setTimestamp();
-		setRequest(request);
-		setResponseCode();
-		setCount();
+		this.list = formatList(response);
+		this.count = calculateCount(this.list);
+		this.timestamp = getCurrentTimestamp();
+		this.request = createRequest(request);
+		this.responseCode = UUID.randomUUID().toString();
 	}
 
-
-	public void setList(@Nullable Object response) {
+	private Object formatList(Object response) {
 		if (response instanceof String) {
 			HashMap<String, Object> responseData = new HashMap<>();
 			responseData.put("message", response);
-			response = responseData;
+			return responseData;
 		}
-		list = response;
+		return response;
 	}
 
-	public Object getList() {
-		return list;
-	}
-
-	public void setCount() {
+	private int calculateCount(Object list) {
 		if (list instanceof List) {
-			count = ((List<?>) list).size();
+			return ((List<?>) list).size();
 		} else if (list instanceof Map) {
-			count = ((Map<?, ?>) list).size();
+			return ((Map<?, ?>) list).size();
 		} else if (list instanceof Set) {
-			count = ((Set<?>) list).size();
-		} else {
-			count = 0;
+			return ((Set<?>) list).size();
 		}
+		return 0;
 	}
 
-	public int getCount() {
-		return count;
+	private String getCurrentTimestamp() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		return ZonedDateTime.now(ZoneId.of("Z")).format(formatter);
 	}
 
-	public Map<String, Object> getRequest() {
-		return request;
-	}
-
-	private void setRequest(HttpServletRequest httpRequest) {
+	private Map<String, Object> createRequest(HttpServletRequest httpRequest) {
 		Map<String, Object> requestArgs = new HashMap<>();
 		requestArgs.put("params", getRequestParams(httpRequest));
 		requestArgs.put("path", httpRequest.getRequestURL());
 		requestArgs.put("args", getRequestArgs(httpRequest));
-
-		request = requestArgs;
+		return requestArgs;
 	}
-
-
-	public String getResponseCode() {
-		return responseCode;
-	}
-
-	public void setResponseCode() {
-		this.responseCode = UUID.randomUUID().toString();
-	}
-
-	public HttpStatus getStatusText() {
-		return statusText;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setTimestamp() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		timestamp = ZonedDateTime.now(ZoneId.of("Z")).format(formatter);
-	}
-
-	public String getTimestamp() {
-		return timestamp;
-	}
-
 
 	private Map<String, String> getRequestParams(HttpServletRequest httpRequest) {
 		HashMap<String, String> params = new HashMap<>();
@@ -128,4 +87,5 @@ public class ApiResponse {
 	{
 		return httpRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 	}
+
 }

@@ -30,7 +30,7 @@ public class Post {
 	private Integer likeCount;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date created_at;
+	private Date createdAt;
 
 
 	@ManyToMany(mappedBy = "posts")

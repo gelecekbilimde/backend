@@ -81,9 +81,9 @@ public class Handler {
 			message = "Beklenmeyen bir hata oldu Hemen ilgileneceğiz";
 		}
 
-		Exception exception = new Exception(path, status, method, message, new HashMap<>());
+		ApiExceptionDetail exception = new ApiExceptionDetail(path, status, method, message, new HashMap<>());
 
-		writeLog(logLevel, exception.errorCode, originalMessage);
+		writeLog(logLevel, exception.getErrorCode(), originalMessage);
 
 		return new ResponseEntity<>(exception, status);
 	}
@@ -92,8 +92,8 @@ public class Handler {
 	{
 		String formatMessage = messageFormat(message,errorCode);
 		switch (level) {
-			case "warn" -> LOGGER.warn(formatMessage);
-			case "error" -> LOGGER.error(formatMessage);
+			case WARN -> LOGGER.warn(formatMessage);
+			case ERROR -> LOGGER.error(formatMessage);
 			default -> LOGGER.info(formatMessage);
 		}
 	}

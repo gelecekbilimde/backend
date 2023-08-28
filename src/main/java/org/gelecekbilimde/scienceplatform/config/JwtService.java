@@ -6,11 +6,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.model.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
@@ -38,7 +36,7 @@ public class JwtService {
 	@Value("${application.security.jwt.public-key}")
 	private String publicKeyPath;
 
-	public  final String  GUEST_USERNAME = "GUEST";
+	public static final String GUEST_USERNAME = "GUEST";
 	public String extractSubject(String token) {
 		return extractClaim(token, Claims::getSubject);
 	}
@@ -60,7 +58,7 @@ public class JwtService {
 		claim.put("fullName", user.getName() + " " + user.getLastname());
 		claim.put("mail",user.getEmail());
 		claim.put("userId",user.getId());
-		claim.put("role",user.getRole().getRole());
+		claim.put("role",user.getRole().getRoleName());
 		claim.put("scope",scope);
 
 
@@ -112,8 +110,7 @@ public class JwtService {
 	}
 
 	public boolean isGuestTokenValid(String token){
-		final String userName = extractSubject(token);
-		return  !isTokenExpired(token);
+		return !isTokenExpired(token);
 	}
 
 	private boolean isTokenExpired(String token) {

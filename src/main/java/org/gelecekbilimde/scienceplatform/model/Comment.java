@@ -18,7 +18,7 @@ public class Comment {
 	private Long id;
 
 	@Column(columnDefinition = "text", nullable = false)
-	private String comment;
+	private String content;
 
 	@Column(columnDefinition = "integer", nullable = false)
 	private Integer likeCount;

@@ -58,7 +58,7 @@ public class AuthenticationService {
 		try {
 
 			Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException("Default Role is not defined."));
-			List<String> scope = scopeList(role.getRole());
+			List<String> scope = scopeList(role.getRoleName());
 
 
 			Date birthDate = null;
@@ -141,8 +141,8 @@ public class AuthenticationService {
 				throw new ClientException("This Email Not Verify");
 			}
 
-			Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException("User Scope has a problem"));
-			List<String> scope = scopeList(role.getRole());
+			Role role = roleRepository.findByRole(user.getRole().getRoleName()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+			List<String> scope = scopeList(role.getRoleName());
 
 			var jwtToken = jwtService.generateToken(user,scope);
 			var refreshToken = jwtService.generateRefreshToken(user);
@@ -176,7 +176,7 @@ public class AuthenticationService {
 	private void saveUserToken(User user, String jwtToken) {
 		var token = Token.builder()
 			.user(user)
-			.token(jwtToken)
+			.tokenValue(jwtToken)
 			.tokenType(TokenType.BEARER)
 			.revoked(false)
 			.expired(false)
@@ -232,7 +232,7 @@ public class AuthenticationService {
 
 	private List<String> scopeList(String role) {
 		List<Permission> rolePermission = roleRepository.findPermissionsByRole(role);
-		return rolePermission.stream().map(Permission::getPermission).toList();
+		return rolePermission.stream().map(Permission::getPermissionName).toList();
 	}
 
 }
