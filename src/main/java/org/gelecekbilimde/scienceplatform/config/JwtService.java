@@ -4,13 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
-import org.gelecekbilimde.scienceplatform.model.User;
+import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.*;
