@@ -2,8 +2,8 @@ package org.gelecekbilimde.scienceplatform.post.mapper;
 
 
 import org.gelecekbilimde.scienceplatform.common.BaseMapper;
-import org.gelecekbilimde.scienceplatform.post.dto.Domain.PostDomain;
-import org.gelecekbilimde.scienceplatform.post.dto.Response.PostResponse;
+import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
+import org.gelecekbilimde.scienceplatform.post.dto.response.PostResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
