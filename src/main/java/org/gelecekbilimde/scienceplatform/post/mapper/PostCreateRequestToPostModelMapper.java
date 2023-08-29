@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.mapper;
 
 
 import org.gelecekbilimde.scienceplatform.common.BaseMapper;
-import org.gelecekbilimde.scienceplatform.post.dto.Request.PostCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.dto.request.PostCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

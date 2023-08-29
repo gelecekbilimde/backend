@@ -2,12 +2,11 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.comment.model.Comment;
-import org.gelecekbilimde.scienceplatform.postMedia.model.PostMedia;
-import org.gelecekbilimde.scienceplatform.postProcess.model.PostProcess;
+import org.gelecekbilimde.scienceplatform.postmedia.model.PostMedia;
+import org.gelecekbilimde.scienceplatform.postprocess.model.PostProcess;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.gelecekbilimde.scienceplatform.postProcess.enums.PostProcessEnum;
+import org.gelecekbilimde.scienceplatform.postprocess.enums.PostProcessEnum;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.*;
@@ -77,7 +76,7 @@ public class Post {
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "timestamp")
-	private Date created_at;
+	private Date createAt;
 
 
 }

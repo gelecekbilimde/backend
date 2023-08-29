@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
-import org.gelecekbilimde.scienceplatform.postMedia.model.PostMedia;
+import org.gelecekbilimde.scienceplatform.postmedia.model.PostMedia;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.hibernate.annotations.CreationTimestamp;
 

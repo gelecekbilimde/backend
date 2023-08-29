@@ -2,13 +2,13 @@ package org.gelecekbilimde.scienceplatform.post.conroller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.post.dto.Response.AdminPostListResponse;
+import org.gelecekbilimde.scienceplatform.post.dto.response.AdminPostListResponse;
 import org.gelecekbilimde.scienceplatform.post.mapper.AdminPostListDomainToResponseMapper;
 import org.gelecekbilimde.scienceplatform.common.Paging;
 import org.gelecekbilimde.scienceplatform.common.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.Response;
-import org.gelecekbilimde.scienceplatform.post.dto.Domain.AdminPostListDomain;
-import org.gelecekbilimde.scienceplatform.post.dto.Request.AdminPostListRequest;
+import org.gelecekbilimde.scienceplatform.post.dto.domain.AdminPostListDomain;
+import org.gelecekbilimde.scienceplatform.post.dto.request.AdminPostListRequest;
 import org.gelecekbilimde.scienceplatform.post.service.PostService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

@@ -1,20 +1,17 @@
 package org.gelecekbilimde.scienceplatform.media.service;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.media.dto.Request.MediaRequest;
+import org.gelecekbilimde.scienceplatform.media.dto.request.MediaRequest;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.media.model.Media;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
 import org.gelecekbilimde.scienceplatform.media.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.gelecekbilimde.scienceplatform.media.dto.Request.MediaGroupRequest;
+import org.gelecekbilimde.scienceplatform.media.dto.request.MediaGroupRequest;
 import org.gelecekbilimde.scienceplatform.media.model.MediaGroup;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.media.repository.MediaGroupRepository;
-import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

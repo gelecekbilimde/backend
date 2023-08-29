@@ -2,9 +2,9 @@ package org.gelecekbilimde.scienceplatform.post.mapper;
 
 
 import org.gelecekbilimde.scienceplatform.common.BaseMapper;
-import org.gelecekbilimde.scienceplatform.post.dto.Domain.PostDomain;
-import org.gelecekbilimde.scienceplatform.postProcess.dto.Domain.Message;
-import org.gelecekbilimde.scienceplatform.postProcess.dto.Domain.PostProcessCreate;
+import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
+import org.gelecekbilimde.scienceplatform.postprocess.dto.domain.ProcessMessage;
+import org.gelecekbilimde.scienceplatform.postprocess.dto.domain.PostProcessCreate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -17,13 +17,13 @@ import java.util.List;
 public interface PostDomainToPostProcessCreateMapper extends BaseMapper<PostDomain, PostProcessCreate> {
 
 	@Mapping(target = "process", source = "lastProcess")
-	@Mapping(target = "postId", source = "id")
-	@Mapping(target = "message", source = "source.message",qualifiedByName ="emptyMessage")
+//	@Mapping(target = "postId", source = "id")
+	@Mapping(target = "message",expression ="java(emptyMessage())")
 	@Override
 	PostProcessCreate map(PostDomain source);
 
 	@Named("emptyMessage")
-	default List<Message> emptyMessage(){
+	default List<ProcessMessage> emptyMessage(){
 		return new ArrayList<>();
 	}
 
