@@ -56,12 +56,12 @@ public class Post {
 	private Long userId;
 
 
-	@OneToMany(mappedBy = "postMedia", cascade = CascadeType.ALL)
-	private List<PostMedia> postMediaList;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	private List<PostMedia> postMedia;
 
 
-	@OneToMany(mappedBy = "postProcess", cascade = CascadeType.ALL)
-	private List<PostProcess> processList;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	private List<PostProcess> process;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "id",insertable = false,updatable = false)

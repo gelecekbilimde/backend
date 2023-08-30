@@ -7,6 +7,7 @@ import org.gelecekbilimde.scienceplatform.postmedia.dto.request.PostMediaCreate;
 import org.gelecekbilimde.scienceplatform.postmedia.mapper.PostMediaCreateToPostMediaModelMapper;
 import org.gelecekbilimde.scienceplatform.postmedia.model.PostMedia;
 import org.gelecekbilimde.scienceplatform.postmedia.repository.PostMediaRepository;
+import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,21 +17,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostMediaService {
 
+	private final Identity identity;
+
 	private final PostMediaRepository postMediaRepository;
 	private static final PostMediaCreateToPostMediaModelMapper postMediaCreateToPostMediaModel = PostMediaCreateToPostMediaModelMapper.initialize();
 
-	@Transactional
 	public void savePostMedia(List<PostMediaCreate> postMediaCreateList) {
-		postMediaCreateList
-			.stream()
-			.map(this::savePostMediaOne)
-			.toList();
+		postMediaCreateList.forEach(this::savePostMediaOne);
+
 	}
 
 	@Transactional
 	public PostMediaCreate savePostMediaOne(@Valid PostMediaCreate postMediaCreate) {
 
-		PostMedia postMedia = postMediaCreateToPostMediaModel.mapForSaving(postMediaCreate);
+		PostMedia postMedia = postMediaCreateToPostMediaModel.mapForSaving(postMediaCreate,identity.getUserId());
 
 		PostMedia data = postMediaRepository.save(postMedia);
 		postMedia.setId(data.getId());

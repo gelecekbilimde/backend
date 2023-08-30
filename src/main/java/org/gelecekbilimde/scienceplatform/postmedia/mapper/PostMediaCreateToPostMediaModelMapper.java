@@ -9,11 +9,11 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface PostMediaCreateToPostMediaModelMapper extends BaseMapper<PostMediaCreate, PostMedia> {
-	default PostMedia mapForSaving(PostMediaCreate postMediaCreate){
+	default PostMedia mapForSaving(PostMediaCreate postMediaCreate, Long userId){
 		return PostMedia.builder()
 			.postId(postMediaCreate.getPostId())
 			.mediaId(postMediaCreate.getMediaId())
-			.userId(postMediaCreate.getUserId())
+			.userId(userId)
 			.cover(postMediaCreate.getCover())
 			.build();
 	}
