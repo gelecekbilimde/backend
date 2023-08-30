@@ -2,7 +2,6 @@ package org.gelecekbilimde.scienceplatform.user.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.auth.model.Role;
 import org.gelecekbilimde.scienceplatform.auth.model.Token;
 import org.gelecekbilimde.scienceplatform.user.enums.Degree;
@@ -71,7 +70,7 @@ public class User implements UserDetails {
 	public boolean userLock = false;
 
 	@OneToMany(mappedBy = "user")
-	private List<Token> tokens;
+	private List<Token> token;
 
 	@OneToOne
 	@JoinColumn(referencedColumnName = "role")
@@ -82,7 +81,7 @@ public class User implements UserDetails {
 	private Set<User> followerUsers = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Post> posts;
+	private List<Post> post;
 
 	@Override
 	public String getPassword() {

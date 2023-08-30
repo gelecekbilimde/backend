@@ -19,16 +19,20 @@ import java.util.List;
 public interface PostProcessCreateToPostProcessModelMapper extends BaseMapper<PostProcessCreate, PostProcess> {
 
 	@Mapping(target = "message", source = "message", qualifiedByName = "convertListToString")
-	default PostProcess mapForSaving(PostProcessCreate postProcessCreate, Long userId){
-			return PostProcess.builder()
-				.header(postProcessCreate.getHeader())
-				.content(postProcessCreate.getContent())
-				.slug(postProcessCreate.getSlug())
-				.process(postProcessCreate.getProcess())
-				.postId(postProcessCreate.getPostId())
-				.userId(userId)
-				.message(convertListToString(postProcessCreate.getMessage()))
-				.build();
+	@Override
+	PostProcess map(PostProcessCreate source);
+
+	default PostProcess mapForSaving(PostProcessCreate postProcessCreate, Long userId) {
+		String messageString = convertListToString(postProcessCreate.getMessage());
+		return PostProcess.builder()
+			.header(postProcessCreate.getHeader())
+			.content(postProcessCreate.getContent())
+			.slug(postProcessCreate.getSlug())
+			.process(postProcessCreate.getProcess())
+			.postId(postProcessCreate.getPostId())
+			.userId(userId)
+			.message(messageString)
+			.build();
 	}
 
 	@Named("convertListToString")

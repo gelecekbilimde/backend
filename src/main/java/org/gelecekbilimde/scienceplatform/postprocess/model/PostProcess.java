@@ -41,11 +41,11 @@ public class PostProcess {
 
 
 	@ManyToOne
-	@JoinColumn(name = "post_id")
+	@JoinColumn(name = "post_id",insertable = false, updatable = false)
 	private Post post;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
 
 	@Column(columnDefinition = "jsonb")

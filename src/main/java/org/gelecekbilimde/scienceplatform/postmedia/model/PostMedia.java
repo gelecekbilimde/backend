@@ -33,18 +33,18 @@ public class PostMedia {
 	private Long userId;
 
 	@ManyToOne
-	@JoinColumn(name = "post_id")
+	@JoinColumn(name = "post_id",insertable = false, updatable = false)
 	private Post post;
 
 	@ManyToOne
-	@JoinColumn(name = "media_id")
+	@JoinColumn(name = "media_id",insertable = false, updatable = false)
 	private Media media;
 
 	@Column
 	private Boolean cover;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
 
 	@CreationTimestamp
