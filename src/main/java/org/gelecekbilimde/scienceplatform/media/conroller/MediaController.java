@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/media")
 @RequiredArgsConstructor
-public class MediaController {
+class MediaController {
 
 	private final MediaService mediaService;
 

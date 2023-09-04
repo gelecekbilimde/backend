@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
@@ -53,12 +54,12 @@ public class User implements UserDetails {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "timestamp")
-	private Date birthDate;
+	private LocalDateTime birthDate;
 
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "timestamp")
-	private Date createDate;
+	private LocalDateTime createDate;
 
 	@Column(columnDefinition = "boolean default false")
 	public boolean emailVerify = false;

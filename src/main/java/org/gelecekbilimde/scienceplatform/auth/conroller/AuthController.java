@@ -1,6 +1,7 @@
 package org.gelecekbilimde.scienceplatform.auth.conroller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.response.TokenResponse;
@@ -16,17 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController {
+class AuthController {
 
 	private final AuthenticationService service;
 
 	@PostMapping("/register")
-	public Response<TokenResponse> register(@RequestBody RegisterRequest request) {
+	public Response<TokenResponse> register(@RequestBody @Valid RegisterRequest request) {
 		return Response.ok(service.register(request));
 	}
 
 	@PostMapping("/login")
-	public Response<TokenResponse> login(@RequestBody LoginRequest request) {
+	public Response<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
 		return Response.ok(service.login(request));
 	}
 

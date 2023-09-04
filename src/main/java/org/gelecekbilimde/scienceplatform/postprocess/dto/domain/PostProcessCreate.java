@@ -3,7 +3,7 @@ package org.gelecekbilimde.scienceplatform.postprocess.dto.domain;
 import lombok.Data;
 import org.gelecekbilimde.scienceplatform.postprocess.enums.PostProcessEnum;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -19,6 +19,6 @@ public class PostProcessCreate {
 
 	private PostProcessEnum process;
 	private List<ProcessMessage> message;
-	private Date createdDate;
+	private LocalDateTime createdDate;
 
 }
