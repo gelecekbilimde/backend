@@ -18,7 +18,7 @@ public class Token {
 
 	@Id
 	@GeneratedValue
-	public Integer id;
+	public Long id;
 
 	@Column(columnDefinition = "text")
 	public String token;

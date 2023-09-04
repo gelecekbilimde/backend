@@ -11,7 +11,7 @@ import org.gelecekbilimde.scienceplatform.postmedia.model.PostMedia;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -57,7 +57,7 @@ public class Media {
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "timestamp")
-	private Date createdDate;
+	private LocalDateTime createdDate;
 
 
 }

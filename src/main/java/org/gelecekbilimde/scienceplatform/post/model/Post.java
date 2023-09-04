@@ -9,6 +9,7 @@ import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.postprocess.enums.PostProcessEnum;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -76,7 +77,7 @@ public class Post {
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "timestamp")
-	private Date createAt;
+	private LocalDateTime createAt;
 
 
 }
