@@ -28,11 +28,14 @@ public class MediaGroup {
 	@Column(columnDefinition = "varchar(50) default 'Space'", nullable = false)
 	private String name;
 
+	@Column(name = "user_id")
+	private Long userId;
+
 	@OneToMany(mappedBy = "mediaGroup", cascade = CascadeType.ALL)
 	private List<Media> mediaList;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
 
 	@CreationTimestamp

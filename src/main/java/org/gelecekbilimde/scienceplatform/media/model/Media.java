@@ -43,12 +43,15 @@ public class Media {
 	@Column(columnDefinition ="boolean default false", nullable = false)
 	private Boolean shared;
 
+	@Column(name = "user_id")
+	private Long userId;
+
 	@ManyToOne
 	@JoinColumn(name = "group_id")
 	private MediaGroup mediaGroup;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
 
 	@OneToMany(mappedBy = "media", cascade = CascadeType.ALL)
