@@ -7,10 +7,10 @@ import org.gelecekbilimde.scienceplatform.media.model.Media;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
 import org.gelecekbilimde.scienceplatform.media.repository.MediaRepository;
+import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.beans.factory.annotation.Value;
 import org.gelecekbilimde.scienceplatform.media.dto.request.MediaGroupRequest;
 import org.gelecekbilimde.scienceplatform.media.model.MediaGroup;
-import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.media.repository.MediaGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +37,14 @@ public class MediaService {
 	private final MediaGroupRepository mediaGroupRepository;
 	private final MediaRepository mediaRepository;
 
+	private final Identity identity;
 
-	public MediaGroupRequest saveMediaGroup(MediaGroupRequest mediaGroupRequest, User user) {
+
+	public MediaGroupRequest saveMediaGroup(MediaGroupRequest mediaGroupRequest) {
 		var mediaGroup = MediaGroup
 				.builder()
 				.name(mediaGroupRequest.getName())
-				.user(user)
+				.userId(identity.getUserId())
 			;
 
 		if (mediaGroupRequest.getParentId() != null){
@@ -56,17 +58,17 @@ public class MediaService {
 		return mediaGroupRequest;
 	}
 
-	public MediaRequest saveMedia(MediaRequest mediaRequest, User user) {
+	public MediaRequest saveMedia(MediaRequest mediaRequest) {
 		MediaGroup mediaGroup = this.mediaGroupRepository.findById(mediaRequest.getGroupId()).orElseThrow(()->new ClientException("Klasör Bulunamadı"));
 
-		var media = Media.builder()
+		Media media = Media.builder()
 				.url(mediaRequest.getUrl())
 				.type(mediaRequest.getType())
 				.mediaType(mediaRequest.getMediaType())
 				.title(mediaRequest.getTitle())
 				.shared(mediaRequest.getShared())
 				.mediaGroup(mediaGroup)
-				.user(user)
+				.userId(identity.getUserId())
 				.build()
 				;
 
@@ -75,7 +77,7 @@ public class MediaService {
 	}
 
 	@Transactional
-	public List<Object> uploadMedia(Integer groupId, MediaContentType mediaType, List<MultipartFile> files, User user) {
+	public List<Object> uploadMedia(Integer groupId, MediaContentType mediaType, List<MultipartFile> files) {
 
 
 		List<Object> messages = new ArrayList<>();
@@ -97,7 +99,7 @@ public class MediaService {
 
 				String fileName = UUID.randomUUID().toString().replace("-", "") + '.' + ext;
 
-				String path = mediaUploadPath + '/' + user.getId() + "/" + mediaType.toString();
+				String path = mediaUploadPath + '/' + identity.getUserId() + "/" + mediaType.toString();
 				String url = "/" + path + "/" + fileName;
 
 				File directory = new File(path);
@@ -117,7 +119,7 @@ public class MediaService {
 				mediaRequest.setUrl(url);
 				mediaRequest.setMediaType(this.getMediaType(ext));
 
-				this.saveMedia(mediaRequest,user);
+				this.saveMedia(mediaRequest);
 
 				messageItem.put("status", "success");
 			} catch (IOException e) {

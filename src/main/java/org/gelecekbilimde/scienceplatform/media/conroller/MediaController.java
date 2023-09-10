@@ -4,7 +4,6 @@ package org.gelecekbilimde.scienceplatform.media.conroller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.Response;
-import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.service.MediaService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +26,6 @@ class MediaController {
 													@RequestParam("groupId") Integer groupId,
 													@RequestParam("type") MediaContentType mediaType) {
 		//todo size kontrol
-		return Response.ok(mediaService.uploadMedia(groupId, mediaType, files, (User) httpServletRequest.getAttribute("user")));
+		return Response.ok(mediaService.uploadMedia(groupId, mediaType, files));
 	}
 }

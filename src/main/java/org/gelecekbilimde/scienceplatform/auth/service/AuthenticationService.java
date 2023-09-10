@@ -27,8 +27,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -44,6 +42,7 @@ public class AuthenticationService {
 	private final RoleRepository roleRepository;
 	private final BlackListRepository blackListRepository;
 
+	// todo : refactor edilecek
 	@Transactional
 	public TokenResponse register(RegisterRequest request) {
 
@@ -55,67 +54,57 @@ public class AuthenticationService {
 		if (userRepository.existsByEmail(request.getEmail())){
 			throw new ClientException("This user is already registered");
 		}
-		try {
 
-			Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException("Default Role is not defined."));
-			List<String> scope = scopeList(role.getRole());
+		Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException("Default Role is not defined."));
+		List<String> scope = scopeList(role.getRole());
 
 
-			Date birthDate = null;
-			if (request.getBirthDate() != null){
-				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-				birthDate = formatter.parse(request.getBirthDate());
+		Gender gender = null;
+		if (request.getGender() != null) {
+			boolean isGenderExists = EnumSet.allOf(Gender.class).stream().anyMatch(e -> e.name().equals(request.getGender()));
+			if (!isGenderExists) {
+				throw new ClientException("gender type not found");
 			}
-
-			Gender gender = null;
-			if (request.getGender() != null) {
-				boolean isGenderExists = EnumSet.allOf(Gender.class).stream().anyMatch(e -> e.name().equals(request.getGender()));
-				if (!isGenderExists) {
-					throw new ClientException("gender type not found");
-				}
-				gender = Gender.valueOf(request.getGender());
-			}
-
-			Degree degree = null;
-			if (request.getDegree() != null){
-				boolean isDegreeExists = EnumSet.allOf(Degree.class).stream().anyMatch(e -> e.name().equals(request.getDegree()));
-				if (!isDegreeExists) {
-					throw new ClientException("degree type not found");
-				}
-				degree = Degree.valueOf(request.getDegree());
-			}
-
-			var user = User.builder()
-				.name(request.getFirstname())
-				.lastname(request.getLastname())
-				.email(request.getEmail())
-				.birthDate(birthDate)
-				.biography(request.getBiography())
-				.gender(gender)
-				.degree(degree)
-				.role(role)
-				.userEnable(true).userLock(false).emailVerify(false)
-				.password(passwordEncoder.encode(request.getPassword()))
-				.build();
-
-			var savedUser = userRepository.save(user);
-
-			var jwtToken = jwtService.generateToken(user,scope);
-
-			saveUserToken(savedUser, jwtToken);
-
-			var refreshToken = jwtService.generateRefreshToken(user);
-
-			return TokenResponse
-				.builder()
-				.accessToken(jwtToken)
-				.refreshToken(refreshToken)
-				.build();
-		}catch (ParseException parseException){
-			throw new ClientException("BirthDate format is wrong. dd/MM/yyyy");
-		}catch (Exception exception){
-			throw new ClientException(exception.getMessage());
+			gender = Gender.valueOf(request.getGender());
 		}
+
+		Degree degree = null;
+		if (request.getDegree() != null){
+			boolean isDegreeExists = EnumSet.allOf(Degree.class).stream().anyMatch(e -> e.name().equals(request.getDegree()));
+			if (!isDegreeExists) {
+				throw new ClientException("degree type not found");
+			}
+			degree = Degree.valueOf(request.getDegree());
+		}
+
+
+
+		User user = User.builder()
+			.name(request.getFirstname())
+			.lastname(request.getLastname())
+			.email(request.getEmail())
+			.birthDate(request.getBirthDate())
+			.biography(request.getBiography())
+			.gender(gender)
+			.degree(degree)
+			.role(role)
+			.userEnable(true).userLock(false).emailVerify(false)
+			.password(passwordEncoder.encode(request.getPassword()))
+			.build();
+
+		var savedUser = userRepository.save(user);
+
+		var jwtToken = jwtService.generateToken(user,scope);
+
+		saveUserToken(savedUser, jwtToken);
+
+		var refreshToken = jwtService.generateRefreshToken(user);
+
+		return TokenResponse
+			.builder()
+			.accessToken(jwtToken)
+			.refreshToken(refreshToken)
+			.build();
 	}
 
 	public TokenResponse login(LoginRequest request) {

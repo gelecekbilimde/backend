@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -52,9 +53,9 @@ public class User implements UserDetails {
 	@Column(columnDefinition = "text")
 	private String biography;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime birthDate;
+	@Temporal(TemporalType.DATE)
+	@Column(columnDefinition = "date")
+	private LocalDate birthDate;
 
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
