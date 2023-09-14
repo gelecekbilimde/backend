@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
 
@@ -16,17 +15,15 @@ import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
 @NoArgsConstructor
 public class MediaRequest {
 
-
-    @JsonIgnore
-    private String url;
+	private String url;
 
     private MediaContentType type;
 
     private MediaType mediaType;
 
-    private String Title;
+    private String title;
 
-    private Boolean shared=false;
+	private boolean shared = false;
 
     @NotNull(message = "cannot be null")
     @NotBlank(message = "cannot be null")

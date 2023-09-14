@@ -1,5 +1,5 @@
-INSERT INTO role (id, description, role, is_default) VALUES (1, 'Ziyaretçi', 'GUEST', null);
-INSERT INTO role (id, description, role, is_default) VALUES (2, 'Admin', 'ADMIN', null);
+INSERT INTO role (id, description, role, is_default) VALUES (1, 'Ziyaretçi', 'GUEST', false);
+INSERT INTO role (id, description, role, is_default) VALUES (2, 'Admin', 'ADMIN', false);
 INSERT INTO role (id, description, role, is_default) VALUES (3, 'Sosyal Kullanıcı', 'USER', true);
 
 

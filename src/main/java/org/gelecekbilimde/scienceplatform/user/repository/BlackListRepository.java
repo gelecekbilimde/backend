@@ -9,7 +9,7 @@ public interface BlackListRepository extends JpaRepository<BlackList, Integer> {
 
 	Optional<BlackList> findByEmail(String email);
 
-	Boolean existsByEmail(String email);
+	boolean existsByEmail(String email);
 
 
 }
