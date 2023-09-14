@@ -17,7 +17,7 @@ public interface PostCreateRequestToPostModelMapper extends BaseMapper<PostCreat
 			.content(postCreateRequest.getContent())
 			.userId(userId)
 			.likeCount(postCreateRequest.getLikeCount())
-			.active(postCreateRequest.getActive())
+			.active(postCreateRequest.isActive())
 			.lastProcess(postCreateRequest.getLastProcess())
 			.slug(postCreateRequest.getSlug())
 			.build();

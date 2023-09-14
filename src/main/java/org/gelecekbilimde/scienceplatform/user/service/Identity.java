@@ -18,15 +18,15 @@ public class Identity {
 		return getUser().getId();
 	}
 
-	public Boolean isEmailVerify() {
+	public boolean isEmailVerify() {
 		return getUser().isEmailVerify();
 	}
 
-	public Boolean isUserEnable() {
+	public boolean isUserEnable() {
 		return getUser().isUserEnable();
 	}
 
-	public Boolean isUserLock() {
+	public boolean isUserLock() {
 		return getUser().isUserLock();
 	}
 

@@ -66,7 +66,7 @@ public class MediaService {
 				.type(mediaRequest.getType())
 				.mediaType(mediaRequest.getMediaType())
 				.title(mediaRequest.getTitle())
-				.shared(mediaRequest.getShared())
+				.shared(mediaRequest.isShared())
 				.mediaGroup(mediaGroup)
 				.userId(identity.getUserId())
 				.build()
