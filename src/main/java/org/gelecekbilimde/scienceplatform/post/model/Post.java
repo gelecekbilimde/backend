@@ -2,11 +2,8 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.gelecekbilimde.scienceplatform.comment.model.Comment;
-import org.gelecekbilimde.scienceplatform.postmedia.model.PostMedia;
-import org.gelecekbilimde.scienceplatform.postprocess.model.PostProcess;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.gelecekbilimde.scienceplatform.postprocess.enums.PostProcessEnum;
+import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -33,16 +30,16 @@ public class Post {
 	private String content;
 
 	@Column(columnDefinition = "boolean default false")
-	private Boolean active;
+	private boolean active;
 
 	@Column(columnDefinition = "boolean default false")
-	private Boolean copyrightControl;
+	private boolean copyrightControl;
 
 	@Column(columnDefinition = "boolean default false")
-	private Boolean typoControl;
+	private boolean typoControl;
 
 	@Column(columnDefinition = "boolean default false")
-	private Boolean dangerousControl;
+	private boolean dangerousControl;
 
 	@Column(columnDefinition = "integer", nullable = false)
 	private Integer likeCount;
