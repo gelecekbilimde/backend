@@ -6,10 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.comment.dto.domain.response.CommentResponse;
-import org.gelecekbilimde.scienceplatform.postmedia.dto.request.PostMediaCreate;
 import org.gelecekbilimde.scienceplatform.user.dto.response.UserResponse;
-import org.gelecekbilimde.scienceplatform.postprocess.enums.PostProcessEnum;
+import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
 
 import java.util.List;
 
@@ -37,14 +35,12 @@ public class PostCreateRequest {
 	private List<String> label;
 
 	private Integer likeCount = 0;
-	private Boolean active = false;
+	private boolean active = false;
 
-	private Boolean copyrightControl = false;
-	private Boolean typoControl = false;
-	private Boolean dangerousControl = false;
+	private boolean copyrightControl = false;
+	private boolean typoControl = false;
+	private boolean dangerousControl = false;
 
 	private List<PostMediaCreate> medias;
-
-	private List<CommentResponse> comments;
 
 }

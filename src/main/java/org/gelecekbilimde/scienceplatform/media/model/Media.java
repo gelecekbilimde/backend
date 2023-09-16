@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
-import org.gelecekbilimde.scienceplatform.postmedia.model.PostMedia;
+import org.gelecekbilimde.scienceplatform.post.model.PostMedia;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -41,7 +41,7 @@ public class Media {
 	private String title;
 
 	@Column(columnDefinition ="boolean default false", nullable = false)
-	private Boolean shared;
+	private boolean shared;
 
 	@Column(name = "user_id")
 	private Long userId;

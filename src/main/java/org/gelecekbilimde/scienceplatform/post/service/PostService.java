@@ -12,13 +12,11 @@ import org.gelecekbilimde.scienceplatform.post.mapper.PostCreateRequestToPostMod
 import org.gelecekbilimde.scienceplatform.post.mapper.PostDomainToPostProcessCreateMapper;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostModelToPostDomainMapper;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.postmedia.dto.request.PostMediaCreate;
-import org.gelecekbilimde.scienceplatform.postmedia.service.PostMediaService;
-import org.gelecekbilimde.scienceplatform.postprocess.enums.PostProcessEnum;
+import org.gelecekbilimde.scienceplatform.post.dto.request.PostMediaCreate;
+import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.user.service.Identity;
-import org.gelecekbilimde.scienceplatform.postprocess.service.PostProcessService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

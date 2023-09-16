@@ -3,8 +3,8 @@ package org.gelecekbilimde.scienceplatform.post.mapper;
 
 import org.gelecekbilimde.scienceplatform.common.BaseMapper;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
-import org.gelecekbilimde.scienceplatform.postprocess.dto.domain.ProcessMessage;
-import org.gelecekbilimde.scienceplatform.postprocess.dto.domain.PostProcessCreate;
+import org.gelecekbilimde.scienceplatform.post.dto.domain.PostProcessMessage;
+import org.gelecekbilimde.scienceplatform.post.dto.domain.PostProcessCreate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -23,8 +23,8 @@ public interface PostDomainToPostProcessCreateMapper extends BaseMapper<PostDoma
 	PostProcessCreate map(PostDomain source);
 
 	@Named("emptyMessage")
-	default List<ProcessMessage> emptyMessage(){
-		return new ArrayList<>();
+	default List<PostProcessMessage> emptyMessage(){
+		return List.of();
 	}
 
 	static PostDomainToPostProcessCreateMapper initialize() {

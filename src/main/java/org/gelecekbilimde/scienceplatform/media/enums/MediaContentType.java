@@ -1,8 +1,10 @@
 package org.gelecekbilimde.scienceplatform.media.enums;
 
+/**
+ * Resimlerin ne tür göresel doğa görselimi seyahat görselimi vs
+ */
 public enum MediaContentType {
 
-	// Resimlerin ne tür göresel doğa görselimi seyahat görselimi vs
 	AVATAR,
 	EARTH,
 	PEOPLE,
