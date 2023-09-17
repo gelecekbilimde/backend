@@ -8,15 +8,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.exception.UnAuthorizedException;
-import org.gelecekbilimde.scienceplatform.model.Permission;
-import org.gelecekbilimde.scienceplatform.model.Role;
-import org.gelecekbilimde.scienceplatform.repository.RoleRepository;
-import org.gelecekbilimde.scienceplatform.repository.TokenRepository;
-import org.gelecekbilimde.scienceplatform.model.User;
+import org.gelecekbilimde.scienceplatform.auth.model.Permission;
+import org.gelecekbilimde.scienceplatform.auth.model.Role;
+import org.gelecekbilimde.scienceplatform.post.repository.RoleRepository;
+import org.gelecekbilimde.scienceplatform.auth.repository.TokenRepository;
+import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -52,8 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		jwt = authHeader.substring(7);
-		userName = jwtService.extractSubject(jwt);
-		roleName  = jwtService.extractClaim(jwt,"role").toString();
+		userName 	= jwtService.extractSubject(jwt);
+		roleName  	= jwtService.extractClaim(jwt,"role").toString();
 
 		if (null != SecurityContextHolder.getContext().getAuthentication()){
 			filterChain.doFilter(request,response);
@@ -82,7 +81,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
+		User userDetails = (User) this.userDetailsService.loadUserByUsername(userName);
 
 
 		var isTokenValid = tokenRepository.findByToken(jwt)
