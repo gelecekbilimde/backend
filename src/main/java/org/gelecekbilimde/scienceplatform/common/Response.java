@@ -1,30 +1,41 @@
 package org.gelecekbilimde.scienceplatform.common;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-public class Response {
+import java.time.LocalDateTime;
+import java.util.*;
 
-	public static ResponseEntity<ApiResponse> ok(HttpServletRequest request, Object response){
+@Getter
+@Builder
+public class Response<T> {
 
-		ApiResponse apiResponse = new ApiResponse(request,HttpStatus.OK,response);
-		return ResponseEntity.status(apiResponse.getStatus()).body(apiResponse);
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private T list;
+
+	@Builder.Default
+	private LocalDateTime timestamp = LocalDateTime.now();
+
+
+	private String responseCode;
+
+	public static final Response<Void> NO_CONTENT = Response.<Void>builder()
+		.build();
+
+	public static <T> Response<T> ok(final T response) {
+		return Response.<T>builder()
+			.list(response)
+			.responseCode(UUID.randomUUID().toString())
+			.build();
 	}
 
-	public static ResponseEntity<ApiResponse> noContent(){
-		return ResponseEntity.noContent().build();
+
+	public static <T> Response<T> create(final T response) {
+		return Response.<T>builder()
+			.list(response)
+			.responseCode(UUID.randomUUID().toString())
+			.build();
 	}
-
-	public static ResponseEntity<ApiResponse> created(HttpServletRequest request, Object response){
-
-		ApiResponse apiResponse = new ApiResponse(request,HttpStatus.CREATED,response);
-		return ResponseEntity.status(apiResponse.getStatus()).body(apiResponse);
-	}
-	public static ResponseEntity<ApiResponse> multiStatus(HttpServletRequest request, Object response){
-
-		ApiResponse apiResponse = new ApiResponse(request,HttpStatus.MULTI_STATUS,response);
-		return ResponseEntity.status(apiResponse.getStatus()).body(apiResponse);
-	}
-
 }
