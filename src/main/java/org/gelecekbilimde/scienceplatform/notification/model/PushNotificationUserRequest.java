@@ -2,13 +2,16 @@ package org.gelecekbilimde.scienceplatform.notification.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class PushNotificationResponse {
-	private int status;
+public class PushNotificationUserRequest {
+	private String title;
 	private String message;
+	private List<String> token;
+	private String userId;
 }

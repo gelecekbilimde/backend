@@ -2,10 +2,11 @@ package org.gelecekbilimde.scienceplatform.notification.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
 
-import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationRequest;
 @Service
 public class PushNotificationService {
 
@@ -19,9 +20,18 @@ public class PushNotificationService {
 	}
 
 
-	public void sendPushNotificationToToken(PushNotificationRequest request) {
+	public void sendPushNotificationToUser(PushNotificationUserRequest request) {
 		try {
-			fcmService.sendMessageToToken(request);
+			fcmService.sendMessageToTokenList(request);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+
+	public void sendPushNotificationToTopic(PushNotificationTopicRequest request) {
+		try {
+			fcmService.sendMessageToTopic(request);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}

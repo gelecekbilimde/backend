@@ -1,15 +1,15 @@
 package org.gelecekbilimde.scienceplatform.notification.service;
 import java.time.Duration;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.google.firebase.messaging.*;
 
+import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
+import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
 import org.springframework.stereotype.Service;
 
-import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -17,25 +17,44 @@ import com.google.gson.GsonBuilder;
 public class FCMService {
 	private final Logger logger = LogManager.getLogger(FCMService.class);
 
+
+	// TODO: sendMessageToTokenList
+	public void sendMessageToTokenList(PushNotificationUserRequest request)
+		throws FirebaseMessagingException {
+		MulticastMessage message = getPreconfiguredMulticastMessage(request);
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String jsonOutput = gson.toJson(message);
+		BatchResponse response = sendAndGetMultiResponse(message);
+		logger.info("Sent message to token. Device token: " + request.getToken() + ", " + response.getResponses().toString() + " msg "+jsonOutput);
+	}
+
+	//TODO : delete tokens that are not registered from database
+	//device_id - user_id - token - created_at
+
+/*
 	public void sendMessageToToken(PushNotificationRequest request)
 		throws InterruptedException, ExecutionException {
-		Message message = getPreconfiguredMessageToToken(request);
+		MulticastMessage message = getPreconfiguredMulticastMessage(request);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String jsonOutput = gson.toJson(message);
 		String response = sendAndGetResponse(message);
 		logger.info("Sent message to token. Device token: " + request.getToken() + ", " + response+ " msg "+jsonOutput);
-	}
+	}*/
 
-	public void sendMessageToTopic(PushNotificationRequest request)
+	public void sendMessageToTopic(PushNotificationTopicRequest request)
 		throws InterruptedException, ExecutionException {
 		Message message = getPreconfiguredMessageToTopic(request);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String jsonOutput = gson.toJson(message);
-		String response = sendAndGetResponse(message);
+		String response = sendAndGetSingleResponse(message);
 		logger.info("Sent message to topic: " + request.getTopic() + ", " + response + " msg " + jsonOutput);
 	}
 
-	private String sendAndGetResponse(Message message) throws InterruptedException, ExecutionException {
+	private BatchResponse sendAndGetMultiResponse(MulticastMessage message) throws FirebaseMessagingException {
+		return FirebaseMessaging.getInstance().sendEachForMulticast(message);
+	}
+
+	private String  sendAndGetSingleResponse(Message message) throws ExecutionException, InterruptedException {
 		return FirebaseMessaging.getInstance().sendAsync(message).get();
 	}
 
@@ -51,6 +70,28 @@ public class FCMService {
 		return ApnsConfig.builder()
 			.setAps(Aps.builder().setCategory(topic).setThreadId(topic).build()).build();
 	}
+
+	private Message getPreconfiguredMessageToTopic(PushNotificationTopicRequest request) {
+		return getPreconfiguredMessageBuilder(request).setTopic(request.getTopic())
+			.build();
+	}
+
+	private Message.Builder getPreconfiguredMessageBuilder(PushNotificationTopicRequest request) {
+		AndroidConfig androidConfig = getAndroidConfig(request.getTopic());
+		ApnsConfig apnsConfig = getApnsConfig(request.getTopic());
+
+		// Create a Notification.Builder and set title and message
+		Notification.Builder notificationBuilder = Notification.builder()
+			.setTitle(request.getTitle())
+			.setBody(request.getMessage());
+
+		return Message.builder()
+			.setApnsConfig(apnsConfig)
+			.setAndroidConfig(androidConfig)
+			.setNotification(notificationBuilder.build()); // Build the Notification here
+	}
+
+	/*
 	private Message getPreconfiguredMessageToToken(PushNotificationRequest request) {
 		return getPreconfiguredMessageBuilder(request).setToken(request.getToken())
 			.build();
@@ -81,6 +122,29 @@ public class FCMService {
 		return Message.builder()
 			.setApnsConfig(apnsConfig)
 			.setAndroidConfig(androidConfig)
+			.setNotification(notificationBuilder.build()); // Build the Notification here
+	}*/
+
+	//TODO: multicast message send message to multiple devices
+	private MulticastMessage getPreconfiguredMulticastMessage(PushNotificationUserRequest request) {
+		return getPreconfiguredMulticastMessageBuilder(request).build();
+	}
+
+
+	private MulticastMessage.Builder getPreconfiguredMulticastMessageBuilder(PushNotificationUserRequest request) {
+//		//use .addAllTokens(request.getToken()) for multiple devices
+//		AndroidConfig androidConfig = getAndroidConfig(request.getTopic());
+//		ApnsConfig apnsConfig = getApnsConfig(request.getTopic());
+
+		// Create a Notification.Builder and set title and message
+		Notification.Builder notificationBuilder = Notification.builder()
+			.setTitle(request.getTitle())
+			.setBody(request.getMessage());
+
+		return MulticastMessage.builder()
+//			.setApnsConfig(apnsConfig)
+//			.setAndroidConfig(androidConfig)
+			.addAllTokens(request.getToken())
 			.setNotification(notificationBuilder.build()); // Build the Notification here
 	}
 }
