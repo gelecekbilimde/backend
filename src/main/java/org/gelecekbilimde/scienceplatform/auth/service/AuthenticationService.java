@@ -12,6 +12,8 @@ import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.model.Permission;
 import org.gelecekbilimde.scienceplatform.auth.model.Role;
 import org.gelecekbilimde.scienceplatform.auth.model.Token;
+import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
+import org.gelecekbilimde.scienceplatform.notification.service.PushNotificationService;
 import org.gelecekbilimde.scienceplatform.user.enums.Degree;
 import org.gelecekbilimde.scienceplatform.user.enums.Gender;
 import org.gelecekbilimde.scienceplatform.auth.enums.TokenType;
@@ -34,6 +36,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+	private final PushNotificationService pushNotificationService;
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -99,6 +102,11 @@ public class AuthenticationService {
 		saveUserToken(savedUser, jwtToken);
 
 		var refreshToken = jwtService.generateRefreshToken(user);
+
+
+		//TODO: user bazlı push notification böyle gönderilecek
+		pushNotificationService.sendPushNotificationToUser(new PushNotificationUserRequest (savedUser.getId(),
+			"title", "mesaj deneme"));
 
 		return TokenResponse
 			.builder()
