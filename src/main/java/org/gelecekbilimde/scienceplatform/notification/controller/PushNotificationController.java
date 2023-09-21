@@ -11,19 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationResponse;
 import org.gelecekbilimde.scienceplatform.notification.service.PushNotificationService;
+
+// Testing for client side notifications
 @RestController
 @RequestMapping("/notifications")
 public class PushNotificationController {
-
 
 	private final PushNotificationService pushNotificationService;
 
 	public PushNotificationController(PushNotificationService pushNotificationService) {
 		this.pushNotificationService = pushNotificationService;
 	}
-
-	//repository oluştur repodan user id ile token listesi çek sonra token listesine göre notification gönder
-
 
 	@PostMapping("/user")
 	public ResponseEntity<PushNotificationResponse> sendPushNotification(@RequestBody PushNotificationUserRequest request) {
