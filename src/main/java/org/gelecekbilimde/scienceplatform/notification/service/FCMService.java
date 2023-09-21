@@ -1,22 +1,28 @@
 package org.gelecekbilimde.scienceplatform.notification.service;
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.google.firebase.messaging.*;
 
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
+import org.gelecekbilimde.scienceplatform.notification.repository.UserTokenRepository;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @Service
+@RequiredArgsConstructor
 public class FCMService {
-	private final Logger logger = LogManager.getLogger(FCMService.class);
 
+	private final UserTokenRepository userTokenRepository;
+	private final Logger logger = LogManager.getLogger(FCMService.class);
+	private List<String> deviceTokens;
 
 	// TODO: sendMessageToTokenList
 	public void sendMessageToTokenList(PushNotificationUserRequest request)
@@ -25,10 +31,20 @@ public class FCMService {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String jsonOutput = gson.toJson(message);
 		BatchResponse response = sendAndGetMultiResponse(message);
-		logger.info("Sent message to token. Device token: " + request.getToken() + ", " + response.getResponses().toString() + " msg "+jsonOutput);
+		logger.info("Sent message to token. Device token: " + deviceTokens + ", " + response.getResponses().toString() + " msg "+jsonOutput);
+	}
+
+	public List<String> getTokensFromRepository() {
+//		deviceTokens = userTokenRepository.findAllDeviceTokens();
+		return userTokenRepository.findAllDeviceTokens();
 	}
 
 	//TODO : delete tokens that are not registered from database
+
+	public void deleteTokensFromRepository(List<String> tokens) {
+		userTokenRepository.deleteDevicesById(tokens);
+	}
+
 	//device_id - user_id - token - created_at
 
 /*
@@ -136,6 +152,8 @@ public class FCMService {
 //		AndroidConfig androidConfig = getAndroidConfig(request.getTopic());
 //		ApnsConfig apnsConfig = getApnsConfig(request.getTopic());
 
+		deviceTokens = getTokensFromRepository();
+
 		// Create a Notification.Builder and set title and message
 		Notification.Builder notificationBuilder = Notification.builder()
 			.setTitle(request.getTitle())
@@ -144,7 +162,7 @@ public class FCMService {
 		return MulticastMessage.builder()
 //			.setApnsConfig(apnsConfig)
 //			.setAndroidConfig(androidConfig)
-			.addAllTokens(request.getToken())
+			.addAllTokens(deviceTokens)
 			.setNotification(notificationBuilder.build()); // Build the Notification here
 	}
 }
