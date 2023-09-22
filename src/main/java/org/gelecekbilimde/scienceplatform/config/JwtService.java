@@ -20,23 +20,19 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-
 	@Value("${application.security.jwt.expiration}")
 	private long tokenExpiration;
-
 	@Value("${application.security.jwt.refresh-token.expiration}")
 	private long refreshExpiration;
-
 	@Value("${application.security.jwt.guest-token.expiration}")
 	private Long guestTokenExpiration;
-
-
 	@Value("${application.security.jwt.private-key}")
 	private String privateKeyPath;
 	@Value("${application.security.jwt.public-key}")
 	private String publicKeyPath;
 
-	public  final String  GUEST_USERNAME = "GUEST";
+	public static final String GUEST_USERNAME = "GUEST";
+
 	public String extractSubject(String token) {
 		return extractClaim(token, Claims::getSubject);
 	}
@@ -58,7 +54,7 @@ public class JwtService {
 		claim.put("fullName", user.getName() + " " + user.getLastname());
 		claim.put("mail",user.getEmail());
 		claim.put("userId",user.getId());
-		claim.put("role",user.getRole().getRole());
+		claim.put("role",user.getRole().getRoleName());
 		claim.put("scope",scope);
 
 
@@ -75,7 +71,7 @@ public class JwtService {
 
 	public String generateRefreshToken(User user) {
 		HashMap<String,Object> claim  = new HashMap<>();
-		claim.put("role",user.getRole().getRole());
+		claim.put("role",user.getRole().getRoleName());
 
 		return buildToken(claim, user.getUsername(), refreshExpiration );
 	}
@@ -112,9 +108,8 @@ public class JwtService {
 		return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
 	}
 
-	public boolean isGuestTokenValid(String token){
-		final String userName = extractSubject(token);
-		return  !isTokenExpired(token);
+	public boolean isGuestTokenValid(String token) {
+		return !isTokenExpired(token);
 	}
 
 	private boolean isTokenExpired(String token) {
@@ -135,7 +130,7 @@ public class JwtService {
 	}
 
 
-	private PublicKey getSignInPublicKey(){
+	private PublicKey getSignInPublicKey() {
 		try {
 			byte[] keyBytes = Files.readAllBytes(Paths.get(publicKeyPath));
 			String keyContent = new String(keyBytes);

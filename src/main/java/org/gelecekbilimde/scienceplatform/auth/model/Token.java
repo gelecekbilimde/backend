@@ -21,7 +21,7 @@ public class Token {
 	public Long id;
 
 	@Column(columnDefinition = "text")
-	public String token;
+	public String tokenValue;
 
 	@Enumerated(EnumType.STRING)
 	public TokenType tokenType = TokenType.BEARER;
