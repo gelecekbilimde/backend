@@ -3,7 +3,6 @@ package org.gelecekbilimde.scienceplatform.common;
 import jakarta.persistence.criteria.Predicate;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
 
@@ -11,8 +10,11 @@ import java.util.Map;
 
 @Getter
 @Builder
-@NoArgsConstructor
 public class BaseSpecification {
+
+	private BaseSpecification() {
+		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+	}
 
 	@SuppressWarnings("unused")
 	public static class Builder<C> {

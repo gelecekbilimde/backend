@@ -176,7 +176,7 @@ public class AuthenticationService {
 	}
 
 	public TokenResponse generateGuestToken(){
-		var jwtToken = jwtService.generateGuestToken(jwtService.GUEST_USERNAME, scopeList(jwtService.GUEST_USERNAME));
+		var jwtToken = jwtService.generateGuestToken(JwtService.GUEST_USERNAME, scopeList(JwtService.GUEST_USERNAME));
 
 		return TokenResponse
 			.builder()

@@ -36,9 +36,11 @@ public class MediaService {
 
 	private final MediaGroupRepository mediaGroupRepository;
 	private final MediaRepository mediaRepository;
-
 	private final Identity identity;
 
+	private static final String STATUS = "status";
+	private static final String MESSAGE = "message";
+	private static final String FILE = "file";
 
 	public MediaGroupRequest saveMediaGroup(MediaGroupRequest mediaGroupRequest) {
 		var mediaGroup = MediaGroup
@@ -78,29 +80,31 @@ public class MediaService {
 
 	@Transactional
 	public List<Object> uploadMedia(Integer groupId, MediaContentType mediaType, List<MultipartFile> files) {
-
-
 		List<Object> messages = new ArrayList<>();
 		for (MultipartFile file : files) {
 			Map<String, Object> messageItem = new HashMap<>();
-
+			messageItem.put(FILE, file.getOriginalFilename());
 			try {
+				String originalFilename = file.getOriginalFilename();
 
-				messageItem.put("file", file.getOriginalFilename());
+				if (originalFilename == null) {
+					messageItem.put(STATUS, "error");
+					messageItem.put(MESSAGE, "Filename is null");
+					messages.add(messageItem);
+					continue;
+				}
 
 				if (file.getSize() >= mediaUploadSize){
 					throw new IOException("Dosya boyutu büyük en fazla 10MB olmalı");
 				}
 
-
-				String originalFilename = file.getOriginalFilename();
 				String title = originalFilename.substring(0, originalFilename.lastIndexOf("."));
 				String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
 
 				String fileName = UUID.randomUUID().toString().replace("-", "") + '.' + ext;
 
-				String path = mediaUploadPath + '/' + identity.getUserId() + "/" + mediaType.toString();
-				String url = "/" + path + "/" + fileName;
+				String path = mediaUploadPath + File.separator + identity.getUserId() + File.separator + mediaType.toString();
+				String url = File.separator + path + File.separator + fileName;
 
 				File directory = new File(path);
 				if (!directory.exists()){
@@ -121,10 +125,10 @@ public class MediaService {
 
 				this.saveMedia(mediaRequest);
 
-				messageItem.put("status", "success");
+				messageItem.put(STATUS, "success");
 			} catch (IOException e) {
-				messageItem.put("status", "error");
-				messageItem.put("message", e.getMessage());
+				messageItem.put(STATUS, "error");
+				messageItem.put(MESSAGE, e.getMessage());
 			}
 
 			messages.add(messageItem);
@@ -136,12 +140,10 @@ public class MediaService {
 	// todo : hangi formatlarda alacağımızı netleştirelim..
 	private MediaType getMediaType(String ext)
 	{
-		MediaType mediaType = switch (ext) {
+		return switch (ext) {
             case "jpg", "jpeg", "svg", "img","png" -> MediaType.IMAGE;
             case "gif" -> MediaType.GIF;
             default -> MediaType.IMAGE;
         };
-
-        return mediaType;
 	}
 }
