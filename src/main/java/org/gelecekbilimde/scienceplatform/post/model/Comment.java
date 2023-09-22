@@ -2,7 +2,6 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.gelecekbilimde.scienceplatform.post.model.Post;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +18,7 @@ public class Comment {
 	private Long id;
 
 	@Column(columnDefinition = "text", nullable = false)
-	private String comment;
+	private String content;
 
 	@Column(columnDefinition = "integer", nullable = false)
 	private Integer likeCount;
