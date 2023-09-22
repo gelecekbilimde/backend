@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		Set<Permission> permissions = new HashSet<>(roleRepository.findPermissionsByName(roleName));
 		role.setPermissions(permissions);
 
-		if (jwtService.GUEST_USERNAME.equals(roleName) && jwtService.isGuestTokenValid(jwt)){
+		if (JwtService.GUEST_USERNAME.equals(roleName) && jwtService.isGuestTokenValid(jwt)){
 
 			User user = new User();
 			user.setRole(role);
@@ -88,7 +88,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			.map(t -> !t.isExpired() && !t.isRevoked())
 			.orElse(false);
 
-		if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+		if (jwtService.isTokenValid(jwt, userDetails) && Boolean.TRUE.equals(isTokenValid)) {
 
 			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 				userDetails,

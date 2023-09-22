@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 // https://drive.google.com/file/d/1F8TCSt_Oo4Yjl2q32r3XjoTarcLn85KI/view?usp=sharing
@@ -45,7 +44,7 @@ public class PostService {
 	public PostDomain save (PostCreateRequest postCreateRequest){
 
 		if (postCreateRequest.getMedias() != null && !postCreateRequest.getMedias().stream().allMatch(postMediaCreate -> postMediaCreate.getMediaId() != null)){
-			throw new ClientException("Posta media yüklerken media id zorunlu |"+postCreateRequest.getMedias().toString());
+			throw new ClientException("Posta media yüklerken media id zorunlu |"+ postCreateRequest.getMedias());
 		}
 
 		Helper helper = new Helper();
@@ -65,11 +64,10 @@ public class PostService {
 
 		if (postCreateRequest.getMedias() != null){
 
-			List<PostMediaCreate> postMediaCreateList = postCreateRequest.getMedias().stream().map(postMediaCreate -> {
+			List<PostMediaCreate> postMediaCreateList = postCreateRequest.getMedias().stream().peek(postMediaCreate -> {
 				postMediaCreate.setPostId(postDomain.getPostId());
 				postMediaCreate.setUserId(postDomain.getUserId());
-				return postMediaCreate;
-			}).collect(Collectors.toList());
+            }).toList();
 
 			postMediaService.savePostMedia(postMediaCreateList);
 		}
