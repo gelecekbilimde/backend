@@ -28,10 +28,9 @@ public class Ticket {
 	@Column(columnDefinition = "text", nullable = false)
 	private String message;
 
-	@Builder.Default
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "varchar(25) default 'OPEN'")
-	private TicketStatusEnum status = TicketStatusEnum.OPEN;
+	private TicketStatusEnum status;
 
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
