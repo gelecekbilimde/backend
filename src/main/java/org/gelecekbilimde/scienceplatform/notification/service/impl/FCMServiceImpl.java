@@ -74,9 +74,6 @@ class FCMServiceImpl implements FCMService {
 	}
 
 	private MulticastMessage.Builder getPreconfiguredMulticastMessageBuilder(PushNotificationUserRequest request) {
-//		AndroidConfig androidConfig = getAndroidConfig(request.getTopic());
-//		ApnsConfig apnsConfig = getApnsConfig(request.getTopic());
-
 		List<String> deviceTokens = userTokenRepository.findAllByUserId(request.getUserId())
 			.stream()
 			.filter(notificationToken -> notificationToken.getDeviceToken() != null)
@@ -89,8 +86,6 @@ class FCMServiceImpl implements FCMService {
 			.setBody(request.getMessage());
 
 		return MulticastMessage.builder()
-//			.setApnsConfig(apnsConfig)
-//			.setAndroidConfig(androidConfig)
 			.addAllTokens(deviceTokens)
 			.setNotification(notificationBuilder.build());
 	}
