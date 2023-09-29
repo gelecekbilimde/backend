@@ -25,7 +25,6 @@
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
   </properties>
   <dependencies>
-    <!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
     <dependency>
       <groupId>com.google.firebase</groupId>
       <artifactId>firebase-admin</artifactId>

@@ -8,6 +8,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PushNotificationResponse {
-	private int status;
+	private Status status;
 	private String message;
+
+	public enum Status {
+		SUCCESS,
+		FAILURE,
+		PENDING
+	}
 }
