@@ -5,9 +5,9 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ResourceUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,30 +15,19 @@ import java.io.IOException;
 @Slf4j
 @Configuration
 public class FCMConfiguration {
+	@Value("${firebase.service-account.path}")
+	private String serviceAccountFilePath;
 
-//	@PostConstruct
-//	public void initialize() throws IOException {
-//			FileInputStream serviceAccount =
-//				new FileInputStream(ResourceUtils.getFile("classpath:serviceAccountKey.json"));
-////				new FileInputStream("serviceAccountKey.json");
-//
-//			FirebaseOptions options = FirebaseOptions.builder()
-//				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//				.setDatabaseUrl("https://push-notification-projec-86e67-default-rtdb.firebaseio.com")
-//				.build();
-//
-//			FirebaseApp.initializeApp(options);
-//	}
+	@Value("${firebase.service-account.database-url}")
+	private String databaseUrl;
 
 	@Bean
 	public FirebaseMessaging firebaseMessaging() throws IOException {
 		FileInputStream serviceAccount =
-			new FileInputStream(ResourceUtils.getFile("classpath:serviceAccountKey.json"));
-//				new FileInputStream("serviceAccountKey.json");
-
+			new FileInputStream(serviceAccountFilePath);
 		FirebaseOptions options = FirebaseOptions.builder()
 			.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-			.setDatabaseUrl("https://push-notification-projec-86e67-default-rtdb.firebaseio.com")
+			.setDatabaseUrl(databaseUrl)
 			.build();
 
 		FirebaseApp.initializeApp(options);

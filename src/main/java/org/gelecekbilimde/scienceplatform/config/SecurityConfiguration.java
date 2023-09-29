@@ -41,7 +41,7 @@ public class SecurityConfiguration {
 			.exceptionHandling()
 			.and()
 			.authorizeHttpRequests()
-			.requestMatchers("/version","/auth/**", "/notifications/**")
+			.requestMatchers("/version","/auth/**")
 			.permitAll()
 			.anyRequest()
 			.authenticated()
