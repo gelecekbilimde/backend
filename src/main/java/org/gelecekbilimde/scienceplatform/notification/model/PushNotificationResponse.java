@@ -1,12 +1,10 @@
 package org.gelecekbilimde.scienceplatform.notification.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class PushNotificationResponse {
 	private Status status;
 	private String message;
@@ -15,5 +13,29 @@ public class PushNotificationResponse {
 		SUCCESS,
 		FAILURE,
 		PENDING
+	}
+
+	public PushNotificationResponse(Builder builder) {
+		this.status = builder.status;
+		this.message = builder.message;
+	}
+
+	public static class Builder {
+		private Status status;
+		private String message;
+
+		public Builder status(Status status) {
+			this.status = status;
+			return this;
+		}
+
+		public Builder message(String message) {
+			this.message = message;
+			return this;
+		}
+
+		public PushNotificationResponse build() {
+			return new PushNotificationResponse(this);
+		}
 	}
 }
