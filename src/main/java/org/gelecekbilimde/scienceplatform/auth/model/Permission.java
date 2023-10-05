@@ -22,7 +22,7 @@ public class Permission {
 	private Long id;
 
 	@Column(columnDefinition = "varchar(255)", nullable = false, unique = true)
-	private String permissionName;
+	private String permission;
 
 	@Column(columnDefinition = "varchar(255)", nullable = false)
 	private String description;

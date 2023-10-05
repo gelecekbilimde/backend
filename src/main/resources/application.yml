@@ -40,3 +40,7 @@ application:
       guest-token:
         expiration: ${GUEST_TOKEN_EXPIRE_MILLISECOND}
 
+firebase:
+  service-account:
+    path: ${RESOURCE_PATH}${FIREBASE_SERVICE_ACCOUNT_FILE}
+    database-url: ${FIREBASE_DATABASE_URL}

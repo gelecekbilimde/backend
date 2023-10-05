@@ -56,7 +56,7 @@ public class AuthenticationService {
 		}
 
 		Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException("Default Role is not defined."));
-		List<String> scope = scopeList(role.getRoleName());
+		List<String> scope = scopeList(role.getRole());
 
 
 		Gender gender = null;
@@ -130,8 +130,8 @@ public class AuthenticationService {
 				throw new ClientException("This Email Not Verify");
 			}
 
-			Role role = roleRepository.findByRole(user.getRole().getRoleName()).orElseThrow(() -> new ServerException("User Scope has a problem"));
-			List<String> scope = scopeList(role.getRoleName());
+			Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+			List<String> scope = scopeList(role.getRole());
 
 			var jwtToken = jwtService.generateToken(user,scope);
 			var refreshToken = jwtService.generateRefreshToken(user);
@@ -165,7 +165,7 @@ public class AuthenticationService {
 	private void saveUserToken(User user, String jwtToken) {
 		var token = Token.builder()
 			.user(user)
-			.tokenValue(jwtToken)
+			.token(jwtToken)
 			.tokenType(TokenType.BEARER)
 			.revoked(false)
 			.expired(false)
@@ -206,8 +206,8 @@ public class AuthenticationService {
 			throw new ClientException("Oturum bilgisinde hata var");
 		}
 
-		Role role = roleRepository.findByRole(user.getRole().getRoleName()).orElseThrow(() -> new ServerException("User Scope has a problem"));
-		List<String> scope = scopeList(role.getRoleName());
+		Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+		List<String> scope = scopeList(role.getRole());
 		var jwtToken = jwtService.generateToken(user,scope);
 
 		revokeAllUserTokens(user);
@@ -222,7 +222,7 @@ public class AuthenticationService {
 
 	private List<String> scopeList(String role) {
 		List<Permission> rolePermission = roleRepository.findPermissionsByRole(role);
-		return rolePermission.stream().map(Permission::getPermissionName).toList();
+		return rolePermission.stream().map(Permission::getPermission).toList();
 	}
 
 }
