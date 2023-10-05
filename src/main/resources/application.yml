@@ -17,17 +17,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
-server:
-  port: ${SERVER_PORT}
-  servlet:
-    context-path: ${CONTEXT_PATH}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 file:
   upload:
     media:
       path: ${MEDIA_UPLOAD_PATH}
-      size : ${MEDIA_UPLOAD_SIZE}
+      size: ${MEDIA_UPLOAD_SIZE}
 
 application:
   security:
@@ -44,3 +43,8 @@ firebase:
   service-account:
     path: ${RESOURCE_PATH}${FIREBASE_SERVICE_ACCOUNT_FILE}
     database-url: ${FIREBASE_DATABASE_URL}
+
+youtubeDataApi:
+  api-key: ${YOUTUBE_DATA_API_KEY}
+  url: ${YOUTUBE_DATA_API_URL}
+
