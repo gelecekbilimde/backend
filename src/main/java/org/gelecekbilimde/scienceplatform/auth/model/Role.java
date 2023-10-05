@@ -25,7 +25,7 @@ public class Role {
 	private Long id;
 
 	@Column(columnDefinition = "varchar(55)", nullable = false, unique = true)
-	private String roleName;
+	private String role;
 
 	@Column(columnDefinition = "varchar(255)")
 	private String description;
@@ -41,9 +41,9 @@ public class Role {
 	public List<SimpleGrantedAuthority> getPermissions(){
 		var authorities = permissions
 			.stream()
-			.map(permission -> new SimpleGrantedAuthority(permission.getPermissionName()))
+			.map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
 			.collect(Collectors.toList());
-		authorities.add(new SimpleGrantedAuthority("ROLE_" + getRoleName()));
+		authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole()));
 		return  authorities;
 	}
 

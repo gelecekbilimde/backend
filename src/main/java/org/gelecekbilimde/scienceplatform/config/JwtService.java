@@ -54,7 +54,7 @@ public class JwtService {
 		claim.put("fullName", user.getName() + " " + user.getLastname());
 		claim.put("mail",user.getEmail());
 		claim.put("userId",user.getId());
-		claim.put("role",user.getRole().getRoleName());
+		claim.put("role",user.getRole().getRole());
 		claim.put("scope",scope);
 
 
@@ -71,7 +71,7 @@ public class JwtService {
 
 	public String generateRefreshToken(User user) {
 		HashMap<String,Object> claim  = new HashMap<>();
-		claim.put("role",user.getRole().getRoleName());
+		claim.put("role",user.getRole().getRole());
 
 		return buildToken(claim, user.getUsername(), refreshExpiration );
 	}

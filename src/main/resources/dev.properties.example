@@ -1,23 +1,23 @@
-SERVER_PORT=
-DATABASE=
-DATABASE_DDL_AUTO=
+SERVER_PORT=8080
+DATABASE=postgresql
+DATABASE_DDL_AUTO=update
 DATABASE_DRIVER=org.postgresql.Driver
+DATABASE_USER=# kendi cihazındaki database user'ını girebilirsin
+DATABASE_PASSWORD=# kendi cihazındaki database parolanı girebilirsin
 DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
-DATABASE_USER=
-DATABASE_PASSWORD=
-DATABASE_URL=
-SHOW_SQL=
-ELASTICSEARCH_URI=
-REDIS_HOST=
-REDIS_PORT=
+DATABASE_URL=# jdbc:postgresql://localhost:5432/DATABASE_NAME DATABASE_NAME kendi cihazındaki database ismini girebilirsin
+SHOW_SQL=false
+ELASTICSEARCH_URI=localhost:9200
+REDIS_HOST=localhost
+REDIS_PORT=6739
 PRIVATE_KEY_PATH=
 PUBLIC_KEY_PATH=
 GUEST_TOKEN_EXPIRE_MILLISECOND=604800000
 REFRESH_TOKEN_EXPIRE_MILLISECOND=604800000
-TOKEN_EXPIRE_MILLISECOND= 86400000
-RESOURCE_PATH=   # resource ba?ka yerden kullan?lm?yorso bu olmal?   src/main/resources/
+TOKEN_EXPIRE_MILLISECOND=86400000
+RESOURCE_PATH=# resource başka yerden kullanılmıyorsa bu olmalı   src/main/resources/
 CONTEXT_PATH=/api
 MEDIA_UPLOAD_PATH=
 MEDIA_UPLOAD_SIZE=10485760 # 10MB
-
-
+FIREBASE_DATABASE_URL=https://push-notification-projec-86e67-default-rtdb.firebaseio.com
+FIREBASE_SERVICE_ACCOUNT_FILE=serviceAccountKey.json
