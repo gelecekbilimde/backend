@@ -1,8 +1,13 @@
 package org.gelecekbilimde.scienceplatform.notification.scheduler;
 
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.notification.client.youtube.YoutubeClient;
 import org.gelecekbilimde.scienceplatform.notification.client.youtube.model.YoutubePlaylistItemsResponse;
+import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
+import org.gelecekbilimde.scienceplatform.notification.service.PushNotificationService;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,13 +17,15 @@ import javax.annotation.PostConstruct;
 @Service
 @EnableScheduling
 @RequiredArgsConstructor
+@Slf4j
 class YoutubeNotificationScheduler {
 	private final YoutubeClient youtubeClient;
+	private final PushNotificationService pushNotificationService;
 	private String lastVideoId;
 
 	@PostConstruct
 	private void init() {
-		this.lastVideoId = this.getLastVideo().getItems().get(0).getSnippet().getResourceId().getVideoId();
+		this.lastVideoId = this.getLastVideo().getId();
 	}
 
 	/**
@@ -26,22 +33,52 @@ class YoutubeNotificationScheduler {
 	 */
 	@Scheduled(fixedRate = 86_400)
 	private void sendNotificationForNewVideo() {
-		YoutubePlaylistItemsResponse response = this.getLastVideo();
-		String videoId = response.getItems().get(0).getSnippet().getResourceId().getVideoId();
+		log.info("Checking for new video...");
+		YoutubeVideo lastVideo = this.getLastVideo();
+		String videoId = lastVideo.getId();
 
 		if (!this.lastVideoId.equals(videoId)) {
 			//TODO: send notification
+
+			log.info("New video: {}", videoId);
+			pushNotificationService.sendPushNotificationToUser(
+				PushNotificationUserRequest.builder()
+					.userId(3L)
+					.title("Yeni video")
+					.message("Yeni video: " + videoId + " " + lastVideo.getTitle())
+					.build()
+			);
+
 			this.lastVideoId = videoId;
-			System.out.println("New video: " + videoId);
+			log.info("Notifications has been sent.");
 			return;
 		}
-		System.out.println("No new video");
+		log.info("No new video. Last video: {}", videoId);
+		pushNotificationService.sendPushNotificationToUser(
+			PushNotificationUserRequest.builder()
+				.userId(3L)
+				.title("Yeni video yok")
+				.message("Yeni video yok: " + videoId + " " + lastVideo.getTitle())
+				.build()
+		);
+
 	}
 
-	private YoutubePlaylistItemsResponse getLastVideo() {
-		return youtubeClient.getPlaylistItems("snippet",
+	private YoutubeVideo getLastVideo() {
+		YoutubePlaylistItemsResponse playlistItemsResponse = youtubeClient.getPlaylistItems("snippet",
 			"UU03cpKIZShIWoSBhfVE5bog",
 			"AIzaSyDKNZRqoxFE5_rqRpjKvWEUrhoXfawu3jo",
 			1);
+		return YoutubeVideo.builder()
+			.id(playlistItemsResponse.getItems().get(0).getSnippet().getResourceId().getVideoId())
+			.title(playlistItemsResponse.getItems().get(0).getSnippet().getTitle())
+			.build();
+	}
+
+	@Builder
+	@Getter
+	private static class YoutubeVideo {
+		private String id;
+		private String title;
 	}
 }
