@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.notification.client.youtube.YoutubeClient;
 import org.gelecekbilimde.scienceplatform.notification.client.youtube.model.YoutubePlaylistItemsResponse;
-import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
+import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
 import org.gelecekbilimde.scienceplatform.notification.service.PushNotificationService;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -41,9 +41,9 @@ class YoutubeNotificationScheduler {
 			//TODO: send notification
 
 			log.info("New video: {}", videoId);
-			pushNotificationService.sendPushNotificationToUser(
-				PushNotificationUserRequest.builder()
-					.userId(3L)
+			pushNotificationService.sendPushNotificationToTopic(
+				PushNotificationTopicRequest.builder()
+					.topic("youtube-yeni-video")
 					.title("Yeni video")
 					.message("Yeni video: " + videoId + " " + lastVideo.getTitle())
 					.build()
@@ -54,14 +54,6 @@ class YoutubeNotificationScheduler {
 			return;
 		}
 		log.info("No new video. Last video: {}", videoId);
-		pushNotificationService.sendPushNotificationToUser(
-			PushNotificationUserRequest.builder()
-				.userId(3L)
-				.title("Yeni video yok")
-				.message("Yeni video yok: " + videoId + " " + lastVideo.getTitle())
-				.build()
-		);
-
 	}
 
 	private YoutubeVideo getLastVideo() {
