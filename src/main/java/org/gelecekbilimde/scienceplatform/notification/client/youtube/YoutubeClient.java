@@ -4,17 +4,16 @@ package org.gelecekbilimde.scienceplatform.notification.client.youtube;
 import org.gelecekbilimde.scienceplatform.notification.client.youtube.model.YoutubePlaylistItemsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value = "youtubeClient",
-	url = "${youtubeDataApi.url}"
+	url = "${youtubeDataApi.url}" // Kaldırınca bir şey değişmedi
+//	configuration = FeignClient.class
 )
 public interface YoutubeClient {
 	@RequestMapping(method = RequestMethod.GET,
-//		value = "/playlistItems?part={part}&playlistId={playlistId}&key={key}&maxResults=1}",
 		value = "/playlistItems",
 		produces = MediaType.APPLICATION_JSON_VALUE
 	)
