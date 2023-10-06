@@ -38,8 +38,6 @@ class YoutubeNotificationScheduler {
 		String videoId = lastVideo.getId();
 
 		if (!this.lastVideoId.equals(videoId)) {
-			//TODO: send notification
-
 			log.info("New video: {}", videoId);
 			pushNotificationService.sendPushNotificationToTopic(
 				PushNotificationTopicRequest.builder()
