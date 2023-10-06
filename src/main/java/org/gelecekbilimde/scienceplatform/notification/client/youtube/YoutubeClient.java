@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value = "youtubeClient",
-	url = "${youtubeDataApi.url}" // Kaldırınca bir şey değişmedi
-//	configuration = FeignClient.class
+	url = "${youtubeDataApi.url}"
 )
 public interface YoutubeClient {
 	@RequestMapping(method = RequestMethod.GET,
