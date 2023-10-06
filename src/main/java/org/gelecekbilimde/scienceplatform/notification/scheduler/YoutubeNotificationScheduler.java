@@ -18,21 +18,21 @@ class YoutubeNotificationScheduler {
 
 	@PostConstruct
 	private void init() {
-		this.lastVideoId = this.getLastVideo().getItems().getSnippet().getResourceId().getVideoId();
+		this.lastVideoId = this.getLastVideo().getItems().get(0).getSnippet().getResourceId().getVideoId();
 	}
 
 	/**
-	 * This method will be executed every 86 seconds.
+	 * This method will be executed every 86.4 seconds.
 	 */
-	@Scheduled(fixedRate = 86_000)
+	@Scheduled(fixedRate = 86_400)
 	private void sendNotificationForNewVideo() {
 		YoutubePlaylistItemsResponse response = this.getLastVideo();
-		String videoId = response.getItems().getSnippet().getResourceId().getVideoId();
+		String videoId = response.getItems().get(0).getSnippet().getResourceId().getVideoId();
 
 		if (!this.lastVideoId.equals(videoId)) {
 			//TODO: send notification
-			this.lastVideoId = response.getItems().getSnippet().getResourceId().getVideoId();
-			System.out.println("New video: " + response.getItems().getSnippet().getResourceId().getVideoId());
+			this.lastVideoId = videoId;
+			System.out.println("New video: " + videoId);
 			return;
 		}
 		System.out.println("No new video");
