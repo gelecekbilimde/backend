@@ -8,6 +8,7 @@ import org.gelecekbilimde.scienceplatform.notification.client.youtube.YoutubeCli
 import org.gelecekbilimde.scienceplatform.notification.client.youtube.model.YoutubePlaylistItemsResponse;
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
 import org.gelecekbilimde.scienceplatform.notification.service.PushNotificationService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,10 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 @Slf4j
 class YoutubeNotificationScheduler {
+	@Value("${youtubeDataApi.playlistId}")
+	private String playlistId;
+	@Value("${youtubeDataApi.key}")
+	private String apiKey;
 	private final YoutubeClient youtubeClient;
 	private final PushNotificationService pushNotificationService;
 	private String lastVideoId;
@@ -29,9 +34,9 @@ class YoutubeNotificationScheduler {
 	}
 
 	/**
-	 * This method will be executed every 86.4 seconds.
+	 * This method will be executed every 8.64 seconds.
 	 */
-	@Scheduled(fixedRate = 86_400)
+	@Scheduled(fixedRate = 8_640)
 	private void sendNotificationForNewVideo() {
 		log.info("Checking for new video...");
 		YoutubeVideo lastVideo = this.getLastVideo();
@@ -61,8 +66,8 @@ class YoutubeNotificationScheduler {
 		YoutubePlaylistItemsResponse playlistItemsResponse;
 		try {
 			playlistItemsResponse = youtubeClient.getPlaylistItems("snippet",
-				"UU03cpKIZShIWoSBhfVE5bog",
-				"AIzaSyDKNZRqoxFE5_rqRpjKvWEUrhoXfawu3jo",
+				playlistId,
+				apiKey,
 				1);
 
 			return YoutubeVideo.builder()

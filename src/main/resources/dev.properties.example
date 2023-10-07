@@ -21,3 +21,6 @@ MEDIA_UPLOAD_PATH=
 MEDIA_UPLOAD_SIZE=10485760 # 10MB
 FIREBASE_DATABASE_URL=https://push-notification-projec-86e67-default-rtdb.firebaseio.com
 FIREBASE_SERVICE_ACCOUNT_FILE=serviceAccountKey.json
+YOUTUBE_DATA_API_PLAYLIST_ID=UU03cpKIZShIWoSBhfVE5bog
+YOUTUBE_DATA_API_KEY=AIzaSyCdbZ_yQQbk6NpDVpObUlOvb7g-bv3Tgtw
+YOUTUBE_DATA_API_URL=https://www.googleapis.com/youtube/v3
