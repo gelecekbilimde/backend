@@ -17,10 +17,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    context-path: ${CONTEXT_PATH}
 
 file:
   upload:
