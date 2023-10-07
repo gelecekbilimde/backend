@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatusEnum;
+import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
