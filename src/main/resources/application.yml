@@ -45,6 +45,7 @@ firebase:
     database-url: ${FIREBASE_DATABASE_URL}
 
 youtubeDataApi:
-  api-key: ${YOUTUBE_DATA_API_KEY}
+  playlistId: ${YOUTUBE_DATA_API_PLAYLIST_ID}
+  key: ${YOUTUBE_DATA_API_KEY}
   url: ${YOUTUBE_DATA_API_URL}
 
