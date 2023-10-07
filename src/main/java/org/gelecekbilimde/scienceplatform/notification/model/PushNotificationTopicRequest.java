@@ -11,4 +11,5 @@ public class PushNotificationTopicRequest {
 	private String title;
 	private String message;
 	private String topic;
+	private String thumbnailLink;
 }
