@@ -20,6 +20,8 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 @Slf4j
 class YoutubeNotificationScheduler {
+	public static final String YOUTUBE_NEW_VIDEO_TOPIC = "youtube-yeni-video";
+	public static final String YOUTUBE_NEW_VIDEO_TITLE = "Yeni Video";
 	@Value("${youtubeDataApi.playlistId}")
 	private String playlistId;
 	@Value("${youtubeDataApi.key}")
@@ -38,7 +40,7 @@ class YoutubeNotificationScheduler {
 	 */
 	@Scheduled(fixedRate = 8_640)
 	private void sendNotificationForNewVideo() {
-		log.info("Checking for new video...");
+		log.debug("Checking for new video...");
 		YoutubeVideo lastVideo = this.getLastVideo();
 		String videoId = lastVideo.getId();
 
@@ -47,19 +49,18 @@ class YoutubeNotificationScheduler {
 			try {
 				pushNotificationService.sendPushNotificationToTopic(
 					PushNotificationTopicRequest.builder()
-						.topic("youtube-yeni-video")
-						.title("Yeni video")
+						.topic(YOUTUBE_NEW_VIDEO_TOPIC)
+						.title(YOUTUBE_NEW_VIDEO_TITLE)
 						.message("Yeni video: " + lastVideo.getTitle())
+						.thumbnailLink(lastVideo.getThumbnailLink())
 						.build()
 				);
+				log.info("Notifications has been sent to topic: {}", YOUTUBE_NEW_VIDEO_TOPIC);
 			} catch (Exception e) {
 				log.error("Error while sending notification.", e);
 			}
 			this.lastVideoId = videoId;
-			log.info("Notifications has been sent.");
-			return;
 		}
-		log.info("No new video. Last video: {}", videoId);
 	}
 
 	private YoutubeVideo getLastVideo() {
@@ -73,6 +74,7 @@ class YoutubeNotificationScheduler {
 			return YoutubeVideo.builder()
 				.id(playlistItemsResponse.getItems().get(0).getSnippet().getResourceId().getVideoId())
 				.title(playlistItemsResponse.getItems().get(0).getSnippet().getTitle())
+				.thumbnailLink(playlistItemsResponse.getItems().get(0).getSnippet().getThumbnails().getMaxres().getUrl())
 				.build();
 		} catch (Exception exception) {
 			log.error(exception.getMessage(), exception);
@@ -85,5 +87,6 @@ class YoutubeNotificationScheduler {
 	private static class YoutubeVideo {
 		private String id;
 		private String title;
+		private String thumbnailLink;
 	}
 }
