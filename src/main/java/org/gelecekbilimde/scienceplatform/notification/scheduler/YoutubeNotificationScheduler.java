@@ -31,7 +31,7 @@ class YoutubeNotificationScheduler {
 	/**
 	 * This method will be executed every 86.4 seconds.
 	 */
-	@Scheduled(fixedRate = 86_400)
+	@Scheduled(fixedRate = 8_400)
 	private void sendNotificationForNewVideo() {
 		log.info("Checking for new video...");
 		YoutubeVideo lastVideo = this.getLastVideo();
@@ -39,14 +39,17 @@ class YoutubeNotificationScheduler {
 
 		if (!this.lastVideoId.equals(videoId)) {
 			log.info("New video: {}", videoId);
-			pushNotificationService.sendPushNotificationToTopic(
-				PushNotificationTopicRequest.builder()
-					.topic("youtube-yeni-video")
-					.title("Yeni video")
-					.message("Yeni video: " + videoId + " " + lastVideo.getTitle())
-					.build()
-			);
-
+			try {
+				pushNotificationService.sendPushNotificationToTopic(
+					PushNotificationTopicRequest.builder()
+						.topic("youtube-yeni-video")
+						.title("Yeni video")
+						.message("Yeni video: " + lastVideo.getTitle())
+						.build()
+				);
+			} catch (Exception e) {
+				log.error("Error while sending notification.", e);
+			}
 			this.lastVideoId = videoId;
 			log.info("Notifications has been sent.");
 			return;
@@ -55,14 +58,21 @@ class YoutubeNotificationScheduler {
 	}
 
 	private YoutubeVideo getLastVideo() {
-		YoutubePlaylistItemsResponse playlistItemsResponse = youtubeClient.getPlaylistItems("snippet",
-			"UU03cpKIZShIWoSBhfVE5bog",
-			"AIzaSyDKNZRqoxFE5_rqRpjKvWEUrhoXfawu3jo",
-			1);
-		return YoutubeVideo.builder()
-			.id(playlistItemsResponse.getItems().get(0).getSnippet().getResourceId().getVideoId())
-			.title(playlistItemsResponse.getItems().get(0).getSnippet().getTitle())
-			.build();
+		YoutubePlaylistItemsResponse playlistItemsResponse;
+		try {
+			playlistItemsResponse = youtubeClient.getPlaylistItems("snippet",
+				"UU03cpKIZShIWoSBhfVE5bog",
+				"AIzaSyDKNZRqoxFE5_rqRpjKvWEUrhoXfawu3jo",
+				1);
+
+			return YoutubeVideo.builder()
+				.id(playlistItemsResponse.getItems().get(0).getSnippet().getResourceId().getVideoId())
+				.title(playlistItemsResponse.getItems().get(0).getSnippet().getTitle())
+				.build();
+		} catch (Exception exception) {
+			log.error(exception.getMessage(), exception);
+			throw new RuntimeException(exception);
+		}
 	}
 
 	@Builder
