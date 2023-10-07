@@ -1,22 +1,22 @@
 package org.gelecekbilimde.scienceplatform.ticket.dto.response;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatusEnum;
+import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
 
 import java.time.LocalDateTime;
 
 
-@Data
-@EqualsAndHashCode()
+@Getter
+@Setter
 @SuperBuilder
 public class TicketResponse {
 
 	private Long id;
 	private Long userId;
 	private String message;
-	private TicketStatusEnum status;
+	private TicketStatus status;
 	private LocalDateTime updateAt;
 	private LocalDateTime createAt;
 

@@ -43,17 +43,17 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public PagingResponse<TicketResponse> getTicketResponseList(TicketListRequest listRequest) {
 		Page<Ticket> ticketPage = ticketRepository.findAll(listRequest.toPageable());
-		List<TicketResponse> ticketResponseList = ticketModelToTicketResponseMapper.map(ticketPage.getContent());
-		final Paging<TicketResponse> postList = Paging.of(ticketPage, ticketResponseList);
-		return PagingResponse.<TicketResponse>builder().of(postList).content(ticketModelToTicketResponseMapper.map(ticketPage.getContent())).build();
+		List<TicketResponse> ticketResponses = ticketModelToTicketResponseMapper.map(ticketPage.getContent());
+		final Paging<TicketResponse> posts = Paging.of(ticketPage, ticketResponses);
+		return PagingResponse.<TicketResponse>builder().of(posts).content(ticketModelToTicketResponseMapper.map(ticketPage.getContent())).build();
 	}
 
 	@Override
 	public PagingResponse<TicketResponse> getTicketUserResponseList(TicketUserListRequest listRequest) {
 		Page<Ticket> ticketPage = ticketRepository.getByUserId(listRequest.getUserId(), listRequest.toPageable());
-		List<TicketResponse> ticketResponseList = ticketModelToTicketResponseMapper.map(ticketPage.getContent());
-		final Paging<TicketResponse> postList = Paging.of(ticketPage, ticketResponseList);
-		return PagingResponse.<TicketResponse>builder().of(postList).content(ticketModelToTicketResponseMapper.map(ticketPage.getContent())).build();
+		List<TicketResponse> ticketResponses = ticketModelToTicketResponseMapper.map(ticketPage.getContent());
+		final Paging<TicketResponse> posts = Paging.of(ticketPage, ticketResponses);
+		return PagingResponse.<TicketResponse>builder().of(posts).content(ticketModelToTicketResponseMapper.map(ticketPage.getContent())).build();
 	}
 
 }

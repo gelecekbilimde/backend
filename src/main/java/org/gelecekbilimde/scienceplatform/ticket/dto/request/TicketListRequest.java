@@ -3,12 +3,14 @@ package org.gelecekbilimde.scienceplatform.ticket.dto.request;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-@EqualsAndHashCode()
-@Data
+@Getter
+@Setter
 public class TicketListRequest {
 
 

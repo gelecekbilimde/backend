@@ -9,9 +9,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface TicketToTicketResponseMapper extends BaseMapper<Ticket, TicketResponse> {
-	@Override
-	TicketResponse map(Ticket source);
-
 	static TicketToTicketResponseMapper initialize() {
 		return Mappers.getMapper(TicketToTicketResponseMapper.class);
 	}

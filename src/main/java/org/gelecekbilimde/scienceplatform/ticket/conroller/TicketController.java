@@ -21,18 +21,18 @@ class TicketController {
 
 	private final TicketService ticketService;
 
-	@PostMapping("/user")
-	@PreAuthorize("hasAuthority('ticket:read')")
-	public Response<PagingResponse<TicketResponse>> readTicket(@ModelAttribute @Valid TicketUserListRequest request) {
-		final PagingResponse<TicketResponse> ticketResponseList = ticketService.getTicketUserResponseList(request);
-		return Response.ok(ticketResponseList);
-	}
-
-	@RequestMapping("/all")
+	@GetMapping("/")
 	@PreAuthorize("hasAuthority('ticket:all:read')")
 	public Response<PagingResponse<TicketResponse>> getTicket(@ModelAttribute @Valid TicketListRequest request) {
-		final PagingResponse<TicketResponse> ticketResponseList = ticketService.getTicketResponseList(request);
-		return Response.ok(ticketResponseList);
+		final PagingResponse<TicketResponse> ticketResponses = ticketService.getTicketResponseList(request);
+		return Response.ok(ticketResponses);
+	}
+
+	@GetMapping("/user")
+	@PreAuthorize("hasAuthority('ticket:read')")
+	public Response<PagingResponse<TicketResponse>> readTicket(@ModelAttribute @Valid TicketUserListRequest request) {
+		final PagingResponse<TicketResponse> ticketResponses = ticketService.getTicketUserResponseList(request);
+		return Response.ok(ticketResponses);
 	}
 
 	@PostMapping("/create")
@@ -42,7 +42,7 @@ class TicketController {
 		return Response.create(ticketResponse);
 	}
 
-	@PostMapping("/update")
+	@PutMapping("/update")
 	@PreAuthorize("hasAuthority('ticket:all:update')")
 	public Response<TicketResponse> saveTicket(@RequestBody @Valid TicketUpdateRequest request) {
 		TicketResponse ticketResponse = ticketService.updateTicketStatus(request);
