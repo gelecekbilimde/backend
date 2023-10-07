@@ -31,7 +31,7 @@ class YoutubeNotificationScheduler {
 	/**
 	 * This method will be executed every 86.4 seconds.
 	 */
-	@Scheduled(fixedRate = 8_400)
+	@Scheduled(fixedRate = 86_400)
 	private void sendNotificationForNewVideo() {
 		log.info("Checking for new video...");
 		YoutubeVideo lastVideo = this.getLastVideo();
