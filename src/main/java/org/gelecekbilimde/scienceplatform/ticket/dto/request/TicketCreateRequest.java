@@ -1,21 +1,19 @@
 package org.gelecekbilimde.scienceplatform.ticket.dto.request;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class TicketCreateRequest {
 
-	@NotNull(message = "cannot be null")
+	@NotNull
 	private Long userId;
 
-	@NotNull(message = "cannot be null")
+	@NotNull
 	private String message;
 
 }

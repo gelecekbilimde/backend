@@ -16,10 +16,10 @@ INSERT INTO permission (id, description, permission) VALUES (9, 'Test Versiyonu 
 INSERT INTO permission (id, description, permission) VALUES (10, 'Admin Paneline erişir', 'admin:access');
 
 
-INSERT INTO permission (id, description, permission) VALUES (11, 'Ticket Read', 'ticket:read');
-INSERT INTO permission (id, description, permission) VALUES (12, 'All Ticket Read', 'ticket:all:read');
-INSERT INTO permission (id, description, permission) VALUES (13, 'Ticket Create', 'ticket:create');
-INSERT INTO permission (id, description, permission) VALUES (14, 'All Ticket Update', 'ticket:all:update');
+INSERT INTO permission (id, description, permission) VALUES (11, 'Self Ticket Read', 'self:ticket:read');
+INSERT INTO permission (id, description, permission) VALUES (12, 'All Ticket Read', 'ticket:read');
+INSERT INTO permission (id, description, permission) VALUES (13, 'Self Ticket Create', 'self:ticket:create');
+INSERT INTO permission (id, description, permission) VALUES (14, 'All Ticket Update', 'ticket:update');
 
 
 INSERT INTO role_permission (role_id, permission_id) VALUES (1, 1);
