@@ -22,7 +22,7 @@ public class PushNotificationService {
 		try {
 			fcmService.sendMessageToTokenList(request);
 		} catch (Exception exception) {
-			log.warn(exception.getMessage(), exception);
+			log.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -43,7 +43,7 @@ public class PushNotificationService {
 		try {
 			fcmService.sendMessageToTopic(request);
 		} catch (Exception exception) {
-			log.warn(exception.getMessage(), exception);
+			log.error(exception.getMessage(), exception);
 		}
 	}
 }
