@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TicketServiceImpl implements TicketService {
+class TicketServiceImpl implements TicketService {
 
 	private final Identity identity;
 
@@ -40,9 +40,10 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public TicketResponse updateTicket(TicketUpdateRequest request) {
-		this.ticketRepository.updateStatusById(request.getTicketId(), request.getStatus());
-		Ticket saveTicket = ticketRepository.getReferenceById(request.getTicketId());
-		return ticketModelToTicketResponseMapper.map(saveTicket);
+		Ticket ticket = ticketRepository.getReferenceById(request.getTicketId());
+		ticket.setStatus(request.getStatus());
+		ticketRepository.save(ticket);
+		return ticketModelToTicketResponseMapper.map(ticket);
 	}
 
 	@Override
