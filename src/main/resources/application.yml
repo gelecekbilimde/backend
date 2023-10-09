@@ -27,7 +27,7 @@ file:
   upload:
     media:
       path: ${MEDIA_UPLOAD_PATH}
-      size : ${MEDIA_UPLOAD_SIZE}
+      size: ${MEDIA_UPLOAD_SIZE}
 
 application:
   security:
@@ -44,3 +44,9 @@ firebase:
   service-account:
     path: ${RESOURCE_PATH}${FIREBASE_SERVICE_ACCOUNT_FILE}
     database-url: ${FIREBASE_DATABASE_URL}
+
+youtubeDataApi:
+  playlistId: ${YOUTUBE_DATA_API_PLAYLIST_ID}
+  key: ${YOUTUBE_DATA_API_KEY}
+  url: ${YOUTUBE_DATA_API_URL}
+
