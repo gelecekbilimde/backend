@@ -1,6 +1,5 @@
 package org.gelecekbilimde.scienceplatform.notification.service.impl;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -47,29 +46,14 @@ class FCMServiceImpl implements FCMService {
 		log.info("Sent message to topic: {}, {} msg {}", request.getTopic(), response, jsonOutput);
 	}
 
-	private AndroidConfig getAndroidConfig(String topic) {
-		return AndroidConfig.builder()
-			.setTtl(Duration.ofMinutes(2).toMillis()).setCollapseKey(topic)
-			.setPriority(AndroidConfig.Priority.HIGH)
-			.setNotification(AndroidNotification.builder()
-				.setTag(topic).build()).build();
-	}
-
 	private Message.Builder getPreconfiguredMessageBuilder(PushNotificationTopicRequest request) {
-		AndroidConfig androidConfig = getAndroidConfig(request.getTopic());
-		ApnsConfig apnsConfig = ApnsConfig.builder()
-			.setAps(Aps.builder()
-				.setCategory(request.getTopic())
-				.setThreadId(request.getTopic())
-				.build()).build();
-
 		Notification.Builder notificationBuilder = Notification.builder()
 			.setTitle(request.getTitle())
-			.setBody(request.getMessage());
+			.setBody(request.getMessage())
+			.setImage(request.getThumbnailLink());
 
 		return Message.builder()
-			.setApnsConfig(apnsConfig)
-			.setAndroidConfig(androidConfig)
+			.setTopic(request.getTopic())
 			.setNotification(notificationBuilder.build());
 	}
 
