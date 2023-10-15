@@ -51,7 +51,7 @@ public class MediaService {
 			mediaGroup.parentId(mediaGroupRequest.getParentId());
 		}
 
-		var entity = mediaGroupRepository.save(mediaGroup.build());
+		MediaGroup entity = mediaGroupRepository.save(mediaGroup.build());
 
 		mediaGroupRequest.setGroupId(entity.getId().intValue());
 
@@ -63,7 +63,7 @@ public class MediaService {
 
 		Media media = Media.builder()
 				.url(mediaRequest.getUrl())
-				.type(mediaRequest.getType())
+				.contentType(mediaRequest.getContentType())
 				.mediaType(mediaRequest.getMediaType())
 				.title(mediaRequest.getTitle())
 				.shared(mediaRequest.isShared())
@@ -112,7 +112,7 @@ public class MediaService {
 				Files.copy(file.getInputStream(), filePath);
 
 				MediaRequest mediaRequest = new MediaRequest();
-				mediaRequest.setType(mediaType);
+				mediaRequest.setContentType(mediaType);
 				mediaRequest.setTitle(title);
 				mediaRequest.setShared(false);
 				mediaRequest.setGroupId(groupId);

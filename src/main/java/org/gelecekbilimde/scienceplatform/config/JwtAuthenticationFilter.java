@@ -60,8 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		// todo many to many yapılandırmasında boş sonuç döndüğü için böyle !!!!! Düzeltilmeli!!!!!!!
-		Role role = roleRepository.findByRole(roleName).orElseThrow(()->new ServerException("Role bilgisine ulaşılamadı"));
-		Set<Permission> permissions = new HashSet<>(roleRepository.findPermissionsByRole(roleName));
+		Role role = roleRepository.findByName(roleName).orElseThrow(()->new ServerException("Role bilgisine ulaşılamadı"));
+		Set<Permission> permissions = new HashSet<>(roleRepository.findPermissionsByName(roleName));
 		role.setPermissions(permissions);
 
 		if (jwtService.GUEST_USERNAME.equals(roleName) && jwtService.isGuestTokenValid(jwt)){
@@ -84,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		User userDetails = (User) this.userDetailsService.loadUserByUsername(userName);
 
 
-		var isTokenValid = tokenRepository.findByToken(jwt)
+		var isTokenValid = tokenRepository.findByJwt(jwt)
 			.map(t -> !t.isExpired() && !t.isRevoked())
 			.orElse(false);
 

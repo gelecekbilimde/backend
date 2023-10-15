@@ -2,8 +2,10 @@ package org.gelecekbilimde.scienceplatform.user.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.auth.model.Role;
 import org.gelecekbilimde.scienceplatform.auth.model.Token;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.user.enums.Degree;
 import org.gelecekbilimde.scienceplatform.user.enums.Gender;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
@@ -16,70 +18,70 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "`user`")
-public class User implements UserDetails {
+public class User extends BaseModel implements UserDetails {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	@Column(columnDefinition = "varchar(25)", nullable = false)
-	private String name;
 
-	@Column(columnDefinition = "varchar(25)", nullable = false)
-	private String lastname;
+	@Column(name = "avatar_path")
+	private String avatar;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
-	private String email;
-
-	@Column(columnDefinition = "varchar(255)", nullable = false)
-	private String password;
-
-	@Column(columnDefinition = "varchar(255)")
-	private String avatarPath;
-
-	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(255)")
-	private Gender gender;
-
-	@Enumerated(EnumType.ORDINAL)
-	@Column(columnDefinition = "integer")
-	private Degree degree;
-
-	@Column(columnDefinition = "text")
+	@Column(name = "biography")
 	private String biography;
 
-	@Temporal(TemporalType.DATE)
-	@Column(columnDefinition = "date")
+	@Column(name = "birth_date")
 	private LocalDate birthDate;
 
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createDate;
+	@Column(name = "degree")
+	@Enumerated(EnumType.STRING)
+	private Degree degree;
 
-	@Column(columnDefinition = "boolean default false")
-	public boolean emailVerify = false;
+	@Column(name = "email")
+	private String email;
 
-	@Column(columnDefinition = "boolean default true")
-	public boolean userEnable = true;
+	@Column(name = "email_verify")
+	private boolean emailVerify;
 
-	@Column(columnDefinition = "boolean default false")
-	public boolean userLock = false;
+	@Column(name = "gender")
+	@Enumerated(EnumType.STRING)
+	private Gender gender;
+
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "lastname")
+	private String lastName;
+
+
+	@Column(name = "password")
+	private String password;
+
+	@Column(name = "user_enable")
+	private boolean userEnable = true;
+
+	@Column(name = "user_lock")
+	private boolean userLock = true;
+
+	@Column(name = "role_name")
+	private String roleName;
+
 
 	@OneToMany(mappedBy = "user")
 	private List<Token> token;
 
-	@OneToOne
-	@JoinColumn(referencedColumnName = "role")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "role_name", referencedColumnName = "name", insertable = false, updatable = false)
 	private Role role;
 
 	@ManyToMany
-	@JoinTable(name = "follower", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
+	@JoinTable(name = "follower", joinColumns = @JoinColumn(name = "follower_user_id"), inverseJoinColumns = @JoinColumn(name = "followed_user_id"))
 	private Set<User> followerUsers = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -99,6 +101,8 @@ public class User implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return role.getPermissions();
 	}
+
+
 
 	@Override
 	public boolean isEnabled() {

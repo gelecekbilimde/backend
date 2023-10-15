@@ -56,7 +56,7 @@ public class AuthenticationService {
 		}
 
 		Role role = roleRepository.getByIsDefaultTrue().orElseThrow(()-> new ServerException("Default Role is not defined."));
-		List<String> scope = scopeList(role.getRole());
+		List<String> scope = scopeList(role.getName());
 
 
 		Gender gender = null;
@@ -81,13 +81,13 @@ public class AuthenticationService {
 
 		User user = User.builder()
 			.name(request.getFirstname())
-			.lastname(request.getLastname())
+			.lastName(request.getLastname())
 			.email(request.getEmail())
 			.birthDate(request.getBirthDate())
 			.biography(request.getBiography())
 			.gender(gender)
 			.degree(degree)
-			.role(role)
+			.roleName(role.getName())
 			.userEnable(true).userLock(false).emailVerify(false)
 			.password(passwordEncoder.encode(request.getPassword()))
 			.build();
@@ -112,7 +112,7 @@ public class AuthenticationService {
 
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-			var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
+			User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
 
 			if (blackListRepository.existsByEmail(user.getEmail())){
 				throw new ClientException("This user is black list registered");
@@ -130,8 +130,8 @@ public class AuthenticationService {
 				throw new ClientException("This Email Not Verify");
 			}
 
-			Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException("User Scope has a problem"));
-			List<String> scope = scopeList(role.getRole());
+			Role role = roleRepository.findByName(user.getRoleName()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+			List<String> scope = scopeList(role.getName());
 
 			var jwtToken = jwtService.generateToken(user,scope);
 			var refreshToken = jwtService.generateRefreshToken(user);
@@ -145,7 +145,7 @@ public class AuthenticationService {
 				.refreshToken(refreshToken)
 				.build();
 		} catch (Exception e) {
-			throw new ServerException(e.getMessage());
+			throw new ClientException(e.getMessage());
 		}
 
 	}
@@ -165,7 +165,7 @@ public class AuthenticationService {
 	private void saveUserToken(User user, String jwtToken) {
 		var token = Token.builder()
 			.user(user)
-			.token(jwtToken)
+			.jwt(jwtToken)
 			.tokenType(TokenType.BEARER)
 			.revoked(false)
 			.expired(false)
@@ -206,8 +206,8 @@ public class AuthenticationService {
 			throw new ClientException("Oturum bilgisinde hata var");
 		}
 
-		Role role = roleRepository.findByRole(user.getRole().getRole()).orElseThrow(() -> new ServerException("User Scope has a problem"));
-		List<String> scope = scopeList(role.getRole());
+		Role role = roleRepository.findByName(user.getRole().getName()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+		List<String> scope = scopeList(role.getName());
 		var jwtToken = jwtService.generateToken(user,scope);
 
 		revokeAllUserTokens(user);
@@ -221,8 +221,8 @@ public class AuthenticationService {
 	}
 
 	private List<String> scopeList(String role) {
-		List<Permission> rolePermission = roleRepository.findPermissionsByRole(role);
-		return rolePermission.stream().map(Permission::getPermission).toList();
+		List<Permission> rolePermission = roleRepository.findPermissionsByName(role);
+		return rolePermission.stream().map(Permission::getName).toList();
 	}
 
 }

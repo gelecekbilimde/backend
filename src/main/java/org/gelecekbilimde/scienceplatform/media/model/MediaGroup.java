@@ -5,19 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Data
+@SuperBuilder
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "media_group")
-public class MediaGroup {
+public class MediaGroup extends BaseModel {
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -25,7 +26,7 @@ public class MediaGroup {
 	@Column
 	private Integer parentId;
 
-	@Column(columnDefinition = "varchar(50) default 'Space'", nullable = false)
+	@Column(name = "name")
 	private String name;
 
 	@Column(name = "user_id")
@@ -38,8 +39,4 @@ public class MediaGroup {
 	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
 
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createdDate;
 }

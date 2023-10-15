@@ -17,7 +17,7 @@ public class MediaRequest {
 
 	private String url;
 
-    private MediaContentType type;
+    private MediaContentType contentType;
 
     private MediaType mediaType;
 

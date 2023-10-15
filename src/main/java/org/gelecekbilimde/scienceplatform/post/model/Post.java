@@ -20,38 +20,47 @@ public class Post {
 	@GeneratedValue
 	private Long id;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
+	@Column(name = "header")
 	private String header;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
-	private String slug;
-
-	@Column(columnDefinition = "text", nullable = false)
+	@Column(name = "content")
 	private String content;
 
-	@Column(columnDefinition = "boolean default false")
-	private boolean active;
+	@Column(name = "slug")
+	private String slug;
 
-	@Column(columnDefinition = "boolean default false")
-	private boolean copyrightControl;
 
-	@Column(columnDefinition = "boolean default false")
-	private boolean typoControl;
-
-	@Column(columnDefinition = "boolean default false")
-	private boolean dangerousControl;
-
-	@Column(columnDefinition = "integer", nullable = false)
+	@Column(name = "like_count")
 	private Integer likeCount;
 
 
+	@Column(name = "copyright_control")
+	private boolean copyrightControl;
+
+	@Column(name = "typo_control")
+	private boolean typoControl;
+
+	@Column(name = "dangerous_control")
+	private boolean dangerousControl;
+
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(25)")
+	@Column(name = "last_process")
 	private PostProcessEnum lastProcess;
 
 
 	@Column(name = "user_id")
 	private Long userId;
+
+
+	@Column(name = "is_active")
+	private boolean active;
+
+
+
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_at")
+	private LocalDateTime createAt;
 
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
@@ -62,19 +71,7 @@ public class Post {
 	private List<PostProcess> process;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id",insertable = false,updatable = false)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private User user;
-
-
-	@ManyToMany
-	@JoinTable(name = "post_comment", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "comment_id"))
-	private Set<Comment> comments = new HashSet<>();
-
-
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createAt;
-
 
 }
