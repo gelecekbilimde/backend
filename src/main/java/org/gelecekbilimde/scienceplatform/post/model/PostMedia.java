@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.media.model.Media;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.user.model.User;
@@ -14,11 +16,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "posts_media")
-public class PostMedia {
+public class PostMedia extends BaseModel {
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -46,9 +48,4 @@ public class PostMedia {
 	@ManyToOne
 	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
-
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createdDate;
 }

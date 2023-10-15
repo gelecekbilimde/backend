@@ -3,6 +3,7 @@ package org.gelecekbilimde.scienceplatform.notification.repository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class NotificationToken {
+@Table(name = "notification_token")
+
+public class NotificationToken extends BaseModel {
 
 	@Id
 	@GeneratedValue
@@ -19,14 +22,10 @@ public class NotificationToken {
 	@Column(name = "user_id")
 	private Long userId;
 
-	@Column(columnDefinition = "text")
+	@Column(name = "device_token")
 	private String deviceToken;
 
-	@Column(columnDefinition = "varchar(255)")
+	@Column(name = "device_id")
 	private String deviceId;
 
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createAt;
 }

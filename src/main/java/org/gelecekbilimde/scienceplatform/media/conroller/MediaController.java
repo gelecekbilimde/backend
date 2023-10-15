@@ -19,13 +19,13 @@ class MediaController {
 
 	private final MediaService mediaService;
 
-	@PostMapping("")
+	@PostMapping()
 	@PreAuthorize("hasAuthority('post:create')")
 	public Response<List<Object>> secretVersionRole(HttpServletRequest httpServletRequest,
 													@RequestParam("files") List<MultipartFile> files,
 													@RequestParam("groupId") Integer groupId,
-													@RequestParam("type") MediaContentType mediaType) {
+													@RequestParam("contentType") MediaContentType contentType) {
 		//todo size kontrol
-		return Response.ok(mediaService.uploadMedia(groupId, mediaType, files));
+		return Response.ok(mediaService.uploadMedia(groupId, contentType, files));
 	}
 }

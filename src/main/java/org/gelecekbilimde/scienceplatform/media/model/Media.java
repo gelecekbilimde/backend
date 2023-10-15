@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
 import org.gelecekbilimde.scienceplatform.post.model.PostMedia;
@@ -16,31 +18,31 @@ import java.util.List;
 
 @Entity
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "media")
-public class Media {
+public class Media extends BaseModel {
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
+	@Column(name = "url")
 	private String url;
 
 
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(25)", nullable = false)
-	private MediaContentType type;
+	@Column(name = "content_type")
+	private MediaContentType contentType;
 
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(25)", nullable = false)
+	@Column(name = "media_type")
 	private MediaType mediaType;
 
-	@Column(columnDefinition = "varchar(100)", nullable = false)
+	@Column(name = "title")
 	private String title;
 
-	@Column(columnDefinition ="boolean default false", nullable = false)
+	@Column(name = "is_shared")
 	private boolean shared;
 
 	@Column(name = "user_id")
@@ -56,11 +58,5 @@ public class Media {
 
 	@OneToMany(mappedBy = "media", cascade = CascadeType.ALL)
 	private List<PostMedia> postMedia;
-
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createdDate;
-
 
 }

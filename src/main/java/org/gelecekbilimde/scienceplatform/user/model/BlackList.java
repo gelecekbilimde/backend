@@ -18,10 +18,10 @@ public class BlackList {
 	@GeneratedValue
 	private Long id;
 
-	@Column(columnDefinition = "varchar(25)", nullable = false)
+	@Column(name = "email")
 	private String email;
 
-	@Column(columnDefinition = "varchar(255)")
+	@Column(name= "description")
 	private String description;
 
 }

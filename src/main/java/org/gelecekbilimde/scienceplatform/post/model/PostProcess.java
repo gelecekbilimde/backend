@@ -2,6 +2,8 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.user.model.User;
@@ -11,22 +13,22 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "posts_process")
-public class PostProcess {
+public class PostProcess extends BaseModel {
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
+	@Column(columnDefinition = "varchar(255)")
 	private String header;
 
-	@Column(columnDefinition = "text", nullable = false)
+	@Column(columnDefinition = "text")
 	private String content;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
+	@Column(columnDefinition = "varchar(255)")
 	private String slug;
 
 	@Enumerated(EnumType.STRING)
@@ -50,10 +52,5 @@ public class PostProcess {
 
 	@Column(columnDefinition = "jsonb")
 	private String message;
-
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createdDate;
 
 }
