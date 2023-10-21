@@ -5,11 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
-import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -22,17 +18,17 @@ public class PostProcess extends BaseModel {
 	@GeneratedValue
 	private Long id;
 
-	@Column(columnDefinition = "varchar(255)")
+	@Column(name = "header")
 	private String header;
 
-	@Column(columnDefinition = "text")
+	@Column(name = "content")
 	private String content;
 
-	@Column(columnDefinition = "varchar(255)")
+	@Column(name = "slug")
 	private String slug;
 
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(25)")
+	@Column(name = "process")
 	private PostProcessEnum process;
 
 	@Column(name = "post_id")
@@ -50,7 +46,7 @@ public class PostProcess extends BaseModel {
 	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
 
-	@Column(columnDefinition = "jsonb")
+	@Column(name = "message")
 	private String message;
 
 }

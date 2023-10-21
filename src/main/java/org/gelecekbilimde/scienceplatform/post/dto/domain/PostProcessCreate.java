@@ -4,7 +4,6 @@ import lombok.Data;
 import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Data
@@ -18,7 +17,7 @@ public class PostProcessCreate {
 	private String content;
 
 	private PostProcessEnum process;
-	private List<PostProcessMessage> message;
+	private String message;
 	private LocalDateTime createdDate;
 
 }

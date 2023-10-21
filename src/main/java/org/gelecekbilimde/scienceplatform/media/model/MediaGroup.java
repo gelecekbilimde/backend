@@ -23,7 +23,7 @@ public class MediaGroup extends BaseModel {
 	@GeneratedValue
 	private Long id;
 
-	@Column
+	@Column(name = "parent_id")
 	private Integer parentId;
 
 	@Column(name = "name")
