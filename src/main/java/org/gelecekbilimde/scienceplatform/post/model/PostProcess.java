@@ -3,7 +3,6 @@ package org.gelecekbilimde.scienceplatform.post.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
-import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.hibernate.annotations.CreationTimestamp;
 
