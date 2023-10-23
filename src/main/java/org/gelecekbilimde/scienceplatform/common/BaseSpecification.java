@@ -3,7 +3,7 @@ package org.gelecekbilimde.scienceplatform.common;
 import jakarta.persistence.criteria.Predicate;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
 
@@ -11,9 +11,8 @@ import java.util.Map;
 
 @Getter
 @Builder
-@NoArgsConstructor
+@UtilityClass
 public class BaseSpecification {
-
 	@SuppressWarnings("unused")
 	public static class Builder<C> {
 

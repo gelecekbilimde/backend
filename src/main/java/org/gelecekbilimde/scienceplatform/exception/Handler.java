@@ -102,22 +102,28 @@ public class Handler {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 
 		String paramName = e.getName();
-		String expectedType = e.getRequiredType().getSimpleName();
-		String invalidValue = e.getValue().toString();
-
-		Object[] its = e.getRequiredType().getEnumConstants();
+		Class<?> requiredType = e.getRequiredType();
+		String invalidValue = e.getValue() != null ? e.getValue().toString() : "null";
+		String expectedType = requiredType != null ? requiredType.getSimpleName() : "unknown";
 
 		StringJoiner enumList = new StringJoiner(", ");
-		for (Object it : its){
-			enumList.add(it.toString());
+		if (requiredType != null) {
+			Object[] its = requiredType.getEnumConstants();
+			if (its != null) {
+				for (Object it : its) {
+					enumList.add(it.toString());
+				}
+			}
 		}
 
 		// İstisna mesajını hazırla
 		String message = "Hatalı parametre: " + paramName + ". " +
 				"Beklenen tip: " + expectedType + ". " +
-				"Geçersiz değer: " + invalidValue + ". " +
-				"Parametre, değerlerden biri olmalıdır: "+enumList.toString() ;
+				"Geçersiz değer: " + invalidValue + ". ";
 
+		if (!enumList.toString().isEmpty()) {
+			message += "The parameter must be one of the following values: " + enumList;
+		}
 
 		return trowException(request, status, message,ERROR, new HashMap<>());
 	}
@@ -135,23 +141,23 @@ public class Handler {
 			message = "Beklenmeyen bir hata oldu Hemen ilgileneceğiz";
 		}
 
-		Exception exception = new Exception(path, status, method, message, validationMessage, new HashMap<>());
+		ApiExceptionDetail apiExceptionDetail = new ApiExceptionDetail(path, status, method, message, validationMessage, new HashMap<>());
 
-		if (!validationMessage.isEmpty()){
+		if (validationMessage != null && !validationMessage.isEmpty()) {
 			originalMessage += validationMessage.toString();
 		}
 
-		writeLog(logLevel, exception.errorCode, originalMessage);
+		writeLog(logLevel, apiExceptionDetail.getErrorCode(), originalMessage);
 
-		return new ResponseEntity<>(exception, status);
+		return new ResponseEntity<>(apiExceptionDetail, status);
 	}
 
 	private void writeLog(String level, String errorCode, String message)
 	{
 		String formatMessage = messageFormat(message,errorCode);
 		switch (level) {
-			case "warn" -> LOGGER.warn(formatMessage);
-			case "error" -> LOGGER.error(formatMessage);
+			case WARN -> LOGGER.warn(formatMessage);
+			case ERROR -> LOGGER.error(formatMessage);
 			default -> LOGGER.info(formatMessage);
 		}
 	}

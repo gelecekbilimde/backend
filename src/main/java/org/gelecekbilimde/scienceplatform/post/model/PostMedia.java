@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.media.model.Media;
-import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.hibernate.annotations.CreationTimestamp;
 
