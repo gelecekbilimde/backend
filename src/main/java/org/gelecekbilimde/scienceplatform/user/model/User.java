@@ -9,12 +9,10 @@ import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.user.enums.Degree;
 import org.gelecekbilimde.scienceplatform.user.enums.Gender;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
