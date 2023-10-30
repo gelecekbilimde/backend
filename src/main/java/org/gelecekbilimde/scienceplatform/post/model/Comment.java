@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 
+
 @Entity
 @Data
 @SuperBuilder
@@ -18,6 +19,7 @@ public class Comment extends BaseModel {
 
 	@Column(name = "message")
 	private String message;
+
 
 	@Column(name = "like_count")
 	private Integer likeCount;
