@@ -16,7 +16,7 @@ create table if not exists "user"
   role_name      varchar(55),
   create_user_id bigint,
   created_at     timestamp
-  );
+);
 
 create table if not exists black_list
 (
@@ -27,14 +27,14 @@ create table if not exists black_list
   created_at     timestamp,
   updated_at     timestamp,
   deleted_at     timestamp
-  );
+);
 
 
 
 create table if not exists comments
 (
   id             bigint  not null primary key,
-  comment        text    not null,
+  message        text    not null,
   like_count     integer null default 0,
   create_user_id bigint,
   created_at     timestamp,
@@ -54,7 +54,7 @@ create table if not exists notification_token
   created_at     timestamp,
   updated_at     timestamp,
   deleted_at     timestamp
-  );
+);
 
 
 create table if not exists permission
@@ -67,7 +67,7 @@ create table if not exists permission
   updated_at     timestamp,
   deleted_at     timestamp
 
-  );
+);
 
 
 create table if not exists role
@@ -81,7 +81,7 @@ create table if not exists role
   updated_at     timestamp,
   deleted_at     timestamp,
   CONSTRAINT name_unique unique (name)
-  );
+);
 
 
 create table if not exists role_permission
@@ -93,7 +93,7 @@ create table if not exists role_permission
   updated_at     timestamp,
   deleted_at     timestamp,
   primary key (role_id, permission_id)
-  );
+);
 
 
 
@@ -106,7 +106,7 @@ create table if not exists follower
   updated_at       timestamp,
   deleted_at       timestamp,
   primary key (follower_user_id, followed_user_id)
-  );
+);
 
 
 create table if not exists media_group
@@ -119,7 +119,7 @@ create table if not exists media_group
   created_at     timestamp,
   updated_at     timestamp,
   deleted_at     timestamp
-  );
+);
 
 
 create table if not exists media
@@ -136,7 +136,7 @@ create table if not exists media
   created_at     timestamp,
   updated_at     timestamp,
   deleted_at     timestamp
-  );
+);
 
 
 create table if not exists post
@@ -153,7 +153,7 @@ create table if not exists post
   user_id           bigint,
   is_active         boolean           default false,
   create_at         timestamp
-  );
+);
 
 
 create table if not exists post_comments
@@ -165,7 +165,7 @@ create table if not exists post_comments
   updated_at     timestamp,
   deleted_at     timestamp,
   primary key (post_id, comment_id)
-  );
+);
 
 
 create table if not exists posts_media
@@ -186,7 +186,7 @@ create table if not exists posts_process
   id             bigint       not null primary key,
   content        text         not null,
   header         varchar(255) not null,
-  message        jsonb,
+  message        text,
   post_id        bigint,
   process        varchar(25),
   slug           varchar(255) not null,
@@ -195,7 +195,7 @@ create table if not exists posts_process
   created_at     timestamp,
   updated_at     timestamp,
   deleted_at     timestamp
-  );
+);
 
 
 create table if not exists token
@@ -210,7 +210,7 @@ create table if not exists token
   created_at     timestamp,
   updated_at     timestamp,
   deleted_at     timestamp
-  );
+);
 
 ALTER TABLE "user"
   ADD CONSTRAINT user_role_fk FOREIGN KEY (role_name) REFERENCES role (name);
