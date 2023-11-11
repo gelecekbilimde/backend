@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.google.firebase.messaging.*;
 
-import org.gelecekbilimde.scienceplatform.config.FCMConfiguration;
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
 import org.gelecekbilimde.scienceplatform.notification.repository.NotificationToken;
@@ -25,7 +24,7 @@ import com.google.gson.GsonBuilder;
 class FCMServiceImpl implements FCMService {
 
 	private final UserTokenRepository userTokenRepository;
-	private final FirebaseMessaging firebaseMessaging = new FCMConfiguration().firebaseMessaging();
+	private final FirebaseMessaging firebaseMessaging;
 
 	@Override
 	public void sendMessageToTokenList(PushNotificationUserRequest request)
