@@ -39,7 +39,7 @@ class FCMServiceImpl implements FCMService {
 	@Override
 	public void sendMessageToTopic(PushNotificationTopicRequest request)
 		throws InterruptedException, ExecutionException {
-		Message message = getPreconfiguredMessageBuilder(request).setTopic(request.getTopic()).build();
+		Message message = getPreconfiguredMessageBuilder(request).build();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String jsonOutput = gson.toJson(message);
 		String response = firebaseMessaging.sendAsync(message).get();
