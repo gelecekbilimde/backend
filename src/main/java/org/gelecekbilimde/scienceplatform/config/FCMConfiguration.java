@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 
 @Slf4j
 @Configuration
@@ -22,15 +21,20 @@ public class FCMConfiguration {
 	private String databaseUrl;
 
 	@Bean
-	public FirebaseMessaging firebaseMessaging() throws IOException {
-		FileInputStream serviceAccount =
-			new FileInputStream(serviceAccountFilePath);
-		FirebaseOptions options = FirebaseOptions.builder()
-			.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-			.setDatabaseUrl(databaseUrl)
-			.build();
+	public FirebaseMessaging firebaseMessaging() {
+		try {
+			FileInputStream serviceAccount =
+				new FileInputStream(serviceAccountFilePath);
+			FirebaseOptions options = FirebaseOptions.builder()
+				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
+				.setDatabaseUrl(databaseUrl)
+				.build();
 
-		FirebaseApp.initializeApp(options);
-		return FirebaseMessaging.getInstance();
+			FirebaseApp.initializeApp(options);
+			return FirebaseMessaging.getInstance();
+		} catch (Exception e) {
+			log.error("Error while initializing firebase messaging: {}", e.getMessage());
+			return null;
+		}
 	}
 }
