@@ -1,9 +1,12 @@
 package org.gelecekbilimde.scienceplatform.auth.service;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.repository.TokenRepository;
+import org.gelecekbilimde.scienceplatform.auth.model.InvalidToken;
+import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
+import org.gelecekbilimde.scienceplatform.config.JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,27 +18,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
+	private final InvalidTokenService invalidTokenService;
+	private final JwtService jwtService;
 
-	private final TokenRepository tokenRepository;
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-		final String jwt;
 
 		if (null == authHeader || !authHeader.startsWith("Bearer ")) {
 			return;
 		}
-		jwt = authHeader.substring(7);
 
-		var storedToken = tokenRepository.findByJwt(jwt)
-			.orElse(null);
+		final String token = authHeader.substring(7);
+		final String tokenId = (String) jwtService.extractClaim(token,TokenClaims.JWT_ID.getValue());
+		invalidTokenService.saveInvalidToken(tokenId);
 
-		if (storedToken != null){
-			storedToken.setExpired(true);
-			storedToken.setRevoked(true);
-			tokenRepository.save(storedToken);
-			SecurityContextHolder.clearContext();
-		}
+		SecurityContextHolder.clearContext();
+
 	}
 }

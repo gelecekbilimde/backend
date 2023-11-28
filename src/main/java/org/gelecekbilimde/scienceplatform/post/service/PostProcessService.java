@@ -1,24 +1,13 @@
 package org.gelecekbilimde.scienceplatform.post.service;
 
-import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.post.dto.domain.PostProcessCreate;
-import org.gelecekbilimde.scienceplatform.post.mapper.PostProcessCreateToPostProcessModelMapper;
-import org.gelecekbilimde.scienceplatform.post.model.PostProcess;
-import org.gelecekbilimde.scienceplatform.post.repository.PostProcessRepository;
-import org.gelecekbilimde.scienceplatform.user.service.Identity;
-import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
-public class PostProcessService {
+import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
+import org.gelecekbilimde.scienceplatform.post.dto.domain.PostProcessDomain;
+import org.gelecekbilimde.scienceplatform.post.dto.request.PostManagerControl;
 
-	private final PostProcessRepository postProcessRepository;
-	private final Identity identity;
-	private static final PostProcessCreateToPostProcessModelMapper postProcessCreateToPostProcessModel = PostProcessCreateToPostProcessModelMapper.initialize();
+public interface PostProcessService {
 
-	public void savePostAfter(PostProcessCreate postProcessCreate) {
+	void savePostProcess(PostDomain postDomain, boolean done);
 
-		final PostProcess postProcess = postProcessCreateToPostProcessModel.mapForSaving(postProcessCreate, identity.getUserId());
-		postProcessRepository.save(postProcess);
-	}
+	void updatePostProcess(PostManagerControl postManagerControl);
 }

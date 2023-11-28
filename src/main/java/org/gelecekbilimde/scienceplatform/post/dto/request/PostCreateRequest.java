@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.user.dto.response.UserResponse;
-import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
+import org.gelecekbilimde.scienceplatform.post.enums.Process;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class PostCreateRequest {
 
 	private UserResponse user;
 
-	private PostProcessEnum lastProcess;
+	private Process lastProcess;
 
 	private List<String> label;
 
@@ -41,6 +41,6 @@ public class PostCreateRequest {
 	private boolean typoControl = false;
 	private boolean dangerousControl = false;
 
-	private List<PostMediaCreate> medias;
+	private List<PostMediaCreateRequest> medias;
 
 }

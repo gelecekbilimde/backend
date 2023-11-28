@@ -4,13 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.auth.model.Role;
-import org.gelecekbilimde.scienceplatform.auth.model.Token;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.user.enums.Degree;
 import org.gelecekbilimde.scienceplatform.user.enums.Gender;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
+import org.gelecekbilimde.scienceplatform.user.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -21,12 +20,11 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "`user`")
-public class User extends BaseModel implements UserDetails {
+public class User extends BaseModel {
 
 	@Id
-	@GeneratedValue
-	private Long id;
-
+	@Column(name = "id")
+	private String id;
 
 	@Column(name = "avatar_path")
 	private String avatar;
@@ -44,9 +42,6 @@ public class User extends BaseModel implements UserDetails {
 	@Column(name = "email")
 	private String email;
 
-	@Column(name = "email_verify")
-	private boolean emailVerify;
-
 	@Column(name = "gender")
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
@@ -61,65 +56,41 @@ public class User extends BaseModel implements UserDetails {
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "user_enable")
-	private boolean userEnable = true;
 
-	@Column(name = "user_lock")
-	private boolean userLock = true;
-
-	@Column(name = "role_name")
-	private String roleName;
+	@Column(name = "role_id")
+	private String roleId;
 
 
-	@OneToMany(mappedBy = "user")
-	private List<Token> token;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private UserStatus status;
+
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "role_name", referencedColumnName = "name", insertable = false, updatable = false)
+	@JoinColumn(name = "role_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private Role role;
 
 	@ManyToMany
-	@JoinTable(name = "follower", joinColumns = @JoinColumn(name = "follower_user_id"), inverseJoinColumns = @JoinColumn(name = "followed_user_id"))
+	@JoinTable(name = "user_followers", joinColumns = @JoinColumn(name = "follower_user_id"), inverseJoinColumns = @JoinColumn(name = "followed_user_id"))
 	private Set<User> followerUsers = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Post> post;
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
-
-	@Override
 	public String getUsername() {
 		return email;
 	}
 
-	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return role.getPermissions();
 	}
 
-
-
 	@Override
-	public boolean isEnabled() {
-		return userEnable;
+	public String toString() {
+		return "User{" +
+			"id=" + getId() +
+			", username='" + getUsername() + '\'' +
+			// Diğer alanlar
+			'}';
 	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return !userLock;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
 }

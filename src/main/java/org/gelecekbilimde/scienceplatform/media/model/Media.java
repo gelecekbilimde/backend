@@ -18,13 +18,13 @@ import java.util.List;
 
 @Entity
 @Data
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "media")
 public class Media extends BaseModel {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "url")
@@ -46,7 +46,7 @@ public class Media extends BaseModel {
 	private boolean shared;
 
 	@Column(name = "user_id")
-	private Long userId;
+	private String userId;
 
 	@ManyToOne
 	@JoinColumn(name = "group_id")
@@ -59,4 +59,16 @@ public class Media extends BaseModel {
 	@OneToMany(mappedBy = "media", cascade = CascadeType.ALL)
 	private List<PostMedia> postMedia;
 
+	@Override
+	public String toString() {
+		return "Media{" +
+			"id=" + getId() +
+			", url='" + getUrl() + '\'' +
+			", contentType='" + getContentType() + '\'' +
+			", mediaType='" + getMediaType() + '\'' +
+			", title='" + getTitle() + '\'' +
+			", shared='" + isShared() + '\'' +
+			", userId='" + getUser() + '\'' +
+			'}';
+	}
 }
