@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.auth.enums.RoleStatus;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -15,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -23,8 +24,8 @@ import java.util.stream.Collectors;
 public class Role extends BaseModel {
 
 	@Id
-	@GeneratedValue
-	private Long id;
+	@Column(name = "id")
+	private String id;
 
 	@Column(name = "name")
 	private String name;
@@ -34,6 +35,15 @@ public class Role extends BaseModel {
 
 	@Column(name = "is_default")
 	private boolean isDefault = false;
+
+	@Column(name = "is_hidden")
+	private boolean isHidden = false;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private RoleStatus status;
+
+
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))

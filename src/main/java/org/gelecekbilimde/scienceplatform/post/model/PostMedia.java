@@ -5,33 +5,31 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.media.model.Media;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "posts_media")
 public class PostMedia extends BaseModel {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "post_id")
-	private Long postId;
+	private String postId;
 
 	@Column(name = "media_id")
 	private Long mediaId;
 
 	@Column(name = "user_id")
-	private Long userId;
+	private String userId;
 
 	@ManyToOne
 	@JoinColumn(name = "post_id",insertable = false, updatable = false)
@@ -47,4 +45,13 @@ public class PostMedia extends BaseModel {
 	@ManyToOne
 	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
+	@Override
+	public String toString() {
+		return "PostMedia{" +
+			"id=" + getId() +
+			", postId='" + getPostId() + '\'' +
+			", mediaId='" + getMediaId() + '\'' +
+			", cover='" + isCover() + '\'' +
+			'}';
+	}
 }

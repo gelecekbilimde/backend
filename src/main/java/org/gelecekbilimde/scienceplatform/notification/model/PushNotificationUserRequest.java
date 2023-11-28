@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class PushNotificationUserRequest {
-	private Long userId;
+	private String userId;
 	private String title;
 	private String message;
 }

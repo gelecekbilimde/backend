@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface UserTokenRepository extends JpaRepository<NotificationToken, Long> {
 
-	List<NotificationToken> findAllByUserId(Long userId);
+	List<NotificationToken> findAllByUserId(String userId);
 }

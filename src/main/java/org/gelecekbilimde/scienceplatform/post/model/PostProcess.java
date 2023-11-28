@@ -2,20 +2,19 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
-import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
+import org.gelecekbilimde.scienceplatform.post.enums.Process;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 
 @Entity
 @Data
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "posts_process")
 public class PostProcess extends BaseModel {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "header")
@@ -29,14 +28,25 @@ public class PostProcess extends BaseModel {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "process")
-	private PostProcessEnum process;
+	private Process process;
 
 	@Column(name = "post_id")
-	private Long postId;
+	private String postId;
 
 	@Column(name = "user_id")
-	private Long userId;
+	private String  userId;
 
+	@Column(name = "done")
+	private boolean done;
+
+	@Column(name = "copyright_control")
+	private boolean copyrightControl;
+
+	@Column(name = "typo_control")
+	private boolean typoControl;
+
+	@Column(name = "dangerous_control")
+	private boolean dangerousControl;
 
 	@ManyToOne
 	@JoinColumn(name = "post_id",insertable = false, updatable = false)
