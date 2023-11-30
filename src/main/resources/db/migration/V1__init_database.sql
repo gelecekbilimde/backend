@@ -137,7 +137,9 @@ create table if not exists media
   created_at     timestamp,
   updated_at     timestamp,
   CONSTRAINT fk_media_media_group_id FOREIGN KEY (group_id) REFERENCES media_group (id),
-  CONSTRAINT fk_media_user_id FOREIGN KEY (user_id) REFERENCES "user" (id)
+  CONSTRAINT fk_media_user_id FOREIGN KEY (user_id) REFERENCES "user" (id),
+  CONSTRAINT check_role_status CHECK ( status in ('ACTIVE','DELETED'))
+
   );
 
 

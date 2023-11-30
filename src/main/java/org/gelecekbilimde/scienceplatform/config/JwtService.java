@@ -60,6 +60,7 @@ public class JwtService {
 		claim.put(TokenClaims.MAIL.getValue(), user.getEmail());
 		claim.put(TokenClaims.ROLE_NAME.getValue(),role.getName());
 		claim.put(TokenClaims.ROLE_ID.getValue(),role.getId());
+		claim.put(TokenClaims.USER_STATUS.getValue(),user.getStatus());
 		claim.put(TokenClaims.SCOPE.getValue(), scope);
 
 

@@ -5,15 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
+import org.gelecekbilimde.scienceplatform.media.enums.MediaStatus;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
 import org.gelecekbilimde.scienceplatform.post.model.PostMedia;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -58,6 +56,10 @@ public class Media extends BaseModel {
 
 	@OneToMany(mappedBy = "media", cascade = CascadeType.ALL)
 	private List<PostMedia> postMedia;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private MediaStatus status;
 
 	@Override
 	public String toString() {
