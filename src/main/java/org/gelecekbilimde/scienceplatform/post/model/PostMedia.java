@@ -7,9 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.media.model.Media;
+import org.gelecekbilimde.scienceplatform.post.enums.PostMediaStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -41,6 +41,11 @@ public class PostMedia extends BaseModel {
 
 	@Column
 	private boolean cover;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private PostMediaStatus status;
+
 
 	@ManyToOne
 	@JoinColumn(name = "user_id",insertable = false, updatable = false)

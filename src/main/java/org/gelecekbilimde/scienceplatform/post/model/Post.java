@@ -2,6 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.gelecekbilimde.scienceplatform.post.enums.PostStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
 
@@ -54,7 +55,9 @@ public class Post {
 	@Column(name = "is_active")
 	private boolean active;
 
-
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private PostStatus status;
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<PostMedia> medias;

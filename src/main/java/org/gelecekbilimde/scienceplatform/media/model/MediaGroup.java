@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
+import org.gelecekbilimde.scienceplatform.media.enums.MediaGroupStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 
 import java.util.List;
@@ -29,6 +30,10 @@ public class MediaGroup extends BaseModel {
 
 	@Column(name = "user_id")
 	private String userId;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private MediaGroupStatus status;
 
 	@OneToMany(mappedBy = "mediaGroup", cascade = CascadeType.ALL)
 	private List<Media> mediaList;

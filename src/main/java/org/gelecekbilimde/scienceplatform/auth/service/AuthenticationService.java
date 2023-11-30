@@ -3,6 +3,7 @@ package org.gelecekbilimde.scienceplatform.auth.service;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.common.Util;
 import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
 import org.gelecekbilimde.scienceplatform.config.JwtService;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
@@ -69,6 +70,7 @@ public class AuthenticationService {
 
 
 		User user = User.builder()
+			.id(Util.generateUUID())
 			.name(request.getFirstname())
 			.lastName(request.getLastname())
 			.email(request.getEmail())
@@ -76,6 +78,7 @@ public class AuthenticationService {
 			.biography(request.getBiography())
 			.gender(gender)
 			.degree(degree)
+			.role(role)
 			.roleId(role.getId())
 			.status(UserStatus.WAIT)
 			.password(passwordEncoder.encode(request.getPassword()))

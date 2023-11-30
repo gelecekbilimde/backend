@@ -44,12 +44,11 @@ public class MediaService {
 
 	public MediaGroupRequest saveMediaGroup(MediaGroupRequest mediaGroupRequest) {
 		var mediaGroup = MediaGroup
-				.builder()
-				.name(mediaGroupRequest.getName())
-				.userId(identity.getUserId())
-			;
+			.builder()
+			.name(mediaGroupRequest.getName())
+			.userId(identity.getUserId());
 
-		if (mediaGroupRequest.getParentId() != null){
+		if (mediaGroupRequest.getParentId() != null) {
 			mediaGroup.parentId(mediaGroupRequest.getParentId());
 		}
 
@@ -61,18 +60,18 @@ public class MediaService {
 	}
 
 	public MediaRequest saveMedia(MediaRequest mediaRequest) {
-		MediaGroup mediaGroup = this.mediaGroupRepository.findById(mediaRequest.getGroupId()).orElseThrow(()->new ClientException("Klasör Bulunamadı"));
+		MediaGroup mediaGroup = this.mediaGroupRepository.findById(mediaRequest.getGroupId()).orElseThrow(() -> new ClientException("Klasör Bulunamadı"));
 
 		Media media = Media.builder()
-				.url(mediaRequest.getUrl())
-				.contentType(mediaRequest.getContentType())
-				.mediaType(mediaRequest.getMediaType())
-				.title(mediaRequest.getTitle())
-				.shared(mediaRequest.isShared())
-				.mediaGroup(mediaGroup)
-				.userId(identity.getUserId())
-				.build()
-				;
+			.url(mediaRequest.getUrl())
+			.contentType(mediaRequest.getContentType())
+			.mediaType(mediaRequest.getMediaType())
+			.title(mediaRequest.getTitle())
+			.shared(mediaRequest.isShared())
+			.mediaGroup(mediaGroup)
+			.userId(identity.getUserId())
+
+			.build();
 
 		this.mediaRepository.save(media);
 		return mediaRequest;
@@ -94,7 +93,7 @@ public class MediaService {
 					continue;
 				}
 
-				if (file.getSize() >= mediaUploadSize){
+				if (file.getSize() >= mediaUploadSize) {
 					throw new IOException("Dosya boyutu büyük en fazla 10MB olmalı");
 				}
 
@@ -107,11 +106,11 @@ public class MediaService {
 				String url = File.separator + path + File.separator + fileName;
 
 				File directory = new File(path);
-				if (!directory.exists()){
+				if (!directory.exists()) {
 					directory.mkdirs();
 				}
 
-				Path filePath = Paths.get(path,fileName);
+				Path filePath = Paths.get(path, fileName);
 
 				Files.copy(file.getInputStream(), filePath);
 
@@ -134,16 +133,15 @@ public class MediaService {
 			messages.add(messageItem);
 		}
 
-		return  messages;
+		return messages;
 	}
 
 	// todo : hangi formatlarda alacağımızı netleştirelim..
-	private MediaType getMediaType(String ext)
-	{
+	private MediaType getMediaType(String ext) {
 		return switch (ext) {
-            case "jpg", "jpeg", "svg", "img","png" -> MediaType.IMAGE;
-            case "gif" -> MediaType.GIF;
-            default -> MediaType.IMAGE;
-        };
+			case "jpg", "jpeg", "svg", "img", "png" -> MediaType.IMAGE;
+			case "gif" -> MediaType.GIF;
+			default -> MediaType.IMAGE;
+		};
 	}
 }

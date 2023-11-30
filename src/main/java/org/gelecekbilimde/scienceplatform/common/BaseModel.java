@@ -6,8 +6,13 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -24,7 +29,15 @@ public abstract class BaseModel {
 	protected LocalDateTime createdAt;
 
 	@PrePersist
-	public void prePersist() {}
+	public void prePersist() {
+		this.createdUser = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+			.map(Authentication::getPrincipal)
+			.filter(user -> !"anonymousUser".equals(user))
+			.map(Jwt.class::cast)
+			.map(jwt -> jwt.getClaim(TokenClaims.USER_ID.getValue()).toString())
+			.orElse("GUEST");
+		this.createdAt = LocalDateTime.now();
+	}
 
 	@Column(name = "update_user_id")
 	protected String updatedUser;
@@ -32,6 +45,14 @@ public abstract class BaseModel {
 	@Column(name = "updated_at")
 	protected LocalDateTime updatedAt;
 	@PreUpdate
-	public void preUpdate() {}
+	public void preUpdate() {
+		this.updatedUser = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+			.map(Authentication::getPrincipal)
+			.filter(user -> !"anonymousUser".equals(user))
+			.map(Jwt.class::cast)
+			.map(jwt -> jwt.getClaim(TokenClaims.USER_ID.getValue()).toString())
+			.orElse("GUEST");
+		this.updatedAt = LocalDateTime.now();
+	}
 
 }
