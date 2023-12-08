@@ -9,12 +9,13 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Map;
 
+
 @Getter
 @Builder
 @UtilityClass
 public class BaseSpecification {
 	@SuppressWarnings("unused")
-	public static class Builder<C> {
+	public static class BaseSpecificationBuilder<C> {
 
 		public Specification<C> and(final Map<String, Object> filter) {
 			final Predicate[] predicates = new Predicate[filter.size()];
@@ -25,7 +26,7 @@ public class BaseSpecification {
 				for (int count = 0; count < filter.size(); count++) {
 
 					final String name = names[count];
-					final String value = filter.get(name).toString();
+					final Object value = filter.get(name);
 
 					predicates[count] = criteriaBuilder.equal(root.get(name), value);
 				}
