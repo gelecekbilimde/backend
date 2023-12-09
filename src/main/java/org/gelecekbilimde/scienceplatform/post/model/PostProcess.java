@@ -2,11 +2,9 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
+import org.gelecekbilimde.scienceplatform.post.enums.Process;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -14,30 +12,41 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "posts_process")
-public class PostProcess {
+public class PostProcess extends BaseModel {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
+	@Column(name = "header")
 	private String header;
 
-	@Column(columnDefinition = "text", nullable = false)
+	@Column(name = "content")
 	private String content;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
+	@Column(name = "slug")
 	private String slug;
 
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(25)")
-	private PostProcessEnum process;
+	@Column(name = "process")
+	private Process process;
 
 	@Column(name = "post_id")
-	private Long postId;
+	private String postId;
 
 	@Column(name = "user_id")
-	private Long userId;
+	private String  userId;
 
+	@Column(name = "done")
+	private boolean done;
+
+	@Column(name = "copyright_control")
+	private boolean copyrightControl;
+
+	@Column(name = "typo_control")
+	private boolean typoControl;
+
+	@Column(name = "dangerous_control")
+	private boolean dangerousControl;
 
 	@ManyToOne
 	@JoinColumn(name = "post_id",insertable = false, updatable = false)
@@ -47,12 +56,7 @@ public class PostProcess {
 	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
 
-	@Column(columnDefinition = "jsonb")
+	@Column(name = "message")
 	private String message;
-
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createdDate;
 
 }

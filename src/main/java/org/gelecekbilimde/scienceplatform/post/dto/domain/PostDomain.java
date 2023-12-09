@@ -1,31 +1,35 @@
 package org.gelecekbilimde.scienceplatform.post.dto.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
-import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.gelecekbilimde.scienceplatform.post.enums.Process;
+import org.gelecekbilimde.scienceplatform.user.dto.domain.UserDomain;
 
 import java.util.List;
 
 
-@Data
-@EqualsAndHashCode()
-@SuperBuilder
+@Builder
+@Getter
+@Setter
 public class PostDomain {
 
 
-	private Long postId;
+	private String postId;
 	private String header;
 	private String slug;
 	private String content;
-	private PostProcessEnum lastProcess;
+	private Process lastProcess;
 	private List<String> label;
-	private Integer likeCount ;
+	private Integer likeCount;
 	private boolean active;
 	private boolean copyrightControl;
 	private boolean typoControl;
 	private boolean dangerousControl;
 
-	private Long userId;
+	private String userId;
+
+	private UserDomain user;
+	private List<PostMediaDomain> medias;
 
 }

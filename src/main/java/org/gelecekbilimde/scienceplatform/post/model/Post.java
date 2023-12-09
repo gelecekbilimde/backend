@@ -2,9 +2,9 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.gelecekbilimde.scienceplatform.post.enums.PostStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
-import org.hibernate.annotations.CreationTimestamp;
+import org.gelecekbilimde.scienceplatform.post.enums.Process;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -17,64 +17,73 @@ import java.util.*;
 @Table(name = "post")
 public class Post {
 	@Id
-	@GeneratedValue
-	private Long id;
+	@Column(name = "id")
+	private String id;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
+	@Column(name = "header")
 	private String header;
 
-	@Column(columnDefinition = "varchar(255)", nullable = false)
-	private String slug;
-
-	@Column(columnDefinition = "text", nullable = false)
+	@Column(name = "content")
 	private String content;
 
-	@Column(columnDefinition = "boolean default false")
-	private boolean active;
+	@Column(name = "slug")
+	private String slug;
 
-	@Column(columnDefinition = "boolean default false")
-	private boolean copyrightControl;
 
-	@Column(columnDefinition = "boolean default false")
-	private boolean typoControl;
-
-	@Column(columnDefinition = "boolean default false")
-	private boolean dangerousControl;
-
-	@Column(columnDefinition = "integer", nullable = false)
+	@Column(name = "like_count")
 	private Integer likeCount;
 
 
+	@Column(name = "copyright_control")
+	private boolean copyrightControl;
+
+	@Column(name = "typo_control")
+	private boolean typoControl;
+
+	@Column(name = "dangerous_control")
+	private boolean dangerousControl;
+
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(25)")
-	private PostProcessEnum lastProcess;
+	@Column(name = "last_process")
+	private Process lastProcess;
 
 
 	@Column(name = "user_id")
-	private Long userId;
+	private String userId;
+
+
+	@Column(name = "is_active")
+	private boolean active;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private PostStatus status;
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	private List<PostMedia> medias;
 
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private List<PostMedia> postMedia;
-
-
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private List<PostProcess> process;
+	private List<org.gelecekbilimde.scienceplatform.post.model.PostProcess> processes;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id",insertable = false,updatable = false)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private User user;
 
 
 	@ManyToMany
-	@JoinTable(name = "post_comment", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "comment_id"))
+	@JoinTable(name = "post_comments", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "comment_id"))
 	private Set<Comment> comments = new HashSet<>();
 
 
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createAt;
+	@Column(name = "created_at")
+	protected LocalDateTime createdAt;
 
-
+	@Override
+	public String toString() {
+		return "Post{" +
+			"id=" + getId() +
+			", header='" + getSlug() + '\'' +
+			'}';
+	}
 }

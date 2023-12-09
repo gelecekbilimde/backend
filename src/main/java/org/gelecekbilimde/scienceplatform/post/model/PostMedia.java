@@ -5,11 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.media.model.Media;
+import org.gelecekbilimde.scienceplatform.post.enums.PostMediaStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -17,19 +17,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "posts_media")
-public class PostMedia {
+public class PostMedia extends BaseModel {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "post_id")
-	private Long postId;
+	private String postId;
 
 	@Column(name = "media_id")
 	private Long mediaId;
 
 	@Column(name = "user_id")
-	private Long userId;
+	private String userId;
 
 	@ManyToOne
 	@JoinColumn(name = "post_id",insertable = false, updatable = false)
@@ -42,12 +42,21 @@ public class PostMedia {
 	@Column
 	private boolean cover;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private PostMediaStatus status;
+
+
 	@ManyToOne
 	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
-
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createdDate;
+	@Override
+	public String toString() {
+		return "PostMedia{" +
+			"id=" + getId() +
+			", postId='" + getPostId() + '\'' +
+			", mediaId='" + getMediaId() + '\'' +
+			", cover='" + isCover() + '\'' +
+			'}';
+	}
 }

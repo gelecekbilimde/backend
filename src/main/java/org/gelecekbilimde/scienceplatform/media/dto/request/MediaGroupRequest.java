@@ -23,6 +23,6 @@ public class MediaGroupRequest {
     @NotBlank(message = "cannot be null")
     private String name;
 
-    private Integer parentId;
+    private Long parentId;
 
 }

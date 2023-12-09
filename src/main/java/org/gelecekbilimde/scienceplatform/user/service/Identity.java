@@ -3,35 +3,31 @@ package org.gelecekbilimde.scienceplatform.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.BeanScope;
-import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Component
 @Scope(value = BeanScope.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @RequiredArgsConstructor
 public class Identity {
-
-	public Long getUserId() {
-		return getUser().getId();
+	public String getUserId() {
+		return getJwt().getClaim("userId");
 	}
 
-	public boolean isEmailVerify() {
-		return getUser().isEmailVerify();
+
+	public boolean hasPermission(String requiredPermission){
+		ArrayList<String> scope = getJwt().getClaim("scope");
+		return scope.contains(requiredPermission);
 	}
 
-	public boolean isUserEnable() {
-		return getUser().isUserEnable();
+	private Jwt getJwt() {
+		return (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
-	public boolean isUserLock() {
-		return getUser().isUserLock();
-	}
-
-	private User getUser() {
-		return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	}
 
 }
