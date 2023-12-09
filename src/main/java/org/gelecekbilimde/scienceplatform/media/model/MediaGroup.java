@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
+import org.gelecekbilimde.scienceplatform.media.enums.MediaGroupStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -17,19 +17,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "media_group")
-public class MediaGroup {
+public class MediaGroup extends BaseModel {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
-	private Integer parentId;
+	@Column(name = "parent_id")
+	private Long parentId;
 
-	@Column(columnDefinition = "varchar(50) default 'Space'", nullable = false)
+	@Column(name = "name")
 	private String name;
 
 	@Column(name = "user_id")
-	private Long userId;
+	private String userId;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private MediaGroupStatus status;
 
 	@OneToMany(mappedBy = "mediaGroup", cascade = CascadeType.ALL)
 	private List<Media> mediaList;
@@ -38,8 +42,4 @@ public class MediaGroup {
 	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
 
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
-	private LocalDateTime createdDate;
 }

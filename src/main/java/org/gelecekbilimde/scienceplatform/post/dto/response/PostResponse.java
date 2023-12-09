@@ -3,8 +3,7 @@ package org.gelecekbilimde.scienceplatform.post.dto.response;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import org.gelecekbilimde.scienceplatform.post.enums.PostProcessEnum;
-import org.gelecekbilimde.scienceplatform.user.dto.response.UserResponse;
+import org.gelecekbilimde.scienceplatform.post.enums.Process;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class PostResponse {
 	private String header;
 	private String slug;
 	private String content;
-	private PostProcessEnum lastProcess;
+	private Process lastProcess;
 	private List<String> label;
 	private Integer likeCount ;
 	private boolean active;
@@ -26,7 +25,6 @@ public class PostResponse {
 	private boolean typoControl;
 	private boolean dangerousControl;
 
-	private UserResponse user;
 	private PostMediaResponse media;
 
 }

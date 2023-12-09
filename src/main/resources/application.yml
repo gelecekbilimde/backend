@@ -10,13 +10,18 @@ spring:
     driver-class-name: ${DATABASE_DRIVER}
   jpa:
     hibernate:
-      ddl-auto: ${DATABASE_DDL_AUTO}
+      ddl-auto: ${DATABASE_DDL_AUTO:validate}
     database-platform: ${DATABASE_PLATFORM}
     database: ${DATABASE}
     show-sql: ${SHOW_SQL}
     properties:
       hibernate:
         format_sql: true
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    baseline-description: "init"
+    baseline-version: 0
 
 server:
   port: ${SERVER_PORT}

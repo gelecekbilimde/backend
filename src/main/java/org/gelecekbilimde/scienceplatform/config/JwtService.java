@@ -1,12 +1,14 @@
 package org.gelecekbilimde.scienceplatform.config;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
+import org.gelecekbilimde.scienceplatform.auth.model.Role;
+import org.gelecekbilimde.scienceplatform.common.Util;
+import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
+import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -51,11 +53,15 @@ public class JwtService {
 
 		HashMap<String,Object> claim  = new HashMap<>();
 
-		claim.put("fullName", user.getName() + " " + user.getLastname());
-		claim.put("mail",user.getEmail());
-		claim.put("userId",user.getId());
-		claim.put("role",user.getRole().getRole());
-		claim.put("scope",scope);
+		final Role role = user.getRole();
+
+		claim.put(TokenClaims.USER_ID.getValue(),user.getId());
+		claim.put(TokenClaims.FULL_NAME.getValue(), user.getName() + " " + user.getLastName());
+		claim.put(TokenClaims.MAIL.getValue(), user.getEmail());
+		claim.put(TokenClaims.ROLE_NAME.getValue(),role.getName());
+		claim.put(TokenClaims.ROLE_ID.getValue(),role.getId());
+		claim.put(TokenClaims.USER_STATUS.getValue(),user.getStatus());
+		claim.put(TokenClaims.SCOPE.getValue(), scope);
 
 
 		return generateToken(claim, user);
@@ -71,7 +77,7 @@ public class JwtService {
 
 	public String generateRefreshToken(User user) {
 		HashMap<String,Object> claim  = new HashMap<>();
-		claim.put("role",user.getRole().getRole());
+		claim.put(TokenClaims.ROLE_ID.getValue(), user.getRoleId());
 
 		return buildToken(claim, user.getUsername(), refreshExpiration );
 	}
@@ -79,9 +85,9 @@ public class JwtService {
 
 	public String generateGuestToken(String role, List<String> scope) {
 		HashMap<String, Object> claim = new HashMap<>();
-		claim.put("fullName", "Ziyaretci"); // todo : buraya bilim isnsanlarının isimlerini yazsak güzel olur
-		claim.put("role", role);
-		claim.put("scope", scope);
+		claim.put(TokenClaims.FULL_NAME.getValue(), TokenClaims.GUEST_FULL_NAME.getValue());
+		claim.put(TokenClaims.ROLE_NAME.getValue(), role);
+		claim.put(TokenClaims.SCOPE.getValue(), scope);
 		return buildToken(claim, role, guestTokenExpiration);
 	}
 
@@ -92,41 +98,28 @@ public class JwtService {
 	) {
 		return Jwts
 			.builder()
-			.setHeaderParam("jti", UUID.randomUUID().toString())
-			.setHeaderParam("typ","JWT")
+			.setHeaderParam(TokenClaims.JWT_ID.getValue(), Util.generateUUID())
+			.setHeaderParam(TokenClaims.TYPE.getValue(), TokenClaims.TYPE_VAL.getValue())
 			.setClaims(extraClaims)
 			.setSubject(subject)
 			.setIssuedAt(new Date(System.currentTimeMillis()))
 			.setExpiration(new Date(System.currentTimeMillis() + expiration))
-			.setIssuer("gelecekbilimde.net")
+			.setIssuer(TokenClaims.ISSUER.getValue())
 			.signWith(getSignInPrivateKey(), SignatureAlgorithm.RS256)
 			.compact();
 	}
 
-	public boolean isTokenValid(String token, UserDetails userDetails) {
-		final String userName = extractSubject(token);
-		return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
-	}
-
-	public boolean isGuestTokenValid(String token) {
-		return !isTokenExpired(token);
-	}
-
-	private boolean isTokenExpired(String token) {
-		return extractExpiration(token).before(new Date());
-	}
-
-	private Date extractExpiration(String token) {
-		return  extractClaim(token,Claims::getExpiration);
-	}
-
-	private Claims extractAllClaims(String token) {
+	public Claims extractAllClaims(String token) {
+		try {
 		return Jwts
 			.parserBuilder()
 			.setSigningKey(getSignInPublicKey())
 			.build()
 			.parseClaimsJws(token)
 			.getBody();
+		} catch (MalformedJwtException | ExpiredJwtException | SignatureException exception) {
+			throw new ClientException("Hatalı Token");
+		}
 	}
 
 
