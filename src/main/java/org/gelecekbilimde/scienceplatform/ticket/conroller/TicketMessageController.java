@@ -31,7 +31,7 @@ class TicketMessageController {
 	@PreAuthorize("hasAuthority('ticket:update')")
 	public Response<TicketResponse> ticketMessageUpdate(@RequestBody @Valid TicketUpdateRequest request) {
 
-		TicketResponse ticketResponse = ticketService.updateTicket(request);
+		TicketResponse ticketResponse = ticketService.ticketMessageCreate(request);
 		return Response.create(ticketResponse);
 	}
 

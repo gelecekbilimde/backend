@@ -22,14 +22,14 @@ class TicketUserMessageController {
 	@GetMapping
 	@PreAuthorize("hasAuthority('self:ticket:read')")
 	public Response<PagingResponse<TicketResponse>> ticketMessageRead(@Valid TicketRequest request) {
-		final PagingResponse<TicketResponse> ticketResponses = ticketService.ticketMessageRead(request);
+		final PagingResponse<TicketResponse> ticketResponses = ticketService.ticketMessageReadSelf(request);
 		return Response.ok(ticketResponses);
 	}
 
 	@PutMapping
 	@PreAuthorize("hasAuthority('self:ticket:create')")
 	public Response<TicketResponse> ticketMessageCreate(@RequestBody @Valid TicketUpdateRequest request) {
-		TicketResponse ticketResponse = ticketService.updateMessageTicket(request);
+		TicketResponse ticketResponse = ticketService.ticketMessageCreateSelf(request);
 		return Response.create(ticketResponse);
 	}
 
