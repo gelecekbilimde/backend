@@ -15,6 +15,7 @@ public interface PostDomainToPostProcessModelMapper extends BaseMapper<PostDomai
 		return PostProcess.builder()
 			.header(postDomain.getHeader())
 			.content(postDomain.getContent())
+			.category(postDomain.getCategory())
 			.userId(userId)
 			.slug(postDomain.getSlug())
 			.postId(postDomain.getPostId())
