@@ -82,6 +82,10 @@ public class PostProcessServiceImp implements PostProcessService {
 			postManagerControl.setContent(postProcess.getContent());
 		}
 
+		if (postManagerControl.getCategory().getName().isEmpty()) {
+			postManagerControl.setCategory(postProcess.getCategory());
+		}
+
 		Helper helper = new Helper();
 		postManagerControl.setSlug(helper.slugify(postManagerControl.getHeader()));
 
@@ -129,6 +133,10 @@ public class PostProcessServiceImp implements PostProcessService {
 		}
 
 		if (!postDomain.getContent().equals(postManagerControl.getContent())){
+			isChanged = true;
+		}
+
+		if (!postDomain.getCategory().getName().equals(postManagerControl.getCategory().getName())){
 			isChanged = true;
 		}
 

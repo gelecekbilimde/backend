@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.user.dto.response.UserResponse;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
 
@@ -21,12 +22,14 @@ public class PostCreateRequest {
 	@NotBlank(message = "cannot be null")
 	private String header;
 
-	// todo bu var eyvallah ama ya iki tane aynı başlıkta post gelirse beki sonuna bir sayı eklemeliyiz
 	private String slug;
 
 
 	@NotNull(message = "cannot be null")
 	private String content;
+
+	@NotNull(message = "cannot be null")
+	private Category category;
 
 	private UserResponse user;
 
