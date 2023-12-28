@@ -4,11 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.gelecekbilimde.scienceplatform.common.PagingRequest;
 
-
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class AdminPostListRequest extends PagingRequest {
+public class AdminCategoryListRequest extends PagingRequest {
 
-	public Boolean isActive;
 
 }

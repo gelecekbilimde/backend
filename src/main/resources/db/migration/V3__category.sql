@@ -1,6 +1,6 @@
 create table if not exists category
 (
-  id             bigserial not null primary key,
+  id             bigint generated always as identity primary key,
   parent_id      bigint,
   name           varchar(36) not null,
   create_user_id varchar(36),
