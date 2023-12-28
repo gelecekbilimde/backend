@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,16 +21,18 @@ public class Category {
 	@Column(name = "name")
 	private String name;
 
-	@ManyToOne
-	@JoinColumn(name = "parent", referencedColumnName = "id", insertable = false, updatable = false)
-	private Category parent;
-
-	@Column(name = "parent_id")
+	@Transient
 	private Long parentId;
 
-	@OneToMany(mappedBy = "parent")
-	private List<Category> children;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parent_id")
+	private Category parent;
+
+	@OneToMany(mappedBy="parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+	private Set<Category> children;
 
 	@OneToMany(mappedBy = "category")
 	private List<Post> posts;
+
+
 }

@@ -17,14 +17,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('admin:access')")
+@RequestMapping("/admin")
+//@PreAuthorize("hasAuthority('admin:access')")
 class AdminController {
 
 	private final PostService postService;
 	private final PostProcessService postProcessService;
 	private static final PostDomainToAdminPostResponseMapper postDomainToAdminPostResponseMapper = PostDomainToAdminPostResponseMapper.initialize();
 
-	@RequestMapping("/admin/post")
+	@GetMapping()
 	public Response<PagingResponse<AdminPostResponse>> getPostList(@Valid AdminPostListRequest request) {
 
 		final Paging<PostDomain> postList = postService.getPostListAdmin(request);
@@ -36,20 +37,18 @@ class AdminController {
 		return Response.ok(pageOfAdminUsersResponse);
 	}
 
-	@RequestMapping("/admin/post/{postId}")
-	public Response<Void> getPost(@Valid AdminPostListRequest request) {
-
+	// @PathVariable Long postId eklendi.
+	@GetMapping("/{postId}")
+	public Response<Void> getPost(@Valid AdminPostListRequest request , @PathVariable Long postId) {
 		return Response.NO_CONTENT;
 	}
 
 
-
-	@PutMapping("/admin/post/{postId}")
+	@PutMapping("/{postId}")
 	@PreAuthorize("hasAnyAuthority('admin:control','admin:last:control','post:create')")
-
-	public Response<Void> updatePostProcess(@RequestBody @Valid PostManagerControl request) {
+	public Response<Void> updatePostProcess(@RequestBody @Valid PostManagerControl request, @PathVariable Long postId) {
 		postProcessService.updatePostProcess(request);
 		return Response.NO_CONTENT;
 	}
-}
 
+}
