@@ -7,7 +7,6 @@ import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
 
 import java.time.LocalDateTime;
 
-
 @Getter
 @Setter
 @SuperBuilder

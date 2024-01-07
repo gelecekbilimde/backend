@@ -11,9 +11,6 @@ import lombok.Setter;
 public class TicketCreateRequest {
 
 	@NotNull
-	private Long userId;
-
-	@NotNull
 	private String message;
 
 }

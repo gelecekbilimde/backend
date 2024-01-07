@@ -1,6 +1,5 @@
 package org.gelecekbilimde.scienceplatform.ticket.conroller;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.PagingResponse;

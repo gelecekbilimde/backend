@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -27,5 +30,10 @@ public class Message extends BaseModel {
 
 	@Column(name = "message")
 	private String message;
+
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition = "timestamp")
+	private LocalDateTime createAt;
 
 }

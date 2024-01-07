@@ -10,4 +10,6 @@ public interface TicketMessageRepository extends JpaRepository<Message, Integer>
 
 	Page<Message> getByTicketId(Integer ticketId, Pageable pageable);
 
+	Page<Message> getByUserId(String userId, Pageable pageable);
+
 }

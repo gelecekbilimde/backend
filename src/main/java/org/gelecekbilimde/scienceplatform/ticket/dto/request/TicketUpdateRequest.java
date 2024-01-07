@@ -16,5 +16,4 @@ public class TicketUpdateRequest {
 	@Enumerated(EnumType.STRING)
 	private TicketStatus status;
 
-
 }

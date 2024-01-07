@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 @Setter
 public class TicketRequest {
 
-
 	@NotNull
 	@Range(min = 1)
 	private Integer page;
