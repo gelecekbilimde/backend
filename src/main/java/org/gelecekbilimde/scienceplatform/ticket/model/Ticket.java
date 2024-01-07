@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
+import org.gelecekbilimde.scienceplatform.ticket.enums.TicketSubject;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -33,6 +34,11 @@ public class Ticket {
 	@Column(columnDefinition = "varchar(25) default 'OPEN'")
 	private TicketStatus status = TicketStatus.OPEN;
 
+	@Builder.Default
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "varchar(25) default 'OTHER'")
+	private TicketSubject subject = TicketSubject.OTHER;
+
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "timestamp")
@@ -42,6 +48,5 @@ public class Ticket {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "timestamp")
 	private LocalDateTime createAt;
-
 
 }

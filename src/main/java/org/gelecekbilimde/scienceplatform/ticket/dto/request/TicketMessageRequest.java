@@ -9,7 +9,10 @@ import org.springframework.data.domain.Pageable;
 
 @Getter
 @Setter
-public class TicketRequest {
+public class TicketMessageRequest {
+
+	@NotNull
+	private Integer ticketId;
 
 	@NotNull
 	@Range(min = 1)

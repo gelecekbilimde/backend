@@ -3,17 +3,23 @@ package org.gelecekbilimde.scienceplatform.ticket.dto.request;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.gelecekbilimde.scienceplatform.ticket.enums.TicketSubject;
 
 @Getter
 @Setter
-public class TicketUpdateRequest {
+@Builder
+public class TicketMessageCreateRequest {
 
 	@NotNull
 	private Integer ticketId;
 
+	@NotNull
+	private String message;
+
 	@Enumerated(EnumType.STRING)
-	private TicketStatus status;
+	private TicketSubject subject;
 
 }

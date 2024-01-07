@@ -1,12 +1,13 @@
 package org.gelecekbilimde.scienceplatform.ticket.conroller;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.Response;
+import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketMessageRequest;
 import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketRequest;
 import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketUpdateRequest;
+import org.gelecekbilimde.scienceplatform.ticket.dto.response.MessageResponse;
 import org.gelecekbilimde.scienceplatform.ticket.dto.response.TicketResponse;
 import org.gelecekbilimde.scienceplatform.ticket.service.TicketMessageService;
 import org.gelecekbilimde.scienceplatform.ticket.service.TicketService;
@@ -22,17 +23,9 @@ class TicketMessageController {
 
 	@GetMapping
 	@PreAuthorize("hasAuthority('ticket:read')")
-	public Response<PagingResponse<TicketResponse>> ticketMessageRead(@Valid TicketRequest request) {
-		final PagingResponse<TicketResponse> ticketResponses = ticketService.ticketMessageRead(request);
+	public Response<PagingResponse<MessageResponse>> ticketMessageRead(@Valid TicketMessageRequest request) {
+		final PagingResponse<MessageResponse> ticketResponses = ticketService.ticketMessageRead(request);
 		return Response.ok(ticketResponses);
-	}
-
-	@PutMapping
-	@PreAuthorize("hasAuthority('ticket:update')")
-	public Response<TicketResponse> ticketMessageUpdate(@RequestBody @Valid TicketUpdateRequest request) {
-
-		TicketResponse ticketResponse = ticketService.ticketMessageCreate(request);
-		return Response.create(ticketResponse);
 	}
 
 }

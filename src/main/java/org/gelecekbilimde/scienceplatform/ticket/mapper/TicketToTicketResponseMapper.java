@@ -1,6 +1,5 @@
 package org.gelecekbilimde.scienceplatform.ticket.mapper;
 
-
 import org.gelecekbilimde.scienceplatform.common.BaseMapper;
 import org.gelecekbilimde.scienceplatform.ticket.dto.response.TicketResponse;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;

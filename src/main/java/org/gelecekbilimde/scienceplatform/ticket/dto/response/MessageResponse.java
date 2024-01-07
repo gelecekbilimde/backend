@@ -7,15 +7,16 @@ import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
 
 import java.time.LocalDateTime;
 
+
 @Getter
 @Setter
 @SuperBuilder
-public class TicketResponse {
+public class MessageResponse {
 
 	private Long id;
 	private Long userId;
+	private Long ticketId;
 	private String message;
-	private TicketStatus status;
 	private LocalDateTime updateAt;
 	private LocalDateTime createAt;
 
