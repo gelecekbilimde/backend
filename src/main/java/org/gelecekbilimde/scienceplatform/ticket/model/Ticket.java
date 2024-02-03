@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 public class Ticket {
 	@Id
 	@GeneratedValue
+	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "user_id")

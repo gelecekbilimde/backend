@@ -14,7 +14,7 @@ import org.gelecekbilimde.scienceplatform.ticket.enums.TicketSubject;
 public class TicketMessageCreateRequest {
 
 	@NotNull
-	private Integer ticketId;
+	private Long id;
 
 	@NotNull
 	private String message;

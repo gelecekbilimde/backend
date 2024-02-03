@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user/ticket_message")
+@RequestMapping("/user/ticket-message")
 class TicketUserMessageController {
 
 	private final TicketMessageService ticketService;

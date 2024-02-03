@@ -1,16 +1,16 @@
-package org.gelecekbilimde.scienceplatform.ticket.dto.response;
+package org.gelecekbilimde.scienceplatform.ticket.dto.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Setter
-@SuperBuilder
-public class TicketResponse {
+public class TicketDomain {
 
 	private Long id;
 	private String userId;

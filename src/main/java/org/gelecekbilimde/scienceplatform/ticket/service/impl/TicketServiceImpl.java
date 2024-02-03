@@ -2,11 +2,13 @@ package org.gelecekbilimde.scienceplatform.ticket.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.Paging;
+import org.gelecekbilimde.scienceplatform.common.PagingRequest;
 import org.gelecekbilimde.scienceplatform.common.PagingResponse;
+import org.gelecekbilimde.scienceplatform.ticket.dto.domain.TicketDomain;
 import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketCreateRequest;
-import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketRequest;
 import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketUpdateRequest;
 import org.gelecekbilimde.scienceplatform.ticket.dto.response.TicketResponse;
+import org.gelecekbilimde.scienceplatform.ticket.mapper.TicketModelToTicketDomainMapper;
 import org.gelecekbilimde.scienceplatform.ticket.mapper.TicketToTicketResponseMapper;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
 import org.gelecekbilimde.scienceplatform.ticket.repository.TicketRepository;
@@ -29,8 +31,10 @@ class TicketServiceImpl implements TicketService {
 
 	private static final TicketToTicketResponseMapper ticketModelToTicketResponseMapper = TicketToTicketResponseMapper.initialize();
 
+	private static final TicketModelToTicketDomainMapper ticketModelToTicketDomainMapper = TicketModelToTicketDomainMapper.initialize();
+
 	@Override
-	public PagingResponse<TicketResponse> ticketRead(TicketRequest request) {
+	public PagingResponse<TicketResponse> ticketRead(PagingRequest request) {
 		Pageable pageable = request.toPageable();
 		Page<Ticket> ticketPage = ticketRepository.findAll(pageable);
 		List<TicketResponse> ticketResponses = ticketModelToTicketResponseMapper.map(ticketPage.getContent());
@@ -39,22 +43,22 @@ class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public TicketResponse updateTicket(TicketUpdateRequest request) {
-		Ticket ticket = ticketRepository.getReferenceById(request.getTicketId());
+	public TicketDomain updateTicket(TicketUpdateRequest request) {
+		Ticket ticket = ticketRepository.getReferenceById(request.getId());
 		ticket.setStatus(request.getStatus());
 		ticketRepository.save(ticket);
-		return ticketModelToTicketResponseMapper.map(ticket);
+		return ticketModelToTicketDomainMapper.map(ticket);
 	}
 
 	@Override
-	public TicketResponse ticketCreateSelf(TicketCreateRequest request) {
+	public TicketDomain ticketCreateSelf(TicketCreateRequest request) {
 		Ticket ticket = Ticket.builder().userId(identity.getUserId()).message(request.getMessage()).build();
 		Ticket saveTicket = this.ticketRepository.save(ticket);
-		return ticketModelToTicketResponseMapper.map(saveTicket);
+		return ticketModelToTicketDomainMapper.map(saveTicket);
 	}
 
 	@Override
-	public PagingResponse<TicketResponse> ticketReadSelf(TicketRequest request) {
+	public PagingResponse<TicketResponse> ticketReadSelf(PagingRequest request) {
 		Page<Ticket> ticketPage = ticketRepository.getByUserId(identity.getUserId(), request.toPageable());
 		List<TicketResponse> ticketResponses = ticketModelToTicketResponseMapper.map(ticketPage.getContent());
 		final Paging<TicketResponse> posts = Paging.of(ticketPage, ticketResponses);

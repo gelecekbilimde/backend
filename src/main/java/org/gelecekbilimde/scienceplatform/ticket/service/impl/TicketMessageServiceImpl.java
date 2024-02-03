@@ -7,7 +7,7 @@ import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketMessageCreate
 import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketMessageRequest;
 import org.gelecekbilimde.scienceplatform.ticket.dto.response.MessageResponse;
 import org.gelecekbilimde.scienceplatform.ticket.mapper.MessageToMessageResponseMapper;
-import org.gelecekbilimde.scienceplatform.ticket.model.Message;
+import org.gelecekbilimde.scienceplatform.ticket.model.TicketMessage;
 import org.gelecekbilimde.scienceplatform.ticket.repository.TicketMessageRepository;
 import org.gelecekbilimde.scienceplatform.ticket.service.TicketMessageService;
 import org.gelecekbilimde.scienceplatform.user.service.Identity;
@@ -28,24 +28,30 @@ class TicketMessageServiceImpl implements TicketMessageService {
 	@Override
 	public PagingResponse<MessageResponse> ticketMessageRead(TicketMessageRequest request) {
 		Pageable pageable = request.toPageable();
-		Page<Message> ticketPage = ticketMessageRepository.findAll(pageable);
-		List<MessageResponse> ticketResponses = messageToMessageResponseMapper.map(ticketPage.getContent());
-		final Paging<MessageResponse> posts = Paging.of(ticketPage, ticketResponses);
-		return PagingResponse.<MessageResponse>builder().of(posts).content(messageToMessageResponseMapper.map(ticketPage.getContent())).build();
+		Page<TicketMessage> messagePage = ticketMessageRepository.findAll(pageable);
+		List<MessageResponse> ticketResponses = messageToMessageResponseMapper.map(messagePage.getContent());
+		final Paging<MessageResponse> posts = Paging.of(messagePage, ticketResponses);
+		return PagingResponse.<MessageResponse>builder()
+			.of(posts)
+			.content(messageToMessageResponseMapper.map(messagePage.getContent()))
+			.build();
 	}
 
 	@Override
 	public PagingResponse<MessageResponse> ticketMessageReadSelf(TicketMessageRequest request) {
-		Page<Message> ticketPage = ticketMessageRepository.getByUserId(identity.getUserId(), request.toPageable());
-		List<MessageResponse> ticketResponses = messageToMessageResponseMapper.map(ticketPage.getContent());
-		final Paging<MessageResponse> posts = Paging.of(ticketPage, ticketResponses);
-		return PagingResponse.<MessageResponse>builder().of(posts).content(messageToMessageResponseMapper.map(ticketPage.getContent())).build();
+		Page<TicketMessage> messagePage = ticketMessageRepository.getByUserId(identity.getUserId(), request.toPageable());
+		List<MessageResponse> messageResponses = messageToMessageResponseMapper.map(messagePage.getContent());
+		final Paging<MessageResponse> messageResponsesPage = Paging.of(messagePage, messageResponses);
+		return PagingResponse.<MessageResponse>builder()
+			.of(messageResponsesPage)
+			.content(messageToMessageResponseMapper.map(messagePage.getContent()))
+			.build();
 	}
 
 	@Override
 	public MessageResponse ticketMessageCreate(TicketMessageCreateRequest request) {
-		Message message = Message.builder().userId(identity.getUserId()).ticketId(Long.valueOf(request.getTicketId())).message(request.getMessage()).build();
-		Message saveTicket = this.ticketMessageRepository.save(message);
+		TicketMessage message = TicketMessage.builder().userId(identity.getUserId()).ticketId(request.getId()).message(request.getMessage()).build();
+		TicketMessage saveTicket = this.ticketMessageRepository.save(message);
 		return messageToMessageResponseMapper.map(saveTicket);
 	}
 }
