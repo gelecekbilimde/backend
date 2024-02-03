@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class TicketResponse {
 
 	private Long id;
-	private Long userId;
+	private String userId;
 	private String message;
 	private TicketStatus status;
 	private LocalDateTime updateAt;

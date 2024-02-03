@@ -11,7 +11,7 @@ import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
 public class TicketUpdateRequest {
 
 	@NotNull
-	private Integer ticketId;
+	private Integer id;
 
 	@Enumerated(EnumType.STRING)
 	private TicketStatus status;
