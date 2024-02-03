@@ -13,6 +13,7 @@ import org.gelecekbilimde.scienceplatform.ticket.service.TicketMessageService;
 import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +40,8 @@ class TicketMessageServiceImpl implements TicketMessageService {
 
 	@Override
 	public PagingResponse<MessageResponse> ticketMessageReadSelf(TicketMessageRequest request) {
-		Page<TicketMessage> messagePage = ticketMessageRepository.getByUserId(identity.getUserId(), request.toPageable());
+		Specification<TicketMessage> spec = (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("userId"), identity.getUserId());
+		Page<TicketMessage> messagePage = ticketMessageRepository.findAll(spec, request.toPageable());
 		List<MessageResponse> messageResponses = messageToMessageResponseMapper.map(messagePage.getContent());
 		final Paging<MessageResponse> messageResponsesPage = Paging.of(messagePage, messageResponses);
 		return PagingResponse.<MessageResponse>builder()
