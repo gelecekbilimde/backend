@@ -32,12 +32,10 @@ public class Ticket {
 
 	@Builder.Default
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(25) default 'OPEN'")
 	private TicketStatus status = TicketStatus.OPEN;
 
 	@Builder.Default
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(25) default 'OTHER'")
 	private TicketSubject subject = TicketSubject.OTHER;
 
 	@UpdateTimestamp

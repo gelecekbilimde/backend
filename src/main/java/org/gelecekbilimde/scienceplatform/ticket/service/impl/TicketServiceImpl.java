@@ -16,6 +16,7 @@ import org.gelecekbilimde.scienceplatform.ticket.service.TicketService;
 import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,7 +60,8 @@ class TicketServiceImpl implements TicketService {
 
 	@Override
 	public PagingResponse<TicketResponse> ticketReadSelf(PagingRequest request) {
-		Page<Ticket> ticketPage = ticketRepository.getByUserId(identity.getUserId(), request.toPageable());
+		Specification<Ticket> spec = (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("userId"), identity.getUserId());
+		Page<Ticket> ticketPage = ticketRepository.findAll(spec, request.toPageable());
 		List<TicketResponse> ticketResponses = ticketModelToTicketResponseMapper.map(ticketPage.getContent());
 		final Paging<TicketResponse> posts = Paging.of(ticketPage, ticketResponses);
 		return PagingResponse.<TicketResponse>builder().of(posts).content(ticketModelToTicketResponseMapper.map(ticketPage.getContent())).build();
