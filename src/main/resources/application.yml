@@ -22,6 +22,16 @@ spring:
     enabled: true
     baseline-description: "init"
     baseline-version: 0
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      "mail.transport.protocol": smtp
+      "mail.smtp.auth": true
+      "mail.smtp.starttls.enable": true
+    protocol: smtp
 
 server:
   port: ${SERVER_PORT}
@@ -35,6 +45,7 @@ file:
       size: ${MEDIA_UPLOAD_SIZE}
 
 application:
+  base-url: ${BASE_URL}
   security:
     jwt:
       private-key: ${RESOURCE_PATH}${PRIVATE_KEY_PATH}
