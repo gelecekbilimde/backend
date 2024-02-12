@@ -8,8 +8,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface CategoryDomainToCategoryListResponseMapper extends BaseMapper<CategoryDomain, CategoryListResponse> {
-
-	//initialize method
 	static CategoryDomainToCategoryListResponseMapper initialize() {
 		return Mappers.getMapper(CategoryDomainToCategoryListResponseMapper.class);
 	}

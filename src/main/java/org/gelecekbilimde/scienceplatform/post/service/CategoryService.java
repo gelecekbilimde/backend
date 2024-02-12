@@ -7,13 +7,11 @@ import org.gelecekbilimde.scienceplatform.post.dto.request.CategoryListRequest;
 
 public interface CategoryService {
 
-//	void createCategory(CategoryCreateRequest categoryCreateRequest);
-
 	Paging<CategoryDomain> getCategoryList(CategoryListRequest request);
+
 	CategoryDomain getCategory(Long categoryId);
 
-//	Paging<CategoryDomain> getCategoryList(CategoryListRequest request);
+	void createCategory(CategoryCreateRequest request);
 
 	void changeCategoryName(Long categoryId, String newName);
-	void createCategory(CategoryCreateRequest request);
 }
