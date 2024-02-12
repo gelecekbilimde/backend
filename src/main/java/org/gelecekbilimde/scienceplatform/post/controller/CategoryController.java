@@ -6,11 +6,11 @@ import org.gelecekbilimde.scienceplatform.common.Paging;
 import org.gelecekbilimde.scienceplatform.common.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.Response;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.CategoryDomain;
-import org.gelecekbilimde.scienceplatform.post.dto.request.AdminCategoryListRequest;
-import org.gelecekbilimde.scienceplatform.post.dto.response.AdminCategoryResponse;
-import org.gelecekbilimde.scienceplatform.post.mapper.CategoryDomainToAdminCategoryResponseMapper;
+import org.gelecekbilimde.scienceplatform.post.dto.request.CategoryCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.dto.request.CategoryListRequest;
+import org.gelecekbilimde.scienceplatform.post.dto.response.CategoryListResponse;
+import org.gelecekbilimde.scienceplatform.post.mapper.CategoryDomainToCategoryListResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -19,30 +19,49 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/category")
 public class CategoryController {
 	private final CategoryService categoryService;
-	private static final CategoryDomainToAdminCategoryResponseMapper categoryDomainToAdminCategoryResponseMapper = CategoryDomainToAdminCategoryResponseMapper.initialize();
+	private static final CategoryDomainToCategoryListResponseMapper categoryDomainToCategoryListResponseMapper = CategoryDomainToCategoryListResponseMapper.initialize();
 
-	@GetMapping()
-	public Response<PagingResponse<AdminCategoryResponse>> getCategoryList(@Valid AdminCategoryListRequest request) {
+//	@GetMapping()
+//	public Response<PagingResponse<CategoryListResponse>> getCategoryList(@Valid CategoryListRequest request) {
+//
+//		final Paging<CategoryDomain> categoryList = categoryService.getCategoryList(request);
+//
+//		final PagingResponse<CategoryListResponse> pageOfCategoryListResponse = PagingResponse.<CategoryListResponse>builder()
+//			.of(categoryList)
+//			.content(categoryDomainToCategoryListResponseMapper.map(categoryList.getContent()))
+//			.build();
+//
+//		return Response.ok(pageOfCategoryListResponse);
+//	}
 
-		final Paging<CategoryDomain> categoryList = categoryService.getCategoryListAdmin(request);
-
-		final PagingResponse<AdminCategoryResponse> pageOfAdminUsersResponse = PagingResponse.<AdminCategoryResponse>builder()
-			.of(categoryList)
-			.content(categoryDomainToAdminCategoryResponseMapper.map(categoryList.getContent()))
-			.build();
-		return Response.ok(pageOfAdminUsersResponse);
-	}
-
-	@PutMapping("/{categoryId}")
-	@PreAuthorize("hasAnyAuthority('admin:control','admin:last:control','category:create')")
-	public Response<Void> updateCategory(@PathVariable Long categoryId, @RequestBody String newName) {
-		categoryService.changeCategoryName(categoryId, newName);
-		return Response.NO_CONTENT;
-	}
+//	@PutMapping("/{categoryId}")
+//	@PreAuthorize("hasAnyAuthority('admin:control','admin:last:control','category:create')")
+//	public Response<Void> updateCategory(@PathVariable Long categoryId, @RequestBody String newName) {
+//		categoryService.changeCategoryName(categoryId, newName);
+//		return Response.NO_CONTENT;
+//	}
 
 	@GetMapping("/test")
-	public Response<Void> test() {
-		categoryService.findAll();
+	public Response<PagingResponse<CategoryListResponse>> getCategoryList(@Valid CategoryListRequest request) {
+
+		final Paging<CategoryDomain> categoryList = categoryService.getCategoryList(request);
+
+		final PagingResponse<CategoryListResponse> pageOfCategoryListResponse = PagingResponse.<CategoryListResponse>builder()
+			.of(categoryList)
+			.content(categoryDomainToCategoryListResponseMapper.map(categoryList.getContent()))
+			.build();
+
+		return Response.ok(pageOfCategoryListResponse);
+	}
+
+	@GetMapping("/test/{categoryId}")
+	public Response<CategoryDomain> getCategory(@PathVariable Long categoryId) {
+		return Response.ok(categoryService.getCategory(categoryId));
+	}
+
+	@PostMapping("/create")
+	public Response<Void> createCategory(@RequestBody CategoryCreateRequest request) {
+		categoryService.createCategory(request);
 		return Response.NO_CONTENT;
 	}
 }

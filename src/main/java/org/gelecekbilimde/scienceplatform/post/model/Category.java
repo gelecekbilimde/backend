@@ -3,36 +3,37 @@ package org.gelecekbilimde.scienceplatform.post.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "category")
 public class Category {
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "name")
 	private String name;
 
-	@Transient
-	private Long parentId;
+	@Column(name = "order_number")
+	private Integer order;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@Column(name = "slug")
+	private String slug;
+
+	@Column(name = "icon")
+	private String icon;
+
+	@OneToOne
 	@JoinColumn(name = "parent_id")
 	private Category parent;
 
-	@OneToMany(mappedBy="parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
-	private Set<Category> children;
-
-	@OneToMany(mappedBy = "category")
-	private List<Post> posts;
-
-
+//	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+//	private List<Category> children;
 }

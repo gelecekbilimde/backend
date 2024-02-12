@@ -1,6 +1,8 @@
 package org.gelecekbilimde.scienceplatform.post.repository;
 
 import org.gelecekbilimde.scienceplatform.post.model.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Set;
@@ -25,8 +27,11 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	 * @param categoryId: Long
 	 * @return Set<Category>
 	 */
-	Set<Category> findCategoryByChildrenId(Long categoryId);
+//	Set<Category> findCategoryByChildrenId(Long categoryId);
 	Category findCategoryById(Long categoryId);
+
+	Page<Category> findByParentIsNull(Pageable pageable);
+	Category findCategoryByName(String name);
 
 	//example:
 	//input:  a
