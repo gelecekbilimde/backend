@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryCreateRequest {
-	private Integer order;
 	private String name;
+	private Integer order;
 	private String slug;
 	private String icon;
 	private Long parentId;

@@ -21,27 +21,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 	private static final CategoryDomainToCategoryListResponseMapper categoryDomainToCategoryListResponseMapper = CategoryDomainToCategoryListResponseMapper.initialize();
 
-//	@GetMapping()
-//	public Response<PagingResponse<CategoryListResponse>> getCategoryList(@Valid CategoryListRequest request) {
-//
-//		final Paging<CategoryDomain> categoryList = categoryService.getCategoryList(request);
-//
-//		final PagingResponse<CategoryListResponse> pageOfCategoryListResponse = PagingResponse.<CategoryListResponse>builder()
-//			.of(categoryList)
-//			.content(categoryDomainToCategoryListResponseMapper.map(categoryList.getContent()))
-//			.build();
-//
-//		return Response.ok(pageOfCategoryListResponse);
-//	}
-
-//	@PutMapping("/{categoryId}")
-//	@PreAuthorize("hasAnyAuthority('admin:control','admin:last:control','category:create')")
-//	public Response<Void> updateCategory(@PathVariable Long categoryId, @RequestBody String newName) {
-//		categoryService.changeCategoryName(categoryId, newName);
-//		return Response.NO_CONTENT;
-//	}
-
-	@GetMapping("/test")
+	@GetMapping("")
 	public Response<PagingResponse<CategoryListResponse>> getCategoryList(@Valid CategoryListRequest request) {
 
 		final Paging<CategoryDomain> categoryList = categoryService.getCategoryList(request);
@@ -54,7 +34,7 @@ public class CategoryController {
 		return Response.ok(pageOfCategoryListResponse);
 	}
 
-	@GetMapping("/test/{categoryId}")
+	@GetMapping("/{categoryId}")
 	public Response<CategoryDomain> getCategory(@PathVariable Long categoryId) {
 		return Response.ok(categoryService.getCategory(categoryId));
 	}

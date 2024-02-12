@@ -1,47 +1,24 @@
 package org.gelecekbilimde.scienceplatform.post.repository;
 
 import org.gelecekbilimde.scienceplatform.post.model.Category;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Set;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-	//example:
-	//input:  e
-	//output: b, a
-//	/**
-//	 * 	Returns parents of the given category
-//	 * @param categoryId: Long
-//	 * @return Set<Category>
-//	 */
-//	Set<Category> findCategoryByChildren(Long categoryId);
-
-	//example:
-	//input:  e
-	//output: b, a
-	/**
-	 * 	Returns parents of the given category
-	 * @param categoryId: Long
-	 * @return Set<Category>
-	 */
-//	Set<Category> findCategoryByChildrenId(Long categoryId);
-	Category findCategoryById(Long categoryId);
-
-	Page<Category> findByParentIsNull(Pageable pageable);
-	Category findCategoryByName(String name);
-
-	//example:
-	//input:  a
-	//output: b, c, d, e, f, g, h, i, j
 	/**
 	 * Returns categories that is below the given category
 	 *
 	 * @param categoryId: Long
 	 * @return Set<Category>
 	 */
-//	Set<Category> ... (Long categoryId);
+	Category findCategoryById(Long categoryId);
 
+	/**
+	 * Returns the category with the given name
+	 *
+	 * @param name: String
+	 * @return Category
+	 */
+	Category findCategoryByName(String name);
 }

@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -13,10 +12,9 @@ import java.util.Set;
 @Setter
 public class CategoryListResponse {
 	private Long id;
-	private Long order;
 	private String name;
+	private Long order;
 	private String slug;
 	private String icon;
-//	private String description;
 	private Set<CategoryListResponse> children;
 }
