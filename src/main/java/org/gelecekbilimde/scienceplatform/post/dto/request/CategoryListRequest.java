@@ -6,7 +6,6 @@ import org.gelecekbilimde.scienceplatform.common.PagingRequest;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class AdminCategoryListRequest extends PagingRequest {
-
+public class CategoryListRequest extends PagingRequest {
 
 }
