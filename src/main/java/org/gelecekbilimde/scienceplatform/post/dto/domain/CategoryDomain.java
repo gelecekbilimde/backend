@@ -15,6 +15,7 @@ public class CategoryDomain {
 	private String slug;
 	private String icon;
 
-	private CategoryDomain parent;
-	private List<CategoryDomain> children;
+	private Long parentId;
+//	private CategoryDomain parent;
+//	private List<CategoryDomain> children;
 }
