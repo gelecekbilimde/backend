@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.Util;
 import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
-import org.gelecekbilimde.scienceplatform.common.mail.service.EmailService;
+import org.gelecekbilimde.scienceplatform.common.mail.service.impl.EmailServiceImpl;
 import org.gelecekbilimde.scienceplatform.config.JwtService;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.response.TokenResponse;
@@ -37,7 +37,7 @@ public class AuthenticationService {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 	private final RoleRepository roleRepository;
-	private final EmailService emailService;
+	private final EmailServiceImpl emailServiceImpl;
 
 
 	// todo : refactor edilecek
@@ -89,7 +89,7 @@ public class AuthenticationService {
 
 		userRepository.save(user);
 
-		emailService.sendVerifyMessage(user);
+		emailServiceImpl.sendVerifyMessage(user);
 
 
 		var jwtToken = jwtService.generateToken(user,scope);

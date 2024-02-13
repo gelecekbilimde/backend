@@ -45,7 +45,7 @@ class SecurityConfiguration {
 			.cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(customizer -> customizer
-				.requestMatchers("/version","/auth/**","/mail/**").permitAll()
+				.requestMatchers("/version","/auth/**","/confirm-account").permitAll()
 				.anyRequest().authenticated()
 			)
 			.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
