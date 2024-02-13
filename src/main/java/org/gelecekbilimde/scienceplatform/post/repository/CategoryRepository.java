@@ -3,6 +3,8 @@ package org.gelecekbilimde.scienceplatform.post.repository;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Set;
+
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
@@ -21,4 +23,12 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	 * @return Category
 	 */
 	Category findCategoryByName(String name);
+
+	/**
+	 * Returns the category with the given parentId
+	 *
+	 * @param parentId: Long
+	 * @return Set<Category>
+	 */
+	Set<Category> findCategoriesByParentId(Long parentId);
 }
