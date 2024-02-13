@@ -1,14 +1,9 @@
 package org.gelecekbilimde.scienceplatform.post.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class CategoryCreateRequest {
 	private String name;
 	private Integer order;

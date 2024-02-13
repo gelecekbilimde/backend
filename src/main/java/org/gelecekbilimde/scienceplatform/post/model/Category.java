@@ -26,7 +26,10 @@ public class Category {
 	@Column(name = "icon")
 	private String icon;
 
+	@Column(name = "parent_id")
+	private Long parentId;
+
 	@OneToOne
-	@JoinColumn(name = "parent_id")
+	@JoinColumn(name = "parent_id", updatable = false, insertable = false)
 	private Category parent;
 }
