@@ -25,46 +25,10 @@ public class CategoryServiceImpl implements CategoryService {
 	private static final CategoryModelToCategoryDomainMapper categoryModelToCategoryDomain = CategoryModelToCategoryDomainMapper.initialize();
 	private static final CategoryCreateRequestToCategoryModelMapper categoryCreateRequestToCategoryModel = CategoryCreateRequestToCategoryModelMapper.initialize();
 
-	/*
-		public Paging<CategoryDomain> getCategoryList(CategoryListRequest request) {
-
-			// get all categories
-			Page<Category> categoryEntities = categoryRepository.findAll(request.toPageable());
-
-			// convert category entities to category domains
-			List<CategoryDomain> categories = categoryModelToCategoryDomain.map(categoryEntities.getContent());
-
-			// get base categories (categories that have no parent)
-			List<CategoryDomain> baseCategories = categories.stream()
-				.filter(category -> category.getParent() == null)
-				.toList();
-
-			// set children of base categories recursively
-			for (CategoryDomain baseCategory : baseCategories) {
-				setChildrenRecursively(baseCategory, categories);
-			}
-
-			return Paging.of(categoryEntities, baseCategories);
-		}
-	*/
 	public List<CategoryDomain> getCategoryList() {
 		return categoryModelToCategoryDomain.map(categoryRepository.findAll());
 	}
 
-	/*
-		public CategoryDomain getCategory(Long categoryId) {
-			Category categoryEntity = categoryRepository.findCategoryById(categoryId);
-			CategoryDomain categoryDomain = categoryModelToCategoryDomain.map(categoryEntity);
-
-			// get all categories
-			List<CategoryDomain> allCategories = categoryModelToCategoryDomain.map(categoryRepository.findAll());
-
-			// set children of category recursively
-			setChildrenRecursively(categoryDomain, allCategories);
-
-			return categoryDomain;
-		}
-	*/
 	public CategoryDomain getCategory(Long categoryId) {
 		Category categoryEntity = categoryRepository.findCategoryById(categoryId);
 		if (categoryEntity == null) {
@@ -80,34 +44,26 @@ public class CategoryServiceImpl implements CategoryService {
 		if (request.getParentId() != null && categoryRepository.findCategoryById(request.getParentId()) == null) {
 			throw CategoryNotFoundException.builder().categoryId(request.getParentId()).build();
 		}
+		List<Category> categories = categoryRepository.findCategoriesByParentId(request.getParentId()).stream().toList();
+
+		for (Category category : categories) {
+			if (category.getOrder() >= request.getOrder()) {
+				category.setOrder(category.getOrder() + 1);
+			}
+		}
+
 		categoryRepository.save(categoryCreateRequestToCategoryModel.map(request));
+		categoryRepository.saveAll(categories);
 	}
 
 	public void changeCategoryName(Long categoryId, String newName) {
 		try {
 			categoryRepository.findCategoryById(categoryId).setName(newName);
 		} catch (NullPointerException e) {
-			// category not found
 			throw CategoryNotFoundException.builder().categoryId(categoryId).build();
 		}
 	}
 
-	/*
-		public void setChildrenRecursively(CategoryDomain parentCategory, List<CategoryDomain> categories) {
-
-			// get children of parent category
-			List<CategoryDomain> children =
-				categories.stream().filter(category -> category.getParent() != null &&
-									category.getParent().getId().equals(parentCategory.getId())).toList();
-
-			// set children of children recursively
-			for (CategoryDomain child : children) {
-				setChildrenRecursively(child, categories);
-			}
-
-			parentCategory.setChildren(children);
-		}
-	*/
 	public void deleteCategory(Long categoryId) {
 		Category category = categoryRepository.findCategoryById(categoryId);
 		if (category == null) {
