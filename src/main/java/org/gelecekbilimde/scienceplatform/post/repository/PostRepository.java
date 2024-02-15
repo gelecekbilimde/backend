@@ -15,18 +15,4 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
 	Optional<Post> getByIdAndLastProcess(String postId, Process processEnum);
 
 	boolean existsById(String postId);
-
-	/**
-	 * Returns all posts of the given category
-	 * @param categoryId: Long
-	 * @return List<Post>
-	 */
-//	List<Post> ....(Long categoryId);
-
-	/**
-	 * Returns all posts of the given category and its children
-	 * @param categoryId: Long
-	 * @return List<Post>
-	 */
-//	List<Post> ....(Long categoryId);
 }
