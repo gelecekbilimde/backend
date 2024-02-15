@@ -14,5 +14,6 @@ public class CategoryResponse {
 	private Long order;
 	private String slug;
 	private String icon;
-//	private Set<CategoryListResponse> children;
+
+	private Long parentId;
 }

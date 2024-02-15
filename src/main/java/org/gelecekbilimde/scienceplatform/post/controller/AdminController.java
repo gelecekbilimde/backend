@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
-//@PreAuthorize("hasAuthority('admin:access')")
+@RequestMapping("/admin/post")
+@PreAuthorize("hasAuthority('admin:access')")
 class AdminController {
 
 	private final PostService postService;
@@ -37,9 +37,8 @@ class AdminController {
 		return Response.ok(pageOfAdminUsersResponse);
 	}
 
-	// @PathVariable Long postId eklendi.
 	@GetMapping("/{postId}")
-	public Response<Void> getPost(@Valid AdminPostListRequest request , @PathVariable Long postId) {
+	public Response<Void> getPost(@Valid AdminPostListRequest request, @PathVariable Long postId) {
 		return Response.NO_CONTENT;
 	}
 

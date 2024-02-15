@@ -30,6 +30,7 @@ public class PostManagerControl {
 
 	private String content;
 
+	@NotNull(message = "cannot be null")
 	private Category category;
 
 	private String header;

@@ -3,7 +3,6 @@ package org.gelecekbilimde.scienceplatform.post.dto.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +15,4 @@ public class CategoryDomain {
 	private String icon;
 
 	private Long parentId;
-//	private CategoryDomain parent;
-//	private List<CategoryDomain> children;
 }
