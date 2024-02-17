@@ -79,11 +79,9 @@ public class Post {
 	@Column(name = "created_at")
 	protected LocalDateTime createdAt;
 
+
 	@Override
 	public String toString() {
-		return "Post{" +
-			"id=" + getId() +
-			", header='" + getSlug() + '\'' +
-			'}';
+		return "Post{" + "id=" + getId() + ", header='" + getSlug() + '\'' + '}';
 	}
 }

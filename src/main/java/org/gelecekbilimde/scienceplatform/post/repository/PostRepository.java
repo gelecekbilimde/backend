@@ -13,4 +13,6 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
 	Optional <Post> getByIdAndLastProcess(String postId, Process processEnum);
 
 	boolean existsById(String postId);
+
+	Post findByIdEquals(String postId);
 }

@@ -10,10 +10,7 @@ import org.gelecekbilimde.scienceplatform.post.dto.response.PostResponse;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostDomainToPostResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.service.PostService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,12 +20,11 @@ class PostController {
 	private final PostService postService;
 
 	private static final PostDomainToPostResponseMapper postDomainToPostResponse = PostDomainToPostResponseMapper.initialize();
+
 	@PostMapping()
 	@PreAuthorize("hasAuthority('post:create')")
-	public Response<PostResponse> savePost(@RequestBody @Valid PostCreateRequest request)
-	{
+	public Response<PostResponse> savePost(@RequestBody @Valid PostCreateRequest request) {
 		PostDomain postDomain = postService.save(request);
-
 		return Response.create(postDomainToPostResponse.map(postDomain));
 	}
 }
