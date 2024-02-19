@@ -1,9 +1,9 @@
 package org.gelecekbilimde.scienceplatform.common.mail.service;
 
-import org.gelecekbilimde.scienceplatform.user.model.User;
+import org.gelecekbilimde.scienceplatform.common.mail.model.EmailSendRequest;
 
 public interface EmailService {
-	void sendVerifyMessage(User user);
 
-	void sendWelcomeMessage(User user);
+	void send(EmailSendRequest sendRequest);
+
 }
