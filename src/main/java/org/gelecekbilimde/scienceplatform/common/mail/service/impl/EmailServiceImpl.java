@@ -51,7 +51,6 @@ class EmailServiceImpl implements EmailService {
 		for (Map.Entry<String, String> entry : templateVariables.entrySet()) {
 			emailContent = emailContent.replace("${".concat(entry.getKey()).concat("}"), entry.getValue());
 		}
-
 		return emailContent;
 	}
 

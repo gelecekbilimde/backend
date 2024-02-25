@@ -3,6 +3,8 @@ package org.gelecekbilimde.scienceplatform.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.mail.model.EmailSendRequest;
 import org.gelecekbilimde.scienceplatform.common.mail.service.EmailService;
+import org.gelecekbilimde.scienceplatform.exception.UserVerifyException;
+import org.gelecekbilimde.scienceplatform.user.enums.UserVerificationStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.UserVerification;
 import org.gelecekbilimde.scienceplatform.user.repository.UserVerificationRepository;
@@ -28,11 +30,12 @@ class UserEmailServiceImpl implements UserEmailService {
 
 		UserVerification userVerification = UserVerification.builder()
 			.userId(user.getId())
+			.status(UserVerificationStatus.WAIT)
 			.build();
 		userVerificationRepository.save(userVerification);
 
 		Map<String, String> templateVariables = Map.of(
-			"BASE_URL", BASE_URL + "/confirm-account?token=" + userVerification.getId() // TODO : this URL should be UI URL for the user to click and verify the account
+			"BASE_URL", BASE_URL + "/auth/verify?verificationId=" + userVerification.getId() // todo frontendten url istenecek
 		);
 		EmailSendRequest emailSendRequest = EmailSendRequest.builder()
 			.to(user.getEmail())
@@ -44,12 +47,22 @@ class UserEmailServiceImpl implements UserEmailService {
 
 	@Override
 	public void sendWelcomeMessage(User user) {
-
+		UserVerification userVerification = userVerificationRepository.findByUserId(user.getId());
+		if (userIsVerificated(userVerification)) {
+			throw new UserVerifyException("User is already registered.");
+		}
+		userVerification.setStatus(UserVerificationStatus.COMPLETED);
+		userVerificationRepository.save(userVerification);
 		EmailSendRequest emailSendRequest = EmailSendRequest.builder()
 			.to(user.getEmail())
 			.templateFileName("user-welcome.html")
 			.build();
 		emailService.send(emailSendRequest);
+	}
+
+	@Override
+	public boolean userIsVerificated(UserVerification userVerification) {
+		return userVerification.getStatus() == UserVerificationStatus.COMPLETED;
 	}
 
 }

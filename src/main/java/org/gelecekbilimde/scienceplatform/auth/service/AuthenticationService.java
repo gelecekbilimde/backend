@@ -17,6 +17,7 @@ import org.gelecekbilimde.scienceplatform.config.JwtService;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
+import org.gelecekbilimde.scienceplatform.exception.UserVerifyException;
 import org.gelecekbilimde.scienceplatform.user.enums.Degree;
 import org.gelecekbilimde.scienceplatform.user.enums.Gender;
 import org.gelecekbilimde.scienceplatform.user.enums.UserStatus;
@@ -28,7 +29,6 @@ import org.gelecekbilimde.scienceplatform.user.service.UserEmailService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -49,7 +49,6 @@ public class AuthenticationService {
 
 
 	// todo : refactor edilecek
-	@Transactional
 	public TokenResponse register(RegisterRequest request) {
 
 		if (userRepository.existsByEmail(request.getEmail())) {
@@ -97,7 +96,6 @@ public class AuthenticationService {
 		userRepository.save(user);
 
 		CompletableFuture.runAsync(() -> userEmailService.sendVerifyMessage(user));
-
 		var jwtToken = jwtService.generateToken(user, scope);
 
 		var refreshToken = jwtService.generateRefreshToken(user);
@@ -184,7 +182,7 @@ public class AuthenticationService {
 
 	public void verify(VerifyRequest verifyRequest) {
 		UserVerification userVerification = userVerificationRepository.findById(verifyRequest.getVerificationId())
-			.orElseThrow(() -> new RuntimeException("User verification not found!")); // TODO : Create a custom exception for user verification
+			.orElseThrow(() -> new UserVerifyException("User could not be verified!"));
 
 		User user = userRepository.findById(userVerification.getUserId())
 			.orElseThrow(() -> new UserNotFoundException("User not found!"));
