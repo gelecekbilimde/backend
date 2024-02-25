@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserVerificationRepository extends JpaRepository<UserVerification, String> {
+    UserVerification findByUserId(String id);
 }

@@ -1,9 +1,6 @@
 package org.gelecekbilimde.scienceplatform.user.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.gelecekbilimde.scienceplatform.common.Util;
+import org.gelecekbilimde.scienceplatform.user.enums.UserVerificationStatus;
 
 @Entity
 @Getter
@@ -28,4 +26,7 @@ public class UserVerification extends BaseModel {
 	@Column(name = "user_id")
 	private String userId;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private UserVerificationStatus status;
 }

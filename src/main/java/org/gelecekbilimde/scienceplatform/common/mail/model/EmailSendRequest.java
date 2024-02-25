@@ -3,6 +3,7 @@ package org.gelecekbilimde.scienceplatform.common.mail.model;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -11,6 +12,6 @@ public class EmailSendRequest {
 
 	private String to;
 	private String templateFileName;
-	private Map<String, String> templateVariables;
-
+	@Builder.Default
+	private Map<String, String> templateVariables = new HashMap<>();
 }
