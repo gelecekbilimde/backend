@@ -1,9 +1,8 @@
 package org.gelecekbilimde.scienceplatform.user.enums;
 
-public enum UserStatus {
+public enum UserVerificationStatus {
 
-	NOT_VERIFIED,
-	VERIFIED,
-	BLOCKED
+	WAITING,
+	COMPLETED
 
 }
