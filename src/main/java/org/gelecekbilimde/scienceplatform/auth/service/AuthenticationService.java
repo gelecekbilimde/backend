@@ -2,11 +2,12 @@ package org.gelecekbilimde.scienceplatform.auth.service;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.RegisterRequest;
-import org.gelecekbilimde.scienceplatform.auth.dto.request.VerifyRequest;
+import org.gelecekbilimde.scienceplatform.auth.dto.request.UserVerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.response.TokenResponse;
 import org.gelecekbilimde.scienceplatform.auth.model.Permission;
 import org.gelecekbilimde.scienceplatform.auth.model.Role;
@@ -21,6 +22,7 @@ import org.gelecekbilimde.scienceplatform.exception.UserVerifyException;
 import org.gelecekbilimde.scienceplatform.user.enums.Degree;
 import org.gelecekbilimde.scienceplatform.user.enums.Gender;
 import org.gelecekbilimde.scienceplatform.user.enums.UserStatus;
+import org.gelecekbilimde.scienceplatform.user.enums.UserVerificationStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.UserVerification;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
@@ -89,13 +91,25 @@ public class AuthenticationService {
 			.degree(degree)
 			.role(role)
 			.roleId(role.getId())
-			.status(UserStatus.WAIT)
+			.status(UserStatus.NOT_VERIFIED)
 			.password(passwordEncoder.encode(request.getPassword()))
 			.build();
 
 		userRepository.save(user);
 
-		CompletableFuture.runAsync(() -> userEmailService.sendVerifyMessage(user));
+
+		CompletableFuture.runAsync(() -> {
+
+			UserVerification userVerification = UserVerification.builder()
+				.userId(user.getId())
+				.status(UserVerificationStatus.WAITING)
+				.build();
+			userVerificationRepository.save(userVerification);
+
+			userEmailService.sendVerifyMessage(user.getEmail(), userVerification.getId());
+		});
+
+
 		var jwtToken = jwtService.generateToken(user, scope);
 
 		var refreshToken = jwtService.generateRefreshToken(user);
@@ -110,7 +124,9 @@ public class AuthenticationService {
 	public TokenResponse login(LoginRequest request) {
 		try {
 
-			User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
+			User user = userRepository.findByEmail(request.getEmail())
+				.filter(User::isVerified)
+				.orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
 
 			if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 				throw new ClientException("Hatalı Eposta veya Şifre");
@@ -180,16 +196,28 @@ public class AuthenticationService {
 		return rolePermission.stream().map(Permission::getName).toList();
 	}
 
-	public void verify(VerifyRequest verifyRequest) {
-		UserVerification userVerification = userVerificationRepository.findById(verifyRequest.getVerificationId())
-			.orElseThrow(() -> new UserVerifyException("User could not be verified!"));
+	@Transactional
+	public void verify(UserVerifyRequest userVerifyRequest) {
+
+		UserVerification userVerification = userVerificationRepository
+			.findById(userVerifyRequest.getVerificationId())
+			.orElseThrow(() -> new UserVerifyException("Verification ID is not valid!"));
+
+		if (userVerification.isCompleted()) {
+			throw new UserVerifyException("User verification is already completed!");
+		}
+
+		userVerification.complete();
+		userVerificationRepository.save(userVerification);
+
 
 		User user = userRepository.findById(userVerification.getUserId())
 			.orElseThrow(() -> new UserNotFoundException("User not found!"));
-		user.setStatus(UserStatus.VERIFY);
+
+		user.verify();
 		userRepository.save(user);
 
-		CompletableFuture.runAsync(() -> userEmailService.sendWelcomeMessage(user));
+		CompletableFuture.runAsync(() -> userEmailService.sendWelcomeMessage(user.getEmail()));
 	}
 
 }

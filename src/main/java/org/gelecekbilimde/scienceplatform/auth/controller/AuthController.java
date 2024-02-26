@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.RegisterRequest;
-import org.gelecekbilimde.scienceplatform.auth.dto.request.VerifyRequest;
+import org.gelecekbilimde.scienceplatform.auth.dto.request.UserVerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.response.TokenResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.AuthenticationService;
 import org.gelecekbilimde.scienceplatform.common.Response;
@@ -28,8 +28,8 @@ class AuthController {
 	}
 
 	@PostMapping("/verify")
-	public Response<Void> verify(@RequestBody @Valid VerifyRequest verifyRequest) {
-		authenticationService.verify(verifyRequest);
+	public Response<Void> verify(@RequestBody @Valid UserVerifyRequest userVerifyRequest) {
+		authenticationService.verify(userVerifyRequest);
 		return Response.NO_CONTENT;
 	}
 
