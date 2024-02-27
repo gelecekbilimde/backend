@@ -45,7 +45,7 @@ class SecurityConfiguration {
 			.cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(customizer -> customizer
-				.requestMatchers("/version","/auth/**", "/category/**").permitAll()
+				.requestMatchers("/version", "/auth/**", "/category/**").permitAll()
 				.anyRequest().authenticated()
 			)
 			.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -55,7 +55,7 @@ class SecurityConfiguration {
 		return httpSecurity.build();
 	}
 
-	 CorsConfigurationSource corsConfigurationSource() {
+	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(List.of("*"));
 		configuration.setAllowedMethods(List.of("*"));
