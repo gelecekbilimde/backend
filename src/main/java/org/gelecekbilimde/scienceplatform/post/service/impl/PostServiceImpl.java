@@ -122,11 +122,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	private Post isPostExistsById(String postId) {
-		Post post = postRepository.findByIdEquals(postId);
-		if (post == null) {
-			throw new NotFoundException("Post not found");
-		}
-		return post;
+		return postRepository.getById(postId);
 	}
 
 	private boolean isUserLikedPost(String userId, String postId) {
