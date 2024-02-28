@@ -46,11 +46,10 @@ public class PostServiceImpl implements PostService {
 	private static final PostModelToPostDomainMapper postModelToPostDomain = PostModelToPostDomainMapper.initialize();
 	private static final PostLikeRequestToPostLikeModelMapper postLikeRequestToPostLikeModel = PostLikeRequestToPostLikeModelMapper.initialize();
 
-
 	@Transactional
 	public PostDomain save(PostCreateRequest postCreateRequest) {
 
-		if (postCreateRequest.getMedias() != null && !postCreateRequest.getMedias().stream().allMatch(postMediaCreate -> postMediaCreate.getMediaId() != null)) {
+		if (postCreateRequest.getMedias() != null && !postCreateRequest.getMedias().stream().allMatch(postMediaCreate -> true)) {
 			throw new ClientException("Posta media yüklerken media id zorunlu |" + postCreateRequest.getMedias().toString());
 		}
 
@@ -80,7 +79,6 @@ public class PostServiceImpl implements PostService {
 		// CREATE için process gönder
 		postDomain.setLastProcess(Process.CREATE);
 		postProcessService.savePostProcess(postDomain, true);
-
 
 		return postDomain;
 	}
@@ -128,7 +126,6 @@ public class PostServiceImpl implements PostService {
 	private boolean isUserLikedPost(String userId, String postId) {
 		return postLikeRepository.findPostLikeByPostIdAndUserId(postId, userId) != null;
 	}
-
 
 	private Paging<PostDomain> getPostListForAdmin(AdminPostListRequest listRequest) {
 		Page<Post> postModels = postRepository.findAll(listRequest.toPageable());
