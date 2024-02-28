@@ -1,13 +1,11 @@
 package org.gelecekbilimde.scienceplatform.post.service;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.gelecekbilimde.scienceplatform.common.Paging;
 import org.gelecekbilimde.scienceplatform.common.Response;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
 import org.gelecekbilimde.scienceplatform.post.dto.request.AdminPostListRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.request.PostCreateRequest;
-import org.gelecekbilimde.scienceplatform.post.dto.request.PostLikeRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.response.PostLikeResponse;
 
 public interface PostService {
@@ -16,6 +14,6 @@ public interface PostService {
 
 	Paging<PostDomain> getPostListAdmin(AdminPostListRequest listRequest);
 
-	Response<PostLikeResponse> likePost(HttpServletRequest request, PostLikeRequest postLikeRequest);
+	Response<PostLikeResponse> likePost(String postId);
 
 }

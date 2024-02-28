@@ -1,23 +1,20 @@
 package org.gelecekbilimde.scienceplatform.post.service.impl;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-
 import org.gelecekbilimde.scienceplatform.common.BaseSpecification;
+import org.gelecekbilimde.scienceplatform.common.Paging;
 import org.gelecekbilimde.scienceplatform.common.Response;
+import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.exception.NotFoundException;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
-import org.gelecekbilimde.scienceplatform.common.Paging;
-import org.gelecekbilimde.scienceplatform.post.dto.request.PostCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.request.AdminPostListRequest;
-import org.gelecekbilimde.scienceplatform.post.dto.request.PostLikeRequest;
+import org.gelecekbilimde.scienceplatform.post.dto.request.PostCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.dto.request.PostMediaCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.response.PostLikeResponse;
+import org.gelecekbilimde.scienceplatform.post.enums.Process;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostCreateRequestToPostModelMapper;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostLikeRequestToPostLikeModelMapper;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostModelToPostDomainMapper;
-import org.gelecekbilimde.scienceplatform.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.post.dto.request.PostMediaCreateRequest;
-import org.gelecekbilimde.scienceplatform.post.enums.Process;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.PostLike;
 import org.gelecekbilimde.scienceplatform.post.repository.PostLikeRepository;
@@ -30,6 +27,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Map;
 
@@ -95,14 +93,14 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Response<PostLikeResponse> likePost(HttpServletRequest request, PostLikeRequest postLikeRequest) {
+	public Response<PostLikeResponse> likePost(String postId) {
 		try {
 			String userId = identity.getUserId();
-			Post post = isPostExistsById(postLikeRequest.getPostId());
+			Post post = isPostExistsById(postId);
 			int likecount = post.getLikeCount();
 			PostLike postLike;
 			if (!isUserLikedPost(userId, post.getId())) {
-				postLike = postLikeRequestToPostLikeModel.mapForSaving(postLikeRequest, userId);
+				postLike = postLikeRequestToPostLikeModel.mapForSaving(postId, userId);
 				postLikeRepository.save(postLike);
 				likecount += 1;
 				post.setLikeCount(likecount);
@@ -132,7 +130,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	private boolean isUserLikedPost(String userId, String postId) {
-		return postLikeRepository.findPostLikeByPostIdAndUserId(postId, userId) != null ? true : false;
+		return postLikeRepository.findPostLikeByPostIdAndUserId(postId, userId) != null;
 	}
 
 
