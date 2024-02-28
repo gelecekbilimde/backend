@@ -14,5 +14,4 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
 
 	boolean existsById(String postId);
 
-	Post findByIdEquals(String postId);
 }
