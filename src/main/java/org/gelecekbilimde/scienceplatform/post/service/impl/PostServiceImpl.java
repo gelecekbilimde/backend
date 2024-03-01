@@ -32,11 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
-// https://drive.google.com/file/d/1F8TCSt_Oo4Yjl2q32r3XjoTarcLn85KI/view?usp=sharing
 @Service
 @RequiredArgsConstructor
-public class PostServiceImpl implements PostService {
+class PostServiceImpl implements PostService {
 
 	private final PostRepository postRepository;
 	private final PostProcessService postProcessService;
@@ -84,12 +82,28 @@ public class PostServiceImpl implements PostService {
 		return postDomain;
 	}
 
+	@Override
 	public Paging<PostDomain> getPostListAdmin(AdminPostListRequest listRequest) {
 		if (listRequest.getIsActive() == null) {
-			return getPostListForAdmin(listRequest);
+			return this.getPostListForAdmin(listRequest);
 		}
-		return getFilteredPostListForAdmin(listRequest);
+		return this.getFilteredPostListForAdmin(listRequest);
 	}
+
+	private Paging<PostDomain> getPostListForAdmin(AdminPostListRequest listRequest) {
+		Page<Post> postModels = postRepository.findAll(listRequest.toPageable());
+		List<PostDomain> domainDTOList = postModelToPostDomain.map(postModels.getContent());
+		return Paging.of(postModels, domainDTOList);
+	}
+
+	private Paging<PostDomain> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
+		final Map<String, Object> filter = Map.of("active", listRequest.getIsActive());
+		final Specification<Post> specification = BaseSpecification.<Post>builder().and(filter);
+		final Page<Post> postModels = postRepository.findAll(specification, listRequest.toPageable());
+		final List<PostDomain> domainDTOList = postModelToPostDomain.map(postModels.getContent());
+		return Paging.of(postModels, domainDTOList);
+	}
+
 
 	@Override
 	public Response<PostLikeResponse> toggleLikeOfPost(String id) {
@@ -132,17 +146,4 @@ public class PostServiceImpl implements PostService {
 			.build();
 	}
 
-	private Paging<PostDomain> getPostListForAdmin(AdminPostListRequest listRequest) {
-		Page<Post> postModels = postRepository.findAll(listRequest.toPageable());
-		List<PostDomain> domainDTOList = postModelToPostDomain.map(postModels.getContent());
-		return Paging.of(postModels, domainDTOList);
-	}
-
-	private Paging<PostDomain> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
-		final Map<String, Object> filter = Map.of("active", listRequest.getIsActive());
-		final Specification<Post> specification = BaseSpecification.<Post>builder().and(filter);
-		final Page<Post> postModels = postRepository.findAll(specification, listRequest.toPageable());
-		final List<PostDomain> domainDTOList = postModelToPostDomain.map(postModels.getContent());
-		return Paging.of(postModels, domainDTOList);
-	}
 }
