@@ -104,9 +104,4 @@ public class Post {
 		this.likeCount++;
 	}
 
-
-	@Override
-	public String toString() {
-		return "Post{" + "id=" + getId() + ", header='" + getSlug() + '\'' + '}';
-	}
 }
