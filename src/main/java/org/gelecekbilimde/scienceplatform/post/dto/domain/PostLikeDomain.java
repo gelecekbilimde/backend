@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.post.dto.response;
+package org.gelecekbilimde.scienceplatform.post.dto.domain;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class PostLikeResponse {
+public class PostLikeDomain {
 
 	private Integer likeCount;
 	private LocalDateTime likedAt;

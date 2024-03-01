@@ -5,10 +5,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.Response;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
+import org.gelecekbilimde.scienceplatform.post.dto.domain.PostLikeDomain;
 import org.gelecekbilimde.scienceplatform.post.dto.request.PostCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.response.PostLikeResponse;
 import org.gelecekbilimde.scienceplatform.post.dto.response.PostResponse;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostDomainToPostResponseMapper;
+import org.gelecekbilimde.scienceplatform.post.mapper.PostLikeDomainToLikeResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.service.PostLikeToggleService;
 import org.gelecekbilimde.scienceplatform.post.service.PostService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +30,7 @@ class PostController {
 	private final PostLikeToggleService postLikeToggleService;
 
 	private static final PostDomainToPostResponseMapper POST_DOMAIN_TO_RESPONSE = PostDomainToPostResponseMapper.initialize();
+	private static final PostLikeDomainToLikeResponseMapper POST_LIKE_DOMAIN_TO_LIKE_RESPONSE_MAPPER = PostLikeDomainToLikeResponseMapper.initialize();
 
 	@PostMapping
 	@PreAuthorize("hasAuthority('post:create')")
@@ -39,7 +42,9 @@ class PostController {
 	@PutMapping("/{id}/like/toggle")
 	@PreAuthorize("hasAuthority('post:create')")
 	public Response<PostLikeResponse> toggleLikeOfPost(@PathVariable String id) {
-		return postLikeToggleService.toggleLikeOfPost(id);
+		PostLikeDomain postLike = postLikeToggleService.toggleLikeOfPost(id);
+		PostLikeResponse postLikeResponse = POST_LIKE_DOMAIN_TO_LIKE_RESPONSE_MAPPER.map(postLike);
+		return Response.ok(postLikeResponse);
 	}
 
 }
