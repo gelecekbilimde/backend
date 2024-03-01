@@ -9,6 +9,7 @@ import org.gelecekbilimde.scienceplatform.post.dto.request.PostCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.response.PostLikeResponse;
 import org.gelecekbilimde.scienceplatform.post.dto.response.PostResponse;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostDomainToPostResponseMapper;
+import org.gelecekbilimde.scienceplatform.post.service.PostLikeToggleService;
 import org.gelecekbilimde.scienceplatform.post.service.PostService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 class PostController {
 
 	private final PostService postService;
+	private final PostLikeToggleService postLikeToggleService;
 
 	private static final PostDomainToPostResponseMapper POST_DOMAIN_TO_RESPONSE = PostDomainToPostResponseMapper.initialize();
 
@@ -37,7 +39,7 @@ class PostController {
 	@PutMapping("/{id}/like/toggle")
 	@PreAuthorize("hasAuthority('post:create')")
 	public Response<PostLikeResponse> toggleLikeOfPost(@PathVariable String id) {
-		return postService.toggleLikeOfPost(id);
+		return postLikeToggleService.toggleLikeOfPost(id);
 	}
 
 }
