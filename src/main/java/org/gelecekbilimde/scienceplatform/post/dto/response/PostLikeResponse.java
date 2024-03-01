@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class PostLikeResponse {
+
 	private Integer likeCount;
-	private LocalDateTime createdAt;
+	private LocalDateTime likedAt;
+
 }
