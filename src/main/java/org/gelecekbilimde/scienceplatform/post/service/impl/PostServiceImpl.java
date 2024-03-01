@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 // https://drive.google.com/file/d/1F8TCSt_Oo4Yjl2q32r3XjoTarcLn85KI/view?usp=sharing
@@ -91,40 +92,44 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Response<PostLikeResponse> likePost(String postId) {
-		try {
-			String userId = identity.getUserId();
-			Post post = isPostExistsById(postId);
-			int likecount = post.getLikeCount();
-			PostLike postLike;
-			if (!isUserLikedPost(userId, post.getId())) {
-				postLike = postLikeRequestToPostLikeModel.mapForSaving(postId, userId);
-				postLikeRepository.save(postLike);
-				likecount += 1;
-				post.setLikeCount(likecount);
-				postRepository.save(post);
-			} else {
-				postLike = postLikeRepository.findPostLikeByPostIdAndUserId(post.getId(), userId);
-				postLikeRepository.delete(postLike);
-				likecount -= 1;
-				post.setLikeCount(likecount);
-				postRepository.save(post);
-			}
+	public Response<PostLikeResponse> toggleLikeOfPost(String id) {
+
+		final Post post = postRepository.findById(id)
+			.orElseThrow(() -> new NotFoundException("Post not found! id:" + id));
+
+		String userId = identity.getUserId();
+
+		Optional<PostLike> postLikeFromDatabase = postLikeRepository.findByPostIdAndUserId(id, userId);
+		if (postLikeFromDatabase.isPresent()) {
+			postLikeRepository.delete(postLikeFromDatabase.get());
+
+			post.unlike();
+			postRepository.save(post);
+
+			PostLikeResponse postLikeResponse = PostLikeResponse.builder()
+				.likeCount(post.getLikeCount())
+				.createdAt(postLikeFromDatabase.get().getCreatedAt())
+				.build();
 			return Response.<PostLikeResponse>builder()
-				.list(PostLikeResponse.builder().likeCount(likecount).createdAt(postLike.getCreatedAt()).build())
+				.list(postLikeResponse)
 				.responseCode(HttpStatus.OK.toString())
 				.build();
-		} catch (Exception e) {
-			throw new NotFoundException("Post not found");
 		}
-	}
 
-	private Post isPostExistsById(String postId) {
-		return postRepository.getById(postId);
-	}
 
-	private boolean isUserLikedPost(String userId, String postId) {
-		return postLikeRepository.findPostLikeByPostIdAndUserId(postId, userId) != null;
+		PostLike postLike = postLikeRequestToPostLikeModel.mapForSaving(id, userId);
+		PostLike savedPostLike = postLikeRepository.save(postLike);
+
+		post.like();
+		postRepository.save(post);
+
+		return Response.<PostLikeResponse>builder()
+			.list(PostLikeResponse.builder()
+				.likeCount(post.getLikeCount())
+				.createdAt(savedPostLike.getCreatedAt())
+				.build())
+			.responseCode(HttpStatus.OK.toString())
+			.build();
 	}
 
 	private Paging<PostDomain> getPostListForAdmin(AdminPostListRequest listRequest) {

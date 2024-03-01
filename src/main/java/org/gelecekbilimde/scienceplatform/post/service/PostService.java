@@ -14,6 +14,6 @@ public interface PostService {
 
 	Paging<PostDomain> getPostListAdmin(AdminPostListRequest listRequest);
 
-	Response<PostLikeResponse> likePost(String postId);
+	Response<PostLikeResponse> toggleLikeOfPost(String postId);
 
 }
