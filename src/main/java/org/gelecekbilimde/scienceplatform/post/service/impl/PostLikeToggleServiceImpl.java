@@ -30,22 +30,28 @@ class PostLikeToggleServiceImpl implements PostLikeToggleService {
 		final Post post = postRepository.findById(id)
 			.orElseThrow(() -> new NotFoundException("Post not found! id:" + id));
 
-		String userId = identity.getUserId();
-
-		Optional<PostLike> postLikeFromDatabase = postLikeRepository.findByPostIdAndUserId(id, userId);
+		Optional<PostLike> postLikeFromDatabase = postLikeRepository.findByPostIdAndUserId(id, identity.getUserId());
 		if (postLikeFromDatabase.isPresent()) {
-			postLikeRepository.delete(postLikeFromDatabase.get());
-
-			post.unlike();
-			postRepository.save(post);
-
-			return PostLikeDomain.builder()
-				.likeCount(post.getLikeCount())
-				.likedAt(postLikeFromDatabase.get().getCreatedAt())
-				.build();
+			return this.unlikePost(post, postLikeFromDatabase.get());
 		}
 
-		PostLike postLike = postLikeRequestToPostLikeModel.mapForSaving(id, userId);
+		return this.likePost(post);
+	}
+
+	private PostLikeDomain unlikePost(Post post, PostLike postLikeFromDatabase) {
+		postLikeRepository.delete(postLikeFromDatabase);
+
+		post.unlike();
+		postRepository.save(post);
+
+		return PostLikeDomain.builder()
+			.likeCount(post.getLikeCount())
+			.likedAt(postLikeFromDatabase.getCreatedAt())
+			.build();
+	}
+
+	private PostLikeDomain likePost(Post post) {
+		PostLike postLike = postLikeRequestToPostLikeModel.mapForSaving(post.getId(), identity.getUserId());
 		PostLike savedPostLike = postLikeRepository.save(postLike);
 
 		post.like();
