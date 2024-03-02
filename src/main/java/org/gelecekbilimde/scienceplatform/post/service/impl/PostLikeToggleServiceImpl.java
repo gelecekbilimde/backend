@@ -48,20 +48,18 @@ class PostLikeToggleServiceImpl implements PostLikeToggleService {
 
 		return PostLikeDomain.builder()
 			.likeCount(post.getLikeCount())
-			.likedAt(postLikeFromDatabase.getCreatedAt())
 			.build();
 	}
 
 	private PostLikeDomain likePost(Post post) {
 		PostLike postLike = postLikeRequestToPostLikeModel.mapForSaving(post.getId(), identity.getUserId());
-		PostLike savedPostLike = postLikeRepository.save(postLike);
+		postLikeRepository.save(postLike);
 
 		post.like();
 		postRepository.save(post);
 
 		return PostLikeDomain.builder()
 			.likeCount(post.getLikeCount())
-			.likedAt(savedPostLike.getCreatedAt())
 			.build();
 	}
 
