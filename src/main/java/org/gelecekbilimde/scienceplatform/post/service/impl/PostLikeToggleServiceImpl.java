@@ -11,10 +11,12 @@ import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostLikeToggleService;
 import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 class PostLikeToggleServiceImpl implements PostLikeToggleService {
 
