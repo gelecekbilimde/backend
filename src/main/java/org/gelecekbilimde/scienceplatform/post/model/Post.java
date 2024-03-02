@@ -1,13 +1,29 @@
 package org.gelecekbilimde.scienceplatform.post.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.gelecekbilimde.scienceplatform.post.enums.PostStatus;
-import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
+import org.gelecekbilimde.scienceplatform.user.model.User;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -79,11 +95,13 @@ public class Post {
 	@Column(name = "created_at")
 	protected LocalDateTime createdAt;
 
-	@Override
-	public String toString() {
-		return "Post{" +
-			"id=" + getId() +
-			", header='" + getSlug() + '\'' +
-			'}';
+
+	public void like() {
+		this.likeCount++;
 	}
+
+	public void unlike() {
+		this.likeCount++;
+	}
+
 }
