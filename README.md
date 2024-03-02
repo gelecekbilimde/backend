@@ -67,9 +67,10 @@ resource/db/seed.sql çaliştırılmalı
 ## Commit Mesajları
 ### Git mejlarında bir starndartda yazmak için en başına commit ne ile alakalı ise onun başlığını yazarız. (feat,imp,fix) Genellikle bir commitin içerisnde tek tip başlık olması daha düzenli versiyon yönetimi için önemlidir.
 ```text
-feat : Yeni bir özellik geliştirildiğini bildirmek için. Açılımı : feature 
-imp  : Var olan bir özellik üzerinde refactor yapıldıysa veya ek bir alt özellik geliştirildiyse kullanılır. Açılımı : improve
-fix  : Var olan bir özellikte hata düzeltmelerini belirtmek için (hotfix gibi durumlarıda içerir) Açılımı:fix
+feat     : Yeni bir özellik geliştirildiğini bildirmek için. Açılımı : feature 
+imp      : Var olan bir özellik üzerinde refactor yapıldıysa veya ek bir alt özellik geliştirildiyse kullanılır. Açılımı : improve
+fix      : Var olan bir özellikte hata düzeltmelerini belirtmek için (hotfix gibi durumlarıda içerir) Açılımı:fix
+refactor : Var olan bir geliştirme içerisinde kod iyileştirmesi yapıldığını belirtmek için kullanılır. Açılımı: refactor
 ```
 
 ### Örnek Git Mesajı;
