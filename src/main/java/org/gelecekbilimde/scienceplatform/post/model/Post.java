@@ -101,7 +101,7 @@ public class Post {
 	}
 
 	public void unlike() {
-		this.likeCount++;
+		this.likeCount--;
 	}
 
 }
