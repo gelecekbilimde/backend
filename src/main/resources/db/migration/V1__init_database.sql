@@ -100,8 +100,8 @@ create table if not exists user_followers
   created_at       timestamp,
   updated_at       timestamp,
   primary key (follower_user_id, followed_user_id),
-  CONSTRAINT fk_user_followers_follewer_user_id_user_id FOREIGN KEY (follower_user_id) REFERENCES "user" (id),
-  CONSTRAINT fk_user_followers_follewed_user_id_user_id FOREIGN KEY (followed_user_id) REFERENCES "user" (id)
+  CONSTRAINT fk_user_followers_follower_user_id_user_id FOREIGN KEY (follower_user_id) REFERENCES "user" (id),
+  CONSTRAINT fk_user_followers_followed_user_id_user_id FOREIGN KEY (followed_user_id) REFERENCES "user" (id)
   );
 
 
