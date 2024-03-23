@@ -5,7 +5,6 @@ import org.gelecekbilimde.scienceplatform.common.BaseMapper;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.PostMediaDomain;
 import org.gelecekbilimde.scienceplatform.post.model.PostMedia;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

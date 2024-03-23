@@ -1,18 +1,15 @@
 package org.gelecekbilimde.scienceplatform.auth.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.gelecekbilimde.scienceplatform.auth.enums.PermissionStatus;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

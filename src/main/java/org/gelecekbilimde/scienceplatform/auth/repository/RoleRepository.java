@@ -10,12 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-
 	@Query("SELECT r.permissions FROM Role r WHERE r.id = :roleId")
-	List<Permission> findPermissionsByRoleId (@Param("roleId") String roleId);
+	List<Permission> findPermissionsByRoleId(@Param("roleId") String roleId);
 
-	Optional<Role> findByName( String name);
-	Optional<Role> findById( String roleId);
+	Optional<Role> findById(String roleId);
 
 	Optional<Role> getByIsDefaultTrue();
 }

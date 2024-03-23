@@ -31,26 +31,24 @@ class SecurityConfiguration {
 
 	private final JwtAuthenticationFilter jwtAuthFilter;
 
-
 	@Bean
 	protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
 		return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity)
-		throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-		httpSecurity
-			.cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
+		httpSecurity.cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(customizer -> customizer
-				.requestMatchers("/version", "/auth/**").permitAll()
-				.anyRequest().authenticated()
-			)
-			.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(jwtAuthFilter, BearerTokenAuthenticationFilter.class)
-		;
+				.requestMatchers("/version", "/auth/**")
+				.permitAll()
+				.anyRequest()
+				.authenticated())
+			.sessionManagement(customizer -> customizer
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.addFilterBefore(jwtAuthFilter, BearerTokenAuthenticationFilter.class);
 
 		return httpSecurity.build();
 	}

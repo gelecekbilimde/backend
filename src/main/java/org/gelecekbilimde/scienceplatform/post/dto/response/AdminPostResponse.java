@@ -3,7 +3,6 @@ package org.gelecekbilimde.scienceplatform.post.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-
 import lombok.Setter;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;

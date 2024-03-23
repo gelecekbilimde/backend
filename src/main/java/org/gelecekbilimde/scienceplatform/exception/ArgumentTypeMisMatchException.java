@@ -5,7 +5,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 public class ArgumentTypeMisMatchException extends MethodArgumentTypeMismatchException {
 
-
 	public ArgumentTypeMisMatchException(Object value, Class<?> requiredType, String name, MethodParameter param, Throwable cause) {
 		super(value, requiredType, name, param, cause);
 	}

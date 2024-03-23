@@ -1,21 +1,20 @@
 package org.gelecekbilimde.scienceplatform.auth.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.gelecekbilimde.scienceplatform.auth.enums.RoleStatus;
 import org.gelecekbilimde.scienceplatform.common.BaseModel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,19 +43,18 @@ public class Role extends BaseModel {
 	private RoleStatus status;
 
 
-
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
 	@Fetch(FetchMode.SELECT)
 	private Set<Permission> permissions = new HashSet<>();
 
-	public List<SimpleGrantedAuthority> getPermissions(){
+	public List<SimpleGrantedAuthority> getPermissions() {
 		var authorities = permissions
 			.stream()
 			.map(permission -> new SimpleGrantedAuthority(permission.getName()))
 			.collect(Collectors.toList());
 		authorities.add(new SimpleGrantedAuthority("ROLE_" + getName()));
-		return  authorities;
+		return authorities;
 	}
 
 }
