@@ -13,7 +13,6 @@ import org.gelecekbilimde.scienceplatform.post.model.PostProcess;
 import org.gelecekbilimde.scienceplatform.post.repository.PostProcessRepository;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
-import org.gelecekbilimde.scienceplatform.settings.dto.domain.SettingsDomain;
 import org.gelecekbilimde.scienceplatform.settings.service.SettingsService;
 import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.security.access.AuthorizationServiceException;

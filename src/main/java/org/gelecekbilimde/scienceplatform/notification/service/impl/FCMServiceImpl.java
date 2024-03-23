@@ -1,12 +1,10 @@
 package org.gelecekbilimde.scienceplatform.notification.service.impl;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
+import com.google.firebase.messaging.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.google.firebase.messaging.*;
-
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
 import org.gelecekbilimde.scienceplatform.notification.repository.NotificationToken;
@@ -14,9 +12,8 @@ import org.gelecekbilimde.scienceplatform.notification.repository.UserTokenRepos
 import org.gelecekbilimde.scienceplatform.notification.service.FCMService;
 import org.springframework.stereotype.Service;
 
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @Service

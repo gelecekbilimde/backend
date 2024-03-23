@@ -15,21 +15,12 @@ public enum TokenClaims {
 	USER_STATUS("userStatus"),
 	ROLE_NAME("roleName"),
 	SCOPE("scope"),
-
 	SUBJECT("sub"),
-
-
 	ISSUED_AT("iat"),
 	EXPIRES_AT("exp"),
 	ALGORITHM("alg"),
-
-
 	TYPE_VAL("JWT"),
 	ISSUER("gelecekbilimde.net"),
-	GUEST_FULL_NAME("Ziyaretçi"),
-
-
-
-	;
+	GUEST_FULL_NAME("Ziyaretçi");
 	private final String value;
 }

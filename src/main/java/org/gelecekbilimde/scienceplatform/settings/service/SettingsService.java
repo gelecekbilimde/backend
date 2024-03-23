@@ -1,27 +1,11 @@
 package org.gelecekbilimde.scienceplatform.settings.service;
 
-import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.settings.dto.domain.SettingsDomain;
-import org.gelecekbilimde.scienceplatform.settings.mapper.SettingsModelToSettingsDomainMapper;
-import org.gelecekbilimde.scienceplatform.settings.model.Settings;
-import org.gelecekbilimde.scienceplatform.settings.repository.SettingsRepository;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class SettingsService {
+public interface SettingsService {
 
-	private SettingsRepository settingsRepository;
-
-	private static final SettingsModelToSettingsDomainMapper settingsModelToSettingsDomainMapper = SettingsModelToSettingsDomainMapper.initialize();
-
-
-	public List<SettingsDomain> getSettings(String groupName, @Nullable String name) {
-		List<Settings> settings = settingsRepository.getByGroupName(groupName)
-			.orElseThrow(() -> new ClientException("Tanımsız Settings"));
-
-		return  settingsModelToSettingsDomainMapper.map(settings);
-	}
+	List<SettingsDomain> getSettings(String groupName, @Nullable String name);
 }

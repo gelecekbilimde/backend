@@ -10,7 +10,6 @@ import org.gelecekbilimde.scienceplatform.post.dto.request.PostCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.request.PostMediaCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostCreateRequestToPostModelMapper;
-import org.gelecekbilimde.scienceplatform.post.mapper.PostLikeRequestToPostLikeModelMapper;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostModelToPostDomainMapper;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;

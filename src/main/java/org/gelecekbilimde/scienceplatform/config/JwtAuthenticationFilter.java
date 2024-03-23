@@ -8,20 +8,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.auth.enums.Token;
+import org.gelecekbilimde.scienceplatform.auth.model.Permission;
+import org.gelecekbilimde.scienceplatform.auth.model.Role;
+import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.InvalidTokenService;
 import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
 import org.gelecekbilimde.scienceplatform.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.exception.UnAuthorizedException;
-import org.gelecekbilimde.scienceplatform.auth.model.Permission;
-import org.gelecekbilimde.scienceplatform.auth.model.Role;
-import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		final String token;
 		final String roleId;
 
-		if (null == authHeader || !authHeader.startsWith("Bearer ")) {
+		if (null == authHeader || !authHeader.startsWith(Token.BEARER.getValue())) {
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -57,14 +58,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		invalidTokenService.checkForInvalidityOfToken((String) claims.get(TokenClaims.JWT_ID.getValue()));
 
-		roleId = claims.get(TokenClaims.ROLE_ID.getValue(),String.class);
+		roleId = claims.get(TokenClaims.ROLE_ID.getValue(), String.class);
 
-		if (null != SecurityContextHolder.getContext().getAuthentication()){
-			filterChain.doFilter(request,response);
+		if (null != SecurityContextHolder.getContext().getAuthentication()) {
+			filterChain.doFilter(request, response);
 			return;
 		}
 
-		Role role = roleRepository.findById(roleId).orElseThrow(()->new ServerException("Role bilgisine ulaşılamadı"));
+		Role role = roleRepository.findById(roleId).orElseThrow(() -> new ServerException("Role not found"));
 		Set<Permission> permissions = new HashSet<>(roleRepository.findPermissionsByRoleId(roleId));
 		role.setPermissions(permissions);
 
@@ -85,6 +86,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 
-		filterChain.doFilter(request,response);
+		filterChain.doFilter(request, response);
 	}
 }

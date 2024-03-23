@@ -4,7 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
 import org.springframework.security.core.Authentication;
@@ -44,6 +47,7 @@ public abstract class BaseModel {
 
 	@Column(name = "updated_at")
 	protected LocalDateTime updatedAt;
+
 	@PreUpdate
 	public void preUpdate() {
 		this.updatedUser = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())

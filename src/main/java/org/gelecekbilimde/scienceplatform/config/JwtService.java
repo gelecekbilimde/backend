@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.*;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
@@ -39,9 +41,9 @@ public class JwtService {
 		return extractClaim(token, Claims::getSubject);
 	}
 
-	public Object extractClaim(String token,String claim){
+	public Object extractClaim(String token, String claim) {
 		final Claims claims = extractAllClaims(token);
-		return claims.get(claim,Object.class);
+		return claims.get(claim, Object.class);
 	}
 
 	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -51,16 +53,16 @@ public class JwtService {
 
 	public String generateToken(User user, List<String> scope) {
 
-		HashMap<String,Object> claim  = new HashMap<>();
+		HashMap<String, Object> claim = new HashMap<>();
 
 		final Role role = user.getRole();
 
-		claim.put(TokenClaims.USER_ID.getValue(),user.getId());
+		claim.put(TokenClaims.USER_ID.getValue(), user.getId());
 		claim.put(TokenClaims.FULL_NAME.getValue(), user.getName() + " " + user.getLastName());
 		claim.put(TokenClaims.MAIL.getValue(), user.getEmail());
-		claim.put(TokenClaims.ROLE_NAME.getValue(),role.getName());
-		claim.put(TokenClaims.ROLE_ID.getValue(),role.getId());
-		claim.put(TokenClaims.USER_STATUS.getValue(),user.getStatus());
+		claim.put(TokenClaims.ROLE_NAME.getValue(), role.getName());
+		claim.put(TokenClaims.ROLE_ID.getValue(), role.getId());
+		claim.put(TokenClaims.USER_STATUS.getValue(), user.getStatus());
 		claim.put(TokenClaims.SCOPE.getValue(), scope);
 
 
@@ -76,10 +78,10 @@ public class JwtService {
 
 
 	public String generateRefreshToken(User user) {
-		HashMap<String,Object> claim  = new HashMap<>();
+		HashMap<String, Object> claim = new HashMap<>();
 		claim.put(TokenClaims.ROLE_ID.getValue(), user.getRoleId());
 
-		return buildToken(claim, user.getUsername(), refreshExpiration );
+		return buildToken(claim, user.getUsername(), refreshExpiration);
 	}
 
 
@@ -111,14 +113,14 @@ public class JwtService {
 
 	public Claims extractAllClaims(String token) {
 		try {
-		return Jwts
-			.parserBuilder()
-			.setSigningKey(getSignInPublicKey())
-			.build()
-			.parseClaimsJws(token)
-			.getBody();
+			return Jwts
+				.parserBuilder()
+				.setSigningKey(getSignInPublicKey())
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
 		} catch (MalformedJwtException | ExpiredJwtException | SignatureException exception) {
-			throw new ClientException("Hatalı Token");
+			throw new ClientException("Token is not valid: " + exception.getMessage());
 		}
 	}
 
@@ -133,10 +135,11 @@ public class JwtService {
 
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			return keyFactory.generatePublic(new X509EncodedKeySpec(keyData));
-		}catch (Exception e){
-			throw new ServerException("Public Key Okunurken Hata oldu: " + e.getMessage());
+		} catch (Exception e) {
+			throw new ServerException("Public Key read error: " + e.getMessage());
 		}
 	}
+
 	private PrivateKey getSignInPrivateKey() {
 		try {
 			byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyPath));
@@ -147,8 +150,8 @@ public class JwtService {
 
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(keyData));
-		}catch (Exception e){
-			throw new ServerException("Private Key Okunurken Hata oldu: " + e.getMessage());
+		} catch (Exception e) {
+			throw new ServerException("Private Key read error: " + e.getMessage());
 		}
 
 	}
