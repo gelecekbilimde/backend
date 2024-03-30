@@ -16,3 +16,4 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
 
 	boolean existsById(String postId);
 
+}
