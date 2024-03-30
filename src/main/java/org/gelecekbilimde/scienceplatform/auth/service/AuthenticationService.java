@@ -2,7 +2,6 @@ package org.gelecekbilimde.scienceplatform.auth.service;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
@@ -31,6 +30,7 @@ import org.gelecekbilimde.scienceplatform.user.service.UserEmailService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.EnumSet;
 import java.util.List;

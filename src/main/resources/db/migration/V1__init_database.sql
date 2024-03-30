@@ -16,7 +16,7 @@ create table if not exists "user"
   update_user_id varchar(36),
   created_at     timestamp,
   updated_at     timestamp,
-  CONSTRAINT check_user_status CHECK ( status in ('WAIT','VERIFY','BLOCKED'))
+  CONSTRAINT check_user_status CHECK ( status in ('NOT_VERIFIED','VERIFIED','BLOCKED'))
   );
 
 
