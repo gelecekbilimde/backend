@@ -25,7 +25,7 @@ class AdminController {
 	private final PostProcessService postProcessService;
 	private static final PostDomainToAdminPostResponseMapper postDomainToAdminPostResponseMapper = PostDomainToAdminPostResponseMapper.initialize();
 
-	@GetMapping()
+	@GetMapping
 	public Response<PagingResponse<AdminPostResponse>> getPostList(@Valid AdminPostListRequest request) {
 
 		final Paging<PostDomain> postList = postService.getPostListAdmin(request);

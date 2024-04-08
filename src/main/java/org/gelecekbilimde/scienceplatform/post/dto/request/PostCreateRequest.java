@@ -28,7 +28,7 @@ public class PostCreateRequest {
 	@NotNull(message = "cannot be null")
 	private String content;
 
-	@NotNull(message = "cannot be null")
+	@NotNull
 	private Category category;
 
 	private UserResponse user;
