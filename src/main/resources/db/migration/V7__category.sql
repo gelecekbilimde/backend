@@ -6,10 +6,10 @@ create table if not exists category
   name           varchar(36) not null,
   slug           varchar(36) not null,
   icon           varchar(36),
-  create_user_id varchar(36),
-  update_user_id varchar(36),
-  created_at     timestamp,
-  updated_at     timestamp
+  create_user_id varchar(36) not null,
+  update_user_id varchar(36) not null,
+  created_at     timestamp  not null,
+  updated_at     timestamp not null
 );
 
 alter table post
