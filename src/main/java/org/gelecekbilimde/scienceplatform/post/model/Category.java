@@ -2,12 +2,13 @@ package org.gelecekbilimde.scienceplatform.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.gelecekbilimde.scienceplatform.common.BaseModel;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "category")
-public class Category {
+public class Category extends BaseModel {
 
 	@Id
 	@Column(name = "id")
