@@ -2,9 +2,10 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.exception.CategoryAlreadyExist;
-import org.gelecekbilimde.scienceplatform.exception.CategoryHasChild;
+import org.gelecekbilimde.scienceplatform.exception.CategoryAlreadyExistException;
+import org.gelecekbilimde.scienceplatform.exception.CategoryHasChildException;
 import org.gelecekbilimde.scienceplatform.exception.CategoryNotFoundException;
+import org.gelecekbilimde.scienceplatform.exception.ParentNotFoundException;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.CategoryDomain;
 import org.gelecekbilimde.scienceplatform.post.dto.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.mapper.CategoryCreateRequestToCategoryModelMapper;
@@ -19,32 +20,35 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CategoryServiceImpl implements CategoryService {
+class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryRepository categoryRepository;
 	private static final CategoryModelToCategoryDomainMapper categoryModelToCategoryDomain = CategoryModelToCategoryDomainMapper.initialize();
 	private static final CategoryCreateRequestToCategoryModelMapper categoryCreateRequestToCategoryModel = CategoryCreateRequestToCategoryModelMapper.initialize();
 
-	public List<CategoryDomain> getCategoryList() {
+	@Override
+	public List<CategoryDomain> getCategories() {
 		return categoryModelToCategoryDomain.map(categoryRepository.findAll());
 	}
 
+	@Override
 	public CategoryDomain getCategory(Long categoryId) {
 		Category categoryEntity = categoryRepository.findCategoryById(categoryId);
 		if (categoryEntity == null) {
-			throw CategoryNotFoundException.builder().categoryId(categoryId).build();
+			throw new CategoryNotFoundException(categoryId);
 		}
 		return categoryModelToCategoryDomain.map(categoryEntity);
 	}
 
+	@Override
 	public void createCategory(CategoryCreateRequest request) {
-		if (categoryRepository.findCategoryByName(request.getName()) != null) {
-			throw CategoryAlreadyExist.builder().categoryName(request.getName()).build();
+		if (categoryRepository.existsByName(request.getName())) {
+			throw new CategoryAlreadyExistException(request.getName());
 		}
-		if (request.getParentId() != null && categoryRepository.findCategoryById(request.getParentId()) == null) {
-			throw CategoryNotFoundException.builder().categoryId(request.getParentId()).build();
+		if (request.getParentId() != null && categoryRepository.existsById(request.getParentId())) {
+			throw new ParentNotFoundException(request.getParentId());
 		}
-		List<Category> categories = categoryRepository.findCategoriesByParentId(request.getParentId()).stream().toList();
+		List<Category> categories = categoryRepository.findAllByParentId(request.getParentId()).stream().toList();
 
 		for (Category category : categories) {
 			if (category.getOrder() >= request.getOrder()) {
@@ -56,23 +60,26 @@ public class CategoryServiceImpl implements CategoryService {
 		categoryRepository.saveAll(categories);
 	}
 
-	public void changeCategoryName(Long categoryId, String newName) {
-		try {
-			categoryRepository.findCategoryById(categoryId).setName(newName);
-		} catch (NullPointerException e) {
-			throw CategoryNotFoundException.builder().categoryId(categoryId).build();
-		}
+	@Override
+	public void changeCategoryName(Long id, String newName) {
+		Category category = categoryRepository.findById(id)
+		orElseThrow(() -> new CategoryNotFoundException(id));
+
+		category.setName(newName);
+		categoryRepository.save(category);
 	}
 
-	public void deleteCategory(Long categoryId) {
-		Category category = categoryRepository.findCategoryById(categoryId);
-		if (category == null) {
-			throw CategoryNotFoundException.builder().categoryId(categoryId).build();
+	@Override
+	public void deleteCategory(Long id) {
+		Category category = categoryRepository.findById(id)
+		orElseThrow(() -> new CategoryNotFoundException(id));
+
+		boolean isCategoryParent = categoryRepository.existsByParentId(id);
+
+		if (isCategoryParent) {
+			throw new CategoryHasChildException(id);
 		}
-		if (categoryRepository.findCategoriesByParentId(categoryId).isEmpty()) {
-			categoryRepository.delete(category);
-		} else {
-			throw CategoryHasChild.builder().categoryId(categoryId).build();
-		}
+
+		categoryRepository.delete(category);
 	}
 }
