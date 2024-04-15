@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.user.dto.response.UserResponse;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
 
@@ -29,7 +28,7 @@ public class PostCreateRequest {
 	private String content;
 
 	@NotNull
-	private Category category;
+	private CategoryCreateRequest category;
 
 	private UserResponse user;
 
