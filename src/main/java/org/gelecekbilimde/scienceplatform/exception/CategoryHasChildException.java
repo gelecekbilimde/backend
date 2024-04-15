@@ -1,11 +1,6 @@
 package org.gelecekbilimde.scienceplatform.exception;
 
-import lombok.Builder;
-import lombok.Setter;
-
-@Builder
-@Setter
-public class CategoryHasChildException extends NotAllowedException{
+public class CategoryHasChildException extends NotAllowedException {
 	private Long categoryId;
 
 	public CategoryHasChildException(Long categoryId) {

@@ -1,11 +1,6 @@
 package org.gelecekbilimde.scienceplatform.exception;
 
-import lombok.Builder;
-import lombok.Setter;
-
-@Builder
-@Setter
-public class CategoryAlreadyExistException extends NotAllowedException{
+public class CategoryAlreadyExistException extends NotAllowedException {
 	private String categoryName;
 
 	public CategoryAlreadyExistException(String categoryName) {

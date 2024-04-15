@@ -18,7 +18,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 	private static final CategoryDomainToCategoryResponseMapper categoryDomainToCategoryResponseMapper = CategoryDomainToCategoryResponseMapper.initialize();
 
-	@GetMapping("")
+	@GetMapping
 	public Response<List<CategoryResponse>> getCategoryList() {
 		return Response.ok(categoryDomainToCategoryResponseMapper.map(categoryService.getCategories()));
 	}
