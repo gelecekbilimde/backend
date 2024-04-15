@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
-import org.gelecekbilimde.scienceplatform.post.model.Category;
 
 
 @Data
@@ -31,7 +30,7 @@ public class PostManagerControl {
 	private String content;
 
 	@NotNull
-	private Category category;
+	private CategoryCreateRequest category;
 
 	private String header;
 
