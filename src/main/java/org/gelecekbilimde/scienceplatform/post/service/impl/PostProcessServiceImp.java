@@ -3,6 +3,7 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
+import org.gelecekbilimde.scienceplatform.post.dto.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.request.PostManagerControl;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostDomainToPostProcessModelMapper;
@@ -62,7 +63,6 @@ public class PostProcessServiceImp implements PostProcessService {
 		}
 
 
-
 		this.updateControl(postProcess, postManagerControl);
 
 		switch (postManagerControl.getProcess()) {
@@ -82,9 +82,7 @@ public class PostProcessServiceImp implements PostProcessService {
 			postManagerControl.setContent(postProcess.getContent());
 		}
 
-		if (postManagerControl.getCategory().getName().isEmpty()) {
-			postManagerControl.setCategory(postProcess.getCategory());
-		}
+		//TODO: Category kontrolü yapılacak
 
 		Helper helper = new Helper();
 		postManagerControl.setSlug(helper.slugify(postManagerControl.getHeader()));
@@ -99,13 +97,13 @@ public class PostProcessServiceImp implements PostProcessService {
 			.orElseThrow(() -> new ClientException("Postun aktif süreci bulunamadı"));
 
 		Process accessibleProcess = switch (currentProcess) {
-            case CONTROL -> Process.CREATE;
-            case LAST_CONTROL -> Process.CONTROL;
-            case CREATOR_CONTROL -> Process.LAST_CONTROL;
-            default -> throw new ClientException("Yanlış bir status: " + postId + "--->" + currentProcess);
-        };
+			case CONTROL -> Process.CREATE;
+			case LAST_CONTROL -> Process.CONTROL;
+			case CREATOR_CONTROL -> Process.LAST_CONTROL;
+			default -> throw new ClientException("Yanlış bir status: " + postId + "--->" + currentProcess);
+		};
 
-        if (!postProcess.getProcess().equals(accessibleProcess)) {
+		if (!postProcess.getProcess().equals(accessibleProcess)) {
 			return Optional.empty();
 		}
 		return Optional.of(postProcess);
@@ -122,25 +120,25 @@ public class PostProcessServiceImp implements PostProcessService {
 		if (!postManagerControl.isCopyrightControl() || !postManagerControl.isTypoControl() || !postManagerControl.isDangerousControl()) {
 			postManagerControl.setProcess(Process.REJECT);
 			post.setLastProcess(Process.REJECT);
-			return  post;
+			return post;
 		}
 
 		final PostDomain postDomain = postModelToPostDomain.map(post);
 
 		boolean isChanged = false;
-		if(!postDomain.getHeader().equals(postManagerControl.getHeader())){
+		if (!postDomain.getHeader().equals(postManagerControl.getHeader())) {
 			isChanged = true;
 		}
 
-		if (!postDomain.getContent().equals(postManagerControl.getContent())){
+		if (!postDomain.getContent().equals(postManagerControl.getContent())) {
 			isChanged = true;
 		}
 
-		if (!postDomain.getCategory().getName().equals(postManagerControl.getCategory().getName())){
+		if (!postDomain.getCategory().getName().equals(postManagerControl.getCategory().getName())) {
 			isChanged = true;
 		}
 
-		if (!isChanged){
+		if (!isChanged) {
 			postManagerControl.setProcess(Process.CREATOR_CONTROL);
 			final PostProcess postProcessBuild = postManagerControlToPostProcessModelMapper.mapForSaving(postManagerControl, identity.getUserId(), true);
 			postProcessRepository.save(postProcessBuild);
@@ -160,11 +158,11 @@ public class PostProcessServiceImp implements PostProcessService {
 
 		final Post post = control(postManagerControl, Process.PUBLISH);
 
-		if (post.getLastProcess() != Process.PUBLISH){
+		if (post.getLastProcess() != Process.PUBLISH) {
 			return;
 		}
 
-	//	final SettingsDomain settings = settingsService.getSettings();
+		//	final SettingsDomain settings = settingsService.getSettings();
 	}
 
 	private void completeCreatorControl() {
