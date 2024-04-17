@@ -1,11 +1,13 @@
 package org.gelecekbilimde.scienceplatform.post.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class CategoryCreateRequest {
 	@NotBlank
 	private String name;
