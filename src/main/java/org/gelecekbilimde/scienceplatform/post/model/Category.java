@@ -33,4 +33,8 @@ public class Category extends BaseModel {
 	@OneToOne
 	@JoinColumn(name = "parent_id", updatable = false, insertable = false)
 	private Category parent;
+
+	public void increaseOrder() {
+		this.order++;
+	}
 }
