@@ -1,7 +1,6 @@
 package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.exception.CategoryAlreadyExistException;
 import org.gelecekbilimde.scienceplatform.exception.CategoryHasChildException;
 import org.gelecekbilimde.scienceplatform.exception.CategoryNotFoundException;
@@ -16,9 +15,9 @@ import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 class CategoryServiceImpl implements CategoryService {
 
@@ -32,12 +31,12 @@ class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryDomain getCategory(Long categoryId) {
-		Category categoryEntity = categoryRepository.findCategoryById(categoryId);
-		if (categoryEntity == null) {
-			throw new CategoryNotFoundException(categoryId);
+	public CategoryDomain getCategory(Long id) {
+		Optional< Category> category = categoryRepository.findById(id);
+		if (category.isEmpty()) {
+			throw new CategoryNotFoundException(id);
 		}
-		return categoryModelToCategoryDomain.map(categoryEntity);
+		return categoryModelToCategoryDomain.map(category.get());
 	}
 
 	@Override
@@ -45,14 +44,14 @@ class CategoryServiceImpl implements CategoryService {
 		if (categoryRepository.existsByName(request.getName())) {
 			throw new CategoryAlreadyExistException(request.getName());
 		}
-		if (request.getParentId() != null && categoryRepository.existsById(request.getParentId())) {
+		if (request.getParentId() != null && !categoryRepository.existsById(request.getParentId())) {
 			throw new ParentNotFoundException(request.getParentId());
 		}
 		List<Category> categories = categoryRepository.findAllByParentId(request.getParentId()).stream().toList();
 
 		for (Category category : categories) {
 			if (category.getOrder() >= request.getOrder()) {
-				category.setOrder(category.getOrder() + 1);
+				category.increaseOrder();
 			}
 		}
 
@@ -63,7 +62,7 @@ class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void changeCategoryName(Long id, String newName) {
 		Category category = categoryRepository.findById(id)
-		orElseThrow(() -> new CategoryNotFoundException(id));
+			.orElseThrow(() -> new CategoryNotFoundException(id));
 
 		category.setName(newName);
 		categoryRepository.save(category);
@@ -72,7 +71,7 @@ class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void deleteCategory(Long id) {
 		Category category = categoryRepository.findById(id)
-		orElseThrow(() -> new CategoryNotFoundException(id));
+			.orElseThrow(() -> new CategoryNotFoundException(id));
 
 		boolean isCategoryParent = categoryRepository.existsByParentId(id);
 
