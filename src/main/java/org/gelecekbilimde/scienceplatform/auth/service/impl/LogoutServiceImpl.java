@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.auth.enums.Token;
 import org.gelecekbilimde.scienceplatform.auth.service.InvalidTokenService;
 import org.gelecekbilimde.scienceplatform.auth.service.LogoutService;
 import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
@@ -38,7 +37,7 @@ public class LogoutServiceImpl implements LogoutHandler, LogoutService {
 		// TODO Burada Authentication içerisinde token bilgisi alabilrmiyiz
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-		if (null == authHeader || !authHeader.startsWith(Token.BEARER.getValue())) {
+		if (null == authHeader || !authHeader.startsWith("Bearer ")) {
 			return;
 		}
 
