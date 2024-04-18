@@ -188,6 +188,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 	}
 
 	@Transactional
+	@Override
 	public void verify(UserVerifyRequest userVerifyRequest) {
 
 		UserVerification userVerification = userVerificationRepository
