@@ -1,11 +1,11 @@
 package org.gelecekbilimde.scienceplatform.settings.service;
 
 import org.gelecekbilimde.scienceplatform.settings.dto.domain.SettingsDomain;
-import org.springframework.lang.Nullable;
 
 import java.util.List;
 
-public interface SettingsService {
+public interface SettingService {
 
-	List<SettingsDomain> getSettings(String groupName, @Nullable String name);
+	List<SettingsDomain> getSettings(String groupName, String name);
+
 }
