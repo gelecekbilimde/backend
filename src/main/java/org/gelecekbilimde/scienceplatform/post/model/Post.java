@@ -34,6 +34,10 @@ public class Post {
 	@Column(name = "slug")
 	private String slug;
 
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+
 
 	@Column(name = "like_count")
 	private Integer likeCount;

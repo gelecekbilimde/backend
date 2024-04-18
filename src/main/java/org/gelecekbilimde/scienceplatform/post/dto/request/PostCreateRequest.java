@@ -21,12 +21,14 @@ public class PostCreateRequest {
 	@NotBlank(message = "cannot be null")
 	private String header;
 
-	// todo bu var eyvallah ama ya iki tane aynı başlıkta post gelirse beki sonuna bir sayı eklemeliyiz
 	private String slug;
 
 
 	@NotNull(message = "cannot be null")
 	private String content;
+
+	@NotNull
+	private CategoryCreateRequest category;
 
 	private UserResponse user;
 
