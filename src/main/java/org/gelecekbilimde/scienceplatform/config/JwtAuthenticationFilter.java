@@ -31,43 +31,34 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtService jwtService;
 	private final InvalidTokenService invalidTokenService;
 	private final RoleRepository roleRepository;
 
 	@Override
-	protected void doFilterInternal(
-		@NonNull HttpServletRequest request,
-		@NonNull HttpServletResponse response,
-		@NonNull FilterChain filterChain) throws UnAuthorizedException, ServletException, IOException {
+	protected void doFilterInternal(@NonNull HttpServletRequest request,
+									@NonNull HttpServletResponse response,
+									@NonNull FilterChain filterChain)
+		throws UnAuthorizedException, ServletException, IOException {
 
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-		final String token;
-		final String roleId;
-
 		if (null == authHeader || !authHeader.startsWith("Bearer ")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
+		final String token = authHeader.substring(7);
 
-		token = authHeader.substring(7);
 		final Claims claims = jwtService.extractAllClaims(token);
+		invalidTokenService.checkForInvalidityOfToken(claims.getId());
 
-		invalidTokenService.checkForInvalidityOfToken((String) claims.get(TokenClaims.JWT_ID.getValue()));
+		final String roleId = claims.get(TokenClaims.ROLE_ID.getValue(), String.class);
 
-		roleId = claims.get(TokenClaims.ROLE_ID.getValue(), String.class);
-
-		if (null != SecurityContextHolder.getContext().getAuthentication()) {
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-		Role role = roleRepository.findById(roleId).orElseThrow(() -> new ServerException("Role not found"));
+		Role role = roleRepository.findById(roleId)
+			.orElseThrow(() -> new ServerException("Role not found"));
 		Set<Permission> permissions = new HashSet<>(roleRepository.findPermissionsByRoleId(roleId));
 		role.setPermissions(permissions);
-
 
 		final Jwt jwt = new Jwt(
 			token,
@@ -84,7 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		);
 		authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 		SecurityContextHolder.getContext().setAuthentication(authToken);
-
 		filterChain.doFilter(request, response);
 	}
+
 }
