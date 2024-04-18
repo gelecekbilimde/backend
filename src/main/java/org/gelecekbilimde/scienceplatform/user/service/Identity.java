@@ -19,9 +19,13 @@ public class Identity {
 		return getJwt().getClaim("userId");
 	}
 
-	public boolean hasPermission(String requiredPermission){
+	public boolean hasPermission(String requiredPermission) {
 		ArrayList<String> scope = getJwt().getClaim("scope");
 		return scope.contains(requiredPermission);
+	}
+
+	public String getAccessToken() {
+		return this.getJwt().getTokenValue();
 	}
 
 	private Jwt getJwt() {

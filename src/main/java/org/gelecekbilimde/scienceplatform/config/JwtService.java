@@ -1,6 +1,10 @@
 package org.gelecekbilimde.scienceplatform.config;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SignatureException;
 import org.gelecekbilimde.scienceplatform.auth.model.Role;
 import org.gelecekbilimde.scienceplatform.common.Util;
@@ -18,8 +22,11 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class JwtService {
@@ -36,20 +43,6 @@ public class JwtService {
 	private String publicKeyPath;
 
 	public static final String GUEST_USERNAME = "GUEST";
-
-	public String extractSubject(String token) {
-		return extractClaim(token, Claims::getSubject);
-	}
-
-	public Object extractClaim(String token, String claim) {
-		final Claims claims = extractAllClaims(token);
-		return claims.get(claim, Object.class);
-	}
-
-	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-		final Claims claims = extractAllClaims(token);
-		return claimsResolver.apply(claims);
-	}
 
 	public String generateToken(User user, List<String> scope) {
 
