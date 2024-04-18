@@ -1,6 +1,5 @@
 package org.gelecekbilimde.scienceplatform.media.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.Response;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
@@ -23,8 +22,7 @@ class MediaController {
 
 	@PostMapping
 	@PreAuthorize("hasAuthority('post:create')")
-	public Response<List<Object>> secretVersionRole(HttpServletRequest httpServletRequest,
-													@RequestParam("files") List<MultipartFile> files,
+	public Response<List<Object>> secretVersionRole(@RequestParam("files") List<MultipartFile> files,
 													@RequestParam("groupId") Integer groupId,
 													@RequestParam("contentType") MediaContentType contentType) {
 
