@@ -2,6 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
+import org.gelecekbilimde.scienceplatform.exception.NotFoundException;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
 import org.gelecekbilimde.scienceplatform.post.dto.request.PostManagerControl;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
@@ -23,7 +24,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PostProcessServiceImp implements PostProcessService {
+class PostProcessServiceImpl implements PostProcessService {
 
 	private final PostProcessRepository postProcessRepository;
 	private final PostRepository postRepository;
@@ -61,7 +62,6 @@ public class PostProcessServiceImp implements PostProcessService {
 		}
 
 
-
 		this.updateControl(postProcess, postManagerControl);
 
 		switch (postManagerControl.getProcess()) {
@@ -81,6 +81,8 @@ public class PostProcessServiceImp implements PostProcessService {
 			postManagerControl.setContent(postProcess.getContent());
 		}
 
+		//TODO: Category kontrolü yapılacak
+
 		Helper helper = new Helper();
 		postManagerControl.setSlug(helper.slugify(postManagerControl.getHeader()));
 
@@ -94,13 +96,13 @@ public class PostProcessServiceImp implements PostProcessService {
 			.orElseThrow(() -> new ClientException("Postun aktif süreci bulunamadı"));
 
 		Process accessibleProcess = switch (currentProcess) {
-            case CONTROL -> Process.CREATE;
-            case LAST_CONTROL -> Process.CONTROL;
-            case CREATOR_CONTROL -> Process.LAST_CONTROL;
-            default -> throw new ClientException("Yanlış bir status: " + postId + "--->" + currentProcess);
-        };
+			case CONTROL -> Process.CREATE;
+			case LAST_CONTROL -> Process.CONTROL;
+			case CREATOR_CONTROL -> Process.LAST_CONTROL;
+			default -> throw new ClientException("Yanlış bir status: " + postId + "--->" + currentProcess);
+		};
 
-        if (!postProcess.getProcess().equals(accessibleProcess)) {
+		if (!postProcess.getProcess().equals(accessibleProcess)) {
 			return Optional.empty();
 		}
 		return Optional.of(postProcess);
@@ -109,7 +111,8 @@ public class PostProcessServiceImp implements PostProcessService {
 
 
 	private Post control(PostManagerControl postManagerControl, Process nextProcess) {
-		final Post post = postRepository.getById(postManagerControl.getPostId());
+		final Post post = postRepository.findById(postManagerControl.getPostId())
+			.orElseThrow(() -> new NotFoundException("Post not found! id:" + postManagerControl.getPostId()));
 
 		postManagerControl.setProcess(nextProcess);
 		post.setLastProcess(nextProcess);
@@ -117,21 +120,15 @@ public class PostProcessServiceImp implements PostProcessService {
 		if (!postManagerControl.isCopyrightControl() || !postManagerControl.isTypoControl() || !postManagerControl.isDangerousControl()) {
 			postManagerControl.setProcess(Process.REJECT);
 			post.setLastProcess(Process.REJECT);
-			return  post;
+			return post;
 		}
 
 		final PostDomain postDomain = postModelToPostDomain.map(post);
 
-		boolean isChanged = false;
-		if(!postDomain.getHeader().equals(postManagerControl.getHeader())){
-			isChanged = true;
-		}
-
-		if (!postDomain.getContent().equals(postManagerControl.getContent())){
-			isChanged = true;
-		}
-
-		if (!isChanged){
+		boolean isHeaderChanged = !postDomain.getHeader().equals(postManagerControl.getHeader());
+		boolean isContentChanged = !postDomain.getContent().equals(postManagerControl.getContent());
+		boolean isNameChanged = !postDomain.getCategory().getName().equals(postManagerControl.getCategory().getName());
+		if (!isHeaderChanged || !isContentChanged || !isNameChanged) {
 			postManagerControl.setProcess(Process.CREATOR_CONTROL);
 			final PostProcess postProcessBuild = postManagerControlToPostProcessModelMapper.mapForSaving(postManagerControl, identity.getUserId(), true);
 			postProcessRepository.save(postProcessBuild);
@@ -151,11 +148,11 @@ public class PostProcessServiceImp implements PostProcessService {
 
 		final Post post = control(postManagerControl, Process.PUBLISH);
 
-		if (post.getLastProcess() != Process.PUBLISH){
+		if (post.getLastProcess() != Process.PUBLISH) {
 			return;
 		}
 
-	//	final SettingsDomain settings = settingsService.getSettings();
+		//	final SettingsDomain settings = settingsService.getSettings();
 	}
 
 	private void completeCreatorControl() {

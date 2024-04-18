@@ -42,7 +42,7 @@ class SecurityConfiguration {
 		httpSecurity.cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(customizer -> customizer
-				.requestMatchers("/version", "/auth/**")
+				.requestMatchers("/version", "/auth/**", "/category/**")
 				.permitAll()
 				.anyRequest()
 				.authenticated())
@@ -67,5 +67,4 @@ class SecurityConfiguration {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 }

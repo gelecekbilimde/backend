@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/admin/post")
 @PreAuthorize("hasAuthority('admin:access')")
 class AdminController {
 
@@ -27,7 +28,7 @@ class AdminController {
 	private final PostProcessService postProcessService;
 	private static final PostDomainToAdminPostResponseMapper postDomainToAdminPostResponseMapper = PostDomainToAdminPostResponseMapper.initialize();
 
-	@RequestMapping("/admin/post")
+	@GetMapping
 	public Response<PagingResponse<AdminPostResponse>> getPostList(@Valid AdminPostListRequest request) {
 
 		final Paging<PostDomain> postList = postService.getPostListAdmin(request);
@@ -39,20 +40,17 @@ class AdminController {
 		return Response.ok(pageOfAdminUsersResponse);
 	}
 
-	@RequestMapping("/admin/post/{postId}")
-	public Response<Void> getPost(@Valid AdminPostListRequest request) {
-
+	@GetMapping("/{postId}")
+	public Response<Void> getPost(@Valid AdminPostListRequest request, @PathVariable Long postId) {
 		return Response.NO_CONTENT;
 	}
 
 
-
-	@PutMapping("/admin/post/{postId}")
+	@PutMapping("/{postId}")
 	@PreAuthorize("hasAnyAuthority('admin:control','admin:last:control','post:create')")
-
-	public Response<Void> updatePostProcess(@RequestBody @Valid PostManagerControl request) {
+	public Response<Void> updatePostProcess(@RequestBody @Valid PostManagerControl request, @PathVariable Long postId) {
 		postProcessService.updatePostProcess(request);
 		return Response.NO_CONTENT;
 	}
-}
 
+}
