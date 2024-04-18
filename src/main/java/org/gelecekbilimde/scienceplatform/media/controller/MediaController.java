@@ -1,6 +1,5 @@
 package org.gelecekbilimde.scienceplatform.media.controller;
 
-
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.Response;
@@ -22,12 +21,13 @@ class MediaController {
 
 	private final MediaService mediaService;
 
-	@PostMapping()
+	@PostMapping
 	@PreAuthorize("hasAuthority('post:create')")
 	public Response<List<Object>> secretVersionRole(HttpServletRequest httpServletRequest,
 													@RequestParam("files") List<MultipartFile> files,
 													@RequestParam("groupId") Integer groupId,
 													@RequestParam("contentType") MediaContentType contentType) {
+
 		//todo size kontrol
 		return Response.ok(mediaService.uploadMedia(groupId, contentType, files));
 	}
