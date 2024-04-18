@@ -1,11 +1,11 @@
 package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.RegisterRequest;
+import org.gelecekbilimde.scienceplatform.auth.dto.request.TokenRefreshRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.UserVerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.response.TokenResponse;
 import org.gelecekbilimde.scienceplatform.auth.model.Permission;
@@ -28,7 +28,6 @@ import org.gelecekbilimde.scienceplatform.user.model.UserVerification;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
 import org.gelecekbilimde.scienceplatform.user.repository.UserVerificationRepository;
 import org.gelecekbilimde.scienceplatform.user.service.UserEmailService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -161,25 +160,14 @@ class AuthenticationServiceImpl implements AuthenticationService {
 	}
 
 	@Override
+	public TokenResponse refreshToken(TokenRefreshRequest refreshRequest) {
 
-	public Object refreshToken(HttpServletRequest request) {
-		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-		final String refreshToken;
-
-		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-			throw new ClientException("Token bilgisine ulaşılamadı");
-		}
-		refreshToken = authHeader.substring(7);
-
+		final String refreshToken = refreshRequest.getRefreshToken();
 		final Claims claims = jwtService.extractAllClaims(refreshToken);
 
-		final String userName = (String) claims.get(TokenClaims.SUBJECT.getValue());
-
-		if (userName == null) {
-			throw new ClientException("Kullanıcı bilgilerinde hata var");
-		}
-
-		final User user = this.userRepository.findByEmail(userName).orElseThrow(() -> new ClientException("Kullanıcı Bulunamadı"));
+		final String username = (String) claims.get(TokenClaims.SUBJECT.getValue());
+		final User user = this.userRepository.findByEmail(username)
+			.orElseThrow(() -> new ClientException("Kullanıcı Bulunamadı"));
 
 		Role role = roleRepository.findById(user.getRoleId())
 			.orElseThrow(() -> new ServerException("User Scope has a problem"));

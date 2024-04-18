@@ -1,10 +1,10 @@
 package org.gelecekbilimde.scienceplatform.auth.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.RegisterRequest;
+import org.gelecekbilimde.scienceplatform.auth.dto.request.TokenRefreshRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.request.UserVerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.dto.response.TokenResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.AuthenticationService;
@@ -38,8 +38,8 @@ class AuthController {
 	}
 
 	@PostMapping("/refresh-token")
-	public Response<Object> refreshToken(HttpServletRequest request) {
-		return Response.ok(authenticationService.refreshToken(request));
+	public Response<TokenResponse> refreshToken(@RequestBody @Valid TokenRefreshRequest refreshRequest) {
+		return Response.ok(authenticationService.refreshToken(refreshRequest));
 	}
 
 	@PostMapping("/guest")
