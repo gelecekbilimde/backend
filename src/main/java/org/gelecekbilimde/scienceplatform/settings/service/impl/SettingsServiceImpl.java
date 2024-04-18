@@ -1,5 +1,6 @@
 package org.gelecekbilimde.scienceplatform.settings.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.settings.dto.domain.SettingsDomain;
 import org.gelecekbilimde.scienceplatform.settings.mapper.SettingsModelToSettingsDomainMapper;
@@ -12,9 +13,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SettingsServiceImpl implements SettingsService {
+@RequiredArgsConstructor
+class SettingsServiceImpl implements SettingsService {
 
-	private SettingsRepository settingsRepository;
+	private final SettingsRepository settingsRepository;
 
 	private static final SettingsModelToSettingsDomainMapper settingsModelToSettingsDomainMapper = SettingsModelToSettingsDomainMapper.initialize();
 
@@ -23,6 +25,6 @@ public class SettingsServiceImpl implements SettingsService {
 		List<Settings> settings = settingsRepository.getByGroupName(groupName)
 			.orElseThrow(() -> new ClientException("Settings not found"));
 
-		return  settingsModelToSettingsDomainMapper.map(settings);
+		return settingsModelToSettingsDomainMapper.map(settings);
 	}
 }
