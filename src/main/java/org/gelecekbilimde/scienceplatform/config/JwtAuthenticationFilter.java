@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.enums.Token;
 import org.gelecekbilimde.scienceplatform.auth.model.Permission;
 import org.gelecekbilimde.scienceplatform.auth.model.Role;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
@@ -48,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		final String token;
 		final String roleId;
 
-		if (null == authHeader || !authHeader.startsWith(Token.BEARER.getValue())) {
+		if (null == authHeader || !authHeader.startsWith("Bearer ")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
