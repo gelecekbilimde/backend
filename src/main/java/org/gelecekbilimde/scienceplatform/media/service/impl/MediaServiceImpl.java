@@ -1,11 +1,11 @@
 package org.gelecekbilimde.scienceplatform.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.Util;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.media.dto.request.MediaGroupRequest;
 import org.gelecekbilimde.scienceplatform.media.dto.request.MediaRequest;
 import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
+import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
 import org.gelecekbilimde.scienceplatform.media.model.Media;
 import org.gelecekbilimde.scienceplatform.media.model.MediaGroup;
 import org.gelecekbilimde.scienceplatform.media.repository.MediaGroupRepository;
@@ -22,12 +22,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 @Service
 @RequiredArgsConstructor
-public class MediaServiceImpl  implements MediaService {
+public class MediaServiceImpl implements MediaService {
 
 	@Value("${file.upload.media.path}")
 	private String mediaUploadPath;
@@ -60,6 +64,7 @@ public class MediaServiceImpl  implements MediaService {
 
 		return mediaGroupRequest;
 	}
+
 	@Override
 	public MediaRequest saveMedia(MediaRequest mediaRequest) {
 		MediaGroup mediaGroup = this.mediaGroupRepository.findById(mediaRequest.getGroupId()).orElseThrow(() -> new ClientException("Klasör Bulunamadı"));
@@ -78,6 +83,7 @@ public class MediaServiceImpl  implements MediaService {
 		this.mediaRepository.save(media);
 		return mediaRequest;
 	}
+
 	@Override
 	@Transactional
 	public List<Object> uploadMedia(Integer groupId, MediaContentType mediaType, List<MultipartFile> files) {
@@ -122,7 +128,7 @@ public class MediaServiceImpl  implements MediaService {
 				mediaRequest.setShared(false);
 				mediaRequest.setGroupId(groupId);
 				mediaRequest.setUrl(url);
-				mediaRequest.setMediaType(Util.getMediaType(ext));
+				mediaRequest.setMediaType(MediaType.valueOfExtension(ext));
 
 				this.saveMedia(mediaRequest);
 
