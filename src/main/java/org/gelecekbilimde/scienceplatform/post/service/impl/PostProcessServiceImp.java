@@ -2,8 +2,8 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.exception.ClientException;
+import org.gelecekbilimde.scienceplatform.exception.NotFoundException;
 import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
-import org.gelecekbilimde.scienceplatform.post.dto.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.dto.request.PostManagerControl;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
 import org.gelecekbilimde.scienceplatform.post.mapper.PostDomainToPostProcessModelMapper;
@@ -14,7 +14,6 @@ import org.gelecekbilimde.scienceplatform.post.model.PostProcess;
 import org.gelecekbilimde.scienceplatform.post.repository.PostProcessRepository;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
-import org.gelecekbilimde.scienceplatform.settings.dto.domain.SettingsDomain;
 import org.gelecekbilimde.scienceplatform.settings.service.SettingsService;
 import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.security.access.AuthorizationServiceException;
@@ -112,7 +111,8 @@ public class PostProcessServiceImp implements PostProcessService {
 
 
 	private Post control(PostManagerControl postManagerControl, Process nextProcess) {
-		final Post post = postRepository.getById(postManagerControl.getPostId());
+		final Post post = postRepository.findById(postManagerControl.getPostId())
+			.orElseThrow(() -> new NotFoundException("Post not found! id:" + postManagerControl.getPostId()));
 
 		postManagerControl.setProcess(nextProcess);
 		post.setLastProcess(nextProcess);
