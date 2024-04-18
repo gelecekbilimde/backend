@@ -125,20 +125,10 @@ public class PostProcessServiceImp implements PostProcessService {
 
 		final PostDomain postDomain = postModelToPostDomain.map(post);
 
-		boolean isChanged = false;
-		if (!postDomain.getHeader().equals(postManagerControl.getHeader())) {
-			isChanged = true;
-		}
-
-		if (!postDomain.getContent().equals(postManagerControl.getContent())) {
-			isChanged = true;
-		}
-
-		if (!postDomain.getCategory().getName().equals(postManagerControl.getCategory().getName())) {
-			isChanged = true;
-		}
-
-		if (!isChanged) {
+		boolean isHeaderChanged = !postDomain.getHeader().equals(postManagerControl.getHeader());
+		boolean isContentChanged = !postDomain.getContent().equals(postManagerControl.getContent());
+		boolean isNameChanged = !postDomain.getCategory().getName().equals(postManagerControl.getCategory().getName());
+		if (!isHeaderChanged || !isContentChanged || !isNameChanged) {
 			postManagerControl.setProcess(Process.CREATOR_CONTROL);
 			final PostProcess postProcessBuild = postManagerControlToPostProcessModelMapper.mapForSaving(postManagerControl, identity.getUserId(), true);
 			postProcessRepository.save(postProcessBuild);
