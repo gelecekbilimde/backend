@@ -26,6 +26,10 @@ public class PostProcess extends BaseModel {
 	@Column(name = "slug")
 	private String slug;
 
+	@ManyToOne
+	@JoinColumn(name = "category")
+	private Category category;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "process")
 	private Process process;
@@ -34,7 +38,7 @@ public class PostProcess extends BaseModel {
 	private String postId;
 
 	@Column(name = "user_id")
-	private String  userId;
+	private String userId;
 
 	@Column(name = "done")
 	private boolean done;
@@ -49,11 +53,11 @@ public class PostProcess extends BaseModel {
 	private boolean dangerousControl;
 
 	@ManyToOne
-	@JoinColumn(name = "post_id",insertable = false, updatable = false)
+	@JoinColumn(name = "post_id", insertable = false, updatable = false)
 	private Post post;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id",insertable = false, updatable = false)
+	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private User user;
 
 	@Column(name = "message")

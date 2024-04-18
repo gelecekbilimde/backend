@@ -29,6 +29,9 @@ public class PostManagerControl {
 
 	private String content;
 
+	@NotNull
+	private CategoryCreateRequest category;
+
 	private String header;
 
 	private String message;

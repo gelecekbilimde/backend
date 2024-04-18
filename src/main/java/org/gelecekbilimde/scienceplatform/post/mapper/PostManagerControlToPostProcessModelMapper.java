@@ -15,6 +15,7 @@ public interface PostManagerControlToPostProcessModelMapper extends BaseMapper<P
 		return PostProcess.builder()
 			.header(postManagerControl.getHeader())
 			.content(postManagerControl.getContent())
+			.category(postManagerControl.getCategory())
 			.slug(postManagerControl.getSlug())
 			.process(postManagerControl.getProcess())
 			.done(done)
