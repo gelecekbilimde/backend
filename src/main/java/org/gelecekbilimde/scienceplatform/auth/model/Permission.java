@@ -36,4 +36,5 @@ public class Permission extends BaseModel {
 
 	@ManyToMany(mappedBy = "permissions", fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<>();
+
 }
