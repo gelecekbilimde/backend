@@ -25,22 +25,22 @@ alter table posts_process
   add constraint fk_posts_process_category_id foreign key (category_id) references category;
 
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (0, 1, 'Fizik', 'fizik', null, CURRENT_TIMESTAMP);
+values (0, 1, 'Fizik', 'fizik', null, current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (1, 1, 'Biyoloji', 'biyoloji', null, CURRENT_TIMESTAMP);
+values (1, 1, 'Biyoloji', 'biyoloji', null, current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (2, 1, 'Kimya', 'kimya', null, CURRENT_TIMESTAMP);
+values (2, 1, 'Kimya', 'kimya', null, current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (1, null, 'Teknoloji', 'teknoloji', 'cpu', CURRENT_TIMESTAMP);
+values (1, null, 'Teknoloji', 'teknoloji', 'cpu', current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (2, null, 'Felsefe', 'felsefe', 'book', CURRENT_TIMESTAMP);
+values (2, null, 'Felsefe', 'felsefe', 'book', current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (1, 6, 'Ontoloji', 'ontoloji', null, CURRENT_TIMESTAMP);
+values (1, 6, 'Ontoloji', 'ontoloji', null, current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (2, 6, 'Ahlak Felsefesi', 'ahlak-felsefesi', CURRENT_TIMESTAMP);
+values (2, 6, 'Ahlak Felsefesi', 'ahlak-felsefesi', current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (0, 6, 'Epistemoloji', 'epistelomoji', null, CURRENT_TIMESTAMP);
+values (0, 6, 'Epistemoloji', 'epistelomoji', null, current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (5, null, 'testCat', 'test-category', 'g', CURRENT_TIMESTAMP);
+values (5, null, 'testCat', 'test-category', 'g', current_timestamp);
 insert into category (order_number, parent_id, name, slug, icon, create_user_id, created_at)
-values (0, null, 'Bilim', 'bilim', 'flask-conical', CURRENT_TIMESTAMP);
+values (0, null, 'Bilim', 'bilim', 'flask-conical', current_timestamp);
