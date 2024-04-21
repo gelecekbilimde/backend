@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.user.dto.response.UserResponse;
 import org.gelecekbilimde.scienceplatform.post.enums.Process;
+import org.gelecekbilimde.scienceplatform.user.dto.response.UserResponse;
 
 import java.util.List;
 

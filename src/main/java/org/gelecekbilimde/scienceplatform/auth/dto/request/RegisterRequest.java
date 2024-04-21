@@ -1,19 +1,19 @@
 package org.gelecekbilimde.scienceplatform.auth.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.annotation.Nullable;
 import java.time.LocalDate;
 
-
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,8 +37,7 @@ public class RegisterRequest {
 	private String password;
 	private String biography;
 
-	@Nullable
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 
 	@Size(max = 255, message = "gender should not be less than 255")
