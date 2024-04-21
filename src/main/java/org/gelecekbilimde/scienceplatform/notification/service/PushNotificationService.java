@@ -3,8 +3,8 @@ package org.gelecekbilimde.scienceplatform.notification.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
-import org.springframework.stereotype.Service;
 import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service

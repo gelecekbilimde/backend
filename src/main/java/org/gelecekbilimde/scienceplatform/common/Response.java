@@ -3,10 +3,9 @@ package org.gelecekbilimde.scienceplatform.common;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.UUID;
 
 @Getter
 @Builder

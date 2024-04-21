@@ -5,7 +5,6 @@ import org.gelecekbilimde.scienceplatform.common.BaseMapper;
 import org.gelecekbilimde.scienceplatform.user.dto.domain.UserDomain;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

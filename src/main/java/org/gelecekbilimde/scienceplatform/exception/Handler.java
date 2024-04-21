@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
 
 @ControllerAdvice
 public class Handler {
@@ -87,7 +89,7 @@ public class Handler {
 			validationMessage.put(error.getObjectName(),error.getDefaultMessage());
 		}
 
-		// Tüm alan düzeyinde hataları alıyoruz (Örneğin: @Valid kullanılan alan düzeyinde hatalar)
+		// All field level errors are received (For example: errors at field level where @Valid is used)
 		for (FieldError error : e.getBindingResult().getFieldErrors()) {
 			validationMessage.put(error.getField(),error.getDefaultMessage());
 		}
@@ -116,10 +118,9 @@ public class Handler {
 			}
 		}
 
-		// İstisna mesajını hazırla
-		String message = "Hatalı parametre: " + paramName + ". " +
-				"Beklenen tip: " + expectedType + ". " +
-				"Geçersiz değer: " + invalidValue + ". ";
+		String message = "Parameter error: " + paramName + ". " +
+				"Expected type: " + expectedType + ". " +
+				"Invalid value: " + invalidValue + ". ";
 
 		if (!enumList.toString().isEmpty()) {
 			message += "The parameter must be one of the following values: " + enumList;
@@ -138,7 +139,7 @@ public class Handler {
 		message = message.substring(0,message.lastIndexOf("|"));
 
 		if (status == HttpStatus.INTERNAL_SERVER_ERROR){
-			message = "Beklenmeyen bir hata oldu Hemen ilgileneceğiz";
+			message = "Internal Server Error";
 		}
 
 		ApiExceptionDetail apiExceptionDetail = new ApiExceptionDetail(path, status, method, message, validationMessage, new HashMap<>());

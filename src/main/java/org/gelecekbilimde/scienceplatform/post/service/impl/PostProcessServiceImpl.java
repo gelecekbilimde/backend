@@ -14,7 +14,7 @@ import org.gelecekbilimde.scienceplatform.post.model.PostProcess;
 import org.gelecekbilimde.scienceplatform.post.repository.PostProcessRepository;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
-import org.gelecekbilimde.scienceplatform.settings.service.SettingsService;
+import org.gelecekbilimde.scienceplatform.settings.service.SettingService;
 import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ class PostProcessServiceImpl implements PostProcessService {
 	private final PostRepository postRepository;
 	private final Identity identity;
 
-	private final SettingsService settingsService;
+	private final SettingService settingService;
 
 	private static final PostDomainToPostProcessModelMapper postDomainToPostProcessModelMapper = PostDomainToPostProcessModelMapper.initialize();
 	private static final PostManagerControlToPostProcessModelMapper postManagerControlToPostProcessModelMapper = PostManagerControlToPostProcessModelMapper.initialize();

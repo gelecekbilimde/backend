@@ -16,7 +16,7 @@ public class PagingRequest {
 
 	@NotNull
 	@Range(min = 2, max = 100)
-	public Integer pageSize  = 20;
+	public Integer pageSize = 20;
 
 
 	public Pageable toPageable() {
@@ -25,6 +25,7 @@ public class PagingRequest {
 			this.getPageSize()
 		);
 	}
+
 	public Integer getPage() {
 		return this.page - 1;
 	}
