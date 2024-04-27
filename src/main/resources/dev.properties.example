@@ -1,5 +1,5 @@
 SERVER_PORT=8080
-DATABASE=
+DATABASE=postgresql
 BASE_URL=http://localhost:8080
 DATABASE_DDL_AUTO=update
 DATABASE_DRIVER=org.postgresql.Driver
