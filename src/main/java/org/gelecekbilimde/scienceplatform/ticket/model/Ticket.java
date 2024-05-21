@@ -1,51 +1,22 @@
 package org.gelecekbilimde.scienceplatform.ticket.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.gelecekbilimde.scienceplatform.ticket.enums.TicketStatus;
-import org.gelecekbilimde.scienceplatform.ticket.enums.TicketSubject;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.Getter;
+import lombok.Setter;
+import org.gelecekbilimde.scienceplatform.ticket.model.enums.TicketStatus;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "ticket")
+@Getter
+@Setter
 public class Ticket {
-	@Id
-	@GeneratedValue
-	@Column(name = "id")
+
 	private Long id;
-
-	@Column(name = "user_id")
 	private String userId;
-
-	@Column(columnDefinition = "text", nullable = false)
 	private String message;
-
-	@Builder.Default
-	@Enumerated(EnumType.STRING)
-	private TicketStatus status = TicketStatus.OPEN;
-
-	@Builder.Default
-	@Enumerated(EnumType.STRING)
-	private TicketSubject subject = TicketSubject.OTHER;
-
-	@UpdateTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
+	private TicketStatus status;
 	private LocalDateTime updateAt;
-
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp")
 	private LocalDateTime createAt;
 
 }

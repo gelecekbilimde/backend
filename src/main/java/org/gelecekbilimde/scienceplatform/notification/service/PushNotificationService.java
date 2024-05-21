@@ -2,14 +2,14 @@ package org.gelecekbilimde.scienceplatform.notification.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
-import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
+import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationTopicRequest;
+import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationUserRequest;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PushNotificationService {
+public class PushNotificationService { // TODO : interface yazılmalı ve bu sınıf package-private olmalı
 
 	private final FCMService fcmService;
 
@@ -30,14 +30,12 @@ public class PushNotificationService {
 	 * Send push notification to topic.
 	 *
 	 * @param request PushNotificationTopicRequest
-	 *
 	 * @implNote PushNotificationTopicRequest.builder()
-	 * 						.topic("youtube-yeni-video")
-	 * 						.title("Yeni video yok")
-	 * 						.message("Yeni video yok : " + videoTitle)
-	 * 						.build()
-	 * 						);
-	 *
+	 * .topic("youtube-yeni-video")
+	 * .title("Yeni video yok")
+	 * .message("Yeni video yok : " + videoTitle)
+	 * .build()
+	 * );
 	 */
 	public void sendPushNotificationToTopic(PushNotificationTopicRequest request) {
 		try {

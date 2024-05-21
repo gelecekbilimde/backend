@@ -1,21 +1,22 @@
 package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.BaseSpecification;
-import org.gelecekbilimde.scienceplatform.common.Paging;
-import org.gelecekbilimde.scienceplatform.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
-import org.gelecekbilimde.scienceplatform.post.dto.request.AdminPostListRequest;
-import org.gelecekbilimde.scienceplatform.post.dto.request.PostCreateRequest;
-import org.gelecekbilimde.scienceplatform.post.dto.request.PostMediaCreateRequest;
-import org.gelecekbilimde.scienceplatform.post.enums.Process;
-import org.gelecekbilimde.scienceplatform.post.mapper.PostCreateRequestToPostModelMapper;
-import org.gelecekbilimde.scienceplatform.post.mapper.PostModelToPostDomainMapper;
+import org.gelecekbilimde.scienceplatform.auth.model.Identity;
+import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
+import org.gelecekbilimde.scienceplatform.common.model.BaseSpecification;
+import org.gelecekbilimde.scienceplatform.common.model.Paging;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
+import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
+import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.PostCreateRequestToPostEntityMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.PostEntityToPostMapper;
+import org.gelecekbilimde.scienceplatform.post.model.request.AdminPostListRequest;
+import org.gelecekbilimde.scienceplatform.post.model.request.PostCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.model.request.PostMediaCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
 import org.gelecekbilimde.scienceplatform.post.service.PostService;
-import org.gelecekbilimde.scienceplatform.user.service.Identity;
+import org.gelecekbilimde.scienceplatform.post.util.PostUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -32,66 +33,64 @@ class PostServiceImpl implements PostService {
 	private final PostProcessService postProcessService;
 	private final PostMediaService postMediaService;
 	private final Identity identity;
-	private static final PostCreateRequestToPostModelMapper postCreateRequestToPostModel = PostCreateRequestToPostModelMapper.initialize();
-	private static final PostModelToPostDomainMapper postModelToPostDomain = PostModelToPostDomainMapper.initialize();
+
+	private final PostCreateRequestToPostEntityMapper createRequestToPostEntityMapper = PostCreateRequestToPostEntityMapper.initialize();
+	private final PostEntityToPostMapper postEntityToPostMapper = PostEntityToPostMapper.initialize();
 
 	@Transactional
-	public PostDomain save(PostCreateRequest postCreateRequest) {
+	public Post save(PostCreateRequest postCreateRequest) {
 
-		if (postCreateRequest.getMedias() != null && !postCreateRequest.getMedias().stream().allMatch(postMediaCreate -> true)) {
+		if (postCreateRequest.getMedias() != null && !postCreateRequest.getMedias().stream().allMatch(postMediaCreate -> true)) { // TODO : Bu kontrol request objesi içerisine taşınmalı
 			throw new ClientException("Posta media yüklerken media id zorunlu |" + postCreateRequest.getMedias().toString());
 		}
 
-		Helper helper = new Helper();
-
 		postCreateRequest.setLastProcess(Process.CREATE);
-		postCreateRequest.setSlug(helper.slugify(postCreateRequest.getHeader()));
+		postCreateRequest.setSlug(PostUtil.slugging(postCreateRequest.getHeader()));
 
-		final Post postSave = postCreateRequestToPostModel.mapForSaving(postCreateRequest, identity.getUserId());
+		final PostEntity postEntitySave = createRequestToPostEntityMapper.mapForSaving(postCreateRequest, identity.getUserId());
 
-		Post post = postRepository.save(postSave);
+		PostEntity postEntity = postRepository.save(postEntitySave);
 
-		PostDomain postDomain = postModelToPostDomain.map(post);
+		Post post = postEntityToPostMapper.map(postEntity);
 
 		if (postCreateRequest.getMedias() != null) {
 
 			List<PostMediaCreateRequest> postMediaCreateRequestList = postCreateRequest.getMedias().stream().map(postMediaCreate -> {
-				postMediaCreate.setPostId(postDomain.getPostId());
-				postMediaCreate.setUserId(postDomain.getUserId());
+				postMediaCreate.setPostId(post.getId());
+				postMediaCreate.setUserId(post.getUserId()); // TODO : Toplu Bir Şekilde İncelenecek
 				return postMediaCreate;
 			}).toList();
 
-			postDomain.setMedias(postMediaService.savePostMedia(postMediaCreateRequestList));
+			post.setMedias(postMediaService.savePostMedia(postMediaCreateRequestList));
 
 		}
 
-		// CREATE için process gönder
-		postDomain.setLastProcess(Process.CREATE);
-		postProcessService.savePostProcess(postDomain, true);
+		post.setLastProcess(Process.CREATE);
+		postProcessService.savePostProcess(post, true);
 
-		return postDomain;
+		return post;
 	}
 
 	@Override
-	public Paging<PostDomain> getPostListAdmin(AdminPostListRequest listRequest) {
+	public Paging<Post> getPostListAdmin(AdminPostListRequest listRequest) {
 		if (listRequest.getIsActive() == null) {
 			return this.getPostListForAdmin(listRequest);
 		}
 		return this.getFilteredPostListForAdmin(listRequest);
 	}
 
-	private Paging<PostDomain> getPostListForAdmin(AdminPostListRequest listRequest) {
-		Page<Post> postModels = postRepository.findAll(listRequest.toPageable());
-		List<PostDomain> domainDTOList = postModelToPostDomain.map(postModels.getContent());
-		return Paging.of(postModels, domainDTOList);
+	private Paging<Post> getPostListForAdmin(AdminPostListRequest listRequest) {
+		Page<PostEntity> postEntities = postRepository.findAll(listRequest.toPageable());
+		List<Post> posts = postEntityToPostMapper.map(postEntities.getContent());
+		return Paging.of(postEntities, posts);
 	}
 
-	private Paging<PostDomain> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
+	private Paging<Post> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
 		final Map<String, Object> filter = Map.of("active", listRequest.getIsActive());
-		final Specification<Post> specification = BaseSpecification.<Post>builder().and(filter);
-		final Page<Post> postModels = postRepository.findAll(specification, listRequest.toPageable());
-		final List<PostDomain> domainDTOList = postModelToPostDomain.map(postModels.getContent());
-		return Paging.of(postModels, domainDTOList);
+		final Specification<PostEntity> specification = BaseSpecification.<PostEntity>builder().and(filter);
+		final Page<PostEntity> postEntities = postRepository.findAll(specification, listRequest.toPageable());
+		final List<Post> posts = postEntityToPostMapper.map(postEntities.getContent());
+		return Paging.of(postEntities, posts);
 	}
 
 }

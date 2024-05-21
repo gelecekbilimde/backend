@@ -1,15 +1,15 @@
 package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.exception.CategoryAlreadyExistException;
-import org.gelecekbilimde.scienceplatform.exception.CategoryHasChildException;
-import org.gelecekbilimde.scienceplatform.exception.CategoryNotFoundException;
-import org.gelecekbilimde.scienceplatform.exception.ParentNotFoundException;
-import org.gelecekbilimde.scienceplatform.post.dto.domain.CategoryDomain;
-import org.gelecekbilimde.scienceplatform.post.dto.request.CategoryCreateRequest;
-import org.gelecekbilimde.scienceplatform.post.mapper.CategoryCreateRequestToCategoryModelMapper;
-import org.gelecekbilimde.scienceplatform.post.mapper.CategoryModelToCategoryDomainMapper;
+import org.gelecekbilimde.scienceplatform.post.exception.CategoryAlreadyExistException;
+import org.gelecekbilimde.scienceplatform.post.exception.CategoryHasChildException;
+import org.gelecekbilimde.scienceplatform.post.exception.CategoryNotFoundException;
+import org.gelecekbilimde.scienceplatform.post.exception.CategoryParentNotFoundException;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
+import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryCreateRequestToCategoryEntityMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryEntityToCategoryMapper;
+import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.repository.CategoryRepository;
 import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
 import org.springframework.stereotype.Service;
@@ -22,21 +22,22 @@ import java.util.Optional;
 class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryRepository categoryRepository;
-	private static final CategoryModelToCategoryDomainMapper categoryModelToCategoryDomain = CategoryModelToCategoryDomainMapper.initialize();
-	private static final CategoryCreateRequestToCategoryModelMapper categoryCreateRequestToCategoryModel = CategoryCreateRequestToCategoryModelMapper.initialize();
+
+	private final CategoryEntityToCategoryMapper categoryEntityToCategoryMapper = CategoryEntityToCategoryMapper.initialize();
+	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper = CategoryCreateRequestToCategoryEntityMapper.initialize();
 
 	@Override
-	public List<CategoryDomain> getCategories() {
-		return categoryModelToCategoryDomain.map(categoryRepository.findAll());
+	public List<Category> getCategories() {
+		return categoryEntityToCategoryMapper.map(categoryRepository.findAll());
 	}
 
 	@Override
-	public CategoryDomain getCategory(Long id) {
-		Optional< Category> category = categoryRepository.findById(id);
+	public Category getCategory(Long id) {
+		Optional<CategoryEntity> category = categoryRepository.findById(id);
 		if (category.isEmpty()) {
 			throw new CategoryNotFoundException(id);
 		}
-		return categoryModelToCategoryDomain.map(category.get());
+		return categoryEntityToCategoryMapper.map(category.get());
 	}
 
 	@Override
@@ -45,32 +46,32 @@ class CategoryServiceImpl implements CategoryService {
 			throw new CategoryAlreadyExistException(request.getName());
 		}
 		if (request.getParentId() != null && !categoryRepository.existsById(request.getParentId())) {
-			throw new ParentNotFoundException(request.getParentId());
+			throw new CategoryParentNotFoundException(request.getParentId());
 		}
-		List<Category> categories = categoryRepository.findAllByParentId(request.getParentId()).stream().toList();
+		List<CategoryEntity> categories = categoryRepository.findAllByParentId(request.getParentId()).stream().toList();
 
-		for (Category category : categories) {
-			if (category.getOrder() >= request.getOrder()) {
-				category.increaseOrder();
+		for (CategoryEntity categoryEntity : categories) {
+			if (categoryEntity.getOrder() >= request.getOrder()) {
+				categoryEntity.increaseOrder();
 			}
 		}
 
-		categoryRepository.save(categoryCreateRequestToCategoryModel.map(request));
+		categoryRepository.save(categoryCreateRequestToCategoryEntityMapper.map(request));
 		categoryRepository.saveAll(categories);
 	}
 
 	@Override
 	public void changeCategoryName(Long id, String newName) {
-		Category category = categoryRepository.findById(id)
+		CategoryEntity categoryEntity = categoryRepository.findById(id)
 			.orElseThrow(() -> new CategoryNotFoundException(id));
 
-		category.setName(newName);
-		categoryRepository.save(category);
+		categoryEntity.setName(newName);
+		categoryRepository.save(categoryEntity);
 	}
 
 	@Override
 	public void deleteCategory(Long id) {
-		Category category = categoryRepository.findById(id)
+		CategoryEntity categoryEntity = categoryRepository.findById(id)
 			.orElseThrow(() -> new CategoryNotFoundException(id));
 
 		boolean isCategoryParent = categoryRepository.existsByParentId(id);
@@ -79,6 +80,6 @@ class CategoryServiceImpl implements CategoryService {
 			throw new CategoryHasChildException(id);
 		}
 
-		categoryRepository.delete(category);
+		categoryRepository.delete(categoryEntity);
 	}
 }

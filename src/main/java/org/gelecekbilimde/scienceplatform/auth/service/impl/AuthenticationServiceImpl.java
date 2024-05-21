@@ -2,29 +2,27 @@ package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.auth.dto.request.LoginRequest;
-import org.gelecekbilimde.scienceplatform.auth.dto.request.RegisterRequest;
-import org.gelecekbilimde.scienceplatform.auth.dto.request.TokenRefreshRequest;
-import org.gelecekbilimde.scienceplatform.auth.dto.request.UserVerifyRequest;
-import org.gelecekbilimde.scienceplatform.auth.dto.response.TokenResponse;
-import org.gelecekbilimde.scienceplatform.auth.model.Permission;
-import org.gelecekbilimde.scienceplatform.auth.model.Role;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserVerifyException;
+import org.gelecekbilimde.scienceplatform.auth.model.entity.PermissionEntity;
+import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
+import org.gelecekbilimde.scienceplatform.auth.model.enums.TokenClaims;
+import org.gelecekbilimde.scienceplatform.auth.model.request.LoginRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RegisterRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.request.TokenRefreshRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.request.UserVerifyRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.response.TokenResponse;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.AuthenticationService;
-import org.gelecekbilimde.scienceplatform.common.Util;
-import org.gelecekbilimde.scienceplatform.common.enums.TokenClaims;
-import org.gelecekbilimde.scienceplatform.config.JwtService;
-import org.gelecekbilimde.scienceplatform.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.exception.ServerException;
-import org.gelecekbilimde.scienceplatform.exception.UserNotFoundException;
-import org.gelecekbilimde.scienceplatform.exception.UserVerifyException;
-import org.gelecekbilimde.scienceplatform.user.enums.Degree;
-import org.gelecekbilimde.scienceplatform.user.enums.Gender;
-import org.gelecekbilimde.scienceplatform.user.enums.UserStatus;
-import org.gelecekbilimde.scienceplatform.user.enums.UserVerificationStatus;
-import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.gelecekbilimde.scienceplatform.user.model.UserVerification;
+import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
+import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
+import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
+import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
+import org.gelecekbilimde.scienceplatform.user.model.entity.UserVerificationEntity;
+import org.gelecekbilimde.scienceplatform.user.model.enums.Degree;
+import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserVerificationStatus;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
 import org.gelecekbilimde.scienceplatform.user.repository.UserVerificationRepository;
 import org.gelecekbilimde.scienceplatform.user.service.UserEmailService;
@@ -36,7 +34,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 class AuthenticationServiceImpl implements AuthenticationService {
@@ -55,8 +52,8 @@ class AuthenticationServiceImpl implements AuthenticationService {
 			throw new ClientException("This user is already registered");
 		}
 
-		Role role = roleRepository.getByIsDefaultTrue().orElseThrow(() -> new ServerException("Default Role is not defined."));
-		List<String> scope = scopeList(role.getId());
+		RoleEntity roleEntity = roleRepository.getByIsDefaultTrue().orElseThrow(() -> new ServerException("Default Role is not defined."));
+		List<String> scope = scopeList(roleEntity.getId());
 
 
 		Gender gender = null;
@@ -78,8 +75,8 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		}
 
 
-		User user = User.builder()
-			.id(Util.generateUUID())
+		UserEntity userEntity = UserEntity.builder()
+			.id(RandomUtil.generateUUID())
 			.name(request.getFirstname())
 			.lastName(request.getLastname())
 			.email(request.getEmail())
@@ -87,30 +84,30 @@ class AuthenticationServiceImpl implements AuthenticationService {
 			.biography(request.getBiography())
 			.gender(gender)
 			.degree(degree)
-			.role(role)
-			.roleId(role.getId())
+			.roleEntity(roleEntity)
+			.roleId(roleEntity.getId())
 			.status(UserStatus.NOT_VERIFIED)
 			.password(passwordEncoder.encode(request.getPassword()))
 			.build();
 
-		userRepository.save(user);
+		userRepository.save(userEntity);
 
 
 		CompletableFuture.runAsync(() -> {
 
-			UserVerification userVerification = UserVerification.builder()
-				.userId(user.getId())
+			UserVerificationEntity userVerificationEntity = UserVerificationEntity.builder()
+				.userId(userEntity.getId())
 				.status(UserVerificationStatus.WAITING)
 				.build();
-			userVerificationRepository.save(userVerification);
+			userVerificationRepository.save(userVerificationEntity);
 
-			userEmailService.sendVerifyMessage(user.getEmail(), userVerification.getId());
+			userEmailService.sendVerifyMessage(userEntity.getEmail(), userVerificationEntity.getId());
 		});
 
 
-		var jwtToken = jwtService.generateToken(user, scope);
+		var jwtToken = jwtService.generateToken(userEntity, scope);
 
-		var refreshToken = jwtService.generateRefreshToken(user);
+		var refreshToken = jwtService.generateRefreshToken(userEntity);
 
 		return TokenResponse
 			.builder()
@@ -123,19 +120,19 @@ class AuthenticationServiceImpl implements AuthenticationService {
 	public TokenResponse login(LoginRequest request) {
 		try {
 
-			User user = userRepository.findByEmail(request.getEmail())
-				.filter(User::isVerified)
+			UserEntity userEntity = userRepository.findByEmail(request.getEmail())
+				.filter(UserEntity::isVerified)
 				.orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
 
-			if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+			if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
 				throw new ClientException("Hatalı Eposta veya Şifre");
 			}
 
-			Role role = roleRepository.findById(user.getRoleId()).orElseThrow(() -> new ServerException("User Scope has a problem"));
-			List<String> scope = scopeList(role.getId());
+			RoleEntity roleEntity = roleRepository.findById(userEntity.getRoleId()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+			List<String> scope = scopeList(roleEntity.getId());
 
-			var jwtToken = jwtService.generateToken(user, scope);
-			var refreshToken = jwtService.generateRefreshToken(user);
+			var jwtToken = jwtService.generateToken(userEntity, scope);
+			var refreshToken = jwtService.generateRefreshToken(userEntity);
 
 
 			return TokenResponse
@@ -166,14 +163,14 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		final Claims claims = jwtService.extractAllClaims(refreshToken);
 
 		final String username = (String) claims.get(TokenClaims.SUBJECT.getValue());
-		final User user = this.userRepository.findByEmail(username)
-			.orElseThrow(() -> new ClientException("Kullanıcı Bulunamadı"));
+		final UserEntity userEntity = this.userRepository.findByEmail(username)
+			.orElseThrow(() -> new ClientException("Kullanıcı Bulunamadı")); // TODO : UserNotFoundException yazılmalı
 
-		Role role = roleRepository.findById(user.getRoleId())
-			.orElseThrow(() -> new ServerException("User Scope has a problem"));
-		List<String> scope = scopeList(role.getId());
+		RoleEntity roleEntity = roleRepository.findById(userEntity.getRoleId())
+			.orElseThrow(() -> new ServerException("User Scope has a problem")); // TODO : RoleNotFoundException yazılmalı
+		List<String> scope = scopeList(roleEntity.getId());
 
-		var jwtToken = jwtService.generateToken(user, scope);
+		var jwtToken = jwtService.generateToken(userEntity, scope);
 
 		return TokenResponse
 			.builder()
@@ -183,33 +180,33 @@ class AuthenticationServiceImpl implements AuthenticationService {
 	}
 
 	private List<String> scopeList(String roleId) {
-		List<Permission> rolePermission = roleRepository.findPermissionsByRoleId(roleId);
-		return rolePermission.stream().map(Permission::getName).toList();
+		List<PermissionEntity> rolePermissionEntity = roleRepository.findPermissionsByRoleId(roleId);
+		return rolePermissionEntity.stream().map(PermissionEntity::getName).toList();
 	}
 
 	@Transactional
 	@Override
 	public void verify(UserVerifyRequest userVerifyRequest) {
 
-		UserVerification userVerification = userVerificationRepository
+		UserVerificationEntity userVerificationEntity = userVerificationRepository
 			.findById(userVerifyRequest.getVerificationId())
-			.orElseThrow(() -> new UserVerifyException("Verification ID is not valid!"));
+			.orElseThrow(() -> new UserVerifyException("Verification ID is not valid!")); // TODO : UserVerificationIsNotFoundException yazılmalı
 
-		if (userVerification.isCompleted()) {
-			throw new UserVerifyException("User verification is already completed!");
+		if (userVerificationEntity.isCompleted()) {
+			throw new UserVerifyException("User verification is already completed!"); // TODO : UserVerificationAlreadyCompletedException yazılmalı
 		}
 
-		userVerification.complete();
-		userVerificationRepository.save(userVerification);
+		userVerificationEntity.complete();
+		userVerificationRepository.save(userVerificationEntity);
 
 
-		User user = userRepository.findById(userVerification.getUserId())
-			.orElseThrow(() -> new UserNotFoundException("User not found!"));
+		UserEntity userEntity = userRepository.findById(userVerificationEntity.getUserId())
+			.orElseThrow(() -> new UserNotFoundException("User not found!")); // TODO : Buradaki mesaj UserNotFoundException içerisinde constructor'da tanımlanmalı
 
-		user.verify();
-		userRepository.save(user);
+		userEntity.verify();
+		userRepository.save(userEntity);
 
-		CompletableFuture.runAsync(() -> userEmailService.sendWelcomeMessage(user.getEmail()));
+		CompletableFuture.runAsync(() -> userEmailService.sendWelcomeMessage(userEntity.getEmail()));
 	}
 
 }

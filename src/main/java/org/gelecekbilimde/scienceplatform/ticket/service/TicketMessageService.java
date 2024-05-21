@@ -1,16 +1,16 @@
 package org.gelecekbilimde.scienceplatform.ticket.service;
 
-import org.gelecekbilimde.scienceplatform.common.PagingResponse;
-import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketMessageCreateRequest;
-import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketMessageRequest;
-import org.gelecekbilimde.scienceplatform.ticket.dto.response.MessageResponse;
+import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
+import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketMessageCreateRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketMessageRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketMessageResponse;
 
 public interface TicketMessageService {
 
-	PagingResponse<MessageResponse> ticketMessageRead(TicketMessageRequest request);
+	PagingResponse<TicketMessageResponse> ticketMessageRead(TicketMessageRequest request);
 
-	PagingResponse<MessageResponse> ticketMessageReadSelf(TicketMessageRequest request);
+	PagingResponse<TicketMessageResponse> ticketMessageReadSelf(TicketMessageRequest request);
 
-	MessageResponse ticketMessageCreate(TicketMessageCreateRequest request);
+	TicketMessageResponse ticketMessageCreate(TicketMessageCreateRequest request);
 
 }
