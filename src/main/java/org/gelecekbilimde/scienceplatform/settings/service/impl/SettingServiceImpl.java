@@ -1,10 +1,10 @@
 package org.gelecekbilimde.scienceplatform.settings.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.settings.dto.domain.SettingsDomain;
-import org.gelecekbilimde.scienceplatform.settings.mapper.SettingsModelToSettingsDomainMapper;
+import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.settings.model.Settings;
+import org.gelecekbilimde.scienceplatform.settings.model.entity.SettingsEntity;
+import org.gelecekbilimde.scienceplatform.settings.model.mapper.SettingsEntityToSettingsMapper;
 import org.gelecekbilimde.scienceplatform.settings.repository.SettingsRepository;
 import org.gelecekbilimde.scienceplatform.settings.service.SettingService;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ class SettingServiceImpl implements SettingService {
 
 	private final SettingsRepository settingsRepository;
 
-	private static final SettingsModelToSettingsDomainMapper settingsModelToSettingsDomainMapper = SettingsModelToSettingsDomainMapper.initialize();
+	private final SettingsEntityToSettingsMapper settingsEntityToSettingsMapper = SettingsEntityToSettingsMapper.initialize();
 
-	public List<SettingsDomain> getSettings(String groupName, String name) {
-		List<Settings> settings = settingsRepository.getByGroupName(groupName)
+	public List<Settings> getSettings(String groupName, String name) {
+		List<SettingsEntity> settings = settingsRepository.getByGroupName(groupName)
 			.orElseThrow(() -> new ClientException("Settings not found"));
-		return settingsModelToSettingsDomainMapper.map(settings);
+		return settingsEntityToSettingsMapper.map(settings);
 	}
 
 }

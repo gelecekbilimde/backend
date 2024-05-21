@@ -1,14 +1,19 @@
 package org.gelecekbilimde.scienceplatform.notification.service.impl;
 
-import com.google.firebase.messaging.*;
+import com.google.firebase.messaging.BatchResponse;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.MulticastMessage;
+import com.google.firebase.messaging.Notification;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
-import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationUserRequest;
-import org.gelecekbilimde.scienceplatform.notification.repository.NotificationToken;
-import org.gelecekbilimde.scienceplatform.notification.repository.UserTokenRepository;
+import org.gelecekbilimde.scienceplatform.notification.model.NotificationTokenEntity;
+import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationTopicRequest;
+import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationUserRequest;
+import org.gelecekbilimde.scienceplatform.notification.repository.NotificationTokenRepository;
 import org.gelecekbilimde.scienceplatform.notification.service.FCMService;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +25,7 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 class FCMServiceImpl implements FCMService {
 
-	private final UserTokenRepository userTokenRepository;
+	private final NotificationTokenRepository userTokenRepository;
 	private final FirebaseMessaging firebaseMessaging;
 
 	@Override
@@ -58,7 +63,7 @@ class FCMServiceImpl implements FCMService {
 		List<String> deviceTokens = userTokenRepository.findAllByUserId(request.getUserId())
 			.stream()
 			.filter(notificationToken -> notificationToken.getDeviceToken() != null)
-			.map(NotificationToken::getDeviceToken)
+			.map(NotificationTokenEntity::getDeviceToken)
 			.toList();
 		log.info("Find Device Tokens : {}", deviceTokens);
 

@@ -2,15 +2,19 @@ package org.gelecekbilimde.scienceplatform.ticket.conroller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.PagingRequest;
-import org.gelecekbilimde.scienceplatform.common.PagingResponse;
-import org.gelecekbilimde.scienceplatform.common.Response;
-import org.gelecekbilimde.scienceplatform.ticket.dto.domain.TicketDomain;
-import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketUpdateRequest;
-import org.gelecekbilimde.scienceplatform.ticket.dto.response.TicketResponse;
+import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
+import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
+import org.gelecekbilimde.scienceplatform.common.model.response.Response;
+import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
+import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketUpdateRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketResponse;
 import org.gelecekbilimde.scienceplatform.ticket.service.TicketService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,8 +32,8 @@ class TicketController {
 
 	@PutMapping
 	@PreAuthorize("hasAuthority('ticket:update')")
-	public Response<TicketDomain> ticketUpdate(@RequestBody @Valid TicketUpdateRequest request) {
-		TicketDomain ticketResponse = ticketService.updateTicket(request);
+	public Response<Ticket> ticketUpdate(@RequestBody @Valid TicketUpdateRequest request) {
+		Ticket ticketResponse = ticketService.updateTicket(request);
 		return Response.create(ticketResponse);
 	}
 
