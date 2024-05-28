@@ -47,7 +47,7 @@ public class MediaGroupEntity extends BaseEntity {
 	@Column(name = "status")
 	private MediaGroupStatus status;
 
-	@OneToMany(mappedBy = "mediaGroup", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "mediaGroupEntity", cascade = CascadeType.ALL)
 	private List<MediaEntity> mediaEntityList;
 
 	@ManyToOne

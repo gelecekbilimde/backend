@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<RoleEntity, String> {
 
-	@Query("SELECT r.permissions FROM RoleEntity r WHERE r.id = :roleId")
+	@Query("SELECT r.permissionEntities FROM RoleEntity r WHERE r.id = :roleId")
 	List<PermissionEntity> findPermissionsByRoleId(@Param("roleId") String roleId);
 
 	Optional<RoleEntity> getByIsDefaultTrue();

@@ -68,7 +68,7 @@ public class MediaEntity extends BaseEntity {
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private UserEntity userEntity;
 
-	@OneToMany(mappedBy = "media", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "mediaEntity", cascade = CascadeType.ALL)
 	private List<PostMediaEntity> postMediaEntity;
 
 	@Enumerated(EnumType.STRING)

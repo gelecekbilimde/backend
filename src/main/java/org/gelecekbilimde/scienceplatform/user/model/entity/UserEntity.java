@@ -85,7 +85,7 @@ public class UserEntity extends BaseEntity {
 	@JoinTable(name = "user_followers", joinColumns = @JoinColumn(name = "follower_user_id"), inverseJoinColumns = @JoinColumn(name = "followed_user_id"))
 	private Set<UserEntity> followerUserEntities = new HashSet<>();
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
 	private List<PostEntity> postEntity;
 
 	public void verify() {

@@ -79,11 +79,11 @@ public class PostEntity {
 	@Column(name = "status")
 	private PostStatus status;
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "postEntity", cascade = CascadeType.ALL)
 	private List<PostMediaEntity> medias;
 
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "postEntity", cascade = CascadeType.ALL)
 	private List<PostProcessEntity> processes;
 
 	@ManyToOne
