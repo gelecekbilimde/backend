@@ -45,7 +45,7 @@ public class PermissionEntity extends BaseEntity {
 	@Column(name = "status")
 	private PermissionStatus status;
 
-	@ManyToMany(mappedBy = "permissions", fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "permissionEntities", fetch = FetchType.EAGER)
 	private Set<RoleEntity> roleEntities = new HashSet<>();
 
 }
