@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.notification.model.NotificationTokenEntity;
+import org.gelecekbilimde.scienceplatform.notification.model.entity.NotificationTokenEntity;
 import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationTopicRequest;
 import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationUserRequest;
 import org.gelecekbilimde.scienceplatform.notification.repository.NotificationTokenRepository;
