@@ -31,7 +31,7 @@ class PostServiceImpl implements PostService {
 
 	private final PostRepository postRepository;
 	private final PostProcessService postProcessService;
-	private final PostMediaService postMediaService;
+	private final PostMediaServiceImpl postMediaServiceImpl;
 	private final Identity identity;
 
 	private final PostCreateRequestToPostEntityMapper createRequestToPostEntityMapper = PostCreateRequestToPostEntityMapper.initialize();
@@ -61,7 +61,7 @@ class PostServiceImpl implements PostService {
 				return postMediaCreate;
 			}).toList();
 
-			post.setMedias(postMediaService.savePostMedia(postMediaCreateRequestList));
+			post.setMedias(postMediaServiceImpl.savePostMedia(postMediaCreateRequestList));
 
 		}
 
