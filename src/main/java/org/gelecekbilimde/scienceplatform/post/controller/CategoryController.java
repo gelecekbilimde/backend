@@ -1,5 +1,6 @@
 package org.gelecekbilimde.scienceplatform.post.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.response.Response;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToResponseMapper;
@@ -29,7 +30,7 @@ class CategoryController {
 	}
 
 	@PostMapping("/create")
-	public Response<Void> createCategory(@RequestBody CategoryCreateRequest request) {
+	public Response<Void> createCategory(@RequestBody @Valid CategoryCreateRequest request) {
 		categoryService.createCategory(request);
 		return Response.NO_CONTENT;
 	}
