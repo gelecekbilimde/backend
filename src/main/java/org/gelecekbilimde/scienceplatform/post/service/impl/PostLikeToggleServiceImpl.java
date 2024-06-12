@@ -6,7 +6,6 @@ import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
 import org.gelecekbilimde.scienceplatform.post.model.PostLike;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostLikeEntity;
-import org.gelecekbilimde.scienceplatform.post.model.mapper.PostLikeRequestToPostLikeEntityMapper;
 import org.gelecekbilimde.scienceplatform.post.repository.PostLikeRepository;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostLikeToggleService;
@@ -23,8 +22,6 @@ class PostLikeToggleServiceImpl implements PostLikeToggleService {
 	private final PostRepository postRepository;
 	private final PostLikeRepository postLikeRepository;
 	private final Identity identity;
-
-	private final PostLikeRequestToPostLikeEntityMapper postLikeRequestToPostLikeEntityMapper = PostLikeRequestToPostLikeEntityMapper.initialize();
 
 	@Override
 	public PostLike toggleLikeOfPost(String id) {
@@ -52,7 +49,10 @@ class PostLikeToggleServiceImpl implements PostLikeToggleService {
 	}
 
 	private PostLike likePost(PostEntity postEntity) {
-		PostLikeEntity postLikeEntity = postLikeRequestToPostLikeEntityMapper.mapForSaving(postEntity.getId(), identity.getUserId());
+		PostLikeEntity postLikeEntity = PostLikeEntity.builder()
+			.userId(identity.getUserId())
+			.postId(postEntity.getId())
+			.build();
 		postLikeRepository.save(postLikeEntity);
 
 		postEntity.like();
