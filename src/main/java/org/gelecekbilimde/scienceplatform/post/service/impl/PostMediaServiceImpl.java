@@ -1,6 +1,5 @@
 package org.gelecekbilimde.scienceplatform.post.service.impl;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.post.model.PostMedia;
@@ -9,14 +8,16 @@ import org.gelecekbilimde.scienceplatform.post.model.mapper.PostMediaCreateReque
 import org.gelecekbilimde.scienceplatform.post.model.mapper.PostMediaEntityToPostMediaMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.PostMediaCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.repository.PostMediaRepository;
+import org.gelecekbilimde.scienceplatform.post.service.PostMediaService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class PostMediaServiceImpl {
+class PostMediaServiceImpl implements PostMediaService {
 
 	private final Identity identity;
 
@@ -25,12 +26,12 @@ public class PostMediaServiceImpl {
 	private final PostMediaCreateRequestToPostMediaEntityMapper postMediaCreateToPostMediaModel = PostMediaCreateRequestToPostMediaEntityMapper.initialize();
 	private final PostMediaEntityToPostMediaMapper postMediaEntityToPostMediaMapper = PostMediaEntityToPostMediaMapper.initialize();
 
-	public List<PostMedia> savePostMedia(List<PostMediaCreateRequest> postMediaCreateRequestList) {
-		return postMediaCreateRequestList.stream().map(this::savePostMediaOne).toList();
+	@Override
+	public List<PostMedia> savePostMedias(List<PostMediaCreateRequest> postMediaCreateRequests) {
+		return postMediaCreateRequests.stream().map(this::savePostMedia).toList(); // TODO : tek tek veritabanına kaydetmek yerine toplu bir şekilde kaydedilmeli!
 	}
 
-	@Transactional
-	public PostMedia savePostMediaOne(@Valid PostMediaCreateRequest postMediaCreateRequest) {
+	private PostMedia savePostMedia(PostMediaCreateRequest postMediaCreateRequest) {
 
 		final PostMediaEntity postMediaEntitySave = postMediaCreateToPostMediaModel.mapForSaving(postMediaCreateRequest, identity.getUserId());
 

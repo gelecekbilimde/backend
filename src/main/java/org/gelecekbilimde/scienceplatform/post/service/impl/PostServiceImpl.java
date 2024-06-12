@@ -14,6 +14,7 @@ import org.gelecekbilimde.scienceplatform.post.model.request.AdminPostListReques
 import org.gelecekbilimde.scienceplatform.post.model.request.PostCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.PostMediaCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
+import org.gelecekbilimde.scienceplatform.post.service.PostMediaService;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
 import org.gelecekbilimde.scienceplatform.post.service.PostService;
 import org.gelecekbilimde.scienceplatform.post.util.PostUtil;
@@ -31,7 +32,7 @@ class PostServiceImpl implements PostService {
 
 	private final PostRepository postRepository;
 	private final PostProcessService postProcessService;
-	private final PostMediaServiceImpl postMediaServiceImpl;
+	private final PostMediaService postMediaService;
 	private final Identity identity;
 
 	private final PostCreateRequestToPostEntityMapper createRequestToPostEntityMapper = PostCreateRequestToPostEntityMapper.initialize();
@@ -61,7 +62,7 @@ class PostServiceImpl implements PostService {
 				return postMediaCreate;
 			}).toList();
 
-			post.setMedias(postMediaServiceImpl.savePostMedia(postMediaCreateRequestList));
+			post.setMedias(postMediaService.savePostMedias(postMediaCreateRequestList));
 
 		}
 
