@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PostMediaService { // TODO : interface yazılmalı
+public class PostMediaServiceImpl {
 
 	private final Identity identity;
 
