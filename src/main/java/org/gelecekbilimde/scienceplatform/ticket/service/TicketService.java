@@ -1,11 +1,11 @@
 package org.gelecekbilimde.scienceplatform.ticket.service;
 
-import org.gelecekbilimde.scienceplatform.common.PagingRequest;
-import org.gelecekbilimde.scienceplatform.common.PagingResponse;
-import org.gelecekbilimde.scienceplatform.ticket.dto.domain.TicketDomain;
-import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketCreateRequest;
-import org.gelecekbilimde.scienceplatform.ticket.dto.request.TicketUpdateRequest;
-import org.gelecekbilimde.scienceplatform.ticket.dto.response.TicketResponse;
+import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
+import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
+import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
+import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketCreateRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketUpdateRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketResponse;
 
 
 public interface TicketService {
@@ -14,8 +14,8 @@ public interface TicketService {
 
 	PagingResponse<TicketResponse> ticketReadSelf(PagingRequest request);
 
-	TicketDomain updateTicket(TicketUpdateRequest request);
+	Ticket updateTicket(TicketUpdateRequest request);
 
-	TicketDomain ticketCreateSelf(TicketCreateRequest request);
+	Ticket ticketCreateSelf(TicketCreateRequest request);
 
 }

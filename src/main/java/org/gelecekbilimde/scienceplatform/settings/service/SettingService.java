@@ -1,11 +1,11 @@
 package org.gelecekbilimde.scienceplatform.settings.service;
 
-import org.gelecekbilimde.scienceplatform.settings.dto.domain.SettingsDomain;
+import org.gelecekbilimde.scienceplatform.settings.model.Settings;
 
 import java.util.List;
 
 public interface SettingService {
 
-	List<SettingsDomain> getSettings(String groupName, String name);
+	List<Settings> getSettings(String groupName, String name);
 
 }

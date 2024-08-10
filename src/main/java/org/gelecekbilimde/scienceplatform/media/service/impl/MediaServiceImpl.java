@@ -1,17 +1,18 @@
 package org.gelecekbilimde.scienceplatform.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.media.dto.request.MediaGroupRequest;
-import org.gelecekbilimde.scienceplatform.media.dto.request.MediaRequest;
-import org.gelecekbilimde.scienceplatform.media.enums.MediaContentType;
-import org.gelecekbilimde.scienceplatform.media.enums.MediaType;
-import org.gelecekbilimde.scienceplatform.media.model.Media;
-import org.gelecekbilimde.scienceplatform.media.model.MediaGroup;
+import org.gelecekbilimde.scienceplatform.auth.model.Identity;
+import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
+import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
+import org.gelecekbilimde.scienceplatform.media.model.entity.MediaEntity;
+import org.gelecekbilimde.scienceplatform.media.model.entity.MediaGroupEntity;
+import org.gelecekbilimde.scienceplatform.media.model.enums.MediaContentType;
+import org.gelecekbilimde.scienceplatform.media.model.enums.MediaType;
+import org.gelecekbilimde.scienceplatform.media.model.request.MediaGroupRequest;
+import org.gelecekbilimde.scienceplatform.media.model.request.MediaRequest;
 import org.gelecekbilimde.scienceplatform.media.repository.MediaGroupRepository;
 import org.gelecekbilimde.scienceplatform.media.repository.MediaRepository;
 import org.gelecekbilimde.scienceplatform.media.service.MediaService;
-import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +27,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 
 @Service
 @RequiredArgsConstructor
-public class MediaServiceImpl implements MediaService {
+class MediaServiceImpl implements MediaService {
 
 	@Value("${file.upload.media.path}")
 	private String mediaUploadPath;
@@ -48,8 +47,8 @@ public class MediaServiceImpl implements MediaService {
 	private static final String FILE = "file";
 
 	@Override
-	public MediaGroupRequest saveMediaGroup(MediaGroupRequest mediaGroupRequest) {
-		var mediaGroup = MediaGroup
+	public MediaGroupRequest saveMediaGroup(MediaGroupRequest mediaGroupRequest) { // TODO : MediaGroupRequest dönmek yerine MediaGroup ya da void olabilir
+		var mediaGroup = MediaGroupEntity
 			.builder()
 			.name(mediaGroupRequest.getName())
 			.userId(identity.getUserId());
@@ -58,7 +57,7 @@ public class MediaServiceImpl implements MediaService {
 			mediaGroup.parentId(mediaGroupRequest.getParentId());
 		}
 
-		MediaGroup entity = mediaGroupRepository.save(mediaGroup.build());
+		MediaGroupEntity entity = mediaGroupRepository.save(mediaGroup.build());
 
 		mediaGroupRequest.setGroupId(entity.getId().intValue());
 
@@ -67,26 +66,26 @@ public class MediaServiceImpl implements MediaService {
 
 	@Override
 	public MediaRequest saveMedia(MediaRequest mediaRequest) {
-		MediaGroup mediaGroup = this.mediaGroupRepository.findById(mediaRequest.getGroupId()).orElseThrow(() -> new ClientException("Klasör Bulunamadı"));
+		MediaGroupEntity mediaGroupEntity = this.mediaGroupRepository.findById(mediaRequest.getGroupId()).orElseThrow(() -> new ClientException("Klasör Bulunamadı"));
 
-		Media media = Media.builder()
+		MediaEntity mediaEntity = MediaEntity.builder()
 			.url(mediaRequest.getUrl())
 			.contentType(mediaRequest.getContentType())
 			.mediaType(mediaRequest.getMediaType())
 			.title(mediaRequest.getTitle())
 			.shared(mediaRequest.isShared())
-			.mediaGroup(mediaGroup)
+			.mediaGroupEntity(mediaGroupEntity)
 			.userId(identity.getUserId())
 
 			.build();
 
-		this.mediaRepository.save(media);
+		this.mediaRepository.save(mediaEntity);
 		return mediaRequest;
 	}
 
 	@Override
 	@Transactional
-	public List<Object> uploadMedia(Integer groupId, MediaContentType mediaType, List<MultipartFile> files) {
+	public List<Object> uploadMedia(Long groupId, MediaContentType mediaType, List<MultipartFile> files) {
 		List<Object> messages = new ArrayList<>();
 		for (MultipartFile file : files) {
 			Map<String, Object> messageItem = new HashMap<>();
@@ -108,7 +107,7 @@ public class MediaServiceImpl implements MediaService {
 				String title = originalFilename.substring(0, originalFilename.lastIndexOf("."));
 				String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
 
-				String fileName = UUID.randomUUID().toString().replace("-", "") + '.' + ext;
+				String fileName = RandomUtil.generateUUID().replace("-", "") + '.' + ext;
 
 				String path = mediaUploadPath + File.separator + identity.getUserId() + File.separator + mediaType.toString();
 				String url = File.separator + path + File.separator + fileName;

@@ -1,17 +1,17 @@
 package org.gelecekbilimde.scienceplatform.post.service;
 
-import org.gelecekbilimde.scienceplatform.exception.CategoryAlreadyExistException;
-import org.gelecekbilimde.scienceplatform.exception.CategoryNotFoundException;
-import org.gelecekbilimde.scienceplatform.post.dto.domain.CategoryDomain;
-import org.gelecekbilimde.scienceplatform.post.dto.request.CategoryCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.exception.CategoryAlreadyExistException;
+import org.gelecekbilimde.scienceplatform.post.exception.CategoryNotFoundException;
+import org.gelecekbilimde.scienceplatform.post.model.Category;
+import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
 
 import java.util.List;
 
 public interface CategoryService {
 
-	List<CategoryDomain> getCategories();
+	List<Category> getCategories();
 
-	CategoryDomain getCategory(Long categoryId);
+	Category getCategory(Long categoryId);
 
 	/**
 	 * Creates a new category.

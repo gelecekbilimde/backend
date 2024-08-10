@@ -1,11 +1,7 @@
 package org.gelecekbilimde.scienceplatform.post.repository;
 
-import org.gelecekbilimde.scienceplatform.post.model.PostMedia;
+import org.gelecekbilimde.scienceplatform.post.model.entity.PostMediaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
-public interface PostMediaRepository extends JpaRepository<PostMedia, Integer> {
-
-	Optional<PostMedia> findById(Integer id);
+public interface PostMediaRepository extends JpaRepository<PostMediaEntity, Long> {
 }

@@ -1,21 +1,21 @@
 package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.exception.NotFoundException;
-import org.gelecekbilimde.scienceplatform.post.dto.domain.PostDomain;
-import org.gelecekbilimde.scienceplatform.post.dto.request.PostManagerControl;
-import org.gelecekbilimde.scienceplatform.post.enums.Process;
-import org.gelecekbilimde.scienceplatform.post.mapper.PostDomainToPostProcessModelMapper;
-import org.gelecekbilimde.scienceplatform.post.mapper.PostManagerControlToPostProcessModelMapper;
-import org.gelecekbilimde.scienceplatform.post.mapper.PostModelToPostDomainMapper;
+import org.gelecekbilimde.scienceplatform.auth.model.Identity;
+import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
+import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
-import org.gelecekbilimde.scienceplatform.post.model.PostProcess;
+import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
+import org.gelecekbilimde.scienceplatform.post.model.entity.PostProcessEntity;
+import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.PostEntityToPostMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.PostManagerControlRequestToPostProcessEntityMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.PostToPostProcessEntityMapper;
+import org.gelecekbilimde.scienceplatform.post.model.request.PostManagerControlRequest;
 import org.gelecekbilimde.scienceplatform.post.repository.PostProcessRepository;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
-import org.gelecekbilimde.scienceplatform.settings.service.SettingService;
-import org.gelecekbilimde.scienceplatform.user.service.Identity;
+import org.gelecekbilimde.scienceplatform.post.util.PostUtil;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,69 +30,66 @@ class PostProcessServiceImpl implements PostProcessService {
 	private final PostRepository postRepository;
 	private final Identity identity;
 
-	private final SettingService settingService;
+	private final PostToPostProcessEntityMapper postToPostProcessEntityMapper = PostToPostProcessEntityMapper.initialize();
+	private final PostManagerControlRequestToPostProcessEntityMapper postManagerControlRequestToPostProcessEntityMapper = PostManagerControlRequestToPostProcessEntityMapper.initialize();
+	private final PostEntityToPostMapper postEntityToPostMapper = PostEntityToPostMapper.initialize();
 
-	private static final PostDomainToPostProcessModelMapper postDomainToPostProcessModelMapper = PostDomainToPostProcessModelMapper.initialize();
-	private static final PostManagerControlToPostProcessModelMapper postManagerControlToPostProcessModelMapper = PostManagerControlToPostProcessModelMapper.initialize();
-	private static final PostModelToPostDomainMapper postModelToPostDomain = PostModelToPostDomainMapper.initialize();
+	public void savePostProcess(Post post, boolean done) {
 
-	public void savePostProcess(PostDomain postDomain, boolean done) {
-
-		final PostProcess postProcess = postDomainToPostProcessModelMapper.mapForSaving(postDomain, identity.getUserId(), done);
-		postProcessRepository.save(postProcess);
+		final PostProcessEntity postProcessEntity = postToPostProcessEntityMapper.mapForSaving(post, identity.getUserId(), done);
+		postProcessRepository.save(postProcessEntity);
 	}
 
 	@Transactional
-	public void updatePostProcess(PostManagerControl postManagerControl) {
+	public void updatePostProcess(PostManagerControlRequest postManagerControlRequest) {
 
-		Optional<PostProcess> accessProcess = accessProcess(postManagerControl.getProcess(), postManagerControl.getPostId());
+		Optional<PostProcessEntity> accessProcess = accessProcess(postManagerControlRequest.getProcess(), postManagerControlRequest.getPostId());
 
 		if (accessProcess.isEmpty()) {
 			throw new ClientException("Post son kontrol aşaması için uygun değil");
 		}
 
-		PostProcess postProcess = accessProcess.get();
+		PostProcessEntity postProcessEntity = accessProcess.get();
 
-		if (postProcess.getUserId().equals(identity.getUserId()) && postManagerControl.getProcess() != Process.CREATOR_CONTROL) {
+		if (postProcessEntity.getUserId().equals(identity.getUserId()) && postManagerControlRequest.getProcess() != Process.CREATOR_CONTROL) {
 			throw new AuthorizationServiceException("Kendi postunuza işlem yapmazsınız");
 		}
 
-		if (postManagerControl.getProcess() == Process.LAST_CONTROL && !identity.hasPermission("admin:last:control")) {
+		if (postManagerControlRequest.getProcess() == Process.LAST_CONTROL && !identity.hasPermission("admin:last:control")) {
 			throw new AuthorizationServiceException("Son onay işlemini yapmaya yetkiniz yok");
 		}
 
 
-		this.updateControl(postProcess, postManagerControl);
+		this.updateControl(postProcessEntity, postManagerControlRequest);
 
-		switch (postManagerControl.getProcess()) {
-			case CONTROL -> this.control(postManagerControl, Process.LAST_CONTROL);
-			case LAST_CONTROL -> this.completeLastControl(postManagerControl);
+		switch (postManagerControlRequest.getProcess()) { // TODO : default case eklenmeli
+			case CONTROL -> this.control(postManagerControlRequest, Process.LAST_CONTROL);
+			case LAST_CONTROL -> this.completeLastControl(postManagerControlRequest);
 			case CREATOR_CONTROL -> this.completeCreatorControl();
 		}
 	}
 
-	private void updateControl(PostProcess postProcess, PostManagerControl postManagerControl) {
+	private void updateControl(PostProcessEntity postProcessEntity, PostManagerControlRequest postManagerControlRequest) {
 
-		if (postManagerControl.getHeader().isEmpty()) {
-			postManagerControl.setHeader(postProcess.getHeader());
+		if (postManagerControlRequest.getHeader().isEmpty()) {
+			postManagerControlRequest.setHeader(postProcessEntity.getHeader());
 		}
 
-		if (postManagerControl.getContent().isEmpty()) {
-			postManagerControl.setContent(postProcess.getContent());
+		if (postManagerControlRequest.getContent().isEmpty()) {
+			postManagerControlRequest.setContent(postProcessEntity.getContent());
 		}
 
 		//TODO: Category kontrolü yapılacak
 
-		Helper helper = new Helper();
-		postManagerControl.setSlug(helper.slugify(postManagerControl.getHeader()));
+		postManagerControlRequest.setSlug(PostUtil.slugging(postManagerControlRequest.getHeader()));
 
-		final PostProcess postProcessBuild = postManagerControlToPostProcessModelMapper.mapForSaving(postManagerControl, identity.getUserId(), true);
-		postProcessRepository.save(postProcessBuild);
+		final PostProcessEntity postProcessEntityBuild = postManagerControlRequestToPostProcessEntityMapper.mapForSaving(postManagerControlRequest, identity.getUserId(), true);
+		postProcessRepository.save(postProcessEntityBuild);
 
 	}
 
-	private Optional<PostProcess> accessProcess(Process currentProcess, String postId) {
-		PostProcess postProcess = postProcessRepository.getTopByPostIdOrderByCreatedAtDesc(postId)
+	private Optional<PostProcessEntity> accessProcess(Process currentProcess, String postId) {
+		PostProcessEntity postProcessEntity = postProcessRepository.getTopByPostIdOrderByCreatedAtDesc(postId)
 			.orElseThrow(() -> new ClientException("Postun aktif süreci bulunamadı"));
 
 		Process accessibleProcess = switch (currentProcess) {
@@ -102,60 +99,60 @@ class PostProcessServiceImpl implements PostProcessService {
 			default -> throw new ClientException("Yanlış bir status: " + postId + "--->" + currentProcess);
 		};
 
-		if (!postProcess.getProcess().equals(accessibleProcess)) {
+		if (!postProcessEntity.getProcess().equals(accessibleProcess)) {
 			return Optional.empty();
 		}
-		return Optional.of(postProcess);
+		return Optional.of(postProcessEntity);
 
 	}
 
 
-	private Post control(PostManagerControl postManagerControl, Process nextProcess) {
-		final Post post = postRepository.findById(postManagerControl.getPostId())
-			.orElseThrow(() -> new NotFoundException("Post not found! id:" + postManagerControl.getPostId()));
+	private PostEntity control(PostManagerControlRequest postManagerControlRequest, Process nextProcess) {
+		final PostEntity postEntity = postRepository.findById(postManagerControlRequest.getPostId())
+			.orElseThrow(() -> new NotFoundException("Post not found! id:" + postManagerControlRequest.getPostId()));
 
-		postManagerControl.setProcess(nextProcess);
-		post.setLastProcess(nextProcess);
+		postManagerControlRequest.setProcess(nextProcess);
+		postEntity.setLastProcess(nextProcess);
 
-		if (!postManagerControl.isCopyrightControl() || !postManagerControl.isTypoControl() || !postManagerControl.isDangerousControl()) {
-			postManagerControl.setProcess(Process.REJECT);
-			post.setLastProcess(Process.REJECT);
-			return post;
+		if (!postManagerControlRequest.isCopyrightControl() || !postManagerControlRequest.isTypoControl() || !postManagerControlRequest.isDangerousControl()) {
+			postManagerControlRequest.setProcess(Process.REJECT);
+			postEntity.setLastProcess(Process.REJECT);
+			return postEntity;
 		}
 
-		final PostDomain postDomain = postModelToPostDomain.map(post);
+		final Post post = postEntityToPostMapper.map(postEntity);
 
-		boolean isHeaderChanged = !postDomain.getHeader().equals(postManagerControl.getHeader());
-		boolean isContentChanged = !postDomain.getContent().equals(postManagerControl.getContent());
-		boolean isNameChanged = !postDomain.getCategory().getName().equals(postManagerControl.getCategory().getName());
+		boolean isHeaderChanged = !post.getHeader().equals(postManagerControlRequest.getHeader());
+		boolean isContentChanged = !post.getContent().equals(postManagerControlRequest.getContent());
+		boolean isNameChanged = !post.getCategoryEntity().getName().equals(postManagerControlRequest.getCategory().getName());
 		if (!isHeaderChanged || !isContentChanged || !isNameChanged) {
-			postManagerControl.setProcess(Process.CREATOR_CONTROL);
-			final PostProcess postProcessBuild = postManagerControlToPostProcessModelMapper.mapForSaving(postManagerControl, identity.getUserId(), true);
-			postProcessRepository.save(postProcessBuild);
-			post.setLastProcess(Process.CREATOR_CONTROL);
-			postRepository.save(post);
-			return post;
+			postManagerControlRequest.setProcess(Process.CREATOR_CONTROL);
+			final PostProcessEntity postProcessEntityBuild = postManagerControlRequestToPostProcessEntityMapper.mapForSaving(postManagerControlRequest, identity.getUserId(), true);
+			postProcessRepository.save(postProcessEntityBuild);
+			postEntity.setLastProcess(Process.CREATOR_CONTROL);
+			postRepository.save(postEntity);
+			return postEntity;
 		}
 
-		final PostProcess postProcessBuild = postManagerControlToPostProcessModelMapper.mapForSaving(postManagerControl, identity.getUserId(), true);
-		postProcessRepository.save(postProcessBuild);
-		postRepository.save(post);
+		final PostProcessEntity postProcessEntityBuild = postManagerControlRequestToPostProcessEntityMapper.mapForSaving(postManagerControlRequest, identity.getUserId(), true);
+		postProcessRepository.save(postProcessEntityBuild);
+		postRepository.save(postEntity);
 
-		return post;
+		return postEntity;
 	}
 
-	private void completeLastControl(PostManagerControl postManagerControl) {
+	private void completeLastControl(PostManagerControlRequest postManagerControlRequest) {
 
-		final Post post = control(postManagerControl, Process.PUBLISH);
+		final PostEntity postEntity = control(postManagerControlRequest, Process.PUBLISH);
 
-		if (post.getLastProcess() != Process.PUBLISH) {
+		if (postEntity.getLastProcess() != Process.PUBLISH) {
 			return;
 		}
 
 		//	final SettingsDomain settings = settingsService.getSettings();
 	}
 
-	private void completeCreatorControl() {
+	private void completeCreatorControl() { // TODO : bu metot doldurulduğu ve kullanıldığı zaman yazılmalı
 	}
 
 }
