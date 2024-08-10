@@ -1,15 +1,14 @@
 package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.exception.NotFoundException;
-import org.gelecekbilimde.scienceplatform.post.dto.domain.PostLikeDomain;
-import org.gelecekbilimde.scienceplatform.post.mapper.PostLikeRequestToPostLikeModelMapper;
-import org.gelecekbilimde.scienceplatform.post.model.Post;
+import org.gelecekbilimde.scienceplatform.auth.model.Identity;
+import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
 import org.gelecekbilimde.scienceplatform.post.model.PostLike;
+import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
+import org.gelecekbilimde.scienceplatform.post.model.entity.PostLikeEntity;
 import org.gelecekbilimde.scienceplatform.post.repository.PostLikeRepository;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostLikeToggleService;
-import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,42 +23,43 @@ class PostLikeToggleServiceImpl implements PostLikeToggleService {
 	private final PostLikeRepository postLikeRepository;
 	private final Identity identity;
 
-	private static final PostLikeRequestToPostLikeModelMapper postLikeRequestToPostLikeModel = PostLikeRequestToPostLikeModelMapper.initialize();
-
 	@Override
-	public PostLikeDomain toggleLikeOfPost(String id) {
+	public PostLike toggleLikeOfPost(String id) {
 
-		final Post post = postRepository.findById(id)
+		final PostEntity postEntity = postRepository.findById(id)
 			.orElseThrow(() -> new NotFoundException("Post not found! id:" + id));
 
-		Optional<PostLike> postLikeFromDatabase = postLikeRepository.findByPostIdAndUserId(id, identity.getUserId());
+		Optional<PostLikeEntity> postLikeFromDatabase = postLikeRepository.findByPostIdAndUserId(id, identity.getUserId());
 		if (postLikeFromDatabase.isPresent()) {
-			return this.unlikePost(post, postLikeFromDatabase.get());
+			return this.unlikePost(postEntity, postLikeFromDatabase.get());
 		}
 
-		return this.likePost(post);
+		return this.likePost(postEntity);
 	}
 
-	private PostLikeDomain unlikePost(Post post, PostLike postLikeFromDatabase) {
-		postLikeRepository.delete(postLikeFromDatabase);
+	private PostLike unlikePost(PostEntity postEntity, PostLikeEntity postLikeEntityFromDatabase) {
+		postLikeRepository.delete(postLikeEntityFromDatabase);
 
-		post.unlike();
-		postRepository.save(post);
+		postEntity.unlike();
+		postRepository.save(postEntity);
 
-		return PostLikeDomain.builder()
-			.likeCount(post.getLikeCount())
+		return PostLike.builder()
+			.likeCount(postEntity.getLikeCount())
 			.build();
 	}
 
-	private PostLikeDomain likePost(Post post) {
-		PostLike postLike = postLikeRequestToPostLikeModel.mapForSaving(post.getId(), identity.getUserId());
-		postLikeRepository.save(postLike);
+	private PostLike likePost(PostEntity postEntity) {
+		PostLikeEntity postLikeEntity = PostLikeEntity.builder()
+			.userId(identity.getUserId())
+			.postId(postEntity.getId())
+			.build();
+		postLikeRepository.save(postLikeEntity);
 
-		post.like();
-		postRepository.save(post);
+		postEntity.like();
+		postRepository.save(postEntity);
 
-		return PostLikeDomain.builder()
-			.likeCount(post.getLikeCount())
+		return PostLike.builder()
+			.likeCount(postEntity.getLikeCount())
 			.build();
 	}
 

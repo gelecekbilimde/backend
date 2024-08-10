@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.exception.LastYouTubeVideoNotFoundException;
 import org.gelecekbilimde.scienceplatform.notification.client.youtube.YoutubeClient;
-import org.gelecekbilimde.scienceplatform.notification.client.youtube.model.YoutubePlaylistItemsResponse;
-import org.gelecekbilimde.scienceplatform.notification.model.PushNotificationTopicRequest;
+import org.gelecekbilimde.scienceplatform.notification.client.youtube.model.response.YoutubePlaylistItemsResponse;
+import org.gelecekbilimde.scienceplatform.notification.exception.LastYouTubeVideoNotFoundException;
+import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationTopicRequest;
 import org.gelecekbilimde.scienceplatform.notification.service.PushNotificationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
+@Slf4j
 @Service
 @EnableScheduling
 @RequiredArgsConstructor
-@Slf4j
 class YoutubeNotificationScheduler {
 
 	@Value("${youtubeDataApi.playlistId}")

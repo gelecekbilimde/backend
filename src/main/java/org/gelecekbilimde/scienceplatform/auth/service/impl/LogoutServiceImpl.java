@@ -1,10 +1,9 @@
 package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.auth.service.InvalidTokenService;
 import org.gelecekbilimde.scienceplatform.auth.service.LogoutService;
-import org.gelecekbilimde.scienceplatform.config.JwtService;
-import org.gelecekbilimde.scienceplatform.user.service.Identity;
 import org.springframework.stereotype.Service;
 
 @Service
