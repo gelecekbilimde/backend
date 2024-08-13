@@ -33,10 +33,7 @@ build/
 ### VS Code ###
 .vscode/
 /runtime/
-/src/main/resources/certs/
 /src/main/resources/uploads/
 
 /src/main/resources/dev.properties
 /src/main/resources/serviceAccountKey.json
-
-*.key
