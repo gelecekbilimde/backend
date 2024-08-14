@@ -16,10 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -43,6 +42,8 @@ public class JwtService { // TODO : interface yazılmalı
 	private String publicKeyPath;
 
 	public static final String GUEST_USERNAME = "GUEST";
+
+	public static KeyPair keyPair = null;
 
 	public String generateToken(UserEntity userEntity, List<String> scope) {
 
@@ -117,14 +118,25 @@ public class JwtService { // TODO : interface yazılmalı
 		}
 	}
 
+	private void generateAuthKeyPair() throws NoSuchAlgorithmException {
+		KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+		generator.initialize(2048);
+		keyPair = generator.generateKeyPair();
+	}
 
 	private PublicKey getSignInPublicKey() {
 		try {
-			byte[] keyBytes = Files.readAllBytes(Paths.get(publicKeyPath));
-			String keyContent = new String(keyBytes);
-			keyContent = keyContent.replaceAll("\\s+|-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----", "");
+			String contentOfKey = null;
+			if(!Files.exists(Path.of(publicKeyPath))){
+				this.generateAuthKeyPair();
+				contentOfKey = keyPair.getPublic().toString();
+			}else{
+				byte[] keyBytes = Files.readAllBytes(Paths.get(publicKeyPath));
+				String keyContent = new String(keyBytes);
+				contentOfKey = keyContent.replaceAll("\\s+|-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----", "");
+			}
 
-			byte[] keyData = Base64.getDecoder().decode(keyContent);
+			byte[] keyData = Base64.getDecoder().decode(contentOfKey);
 
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			return keyFactory.generatePublic(new X509EncodedKeySpec(keyData));
@@ -135,11 +147,16 @@ public class JwtService { // TODO : interface yazılmalı
 
 	private PrivateKey getSignInPrivateKey() {
 		try {
-			byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyPath));
-			String keyContent = new String(keyBytes);
-			keyContent = keyContent.replaceAll("\\s+|-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----", "");
-
-			byte[] keyData = Base64.getDecoder().decode(keyContent);
+			String contentOfKey = null;
+			if(!Files.exists(Path.of(publicKeyPath))){
+				this.generateAuthKeyPair();
+				contentOfKey = keyPair.getPublic().toString();
+			}else {
+				byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyPath));
+				String keyContent = new String(keyBytes);
+				contentOfKey = keyContent.replaceAll("\\s+|-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----", "");
+			}
+			byte[] keyData = Base64.getDecoder().decode(contentOfKey);
 
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(keyData));
