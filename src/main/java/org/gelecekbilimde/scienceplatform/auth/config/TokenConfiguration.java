@@ -1,6 +1,7 @@
 package org.gelecekbilimde.scienceplatform.auth.config;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.auth.util.AuthKeyPairUtil;
 import org.gelecekbilimde.scienceplatform.common.util.FileUtil;
 import org.springframework.core.env.Environment;
@@ -11,6 +12,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Objects;
 
+@Slf4j
 @Getter
 @Component
 public class TokenConfiguration {
@@ -38,15 +40,26 @@ public class TokenConfiguration {
 
         boolean keyPairExists = FileUtil.isExists(privateKeyPath) && FileUtil.isExists(publicKeyPath);
         if (keyPairExists) {
-            this.privateKey = AuthKeyPairUtil.findAndConvertPrivateKey(privateKeyPath);
+
+			log.info("Key pair files exist");
+
+			this.privateKey = AuthKeyPairUtil.findAndConvertPrivateKey(privateKeyPath);
             this.publicKey = AuthKeyPairUtil.findAndConvertPublicKey(publicKeyPath);
+
+			log.info("Key pair converted");
+
             return;
         }
 
-        final KeyPair keyPair = AuthKeyPairUtil.generateKeyPair();
+		log.warn("Key pair files do not exist");
+
+		log.info("Key pair files are generating...");
+
+		final KeyPair keyPair = AuthKeyPairUtil.generateKeyPair();
         this.privateKey = keyPair.getPrivate();
         this.publicKey = keyPair.getPublic();
 
+		log.info("Key pair generated");
     }
 
 }
