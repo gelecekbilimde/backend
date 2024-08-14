@@ -3,53 +3,50 @@ package org.gelecekbilimde.scienceplatform.auth.config;
 import lombok.Getter;
 import org.gelecekbilimde.scienceplatform.auth.util.AuthKeyPairUtil;
 import org.gelecekbilimde.scienceplatform.common.util.FileUtil;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Objects;
 
+@Getter
 @Component
 public class TokenConfiguration {
 
-	@Getter
-	@Value("${application.security.jwt.expiration}")
-	private long tokenExpiration;
+    private final long tokenExpiration;
+    private final long refreshExpiration;
+    private final long guestTokenExpiration;
+    private final PrivateKey privateKey;
+    private final PublicKey publicKey;
 
-	@Getter
-	@Value("${application.security.jwt.refresh-token.expiration}")
-	private long refreshExpiration;
+    public TokenConfiguration(Environment environment) {
 
-	@Getter
-	@Value("${application.security.jwt.guest-token.expiration}")
-	private Long guestTokenExpiration;
+        this.tokenExpiration = Long.parseLong(
+                Objects.requireNonNull(environment.getProperty("application.security.jwt.expiration"))
+        );
+        this.refreshExpiration = Long.parseLong(
+                Objects.requireNonNull(environment.getProperty("application.security.jwt.refresh-token.expiration"))
+        );
+        this.guestTokenExpiration = Long.parseLong(
+                Objects.requireNonNull(environment.getProperty("application.security.jwt.guest-token.expiration"))
+        );
 
-	@Value("${application.security.jwt.private-key}")
-	private String privateKeyPath;
+        final String privateKeyPath = environment.getProperty("application.security.jwt.private-key");
+        final String publicKeyPath = environment.getProperty("application.security.jwt.public-key");
 
-	@Value("${application.security.jwt.public-key}")
-	private String publicKeyPath;
+        boolean keyPairExists = FileUtil.isExists(privateKeyPath) && FileUtil.isExists(publicKeyPath);
+        if (keyPairExists) {
+            this.privateKey = AuthKeyPairUtil.findAndConvertPrivateKey(privateKeyPath);
+            this.publicKey = AuthKeyPairUtil.findAndConvertPublicKey(publicKeyPath);
+            return;
+        }
 
-	@Getter
-	private final PrivateKey privateKey;
+        final KeyPair keyPair = AuthKeyPairUtil.generateKeyPair();
+        this.privateKey = keyPair.getPrivate();
+        this.publicKey = keyPair.getPublic();
 
-	@Getter
-	private final PublicKey publicKey;
-
-	public TokenConfiguration() {
-
-		boolean keyPairExists = FileUtil.isExists(this.privateKeyPath) && FileUtil.isExists(this.publicKeyPath);
-		if (keyPairExists) {
-			this.privateKey = AuthKeyPairUtil.findAndConvertPrivateKey(this.privateKeyPath);
-			this.publicKey = AuthKeyPairUtil.findAndConvertPublicKey(this.publicKeyPath);
-			return;
-		}
-
-		final KeyPair keyPair = AuthKeyPairUtil.generateKeyPair();
-		this.privateKey = keyPair.getPrivate();
-		this.publicKey = keyPair.getPublic();
-
-	}
+    }
 
 }
