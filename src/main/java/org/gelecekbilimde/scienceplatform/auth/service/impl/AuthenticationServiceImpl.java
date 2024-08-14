@@ -148,7 +148,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public TokenResponse generateGuestToken() {
-		var jwtToken = jwtService.generateGuestToken(JwtService.GUEST_USERNAME, scopeList(JwtService.GUEST_USERNAME));
+		var jwtToken = jwtService.generateGuestToken("GUEST", scopeList("GUEST"));
 
 		return TokenResponse
 			.builder()

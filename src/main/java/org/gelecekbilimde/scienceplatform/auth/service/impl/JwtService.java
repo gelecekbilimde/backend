@@ -6,44 +6,25 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.auth.config.TokenConfiguration;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.TokenClaims;
 import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.*;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService { // TODO : interface yazılmalı
 
-	@Value("${application.security.jwt.expiration}")
-	private long tokenExpiration;
-	@Value("${application.security.jwt.refresh-token.expiration}")
-	private long refreshExpiration;
-	@Value("${application.security.jwt.guest-token.expiration}")
-	private Long guestTokenExpiration;
-	@Value("${application.security.jwt.private-key}")
-	private String privateKeyPath;
-	@Value("${application.security.jwt.public-key}")
-	private String publicKeyPath;
-
-	public static final String GUEST_USERNAME = "GUEST";
-
-	public static KeyPair keyPair = null;
+	private final TokenConfiguration tokenConfiguration;
 
 	public String generateToken(UserEntity userEntity, List<String> scope) {
 
@@ -67,7 +48,7 @@ public class JwtService { // TODO : interface yazılmalı
 		Map<String, Object> extraClaims,
 		UserEntity userEntity
 	) {
-		return buildToken(extraClaims, userEntity.getUsername(), tokenExpiration);
+		return buildToken(extraClaims, userEntity.getUsername(), tokenConfiguration.getTokenExpiration());
 	}
 
 
@@ -75,7 +56,7 @@ public class JwtService { // TODO : interface yazılmalı
 		HashMap<String, Object> claim = new HashMap<>();
 		claim.put(TokenClaims.ROLE_ID.getValue(), userEntity.getRoleId());
 
-		return buildToken(claim, userEntity.getUsername(), refreshExpiration);
+		return buildToken(claim, userEntity.getUsername(), tokenConfiguration.getRefreshExpiration());
 	}
 
 
@@ -84,7 +65,7 @@ public class JwtService { // TODO : interface yazılmalı
 		claim.put(TokenClaims.FULL_NAME.getValue(), TokenClaims.GUEST_FULL_NAME.getValue());
 		claim.put(TokenClaims.ROLE_NAME.getValue(), role);
 		claim.put(TokenClaims.SCOPE.getValue(), scope);
-		return buildToken(claim, role, guestTokenExpiration);
+		return buildToken(claim, role, tokenConfiguration.getGuestTokenExpiration());
 	}
 
 	private String buildToken(
@@ -101,7 +82,7 @@ public class JwtService { // TODO : interface yazılmalı
 			.setIssuedAt(new Date(System.currentTimeMillis()))
 			.setExpiration(new Date(System.currentTimeMillis() + expiration))
 			.setIssuer(TokenClaims.ISSUER.getValue())
-			.signWith(getSignInPrivateKey(), SignatureAlgorithm.RS256)
+			.signWith(tokenConfiguration.getPrivateKey(), SignatureAlgorithm.RS256)
 			.compact();
 	}
 
@@ -109,7 +90,7 @@ public class JwtService { // TODO : interface yazılmalı
 		try {
 			return Jwts
 				.parserBuilder()
-				.setSigningKey(getSignInPublicKey())
+				.setSigningKey(tokenConfiguration.getPublicKey())
 				.build()
 				.parseClaimsJws(token)
 				.getBody();
@@ -118,51 +99,4 @@ public class JwtService { // TODO : interface yazılmalı
 		}
 	}
 
-	private void generateAuthKeyPair() throws NoSuchAlgorithmException {
-		KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-		generator.initialize(2048);
-		keyPair = generator.generateKeyPair();
-	}
-
-	private PublicKey getSignInPublicKey() {
-		try {
-			String contentOfKey = null;
-			if(!Files.exists(Path.of(publicKeyPath))){
-				this.generateAuthKeyPair();
-				contentOfKey = keyPair.getPublic().toString();
-			}else{
-				byte[] keyBytes = Files.readAllBytes(Paths.get(publicKeyPath));
-				String keyContent = new String(keyBytes);
-				contentOfKey = keyContent.replaceAll("\\s+|-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----", "");
-			}
-
-			byte[] keyData = Base64.getDecoder().decode(contentOfKey);
-
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			return keyFactory.generatePublic(new X509EncodedKeySpec(keyData));
-		} catch (Exception e) {
-			throw new ServerException("Public Key read error: " + e.getMessage());
-		}
-	}
-
-	private PrivateKey getSignInPrivateKey() {
-		try {
-			String contentOfKey = null;
-			if(!Files.exists(Path.of(publicKeyPath))){
-				this.generateAuthKeyPair();
-				contentOfKey = keyPair.getPublic().toString();
-			}else {
-				byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyPath));
-				String keyContent = new String(keyBytes);
-				contentOfKey = keyContent.replaceAll("\\s+|-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----", "");
-			}
-			byte[] keyData = Base64.getDecoder().decode(contentOfKey);
-
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(keyData));
-		} catch (Exception e) {
-			throw new ServerException("Private Key read error: " + e.getMessage());
-		}
-
-	}
 }
