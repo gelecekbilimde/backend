@@ -20,41 +20,16 @@ Gelecek bilimde topluluğu, Bilim iletişimi
 ```
 
 
-Secret Key işlemleri 
-``` bash
-mkdir resource/certs
-```
-``` bash
-openssl genrsa -out privatepair.key 2048
-```
-
-``` bash
-openssl rsa -in privatepair.key -pubout -out public.key
-```
-
-``` bash
-openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in privatepair.key -out private.key
-```
-
-``` bash
-rm privatepair.key
-```
-
-``` bash
-chmod 660 private.key public.key
-```
-
-
 ENV Yapılandırma
 
 ```bash
-  cp resource/dev.properties.example dev.properties
+  cp resources/dev.properties.example dev.properties
 ```
 dev.properties dosyasını kopyaladıktan sonra resource olarak serve edilecek klsörün bulunduğu dizin application.yml dosyasının env değerine yazılır.
 ardından dev.properties bilgileri doldurulduktan sonra proje run edilir.
 
 db seeding 
-resource/db/seed.sql çaliştırılmalı
+resources/db/seed.sql çalıştırılmalı
 
 
 ## İlişkili Projeler
