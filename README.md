@@ -31,6 +31,8 @@ ardından dev.properties bilgileri doldurulduktan sonra proje run edilir.
 db seeding 
 resources/db/seed.sql çalıştırılmalı
 
+## İlişkili Postman Collection
+https://www.postman.com/gelecek-bilimde-team/workspace/gelecek-bilimde/collection/37702250-8bfe54f1-1864-410a-b960-ab4e7122dd3e?action=share&creator=37702250
 
 ## İlişkili Projeler
 
