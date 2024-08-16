@@ -27,6 +27,16 @@ Sonrasında uygulama run edilerek ilerlenebilir.
   docker compose up -d --build
 ```
 
+Docker Container'larını kaldırmak için aşağıdaki komut kullanılabilir.
+
+```bash
+  docker compose down -v
+```
+
+> -v flag'i ile birlikte kullanıldığında volume'ler de silinir.
+> Volume'lerin tamamen silinmesini istiyorsanız uygulama dizini içerisindeki `docker` dizinini de silmeniz
+> gerekmektedir.
+
 ---
 
 ## Commit Mesajları
