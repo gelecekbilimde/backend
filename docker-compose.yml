@@ -7,7 +7,7 @@ services:
     image: redislabs/redisearch
     command: --save 60 1 --loglevel warning --appendonly yes --loadmodule /usr/lib/redis/modules/redisearch.so
     ports:
-      - 6379:6379
+      - "6379:6379"
     volumes:
       - redisvolume:/usr/local/etc/redis
     networks:
@@ -34,9 +34,9 @@ services:
     image: postgres:alpine3.18
     container_name: pg
     environment:
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: 5432
     volumes:
       - postgresvolume:/var/lib/postgresql/data
     ports:
