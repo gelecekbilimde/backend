@@ -37,3 +37,5 @@ build/
 
 /src/main/resources/dev.properties
 /src/main/resources/serviceAccountKey.json
+
+/docker
