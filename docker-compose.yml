@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 
 services:
 
@@ -7,16 +7,16 @@ services:
     image: redislabs/redisearch
     command: --save 60 1 --loglevel warning --appendonly yes --loadmodule /usr/lib/redis/modules/redisearch.so
     ports:
-      - 6379:6379
+      - "6379:6379"
     volumes:
-      - redisvolume:/usr/local/etc/redis
+      - ./docker/redis:/usr/local/etc/redis
     networks:
       - app-network
   elasticsearch:
     image: elasticsearch:8.1.0
     container_name: es
     volumes:
-      - elasticsearchvolume:/usr/share/elasticsearch/data
+      - ./docker/elasticsearch:/usr/share/elasticsearch/data
     environment:
       - "http.cors.enabled=true"
       - "http.cors.allow-origin=http://localhost:1358,http://127.0.0.1:1358"
@@ -34,20 +34,16 @@ services:
     image: postgres:alpine3.18
     container_name: pg
     environment:
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: 5433
     volumes:
-      - postgresvolume:/var/lib/postgresql/data
+      - ./docker/postgresql:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - app-network
 
 networks:
   app-network:
     driver: bridge
-volumes:
-  elasticsearchvolume:
-  postgresvolume:
-  redisvolume:
