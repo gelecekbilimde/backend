@@ -13,15 +13,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 class UserEmailServiceImpl implements UserEmailService {
 
-	@Value("${application.base-url}")
-	public String baseUrl;
+	@Value("${application.front-end.url}")
+	public String frontEndUrl;
 
 	private final EmailService emailService;
 
 	@Override
 	public void sendVerifyMessage(String email, String verificationId) {
 		Map<String, String> templateVariables = Map.of(
-			"BASE_URL", baseUrl + "/auth/verify?verificationId=" + verificationId // todo frontendten url istenecek
+			"BASE_URL", frontEndUrl + "/auth/verify?verificationId=" + verificationId // todo frontendten url istenecek
 		);
 		EmailSendRequest emailSendRequest = EmailSendRequest.builder()
 			.to(email)
