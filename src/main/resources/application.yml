@@ -1,32 +1,31 @@
-env: classpath:dev.properties
+server:
+  servlet:
+    context-path: ${CONTEXT_PATH:/api}
 
 spring:
-  config:
-    import: ${env:classpath:dev.properties}
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USER}
-    password: ${DATABASE_PASSWORD}
-    driver-class-name: ${DATABASE_DRIVER}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate:
-      ddl-auto: ${DATABASE_DDL_AUTO:validate}
-    database-platform: ${DATABASE_PLATFORM}
-    database: ${DATABASE}
-    show-sql: ${SHOW_SQL}
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   flyway:
     baseline-on-migrate: true
     enabled: true
     baseline-description: "init"
     baseline-version: 0
   mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:noreplygelecekbilimde@gmail.com}
+    password: ${MAIL_PASSWORD:ffctoaojqnivhkbd}
     properties:
       mail:
         transport:
@@ -36,36 +35,32 @@ spring:
           starttls:
             enable: true
 
-server:
-  port: ${SERVER_PORT}
-  servlet:
-    context-path: ${CONTEXT_PATH}
-
 file:
   upload:
     media:
-      path: ${MEDIA_UPLOAD_PATH}
-      size: ${MEDIA_UPLOAD_SIZE}
+      path: ${MEDIA_UPLOAD_PATH:src/main/resources/uploads/medias}
+      size: ${MEDIA_UPLOAD_SIZE:10485760}
 
 application:
-  base-url: ${BASE_URL}
+  front-end:
+    url: ${FRONT_END_URL:http://localhost:3000}
   security:
     jwt:
-      private-key: ${RESOURCE_PATH}${PRIVATE_KEY_PATH}
-      public-key: ${RESOURCE_PATH}${PUBLIC_KEY_PATH}
-      expiration: ${TOKEN_EXPIRE_MILLISECOND}
+      private-key: ${PRIVATE_KEY_PATH:src/main/resources/certs/private.key}
+      public-key: ${PUBLIC_KEY_PATH:src/main/resources/certs/public.key}
+      expiration: ${TOKEN_EXPIRE_MILLISECOND:86400000}
       refresh-token:
-        expiration: ${REFRESH_TOKEN_EXPIRE_MILLISECOND}
+        expiration: ${REFRESH_TOKEN_EXPIRE_MILLISECOND:604800000}
       guest-token:
-        expiration: ${GUEST_TOKEN_EXPIRE_MILLISECOND}
+        expiration: ${GUEST_TOKEN_EXPIRE_MILLISECOND:604800000}
 
 firebase:
   service-account:
-    path: ${RESOURCE_PATH}${FIREBASE_SERVICE_ACCOUNT_FILE}
-    database-url: ${FIREBASE_DATABASE_URL}
+    path: ${FIREBASE_SERVICE_ACCOUNT_FILE:src/main/resources/serviceAccountKey.json}
+    database-url: ${FIREBASE_DATABASE_URL:https://push-notification-projec-86e67-default-rtdb.firebaseio.com}
 
 youtubeDataApi:
-  playlistId: ${YOUTUBE_DATA_API_PLAYLIST_ID}
-  key: ${YOUTUBE_DATA_API_KEY}
-  url: ${YOUTUBE_DATA_API_URL}
+  playlistId: ${YOUTUBE_DATA_API_PLAYLIST_ID:UU03cpKIZShIWoSBhfVE5bog}
+  key: ${YOUTUBE_DATA_API_KEY:AIzaSyCdbZ_yQQbk6NpDVpObUlOvb7g-bv3Tgtw}
+  url: ${YOUTUBE_DATA_API_URL:https://www.googleapis.com/youtube/v3}
 
