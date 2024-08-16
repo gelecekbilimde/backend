@@ -9,14 +9,14 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redisvolume:/usr/local/etc/redis
+      - ./docker/redis:/usr/local/etc/redis
     networks:
       - app-network
   elasticsearch:
     image: elasticsearch:8.1.0
     container_name: es
     volumes:
-      - elasticsearchvolume:/usr/share/elasticsearch/data
+      - ./docker/elasticsearch:/usr/share/elasticsearch/data
     environment:
       - "http.cors.enabled=true"
       - "http.cors.allow-origin=http://localhost:1358,http://127.0.0.1:1358"
@@ -38,7 +38,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: 5432
     volumes:
-      - postgresvolume:/var/lib/postgresql/data
+      - ./docker/postgresql:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -47,7 +47,3 @@ services:
 networks:
   app-network:
     driver: bridge
-volumes:
-  elasticsearchvolume:
-  postgresvolume:
-  redisvolume:
