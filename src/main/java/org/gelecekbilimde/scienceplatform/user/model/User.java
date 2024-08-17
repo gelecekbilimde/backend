@@ -9,6 +9,7 @@ import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +27,6 @@ public class User {
 	private String name;
 	private String lastName;
 	private UserStatus status;
+	private List<User> followings;
 
 }
