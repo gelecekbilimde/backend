@@ -10,6 +10,7 @@ import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
 import org.gelecekbilimde.scienceplatform.user.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,5 +44,13 @@ public class UserServiceImpl implements UserService {
 			.followedUserId(userEntity.getId())
 			.build();
 		userFollowersRepository.save(userFollowerEntity);
+	}
+
+	public List<UserEntity> getFollowings(String id){
+		return this.userFollowersRepository.findFollowersByUserId(id);
+	}
+
+	public List<UserEntity> getFollowers(String id){
+		return this.userFollowersRepository.findFollowingsByUserId(id);
 	}
 }
