@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,6 +44,8 @@ class SecurityConfiguration {
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(customizer -> customizer
 				.requestMatchers("/api/v1/version", "/api/v1/auth/**", "/api/v1/category/**")
+				.permitAll()
+				.requestMatchers(HttpMethod.GET,"/api/v1/users/*/followers","/api/v1/users/*/followings")
 				.permitAll()
 				.anyRequest()
 				.authenticated())

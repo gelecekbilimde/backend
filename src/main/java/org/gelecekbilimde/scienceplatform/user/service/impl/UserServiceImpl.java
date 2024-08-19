@@ -3,8 +3,10 @@ package org.gelecekbilimde.scienceplatform.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
+import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserFollowerEntity;
+import org.gelecekbilimde.scienceplatform.user.model.mapper.UserEntityToUserMapper;
 import org.gelecekbilimde.scienceplatform.user.repository.UserFollowersRepository;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
 import org.gelecekbilimde.scienceplatform.user.service.UserService;
@@ -20,6 +22,7 @@ public class UserServiceImpl implements UserService {
 	private final Identity identity;
 	private final UserRepository userRepository;
 	private final UserFollowersRepository userFollowersRepository;
+	private final UserEntityToUserMapper userEntityToUserMapper = UserEntityToUserMapper.initialize();
 
 	@Override
 	public void followToggle(String id) {
@@ -46,11 +49,17 @@ public class UserServiceImpl implements UserService {
 		userFollowersRepository.save(userFollowerEntity);
 	}
 
-	public List<UserEntity> getFollowings(String id){
-		return this.userFollowersRepository.findFollowersByUserId(id);
+	public List<User> getFollowings(String id){
+		final UserEntity userEntity = userRepository.findById(id)
+			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
+
+		return userEntityToUserMapper.map(userEntity.getFollowings());
 	}
 
-	public List<UserEntity> getFollowers(String id){
-		return this.userFollowersRepository.findFollowingsByUserId(id);
+	public List<User> getFollowers(String id){
+		final UserEntity userEntity = userRepository.findById(id)
+			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
+
+		return userEntityToUserMapper.map(userEntity.getFollowers());
 	}
 }
