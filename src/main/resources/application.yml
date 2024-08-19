@@ -1,7 +1,3 @@
-server:
-  servlet:
-    context-path: ${CONTEXT_PATH:/api}
-
 spring:
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/postgres}
