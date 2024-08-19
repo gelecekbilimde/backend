@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user/ticket-message")
+@RequestMapping("/api/v1/user/ticket-message")
 class TicketUserMessageController {
 
 	private final TicketMessageService ticketService;
