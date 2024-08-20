@@ -1,13 +1,12 @@
 package org.gelecekbilimde.scienceplatform.user.model.request;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
+import lombok.Getter;
+import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
-public class RemoveFollower extends PagingRequest {
+@Getter
+@Setter
+public class RemoveFollower {
 
-	public String followerId;
+	private String followerId;
 
 }

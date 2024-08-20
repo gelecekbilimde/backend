@@ -65,8 +65,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public void removeFollower(RemoveFollower request){
-		final UserEntity userEntity = userRepository.findById(request.followerId)
-			.orElseThrow(() -> new NotFoundException("User could not found! id:" + request.followerId));
+		final UserEntity userEntity = userRepository.findById(request.getFollowerId())
+			.orElseThrow(() -> new NotFoundException("User could not found! id:" + request.getFollowerId()));
 
 		final UserFollowerEntity userFollowerEntity = userFollowersRepository.findByFollowedUserIdAndFollowerUserId(identity.getUserId(), userEntity.getId())
 			.orElseThrow(() -> new NotFoundException("Follower and followed could not found! id:" + userEntity.getId() + identity.getUserId()));
