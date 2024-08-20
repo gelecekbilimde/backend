@@ -31,6 +31,22 @@ spring:
           starttls:
             enable: true
 
+info:
+  application:
+    name: '@project.name@'
+    description: '@project.description@'
+    version: '@project.version@'
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+      base-path: /public/actuator
+
 file:
   upload:
     media:
