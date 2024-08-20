@@ -7,6 +7,7 @@ import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserFollowerEntity;
 import org.gelecekbilimde.scienceplatform.user.model.mapper.UserEntityToUserMapper;
+import org.gelecekbilimde.scienceplatform.user.model.request.RemoveFollower;
 import org.gelecekbilimde.scienceplatform.user.repository.UserFollowersRepository;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
 import org.gelecekbilimde.scienceplatform.user.service.UserService;
@@ -61,5 +62,15 @@ public class UserServiceImpl implements UserService {
 			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
 
 		return userEntityToUserMapper.map(userEntity.getFollowers());
+	}
+
+	public void removeFollower(RemoveFollower request){
+		final UserEntity userEntity = userRepository.findById(request.followerId)
+			.orElseThrow(() -> new NotFoundException("User could not found! id:" + request.followerId));
+
+		final UserFollowerEntity userFollowerEntity = userFollowersRepository.findByFollowedUserIdAndFollowerUserId(identity.getUserId(), userEntity.getId())
+			.orElseThrow(() -> new NotFoundException("Follower and followed could not found! id:" + userEntity.getId() + identity.getUserId()));
+
+		userFollowersRepository.delete(userFollowerEntity);
 	}
 }
