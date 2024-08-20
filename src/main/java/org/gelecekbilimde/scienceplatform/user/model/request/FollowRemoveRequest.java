@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RemoveFollower {
+public class FollowRemoveRequest {
 
 	private String followerId;
 
