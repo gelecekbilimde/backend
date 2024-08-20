@@ -11,7 +11,7 @@ import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_followers")
-public class UserFollowerEntity extends BaseEntity {
+public class UserFollowEntity extends BaseEntity {
 
 	@Id
 	@Column(name = "id")
