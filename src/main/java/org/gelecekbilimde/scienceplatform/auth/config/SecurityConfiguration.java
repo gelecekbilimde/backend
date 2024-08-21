@@ -43,6 +43,7 @@ class SecurityConfiguration {
 		httpSecurity.cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(customizer -> customizer
+				.requestMatchers(HttpMethod.GET, "/public/**").permitAll()
 				.requestMatchers("/api/v1/version", "/api/v1/auth/**", "/api/v1/category/**")
 				.permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/users/*/followers", "/api/v1/users/*/followings")
