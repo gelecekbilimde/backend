@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.response.Response;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.mapper.UserToUserFollowResponseMapper;
-import org.gelecekbilimde.scienceplatform.user.model.request.FollowRemoveRequest;
+import org.gelecekbilimde.scienceplatform.user.model.request.UnfollowRequest;
 import org.gelecekbilimde.scienceplatform.user.model.response.UserFollowResponse;
 import org.gelecekbilimde.scienceplatform.user.service.UserFollowService;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-class UserController {
+class UserFollowController {
 
 	private final UserFollowService userFollowService;
 	private final UserToUserFollowResponseMapper userToUserFollowResponseMapper = UserToUserFollowResponseMapper.initialize();
@@ -27,7 +27,7 @@ class UserController {
 	}
 
 	@PostMapping("/followers/remove")
-	public Response<Void> removeFollowers(@RequestBody @Valid FollowRemoveRequest request) {
+	public Response<Void> removeFollowers(@RequestBody @Valid UnfollowRequest request) {
 		this.userFollowService.removeFollower(request);
 		return Response.NO_CONTENT;
 	}
