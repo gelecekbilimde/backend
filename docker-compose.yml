@@ -18,13 +18,10 @@ services:
     volumes:
       - ./docker/elasticsearch:/usr/share/elasticsearch/data
     environment:
-      - "http.cors.enabled=true"
-      - "http.cors.allow-origin=http://localhost:1358,http://127.0.0.1:1358"
+      - "xpack.security.enabled=false"
+      - "xpack.security.transport.ssl.enabled=false"
+      - "xpack.security.http.ssl.enabled=false"
       - "discovery.type=single-node"
-      - "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization"
-      - "http.cors.allow-credentials=true"
-      - "xpack.security.enabled: true"
-      - "elasticsearch.shardTimeout: 5m"
     ports:
       - "9200:9200"
       - "9300:9300"
