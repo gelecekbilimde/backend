@@ -45,7 +45,7 @@ class SecurityConfiguration {
 			.authorizeHttpRequests(customizer -> customizer
 				.requestMatchers("/api/v1/version", "/api/v1/auth/**", "/api/v1/category/**")
 				.permitAll()
-				.requestMatchers(HttpMethod.GET,"/api/v1/users/*/followers","/api/v1/users/*/followings")
+					.requestMatchers(HttpMethod.GET, "/api/v1/users/*/followers", "/api/v1/users/*/followings")
 				.permitAll()
 				.anyRequest()
 				.authenticated())
