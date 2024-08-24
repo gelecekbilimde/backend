@@ -1,4 +1,4 @@
-# Gelecek Bilimde Topluluğu Bilim İletişimi Platformu
+# Gelecek Bilimde Community Science Communication Platform
 
 [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)
 
@@ -6,11 +6,11 @@
 
 ---
 
-## İlişkili Postman Collection
+## Postman Collection: Gelecek Bilimde API
 
 https://www.postman.com/gelecek-bilimde-team/workspace/gelecek-bilimde/collection/37702250-8bfe54f1-1864-410a-b960-ab4e7122dd3e?action=share&creator=37702250
 
-## İlişkili Projeler
+## Related Projects
 
 [Frontend](https://github.com/gelecekbilimde/gelecek-bilimde-frontend)
 
@@ -18,84 +18,26 @@ https://www.postman.com/gelecek-bilimde-team/workspace/gelecek-bilimde/collectio
 
 ---
 
-## Local Ortam Kurulumu
+## Local Environment Setup
 
-Aşağıdaki komut çalıştırılarak uygulamanın bağımlılıkları Docker üzerinde ayağa kaldırılabilir.
-Sonrasında uygulama run edilerek ilerlenebilir.
+The following command can be executed to stand up the application's dependencies on Docker.
+Then the application can be run and proceed.
 
 ```bash
   docker compose up -d --build
 ```
 
-Docker Container'larını kaldırmak için aşağıdaki komut kullanılabilir.
+The following command can be used to remove Docker Containers.
 
 ```bash
   docker compose down -v
 ```
 
-> -v flag'i ile birlikte kullanıldığında volume'ler de silinir.
-> Volume'lerin tamamen silinmesini istiyorsanız uygulama dizini içerisindeki `docker` dizinini de silmeniz
-> gerekmektedir.
+> When used with the -v flag, volumes are also deleted.
+ If you want the volumes to be deleted completely, you must also delete the `docker` directory in the application directory.
+ is required.
+
 
 ---
 
-## Commit Mesajları
 
-### Git mejlarında bir starndartda yazmak için en başına commit ne ile alakalı ise onun başlığını yazarız. (feat,imp,fix) Genellikle bir commitin içerisnde tek tip başlık olması daha düzenli versiyon yönetimi için önemlidir.
-
-```text
-feat     : Yeni bir özellik geliştirildiğini bildirmek için. Açılımı : feature 
-imp      : Var olan bir özellik üzerinde refactor yapıldıysa veya ek bir alt özellik geliştirildiyse kullanılır. Açılımı : improve
-fix      : Var olan bir özellikte hata düzeltmelerini belirtmek için (hotfix gibi durumlarıda içerir) Açılımı:fix
-refactor : Var olan bir geliştirme içerisinde kod iyileştirmesi yapıldığını belirtmek için kullanılır. Açılımı: refactor
-```
-
-### Örnek Git Mesajı;
-
-```text
-feat : Post servisi geliştirldi
-imp  : Api dönüşlerine timestamp eklendi
-fix  : Kullanıcı kendi yorumunu düzenlerken yetki hatası sorunu düzeltildi
-```
-
-## Örnek Api Dönüşleri
-
-### Başarılı (200 , 201, 207)
-
-``` json
-{
-    "statusText": "OK",
-    "status": 200,
-    "list": {
-        "message": "API version: 0.0.1"
-    },
-    "count": 1,
-    "timestamp": "2023-05-31 21:58:45",
-    "request": {
-        "args": {
-            "v":"v1"
-        },
-        "path": "http://localhost:8057/api/version",
-        "params": {
-            "param1": "44",
-            "param2": "123"
-        }
-    },
-    "responseCode": "43e9f812-8a7c-49f9-812e-024ee0705f9b"
-}
-```
-
-### Başarısız (400, 401, 404, 405, 422, 500, 503)
-
-``` json
-{
-    "path": "/api/version",
-    "message": "Versiyon Alınamadı",
-    "status": 400,
-    "statusText": "BAD_REQUEST",
-    "method": "GET",
-    "args": {},
-    "errorCode": "0ada5a5c-6834-4df6-9452-ddf6c64b03a8",
-    "timestamp": "2023-05-31 22:19:07"
-}
-```
