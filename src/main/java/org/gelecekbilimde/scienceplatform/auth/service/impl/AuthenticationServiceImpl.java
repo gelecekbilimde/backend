@@ -1,5 +1,6 @@
 package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
+import com.google.common.base.VerifyException;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundException;
@@ -121,9 +122,10 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		try {
 
 			UserEntity userEntity = userRepository.findByEmail(request.getEmail())
-				.filter(UserEntity::isVerified)
 				.orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
-
+			if (!userEntity.isVerified()){
+				throw new VerifyException("user must do the verification process: " + request.getEmail());
+			}
 			if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
 				throw new ClientException("Hatalı Eposta veya Şifre");
 			}
