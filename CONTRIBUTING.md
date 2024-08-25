@@ -4,8 +4,8 @@ Thank you for your interest in contributing to the Gelecek Bilimde project! We a
 
 ## How to Contribute
 
-1. **Fork the Repository**
-    - Visit our GitHub repository and fork it to your GitHub account.
+1.  **Clone the Repository**
+    - Visit our GitHub repository and clone it to your local environment.
     - In order to set up the development environment you can read the [README.md](https://github.com/gelecekbilimde/gelecekbilimde-backend/blob/main/README.md) documentation.
 
 2. **Create a New Branch**
@@ -67,6 +67,21 @@ Code reviews are a crucial part of our development process to ensure code qualit
 - **Detailed Feedback**: When identifying issues, provide a detailed explanation of the problem and, if possible, suggest resources for the contributor to learn from or reference.
     - Example: "This method could be optimized for performance. Consider reviewing the Java Streams documentation here."
 - **Resource Sharing**: If you know of articles, documentation, or examples that can help the contributor improve their code, share them in your review comments.
+
+
+## Code Cleanliness
+
+To maintain clean and understandable code, we encourage the following practices:
+
+### Avoiding TODO Comments
+
+Instead of leaving TODO comments in the codebase, consider converting them into GitHub issues. This helps in tracking and managing tasks more effectively. Once an issue is created, you can discuss and prioritize it accordingly. After addressing the issue, you can close it, ensuring that our code remains free of unnecessary TODOs.
+
+### Minimal Use of Comments
+
+We aim for self-explanatory code that minimizes the need for comments. Instead of explaining what the code does, focus on writing code that is clear and expressive. Comments should be used sparingly and only when necessary to explain why certain decisions were made or to clarify complex logic.
+
+By adhering to these practices, we can maintain a cleaner and more maintainable codebase.
 
 ## Java Spring Boot Coding Guidelines
 
@@ -167,11 +182,21 @@ To maintain a consistent commit history, start your commit messages with a keywo
 - **imp**: Use for improvements or refactoring of existing features.
 - **fix**: Use for bug fixes (including hotfixes).
 - **refactor**: Use for code optimization or restructuring without changing functionality.
+- **docs**: Documentation related changes (e.g., updating README.md, adding comments)
+- **style**: Code style changes (e.g., formatting, semicolons)
+- **test** Adding or modifying tests
+- **chore** Routine tasks, maintenance, or tooling changes that don’t affect the main codebase
+- **perf** Performance improvements
+- **revert** Reverting a previous commit
 
 ### Example Commit Messages:
-- `feat: Implemented the Post service`
-- `imp: Added timestamp to API responses`
-- `fix: Resolved permission error when editing user's comment`
+- `#1 | feat: Implemented the Post service`
+- `#2 | imp: Added timestamp to API responses`
+- `#3 | fix: Resolved permission error when editing user's comment`
+
+ ### Pull Request Title Standard
+- For pull requests, include the issue number and a brief description of the change:
+- Use #<issue_number> | prefix followed by the commit type and a concise description.
 
 ## API Response Examples
 
