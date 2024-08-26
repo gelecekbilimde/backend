@@ -3,8 +3,10 @@ package org.gelecekbilimde.scienceplatform.auth.service.impl;
 import com.google.common.base.VerifyException;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundException;
-import org.gelecekbilimde.scienceplatform.auth.exception.UserVerifyException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationAlreadyCompletedException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationIsNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.PermissionEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.TokenClaims;
@@ -166,10 +168,10 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
 		final String username = (String) claims.get(TokenClaims.SUBJECT.getValue());
 		final UserEntity userEntity = this.userRepository.findByEmail(username)
-			.orElseThrow(() -> new ClientException("Kullanıcı Bulunamadı")); // TODO : UserNotFoundException yazılmalı
+			.orElseThrow(UserNotFoundException::new);
 
 		RoleEntity roleEntity = roleRepository.findById(userEntity.getRoleId())
-			.orElseThrow(() -> new ServerException("User Scope has a problem")); // TODO : RoleNotFoundException yazılmalı
+			.orElseThrow(() -> new RoleNotFoundException("User Scope has a problem"));
 		List<String> scope = scopeList(roleEntity.getId());
 
 		var jwtToken = jwtService.generateToken(userEntity, scope);
@@ -192,10 +194,10 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
 		UserVerificationEntity userVerificationEntity = userVerificationRepository
 			.findById(userVerifyRequest.getVerificationId())
-			.orElseThrow(() -> new UserVerifyException("Verification ID is not valid!")); // TODO : UserVerificationIsNotFoundException yazılmalı
+			.orElseThrow(() -> new UserVerificationIsNotFoundException("Verification ID is not valid!"));
 
 		if (userVerificationEntity.isCompleted()) {
-			throw new UserVerifyException("User verification is already completed!"); // TODO : UserVerificationAlreadyCompletedException yazılmalı
+			throw new UserVerificationAlreadyCompletedException("User verification is already completed!");
 		}
 
 		userVerificationEntity.complete();
@@ -203,7 +205,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
 
 		UserEntity userEntity = userRepository.findById(userVerificationEntity.getUserId())
-			.orElseThrow(() -> new UserNotFoundException("User not found!")); // TODO : Buradaki mesaj UserNotFoundException içerisinde constructor'da tanımlanmalı
+			.orElseThrow(UserNotFoundException::new);
 
 		userEntity.verify();
 		userRepository.save(userEntity);
