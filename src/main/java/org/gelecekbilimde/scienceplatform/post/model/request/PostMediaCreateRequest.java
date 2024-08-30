@@ -13,19 +13,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostMediaCreateRequest {
 
-    private Long postMediaId;
+	private Long postMediaId;
 
-    private boolean cover = false;
-
-    @NotNull(message = "cannot be null")
-    @NotBlank(message = "cannot be null")
-    private Long mediaId;
+	private boolean cover;
 
 	@NotNull(message = "cannot be null")
 	@NotBlank(message = "cannot be null")
-    private String postId;
+	private Long mediaId;
 
 	@NotNull(message = "cannot be null")
 	@NotBlank(message = "cannot be null")
-    private String userId;
+	private String postId;
+
+	@NotNull(message = "cannot be null")
+	@NotBlank(message = "cannot be null")
+	private String userId;
 }

@@ -33,7 +33,7 @@ class PostMediaServiceImpl implements PostMediaService {
 
 	private PostMedia savePostMedia(PostMediaCreateRequest postMediaCreateRequest) {
 
-		final PostMediaEntity postMediaEntitySave = postMediaCreateToPostMediaModel.mapForSaving(postMediaCreateRequest, identity.getUserId());
+		final PostMediaEntity postMediaEntitySave = postMediaCreateToPostMediaModel.map(postMediaCreateRequest);
 
 		PostMediaEntity postMediaEntity = postMediaRepository.save(postMediaEntitySave);
 

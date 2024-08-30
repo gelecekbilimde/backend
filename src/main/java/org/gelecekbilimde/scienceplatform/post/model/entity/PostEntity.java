@@ -5,35 +5,37 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 import org.gelecekbilimde.scienceplatform.post.model.enums.PostStatus;
 import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
-@Table(name = "post")
-public class PostEntity {
+@AllArgsConstructor
+@Table(name = "gb_post")
+public class PostEntity extends BaseEntity {
+
 	@Id
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	@Column(name = "header")
@@ -91,13 +93,8 @@ public class PostEntity {
 	private UserEntity userEntity;
 
 
-	@ManyToMany
-	@JoinTable(name = "post_comments", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "comment_id"))
-	private Set<CommentEntity> commentEntities = new HashSet<>();
-
-
-	@Column(name = "created_at")
-	protected LocalDateTime createdAt;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	private List<CommentEntity> commentEntities;
 
 
 	public void like() {

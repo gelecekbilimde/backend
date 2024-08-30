@@ -13,10 +13,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 import org.gelecekbilimde.scienceplatform.media.model.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.model.enums.MediaStatus;
@@ -29,19 +29,19 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-@Table(name = "media")
+@AllArgsConstructor
+@Table(name = "gb_media")
 public class MediaEntity extends BaseEntity {
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "url")
 	private String url;
-
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "content_type")
@@ -75,16 +75,4 @@ public class MediaEntity extends BaseEntity {
 	@Column(name = "status")
 	private MediaStatus status;
 
-	@Override
-	public String toString() {
-		return "Media{" +
-			"id=" + getId() +
-			", url='" + getUrl() + '\'' +
-			", contentType='" + getContentType() + '\'' +
-			", mediaType='" + getMediaType() + '\'' +
-			", title='" + getTitle() + '\'' +
-			", shared='" + isShared() + '\'' +
-			", userId='" + getUserEntity() + '\'' +
-			'}';
-	}
 }

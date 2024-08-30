@@ -25,7 +25,7 @@ import java.util.Optional;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-	@Column(name = "create_user_id")
+	@Column(name = "created_by")
 	protected String createdUser;
 
 	@Column(name = "created_at")
@@ -42,7 +42,7 @@ public abstract class BaseEntity {
 		this.createdAt = LocalDateTime.now();
 	}
 
-	@Column(name = "update_user_id")
+	@Column(name = "updated_by")
 	protected String updatedUser;
 
 	@Column(name = "updated_at")
