@@ -1,18 +1,21 @@
 package org.gelecekbilimde.scienceplatform.post.model;
 
-import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.model.BaseDomainModel;
 import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
 import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 
 import java.util.List;
 
-@Builder
 @Getter
 @Setter
-public class Post {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class Post extends BaseDomainModel {
 
 	private String id;
 	private String header;

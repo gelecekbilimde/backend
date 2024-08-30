@@ -1,11 +1,16 @@
 package org.gelecekbilimde.scienceplatform.settings.model;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.model.BaseDomainModel;
 
-@Data
+@Getter
+@Setter
 @SuperBuilder
-public class Settings {
+@EqualsAndHashCode(callSuper = true)
+public class Settings extends BaseDomainModel {
 
 	private Long settingsId;
 	private String groupName;

@@ -16,7 +16,7 @@ public class TicketResponse {
 	private String userId;
 	private String message;
 	private TicketStatus status;
-	private LocalDateTime updateAt;
-	private LocalDateTime createAt;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 
 }
