@@ -7,20 +7,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
-@Table(name = "settings")
+@AllArgsConstructor
+@Table(name = "gb_setting")
 public class SettingsEntity extends BaseEntity {
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

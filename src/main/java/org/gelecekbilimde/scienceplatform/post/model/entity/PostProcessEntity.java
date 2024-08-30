@@ -11,26 +11,39 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
-@Table(name = "posts_process")
+@AllArgsConstructor
+@Table(name = "gb_post_process")
 public class PostProcessEntity extends BaseEntity {
+
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(name = "post_id")
+	private String postId;
+
+	@Column(name = "user_id")
+	private String userId;
+
 	@Column(name = "header")
 	private String header;
+
+	@Column(name = "message")
+	private String message;
 
 	@Column(name = "content")
 	private String content;
@@ -38,19 +51,9 @@ public class PostProcessEntity extends BaseEntity {
 	@Column(name = "slug")
 	private String slug;
 
-	@ManyToOne
-	@JoinColumn(name = "category")
-	private CategoryEntity categoryEntity;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "process")
 	private Process process;
-
-	@Column(name = "post_id")
-	private String postId;
-
-	@Column(name = "user_id")
-	private String userId;
 
 	@Column(name = "done")
 	private boolean done;
@@ -65,14 +68,15 @@ public class PostProcessEntity extends BaseEntity {
 	private boolean dangerousControl;
 
 	@ManyToOne
+	@JoinColumn(name = "category")
+	private CategoryEntity categoryEntity;
+
+	@ManyToOne
 	@JoinColumn(name = "post_id", insertable = false, updatable = false)
 	private PostEntity postEntity;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private UserEntity userEntity;
-
-	@Column(name = "message")
-	private String message;
 
 }

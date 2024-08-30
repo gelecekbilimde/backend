@@ -13,7 +13,7 @@ import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 @Entity
 @Getter
 @Setter
-@Table(name = "notification_token")
+@Table(name = "gb_notification_token")
 public class NotificationTokenEntity extends BaseEntity {
 
 	@Id

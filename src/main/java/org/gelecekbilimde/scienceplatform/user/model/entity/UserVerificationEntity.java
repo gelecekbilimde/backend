@@ -4,15 +4,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
-import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserVerificationStatus;
 
 @Entity
@@ -20,13 +21,14 @@ import org.gelecekbilimde.scienceplatform.user.model.enums.UserVerificationStatu
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-@Table(name = "user_verification")
+@AllArgsConstructor
+@Table(name = "gb_user_verification")
 public class UserVerificationEntity extends BaseEntity {
 
 	@Id
 	@Column(name = "id")
-	@Builder.Default
-	private String id = RandomUtil.generateUUID();
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 
 	@Column(name = "user_id")
 	private String userId;
@@ -35,9 +37,11 @@ public class UserVerificationEntity extends BaseEntity {
 	@Column(name = "status")
 	private UserVerificationStatus status;
 
+
 	public void complete() {
 		this.status = UserVerificationStatus.COMPLETED;
 	}
+
 
 	public boolean isCompleted() {
 		return this.status == UserVerificationStatus.COMPLETED;

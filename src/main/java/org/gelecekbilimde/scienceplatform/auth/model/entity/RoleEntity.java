@@ -4,7 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -17,14 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleStatus;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -32,11 +27,12 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "role")
+@Table(name = "gb_role")
 public class RoleEntity extends BaseEntity {
 
 	@Id
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	@Column(name = "name")
@@ -46,10 +42,10 @@ public class RoleEntity extends BaseEntity {
 	private String description;
 
 	@Column(name = "is_default")
-	private boolean isDefault = false;
+	private boolean isDefault;
 
 	@Column(name = "is_hidden")
-	private boolean isHidden = false;
+	private boolean isHidden;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")

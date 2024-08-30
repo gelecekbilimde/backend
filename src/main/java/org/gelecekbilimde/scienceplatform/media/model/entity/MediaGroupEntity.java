@@ -13,9 +13,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 import org.gelecekbilimde.scienceplatform.media.model.enums.MediaGroupStatus;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
@@ -23,14 +24,16 @@ import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import java.util.List;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
-@Table(name = "media_group")
+@AllArgsConstructor
+@Table(name = "gb_media_group")
 public class MediaGroupEntity extends BaseEntity {
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
