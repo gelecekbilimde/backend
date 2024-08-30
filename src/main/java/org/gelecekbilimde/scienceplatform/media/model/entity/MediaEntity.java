@@ -48,7 +48,7 @@ public class MediaEntity extends BaseEntity {
 	private MediaContentType contentType;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "media_type")
+	@Column(name = "type")
 	private MediaType mediaType;
 
 	@Column(name = "title")

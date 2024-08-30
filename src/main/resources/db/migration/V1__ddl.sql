@@ -136,7 +136,7 @@ create table if not exists gb_media
     id           bigint generated always as identity primary key,
     user_id      varchar(36)  not null,
     group_id     bigint,
-    media_type   varchar(25)  not null,
+    type varchar(25) not null,
     is_shared    boolean      not null default false,
     title        varchar(100) not null,
     content_type varchar(25)  not null,
