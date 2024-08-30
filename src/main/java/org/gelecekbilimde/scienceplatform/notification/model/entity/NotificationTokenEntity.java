@@ -24,10 +24,10 @@ public class NotificationTokenEntity extends BaseEntity {
 	@Column(name = "user_id")
 	private String userId;
 
-	@Column(name = "device_token")
-	private String deviceToken;
-
 	@Column(name = "device_id")
 	private String deviceId;
+
+	@Column(name = "device_token")
+	private String deviceToken;
 
 }
