@@ -55,19 +55,12 @@ public class RoleEntity extends BaseEntity {
 	@Column(name = "status")
 	private RoleStatus status;
 
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
-	@Fetch(FetchMode.SELECT)
-	private Set<PermissionEntity> permissionEntities = new HashSet<>();
-
-	public List<SimpleGrantedAuthority> getPermissionEntities() {
-		var authorities = permissionEntities
-			.stream()
-			.map(permissionEntity -> new SimpleGrantedAuthority(permissionEntity.getName()))
-			.collect(Collectors.toList());
-		authorities.add(new SimpleGrantedAuthority("ROLE_" + getName()));
-		return authorities;
-	}
+	@ManyToMany
+	@JoinTable(
+		name = "gb_role_permission",
+		joinColumns = @JoinColumn(name = "role_id"),
+		inverseJoinColumns = @JoinColumn(name = "permission_id")
+	)
+	private List<PermissionEntity> permissionEntities;
 
 }
