@@ -212,14 +212,12 @@ create table if not exists gb_post_media
     media_id   bigint       not null,
     post_id    varchar(36)  not null,
     is_cover   boolean      not null default false,
-    status     varchar(25)  not null,
     created_by varchar(255) not null,
     created_at timestamp(0) not null,
     updated_by varchar(255),
     updated_at timestamp(0),
     constraint fk__gb_post_media__post_id foreign key (post_id) references gb_post (id),
-    constraint fk__gb_post_media__media_id foreign key (media_id) references gb_media (id),
-    constraint c__gb_post_media__status check ( status in ('ACTIVE', 'PASSIVE'))
+    constraint fk__gb_post_media__media_id foreign key (media_id) references gb_media (id)
 );
 
 
