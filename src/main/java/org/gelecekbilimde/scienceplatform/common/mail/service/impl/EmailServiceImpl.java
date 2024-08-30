@@ -3,7 +3,7 @@ package org.gelecekbilimde.scienceplatform.common.mail.service.impl;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.common.mail.model.EmailSendRequest;
+import org.gelecekbilimde.scienceplatform.common.mail.model.request.EmailSendRequest;
 import org.gelecekbilimde.scienceplatform.common.mail.service.EmailService;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
