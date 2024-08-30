@@ -1,30 +1,31 @@
 package org.gelecekbilimde.scienceplatform.user.model;
 
-import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.model.BaseDomainModel;
 import org.gelecekbilimde.scienceplatform.user.model.enums.Degree;
 import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
-public class User {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class User extends BaseDomainModel {
 
 	private String id;
+	private String email;
+	private String firstName;
+	private String lastName;
 	private String avatarPath;
 	private String biography;
 	private LocalDate birthDate;
-	private LocalDateTime createDate;
 	private Degree degree;
-	private String email;
 	private Gender gender;
-	private String name;
-	private String lastName;
 	private UserStatus status;
 
 }

@@ -1,11 +1,16 @@
 package org.gelecekbilimde.scienceplatform.post.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.model.BaseDomainModel;
 
 @Getter
 @Setter
-public class Category {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class Category extends BaseDomainModel {
 
 	private Long id;
 	private String name;

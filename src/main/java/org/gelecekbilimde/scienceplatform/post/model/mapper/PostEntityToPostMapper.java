@@ -23,7 +23,7 @@ public interface PostEntityToPostMapper extends BaseMapper<PostEntity, Post> {
 			return new ArrayList<>();
 		}
 
-		return medias.stream()
+		return (List<PostMedia>) medias.stream()
 			.map(media -> {
 				MediaEntity mediaEntityData = media.getMediaEntity();
 				MediaGroupEntity mediaGroupEntity = mediaEntityData.getMediaGroupEntity();
