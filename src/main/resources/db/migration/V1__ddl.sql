@@ -176,6 +176,20 @@ create table if not exists gb_post
     constraint c__gb_post__status check ( status in ('ACTIVE', 'PASSIVE'))
 );
 
+create table if not exists gb_post_like
+(
+  id         bigint generated always as identity primary key,
+  post_id    varchar(36)  not null,
+  user_id    varchar(36)  not null,
+  created_by varchar(255) not null,
+  created_at timestamp(0) not null,
+  updated_by varchar(255),
+  updated_at timestamp(0),
+  constraint u__gb_post_like__post_id__user_id unique (post_id, user_id),
+  constraint fk__gb_post_like__user_id foreign key (user_id) references gb_user (id),
+  constraint fk__gb_post_like__post_id foreign key (post_id) references gb_post (id)
+);
+
 create table if not exists gb_comment
 (
     id         bigint generated always as identity primary key,
@@ -190,6 +204,7 @@ create table if not exists gb_comment
     constraint fk__gb_comment__post_id foreign key (post_id) references gb_post (id),
     constraint c__gb_comment__status check ( status in ('DONE', 'DELETED'))
 );
+
 
 create table if not exists gb_post_media
 (
@@ -287,18 +302,3 @@ create table if not exists gb_ticket_message
     updated_by varchar(255),
     updated_at timestamp(0)
 );
-
-create table if not exists gb_post_like
-(
-    id         bigint generated always as identity primary key,
-    post_id    varchar(36)  not null,
-    user_id    varchar(36)  not null,
-    created_by varchar(255) not null,
-    created_at timestamp(0) not null,
-    updated_by varchar(255),
-    updated_at timestamp(0),
-    constraint u__gb_post_like__post_id__user_id unique (post_id, user_id),
-    constraint fk__gb_post_like__user_id foreign key (user_id) references gb_user (id),
-    constraint fk__gb_post_like__post_id foreign key (post_id) references gb_post (id)
-);
-
