@@ -48,7 +48,7 @@ public class JwtService { // TODO : interface yazılmalı
 		Map<String, Object> extraClaims,
 		UserEntity userEntity
 	) {
-		return buildToken(extraClaims, userEntity.getUsername(), tokenConfiguration.getTokenExpiration());
+		return buildToken(extraClaims, userEntity.getEmail(), tokenConfiguration.getTokenExpiration());
 	}
 
 
@@ -56,7 +56,7 @@ public class JwtService { // TODO : interface yazılmalı
 		HashMap<String, Object> claim = new HashMap<>();
 		claim.put(TokenClaims.ROLE_ID.getValue(), userEntity.getRoleId());
 
-		return buildToken(claim, userEntity.getUsername(), tokenConfiguration.getRefreshExpiration());
+		return buildToken(claim, userEntity.getEmail(), tokenConfiguration.getRefreshExpiration());
 	}
 
 

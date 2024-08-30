@@ -97,9 +97,4 @@ public class UserEntity extends BaseEntity {
 		return this.status == UserStatus.VERIFIED;
 	}
 
-
-	public String getUsername() {
-		return email;
-	}
-
 }
