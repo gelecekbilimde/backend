@@ -49,7 +49,7 @@ public class PostEntity extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")
-	private CategoryEntity categoryEntity;
+	private CategoryEntity category;
 
 
 	@Column(name = "like_count")
