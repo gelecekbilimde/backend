@@ -2,8 +2,17 @@ package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.auth.exception.AlreadyRegisteredException;
+import org.gelecekbilimde.scienceplatform.auth.exception.DefaultRoleNotDefinedException;
+import org.gelecekbilimde.scienceplatform.auth.exception.DegreeTypeNotFoundException;
+import org.gelecekbilimde.scienceplatform.auth.exception.GenderTypeNotFoundException;
+import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundException;
-import org.gelecekbilimde.scienceplatform.auth.exception.UserVerifyException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserScopeException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationAlreadyCompletedException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationIsNotFoundException;
+import org.gelecekbilimde.scienceplatform.auth.exception.VerifyException;
+import org.gelecekbilimde.scienceplatform.auth.exception.WrongEmailOrPasswordException;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.PermissionEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.TokenClaims;
@@ -15,7 +24,6 @@ import org.gelecekbilimde.scienceplatform.auth.model.response.TokenResponse;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.AuthenticationService;
 import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserVerificationEntity;
@@ -49,10 +57,10 @@ class AuthenticationServiceImpl implements AuthenticationService {
 	public TokenResponse register(RegisterRequest request) {
 
 		if (userRepository.existsByEmail(request.getEmail())) {
-			throw new ClientException("This user is already registered");
+			throw new AlreadyRegisteredException(request.getEmail());
 		}
 
-		RoleEntity roleEntity = roleRepository.getByIsDefaultTrue().orElseThrow(() -> new ServerException("Default Role is not defined."));
+		RoleEntity roleEntity = roleRepository.getByIsDefaultTrue().orElseThrow(DefaultRoleNotDefinedException::new);
 		List<String> scope = scopeList(roleEntity.getId());
 
 
@@ -60,7 +68,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		if (request.getGender() != null) {
 			boolean isGenderExists = EnumSet.allOf(Gender.class).stream().anyMatch(e -> e.name().equals(request.getGender()));
 			if (!isGenderExists) {
-				throw new ClientException("gender type not found");
+				throw new GenderTypeNotFoundException();
 			}
 			gender = Gender.valueOf(request.getGender());
 		}
@@ -69,7 +77,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		if (request.getDegree() != null) {
 			boolean isDegreeExists = EnumSet.allOf(Degree.class).stream().anyMatch(e -> e.name().equals(request.getDegree()));
 			if (!isDegreeExists) {
-				throw new ClientException("degree type not found");
+				throw new DegreeTypeNotFoundException();
 			}
 			degree = Degree.valueOf(request.getDegree());
 		}
@@ -121,14 +129,16 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		try {
 
 			UserEntity userEntity = userRepository.findByEmail(request.getEmail())
-				.filter(UserEntity::isVerified)
-				.orElseThrow(() -> new UserNotFoundException("User not found: " + request.getEmail()));
-
-			if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
-				throw new ClientException("Hatalı Eposta veya Şifre");
+				.orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+			if (!userEntity.isVerified()){
+				throw new VerifyException(request.getEmail());
 			}
 
-			RoleEntity roleEntity = roleRepository.findById(userEntity.getRoleId()).orElseThrow(() -> new ServerException("User Scope has a problem"));
+			if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
+				throw new WrongEmailOrPasswordException();
+			}
+
+			RoleEntity roleEntity = roleRepository.findById(userEntity.getRoleId()).orElseThrow(UserScopeException::new);
 			List<String> scope = scopeList(roleEntity.getId());
 
 			var jwtToken = jwtService.generateToken(userEntity, scope);
@@ -164,10 +174,10 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
 		final String username = (String) claims.get(TokenClaims.SUBJECT.getValue());
 		final UserEntity userEntity = this.userRepository.findByEmail(username)
-			.orElseThrow(() -> new ClientException("Kullanıcı Bulunamadı")); // TODO : UserNotFoundException yazılmalı
+			.orElseThrow(() -> new UserNotFoundException(username));
 
 		RoleEntity roleEntity = roleRepository.findById(userEntity.getRoleId())
-			.orElseThrow(() -> new ServerException("User Scope has a problem")); // TODO : RoleNotFoundException yazılmalı
+			.orElseThrow(() -> new RoleNotFoundException(userEntity.getRoleId()));
 		List<String> scope = scopeList(roleEntity.getId());
 
 		var jwtToken = jwtService.generateToken(userEntity, scope);
@@ -190,10 +200,10 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
 		UserVerificationEntity userVerificationEntity = userVerificationRepository
 			.findById(userVerifyRequest.getVerificationId())
-			.orElseThrow(() -> new UserVerifyException("Verification ID is not valid!")); // TODO : UserVerificationIsNotFoundException yazılmalı
+			.orElseThrow(() -> new UserVerificationIsNotFoundException(userVerifyRequest.getVerificationId()));
 
 		if (userVerificationEntity.isCompleted()) {
-			throw new UserVerifyException("User verification is already completed!"); // TODO : UserVerificationAlreadyCompletedException yazılmalı
+			throw new UserVerificationAlreadyCompletedException();
 		}
 
 		userVerificationEntity.complete();
@@ -201,7 +211,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
 
 		UserEntity userEntity = userRepository.findById(userVerificationEntity.getUserId())
-			.orElseThrow(() -> new UserNotFoundException("User not found!")); // TODO : Buradaki mesaj UserNotFoundException içerisinde constructor'da tanımlanmalı
+			.orElseThrow(UserNotFoundException::new);
 
 		userEntity.verify();
 		userRepository.save(userEntity);

@@ -20,30 +20,31 @@ import java.time.LocalDate;
 public class RegisterRequest {
 
 	@NotNull(message = "firstname cannot be null")
-	@Size(max = 25, message = "firstname should not be less than 25")
+	@Size(min = 2 ,max = 25)
 	private String firstname;
 
 	@NotNull(message = "lastname cannot be null")
-	@Size(max = 25, message = "lastname should not be less than 25")
+	@Size(min = 2, max = 25)
 	private String lastname;
 
 	@NotNull(message = "email cannot be null")
 	@Email(message = "email should be valid")
-	@Size(max = 255, message = "email should not be less than 255")
+	@Size(min = 8, max = 255)
 	private String email;
 
 	@NotNull(message = "password cannot be null")
-	@Size(max = 255, message = "password should not be less than 255")
+	@Size(min = 8, max = 255)
 	private String password;
+
 	private String biography;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 
-	@Size(max = 255, message = "gender should not be less than 255")
+	@Size(max = 255)
 	private String gender;
 
-	@Size(max = 255, message = "degree should not be less than 255")
+	@Size(max = 255)
 	private String degree;
 
 }
