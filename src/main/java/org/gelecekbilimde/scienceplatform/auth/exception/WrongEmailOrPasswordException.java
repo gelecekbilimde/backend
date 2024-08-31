@@ -8,6 +8,6 @@ public class WrongEmailOrPasswordException extends RuntimeException {
 	private static final long serialVersionUID = -5855985402072628508L;
 
 	public WrongEmailOrPasswordException() {
-		super("Hatalı Eposta veya Şifre");
+		super("Wrong email or password!");
 	}
 }
