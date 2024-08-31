@@ -8,7 +8,7 @@ import org.gelecekbilimde.scienceplatform.common.model.Paging;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
-import org.gelecekbilimde.scienceplatform.post.model.mapper.PostCreateRequestToPostEntityMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.PostCreateRequestToEntityMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.PostEntityToPostMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.AdminPostListRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.PostCreateRequest;
@@ -35,7 +35,7 @@ class PostServiceImpl implements PostService {
 	private final PostMediaService postMediaService;
 	private final Identity identity;
 
-	private final PostCreateRequestToPostEntityMapper createRequestToPostEntityMapper = PostCreateRequestToPostEntityMapper.initialize();
+	private final PostCreateRequestToEntityMapper createRequestToEntityMapper = PostCreateRequestToEntityMapper.initialize();
 	private final PostEntityToPostMapper postEntityToPostMapper = PostEntityToPostMapper.initialize();
 
 	@Transactional
@@ -48,7 +48,7 @@ class PostServiceImpl implements PostService {
 		postCreateRequest.setLastProcess(Process.CREATE);
 		postCreateRequest.setSlug(PostUtil.slugging(postCreateRequest.getHeader()));
 
-		final PostEntity postEntity = createRequestToPostEntityMapper.map(postCreateRequest);
+		final PostEntity postEntity = createRequestToEntityMapper.map(postCreateRequest);
 		postEntity.setUserId(identity.getUserId());
 
 		PostEntity postEntityFromDatabase = postRepository.save(postEntity);
