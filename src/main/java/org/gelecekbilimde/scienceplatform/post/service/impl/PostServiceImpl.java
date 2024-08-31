@@ -48,11 +48,12 @@ class PostServiceImpl implements PostService {
 		postCreateRequest.setLastProcess(Process.CREATE);
 		postCreateRequest.setSlug(PostUtil.slugging(postCreateRequest.getHeader()));
 
-		final PostEntity postEntitySave = createRequestToPostEntityMapper.mapForSaving(postCreateRequest, identity.getUserId());
+		final PostEntity postEntity = createRequestToPostEntityMapper.map(postCreateRequest);
+		postEntity.setUserId(identity.getUserId());
 
-		PostEntity postEntity = postRepository.save(postEntitySave);
+		PostEntity postEntityFromDatabase = postRepository.save(postEntity);
 
-		Post post = postEntityToPostMapper.map(postEntity);
+		Post post = postEntityToPostMapper.map(postEntityFromDatabase);
 
 		if (postCreateRequest.getMedias() != null) {
 
