@@ -7,10 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface PostCreateRequestToPostEntityMapper extends BaseMapper<PostCreateRequest, PostEntity> {
+public interface PostCreateRequestToEntityMapper extends BaseMapper<PostCreateRequest, PostEntity> {
 
-	static PostCreateRequestToPostEntityMapper initialize() {
-		return Mappers.getMapper(PostCreateRequestToPostEntityMapper.class);
+	static PostCreateRequestToEntityMapper initialize() {
+		return Mappers.getMapper(PostCreateRequestToEntityMapper.class);
 	}
 
 }
