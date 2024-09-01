@@ -26,6 +26,22 @@ public class UserFollowServiceImpl implements UserFollowService {
 	private final UserEntityToUserMapper userEntityToUserMapper = UserEntityToUserMapper.initialize();
 
 	@Override
+	public List<User> findAllFollowings(String id) {
+		final UserEntity userEntity = userRepository.findById(id)
+			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
+
+		return userEntityToUserMapper.map(userEntity.getFollowings());
+	}
+
+	@Override
+	public List<User> findAllFollowers(String id) {
+		final UserEntity userEntity = userRepository.findById(id)
+			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
+
+		return userEntityToUserMapper.map(userEntity.getFollowers());
+	}
+
+	@Override
 	public void followToggle(String id) {
 		final UserEntity userEntity = userRepository.findById(id)
 			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
@@ -50,20 +66,7 @@ public class UserFollowServiceImpl implements UserFollowService {
 		userFollowRepository.save(userFollowEntity);
 	}
 
-	public List<User> findAllFollowings(String id) {
-		final UserEntity userEntity = userRepository.findById(id)
-			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
-
-		return userEntityToUserMapper.map(userEntity.getFollowings());
-	}
-
-	public List<User> findAllFollowers(String id) {
-		final UserEntity userEntity = userRepository.findById(id)
-			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
-
-		return userEntityToUserMapper.map(userEntity.getFollowers());
-	}
-
+	@Override
 	public void removeFollower(UnfollowRequest request) {
 		final UserEntity userEntity = userRepository.findById(request.getFollowerId())
 			.orElseThrow(() -> new NotFoundException("User could not found! id:" + request.getFollowerId()));
