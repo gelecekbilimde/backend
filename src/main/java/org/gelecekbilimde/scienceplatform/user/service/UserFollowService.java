@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface UserFollowService {
 
-	void followToggle(String id);
-
 	List<User> findAllFollowings(String id);
 
 	List<User> findAllFollowers(String id);
+
+	void followToggle(String id);
 
 	void removeFollower(UnfollowRequest request);
 
