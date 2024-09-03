@@ -13,9 +13,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
@@ -25,11 +23,11 @@ import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -82,8 +80,20 @@ public class UserEntity extends BaseEntity {
 	private RoleEntity roleEntity;
 
 	@ManyToMany
-	@JoinTable(name = "user_followers", joinColumns = @JoinColumn(name = "follower_user_id"), inverseJoinColumns = @JoinColumn(name = "followed_user_id"))
-	private Set<UserEntity> followerUserEntities = new HashSet<>();
+	@JoinTable(
+		name = "user_followers",
+		joinColumns = @JoinColumn(name = "follower_user_id"),
+		inverseJoinColumns = @JoinColumn(name = "followed_user_id")
+	)
+	private List<UserEntity> followings = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(
+		name = "user_followers",
+		joinColumns = @JoinColumn(name = "followed_user_id"),
+		inverseJoinColumns = @JoinColumn(name = "follower_user_id")
+	)
+	private List<UserEntity> followers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
 	private List<PostEntity> postEntity;
