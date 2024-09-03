@@ -28,9 +28,8 @@ import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -87,8 +86,20 @@ public class UserEntity extends BaseEntity {
 	private RoleEntity roleEntity;
 
 	@ManyToMany
-	@JoinTable(name = "gb_user_follow", joinColumns = @JoinColumn(name = "follower_user_id"), inverseJoinColumns = @JoinColumn(name = "followed_user_id"))
-	private Set<UserEntity> followerUserEntities = new HashSet<>();
+	@JoinTable(
+		name = "gb_user_follow",
+		joinColumns = @JoinColumn(name = "follower_user_id"),
+		inverseJoinColumns = @JoinColumn(name = "followed_user_id")
+	)
+	private List<UserEntity> followings = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(
+		name = "gb_user_follow",
+		joinColumns = @JoinColumn(name = "followed_user_id"),
+		inverseJoinColumns = @JoinColumn(name = "follower_user_id")
+	)
+	private List<UserEntity> followers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
 	private List<PostEntity> postEntity;
