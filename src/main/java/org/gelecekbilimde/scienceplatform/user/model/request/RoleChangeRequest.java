@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserToAuthorRequest {
+public class RoleChangeRequest {
 	@NotNull
 	private String userId;
 }
