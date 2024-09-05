@@ -1,22 +1,21 @@
 package org.gelecekbilimde.scienceplatform.ticket.model;
 
-import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.common.model.BaseDomainModel;
 import org.gelecekbilimde.scienceplatform.ticket.model.enums.TicketStatus;
 
-import java.time.LocalDateTime;
-
-@Builder
 @Getter
 @Setter
-public class Ticket {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class Ticket extends BaseDomainModel {
 
 	private Long id;
 	private String userId;
 	private String message;
 	private TicketStatus status;
-	private LocalDateTime updateAt;
-	private LocalDateTime createAt;
 
 }

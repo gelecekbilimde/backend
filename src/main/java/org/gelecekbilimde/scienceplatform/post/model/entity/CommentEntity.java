@@ -7,20 +7,24 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 import org.gelecekbilimde.scienceplatform.post.model.enums.CommentStatus;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
-@Table(name = "comments")
+@AllArgsConstructor
+@Table(name = "gb_comment")
 public class CommentEntity extends BaseEntity {
 
 	@Id
@@ -31,12 +35,15 @@ public class CommentEntity extends BaseEntity {
 	@Column(name = "message")
 	private String message;
 
-
 	@Column(name = "like_count")
 	private Integer likeCount;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private CommentStatus status;
+
+	@ManyToOne
+	@JoinColumn(name = "post_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private PostEntity post;
 
 }
