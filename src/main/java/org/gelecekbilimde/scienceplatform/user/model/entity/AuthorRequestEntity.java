@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.checkerframework.common.aliasing.qual.Unique;
 
 @Data
 @SuperBuilder
@@ -21,5 +22,7 @@ public class AuthorRequestEntity {
 	private String id;
 
 	@OneToOne
+	@Unique
 	private UserEntity user;
+
 }
