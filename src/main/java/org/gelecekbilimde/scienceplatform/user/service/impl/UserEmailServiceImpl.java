@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.mail.model.EmailSendRequest;
+import org.gelecekbilimde.scienceplatform.common.mail.model.request.EmailSendRequest;
 import org.gelecekbilimde.scienceplatform.common.mail.service.EmailService;
 import org.gelecekbilimde.scienceplatform.user.service.UserEmailService;
 import org.springframework.beans.factory.annotation.Value;

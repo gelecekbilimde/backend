@@ -25,37 +25,37 @@ import java.util.Optional;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-	@Column(name = "create_user_id")
-	protected String createdUser;
+	@Column(name = "created_by")
+	protected String createdBy;
 
 	@Column(name = "created_at")
 	protected LocalDateTime createdAt;
 
 	@PrePersist
 	public void prePersist() {
-		this.createdUser = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+		this.createdBy = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
 			.map(Authentication::getPrincipal)
 			.filter(user -> !"anonymousUser".equals(user))
 			.map(Jwt.class::cast)
 			.map(jwt -> jwt.getClaim(TokenClaims.USER_ID.getValue()).toString())
-			.orElse("GUEST");
+			.orElse("gelecekbilimde");
 		this.createdAt = LocalDateTime.now();
 	}
 
-	@Column(name = "update_user_id")
-	protected String updatedUser;
+	@Column(name = "updated_by")
+	protected String updatedBy;
 
 	@Column(name = "updated_at")
 	protected LocalDateTime updatedAt;
 
 	@PreUpdate
 	public void preUpdate() {
-		this.updatedUser = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+		this.updatedBy = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
 			.map(Authentication::getPrincipal)
 			.filter(user -> !"anonymousUser".equals(user))
 			.map(Jwt.class::cast)
 			.map(jwt -> jwt.getClaim(TokenClaims.USER_ID.getValue()).toString())
-			.orElse("GUEST");
+			.orElse("gelecekbilimde");
 		this.updatedAt = LocalDateTime.now();
 	}
 

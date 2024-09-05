@@ -13,7 +13,7 @@ import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 @Entity
 @Getter
 @Setter
-@Table(name = "notification_token")
+@Table(name = "gb_notification_token")
 public class NotificationTokenEntity extends BaseEntity {
 
 	@Id
@@ -24,10 +24,10 @@ public class NotificationTokenEntity extends BaseEntity {
 	@Column(name = "user_id")
 	private String userId;
 
-	@Column(name = "device_token")
-	private String deviceToken;
-
 	@Column(name = "device_id")
 	private String deviceId;
+
+	@Column(name = "device_token")
+	private String deviceToken;
 
 }

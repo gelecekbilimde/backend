@@ -17,6 +17,7 @@ import org.gelecekbilimde.scienceplatform.auth.service.impl.JwtService;
 import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -25,9 +26,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -53,13 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		final Claims claims = jwtService.extractAllClaims(token);
 		invalidTokenService.checkForInvalidityOfToken(claims.getId());
 
-		final String roleId = claims.get(TokenClaims.ROLE_ID.getValue(), String.class);
-
-		RoleEntity roleEntity = roleRepository.findById(roleId)
-			.orElseThrow(() -> new ServerException("Role not found"));
-		Set<PermissionEntity> permissionEntities = new HashSet<>(roleRepository.findPermissionsByRoleId(roleId));
-		roleEntity.setPermissionEntities(permissionEntities);
-
 		final Jwt jwt = new Jwt(
 			token,
 			Instant.ofEpochSecond(claims.getIssuedAt().getTime()),
@@ -68,10 +62,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			claims
 		);
 
+		final String roleId = claims.get(TokenClaims.ROLE_ID.getValue(), String.class);
+
+		RoleEntity roleEntity = roleRepository.findById(roleId)
+			.orElseThrow(() -> new ServerException("Role not found"));
+		List<PermissionEntity> permissionEntities = roleRepository.findPermissionsByRoleId(roleId);
+		roleEntity.setPermissionEntities(permissionEntities);
+
+		List<SimpleGrantedAuthority> authorities = permissionEntities
+			.stream()
+			.map(permissionEntity -> new SimpleGrantedAuthority(permissionEntity.getName()))
+			.collect(Collectors.toList());
+		authorities.add(new SimpleGrantedAuthority("ROLE_" + roleEntity.getName()));
+
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 			jwt,
 			null,
-			roleEntity.getPermissionEntities()
+			authorities
 		);
 		authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 		SecurityContextHolder.getContext().setAuthentication(authToken);

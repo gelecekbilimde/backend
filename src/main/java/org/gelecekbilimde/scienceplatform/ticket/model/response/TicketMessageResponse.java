@@ -6,7 +6,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-
 @Getter
 @Setter
 @SuperBuilder
@@ -16,7 +15,7 @@ public class TicketMessageResponse {
 	private Long userId;
 	private Long ticketId;
 	private String message;
-	private LocalDateTime updateAt;
-	private LocalDateTime createAt;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 
 }
