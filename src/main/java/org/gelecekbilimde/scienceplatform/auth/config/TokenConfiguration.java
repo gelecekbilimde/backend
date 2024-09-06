@@ -17,49 +17,52 @@ import java.util.Objects;
 @Component
 public class TokenConfiguration {
 
-    private final long tokenExpiration;
-    private final long refreshExpiration;
-    private final long guestTokenExpiration;
-    private final PrivateKey privateKey;
-    private final PublicKey publicKey;
+	private final String issuer;
+	private final int tokenExpiration;
+	private final int refreshExpiration;
+	private final int guestTokenExpiration;
+	private final PrivateKey privateKey;
+	private final PublicKey publicKey;
 
-    public TokenConfiguration(Environment environment) {
+	public TokenConfiguration(Environment environment) {
 
-        this.tokenExpiration = Long.parseLong(
-                Objects.requireNonNull(environment.getProperty("application.security.jwt.expiration"))
-        );
-        this.refreshExpiration = Long.parseLong(
-                Objects.requireNonNull(environment.getProperty("application.security.jwt.refresh-token.expiration"))
-        );
-        this.guestTokenExpiration = Long.parseLong(
-                Objects.requireNonNull(environment.getProperty("application.security.jwt.guest-token.expiration"))
-        );
+		this.issuer = "gelecekbilimde.net";
 
-        final String privateKeyPath = environment.getProperty("application.security.jwt.private-key");
-        final String publicKeyPath = environment.getProperty("application.security.jwt.public-key");
+		this.tokenExpiration = Integer.parseInt(
+			Objects.requireNonNull(environment.getProperty("application.security.jwt.expiration"))
+		);
+		this.refreshExpiration = Integer.parseInt(
+			Objects.requireNonNull(environment.getProperty("application.security.jwt.refresh-token.expiration"))
+		);
+		this.guestTokenExpiration = Integer.parseInt(
+			Objects.requireNonNull(environment.getProperty("application.security.jwt.guest-token.expiration"))
+		);
 
-        boolean keyPairExists = FileUtil.isExists(privateKeyPath) && FileUtil.isExists(publicKeyPath);
-        if (keyPairExists) {
+		final String privateKeyPath = environment.getProperty("application.security.jwt.private-key");
+		final String publicKeyPath = environment.getProperty("application.security.jwt.public-key");
+
+		boolean keyPairExists = FileUtil.isExists(privateKeyPath) && FileUtil.isExists(publicKeyPath);
+		if (keyPairExists) {
 
 			log.info("Key pair files exist");
 
 			this.privateKey = AuthKeyPairUtil.findAndConvertPrivateKey(privateKeyPath);
-            this.publicKey = AuthKeyPairUtil.findAndConvertPublicKey(publicKeyPath);
+			this.publicKey = AuthKeyPairUtil.findAndConvertPublicKey(publicKeyPath);
 
 			log.info("Key pair converted");
 
-            return;
-        }
+			return;
+		}
 
 		log.warn("Key pair files do not exist");
 
 		log.info("Key pair files are generating...");
 
 		final KeyPair keyPair = AuthKeyPairUtil.generateKeyPair();
-        this.privateKey = keyPair.getPrivate();
-        this.publicKey = keyPair.getPublic();
+		this.privateKey = keyPair.getPrivate();
+		this.publicKey = keyPair.getPublic();
 
 		log.info("Key pair generated");
-    }
+	}
 
 }
