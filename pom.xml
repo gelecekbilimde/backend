@@ -30,7 +30,7 @@
     <org.springframework.boot.version>3.1.4</org.springframework.boot.version>
     <org.postgresql.version>42.6.0</org.postgresql.version>
     <org.projectlombok.version>1.18.26</org.projectlombok.version>
-    <io.jsonwebtoken.version>0.11.5</io.jsonwebtoken.version>
+    <jsonwebtoken.version>0.12.6</jsonwebtoken.version>
     <org.hibernate.validator.version>8.0.0.Final</org.hibernate.validator.version>
     <org.slf4j.version>2.0.7</org.slf4j.version>
     <org.apache.logging.log4j.version>2.20.0</org.apache.logging.log4j.version>
@@ -56,11 +56,6 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
-      <version>${org.springframework.boot.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
       <version>${org.springframework.boot.version}</version>
@@ -81,16 +76,6 @@
       <version>${org.springframework.boot.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-oauth2-client</artifactId>
-      <version>${org.springframework.boot.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-      <version>${org.springframework.boot.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
@@ -107,21 +92,55 @@
       <artifactId>spring-boot-starter-data-jpa</artifactId>
       <version>${org.springframework.boot.version}</version>
     </dependency>
+
+
+    <!-- ===================== -->
+    <!-- security dependencies -->
+    <!-- ===================== -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-api</artifactId>
-      <version>${io.jsonwebtoken.version}</version>
+      <version>${jsonwebtoken.version}</version>
     </dependency>
+
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-impl</artifactId>
-      <version>${io.jsonwebtoken.version}</version>
+      <version>${jsonwebtoken.version}</version>
+      <scope>runtime</scope>
     </dependency>
+
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
-      <artifactId>jjwt-jackson</artifactId>
-      <version>${io.jsonwebtoken.version}</version>
+      <artifactId>jjwt-gson</artifactId>
+      <version>${jsonwebtoken.version}</version>
+      <scope>compile</scope> <!-- Not runtime -->
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <!-- ===================== -->
+    <!-- security dependencies -->
+    <!-- ===================== -->
+
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
