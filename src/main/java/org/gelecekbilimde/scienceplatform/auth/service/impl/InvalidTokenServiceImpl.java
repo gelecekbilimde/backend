@@ -7,11 +7,14 @@ import org.gelecekbilimde.scienceplatform.auth.service.InvalidTokenService;
 import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 class InvalidTokenServiceImpl implements InvalidTokenService {
 
-	final InvalidTokenRepository invalidTokenRepository;
+	private final InvalidTokenRepository invalidTokenRepository;
 
 	public void checkForInvalidityOfToken(final String tokenId) {
 		final boolean isTokenInvalid = invalidTokenRepository.findByTokenId(tokenId).isPresent();
@@ -20,9 +23,11 @@ class InvalidTokenServiceImpl implements InvalidTokenService {
 		}
 	}
 
-	public void saveInvalidToken(String tokenId) {
-		InvalidTokenEntity invalidTokenEntity = InvalidTokenEntity.builder().tokenId(tokenId).build();
-		invalidTokenRepository.save(invalidTokenEntity);
+	public void saveAll(List<String> invalidTokenIds) {
+		List<InvalidTokenEntity> invalidTokenEntities = invalidTokenIds.stream()
+			.map(invalidTokenId -> InvalidTokenEntity.builder().tokenId(invalidTokenId).build())
+			.collect(Collectors.toUnmodifiableList());
+		invalidTokenRepository.saveAll(invalidTokenEntities);
 	}
 
 }
