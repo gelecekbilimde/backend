@@ -52,7 +52,7 @@ public class UserEntity extends BaseEntity {
 	private String password;
 
 	@Column(name = "first_name")
-	private String name;
+	private String firstName;
 
 	@Column(name = "last_name")
 	private String lastName;
