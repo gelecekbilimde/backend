@@ -66,7 +66,7 @@ create table if not exists gb_user
 
 create table if not exists gb_user_verification
 (
-  id         bigint generated always as identity primary key,
+  id varchar(36) not null primary key,
   user_id    varchar(36)  not null,
   status     varchar(25)  not null,
   created_by varchar(255) not null,
