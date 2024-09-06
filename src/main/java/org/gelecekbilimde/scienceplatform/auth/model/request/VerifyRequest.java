@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserVerifyRequest {
+public class VerifyRequest {
 
 	@NotBlank
 	private String verificationId;

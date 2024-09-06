@@ -2,12 +2,15 @@ package org.gelecekbilimde.scienceplatform.auth.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.auth.model.Token;
 import org.gelecekbilimde.scienceplatform.auth.model.request.LoginRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.request.LogoutRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RefreshRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RegisterRequest;
-import org.gelecekbilimde.scienceplatform.auth.model.request.TokenRefreshRequest;
-import org.gelecekbilimde.scienceplatform.auth.model.request.UserVerifyRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.request.VerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.response.TokenResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.AuthenticationService;
+import org.gelecekbilimde.scienceplatform.auth.service.RegistrationService;
 import org.gelecekbilimde.scienceplatform.common.model.response.Response;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,32 +22,49 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class AuthController {
 
+	private final RegistrationService registrationService;
 	private final AuthenticationService authenticationService;
 
-	@PostMapping("/register")
-	public Response<TokenResponse> register(@RequestBody @Valid RegisterRequest request) {
-		return Response.ok(authenticationService.register(request));
-	}
 
-	@PostMapping("/verify")
-	public Response<Void> verify(@RequestBody @Valid UserVerifyRequest userVerifyRequest) {
-		authenticationService.verify(userVerifyRequest);
+	@PostMapping("/register")
+	public Response<Void> register(@RequestBody @Valid RegisterRequest request) {
+		registrationService.register(request);
 		return Response.NO_CONTENT;
 	}
 
+	@PostMapping("/verify")
+	public Response<Void> verify(@RequestBody @Valid VerifyRequest verifyRequest) {
+		registrationService.verify(verifyRequest);
+		return Response.NO_CONTENT;
+	}
+
+
 	@PostMapping("/login")
 	public Response<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
-		return Response.ok(authenticationService.login(request));
+		Token token = authenticationService.login(request);
+		return Response.ok(
+			TokenResponse.builder()
+				.accessToken(token.getAccessToken())
+				.refreshToken(token.getRefreshToken())
+				.build()
+		);
 	}
 
-	@PostMapping("/refresh-token")
-	public Response<TokenResponse> refreshToken(@RequestBody @Valid TokenRefreshRequest refreshRequest) {
-		return Response.ok(authenticationService.refreshToken(refreshRequest));
+	@PostMapping("/refresh")
+	public Response<TokenResponse> refresh(@RequestBody @Valid RefreshRequest refreshRequest) {
+		Token token = authenticationService.refresh(refreshRequest);
+		return Response.ok(
+			TokenResponse.builder()
+				.accessToken(token.getAccessToken())
+				.refreshToken(token.getRefreshToken())
+				.build()
+		);
 	}
 
-	@PostMapping("/guest")
-	public Response<TokenResponse> guest() {
-		return Response.ok(authenticationService.generateGuestToken());
+	@PostMapping("/logout")
+	public Response<Void> logout(@RequestBody @Valid LogoutRequest logoutRequest) {
+		authenticationService.logout(logoutRequest.getRefreshToken());
+		return Response.NO_CONTENT;
 	}
 
 }
