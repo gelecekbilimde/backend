@@ -1,6 +1,6 @@
 package org.gelecekbilimde.scienceplatform.user.model.enums;
 
-public enum Degree {
+public enum UserDegree {
 
 	PRIMARY_SCHOOL,
 	MIDDLE_SCHOOL,

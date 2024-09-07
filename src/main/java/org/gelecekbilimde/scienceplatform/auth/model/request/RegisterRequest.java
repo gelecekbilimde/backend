@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.gelecekbilimde.scienceplatform.user.model.enums.Degree;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserDegree;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
 
 import java.time.LocalDate;
@@ -43,6 +43,6 @@ public class RegisterRequest {
 
 	private UserGender gender;
 
-	private Degree degree;
+	private UserDegree degree;
 
 }
