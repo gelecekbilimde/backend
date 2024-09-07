@@ -17,6 +17,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.enums.TokenClaims;
 import org.gelecekbilimde.scienceplatform.auth.service.TokenService;
 import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.common.util.ListUtil;
+import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ class TokenServiceImpl implements TokenService {
 			new Date(currentTimeMillis), tokenConfiguration.getTokenExpiration()
 		);
 		final String accessToken = tokenBuilder
-			.id(UUID.randomUUID().toString())
+			.id(RandomUtil.generateUUID())
 			.expiration(accessTokenExpiresAt)
 			.claims(claims)
 			.compact();
@@ -55,7 +55,7 @@ class TokenServiceImpl implements TokenService {
 			new Date(currentTimeMillis), tokenConfiguration.getRefreshExpiration()
 		);
 		final String refreshToken = tokenBuilder
-			.id(UUID.randomUUID().toString())
+			.id(RandomUtil.generateUUID())
 			.expiration(refreshTokenExpiresAt)
 			.claims(claims)
 			.compact();
@@ -78,7 +78,7 @@ class TokenServiceImpl implements TokenService {
 			new Date(currentTimeMillis), tokenConfiguration.getTokenExpiration()
 		);
 		final String accessToken = tokenBuilder
-			.id(UUID.randomUUID().toString())
+			.id(RandomUtil.generateUUID())
 			.expiration(accessTokenExpiresAt)
 			.claims(claims)
 			.compact();
