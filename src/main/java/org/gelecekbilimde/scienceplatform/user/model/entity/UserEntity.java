@@ -24,7 +24,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.user.model.enums.Degree;
-import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 
 import java.time.LocalDate;
@@ -72,7 +72,7 @@ public class UserEntity extends BaseEntity {
 
 	@Column(name = "gender")
 	@Enumerated(EnumType.STRING)
-	private Gender gender;
+	private UserGender gender;
 
 	@Column(name = "role_id")
 	private String roleId;

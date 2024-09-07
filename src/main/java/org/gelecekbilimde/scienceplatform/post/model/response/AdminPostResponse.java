@@ -8,7 +8,7 @@ import org.gelecekbilimde.scienceplatform.media.model.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
 import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
 import org.gelecekbilimde.scienceplatform.user.model.enums.Degree;
-import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class AdminPostResponse {
 		private String lastName;
 		private String avatar;
 		private Degree degree;
-		private Gender gender;
+		private UserGender gender;
 	}
 
 	@Builder
