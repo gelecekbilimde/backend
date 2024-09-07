@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.gelecekbilimde.scienceplatform.user.model.enums.Degree;
-import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
 
 import java.time.LocalDate;
 
@@ -41,7 +41,7 @@ public class RegisterRequest {
 
 	private LocalDate birthDate;
 
-	private Gender gender;
+	private UserGender gender;
 
 	private Degree degree;
 
