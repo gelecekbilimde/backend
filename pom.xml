@@ -28,7 +28,7 @@
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     <org.springframework.security.version>6.0.3</org.springframework.security.version>
     <org.springframework.boot.version>3.1.4</org.springframework.boot.version>
-    <org.postgresql.version>42.6.0</org.postgresql.version>
+    <org.postgresql.version>42.6.1</org.postgresql.version>
     <org.projectlombok.version>1.18.26</org.projectlombok.version>
     <jsonwebtoken.version>0.12.6</jsonwebtoken.version>
     <org.hibernate.validator.version>8.0.0.Final</org.hibernate.validator.version>
