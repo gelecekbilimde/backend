@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.model.BaseDomainModel;
-import org.gelecekbilimde.scienceplatform.user.model.enums.Degree;
-import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserDegree;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 
 import java.time.LocalDate;
@@ -24,8 +24,8 @@ public class User extends BaseDomainModel {
 	private String avatarPath;
 	private String biography;
 	private LocalDate birthDate;
-	private Degree degree;
-	private Gender gender;
+	private UserDegree degree;
+	private UserGender gender;
 	private UserStatus status;
 
 }

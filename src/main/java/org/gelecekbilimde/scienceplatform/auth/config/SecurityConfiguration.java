@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.auth.config;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.filter.JwtAuthenticationFilter;
+import org.gelecekbilimde.scienceplatform.auth.filter.CustomBearerTokenAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,7 +38,7 @@ class SecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity,
-										   JwtAuthenticationFilter jwtAuthFilter) throws Exception {
+										   CustomBearerTokenAuthenticationFilter bearerTokenAuthenticationFilter) throws Exception {
 
 		httpSecurity.cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
@@ -46,13 +46,13 @@ class SecurityConfiguration {
 				.requestMatchers(HttpMethod.GET, "/public/**").permitAll()
 				.requestMatchers("/api/v1/version", "/api/v1/auth/**", "/api/v1/category/**")
 				.permitAll()
-					.requestMatchers(HttpMethod.GET, "/api/v1/users/*/followers", "/api/v1/users/*/followings")
+				.requestMatchers(HttpMethod.GET, "/api/v1/users/*/followers", "/api/v1/users/*/followings")
 				.permitAll()
 				.anyRequest()
 				.authenticated())
 			.sessionManagement(customizer -> customizer
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(jwtAuthFilter, BearerTokenAuthenticationFilter.class);
+			.addFilterBefore(bearerTokenAuthenticationFilter, BearerTokenAuthenticationFilter.class);
 
 		return httpSecurity.build();
 	}
