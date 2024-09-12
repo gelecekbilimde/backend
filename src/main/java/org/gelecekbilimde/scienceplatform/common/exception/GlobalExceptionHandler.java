@@ -9,8 +9,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 class GlobalExceptionHandler {
 
 	private static final String ERROR = "error";

@@ -6,21 +6,17 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum TokenClaims {
-	JWT_ID("jti"),
+
+	ALGORITHM("alg"),
 	TYPE("typ"),
 	USER_ID("userId"),
-	FULL_NAME("fullName"),
-	MAIL("mail"),
-	ROLE_ID("roleId"),
+	USER_FIRST_NAME("userFirstName"),
+	USER_LAST_NAME("userLastName"),
+	USER_MAIL("userMail"),
 	USER_STATUS("userStatus"),
-	ROLE_NAME("roleName"),
-	SCOPE("scope"),
-	SUBJECT("sub"),
-	ISSUED_AT("iat"),
-	EXPIRES_AT("exp"),
-	ALGORITHM("alg"),
-	TYPE_VAL("JWT"),
-	ISSUER("gelecekbilimde.net"),
-	GUEST_FULL_NAME("Ziyaretçi");
+	USER_ROLE("userRole"),
+	USER_PERMISSIONS("userPermissions");
+
 	private final String value;
+
 }

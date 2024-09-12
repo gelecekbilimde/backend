@@ -3,9 +3,9 @@ package org.gelecekbilimde.scienceplatform.common.model.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
+import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Builder
@@ -26,7 +26,7 @@ public class Response<T> {
 	public static <T> Response<T> ok(final T response) {
 		return Response.<T>builder()
 			.list(response)
-			.responseCode(UUID.randomUUID().toString())
+			.responseCode(RandomUtil.generateUUID())
 			.build();
 	}
 
@@ -34,7 +34,7 @@ public class Response<T> {
 	public static <T> Response<T> create(final T response) {
 		return Response.<T>builder()
 			.list(response)
-			.responseCode(UUID.randomUUID().toString())
+			.responseCode(RandomUtil.generateUUID())
 			.build();
 	}
 }

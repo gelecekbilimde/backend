@@ -23,8 +23,8 @@ import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
-import org.gelecekbilimde.scienceplatform.user.model.enums.Degree;
-import org.gelecekbilimde.scienceplatform.user.model.enums.Gender;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserDegree;
+import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 
 import java.time.LocalDate;
@@ -52,7 +52,7 @@ public class UserEntity extends BaseEntity {
 	private String password;
 
 	@Column(name = "first_name")
-	private String name;
+	private String firstName;
 
 	@Column(name = "last_name")
 	private String lastName;
@@ -68,11 +68,11 @@ public class UserEntity extends BaseEntity {
 
 	@Column(name = "degree")
 	@Enumerated(EnumType.STRING)
-	private Degree degree;
+	private UserDegree degree;
 
 	@Column(name = "gender")
 	@Enumerated(EnumType.STRING)
-	private Gender gender;
+	private UserGender gender;
 
 	@Column(name = "role_id")
 	private String roleId;
