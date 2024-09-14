@@ -1,8 +1,8 @@
-package org.gelecekbilimde.scienceplatform.user.service;
+package org.gelecekbilimde.scienceplatform.auth.service;
 
 import org.gelecekbilimde.scienceplatform.common.model.response.Response;
-import org.gelecekbilimde.scienceplatform.user.model.request.RoleChangeRequest;
-import org.gelecekbilimde.scienceplatform.user.model.response.UserRoleResponse;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.response.UserRoleResponse;
 
 import java.util.List;
 
