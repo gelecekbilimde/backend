@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.user.model.response;
+package org.gelecekbilimde.scienceplatform.auth.model.response;
 
 import lombok.*;
 
