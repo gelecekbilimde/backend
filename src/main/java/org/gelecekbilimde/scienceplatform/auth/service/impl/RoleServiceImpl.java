@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.user.service.impl;
+package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundException;
@@ -8,17 +8,17 @@ import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.common.model.response.Response;
 import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
-import org.gelecekbilimde.scienceplatform.user.exception.AdminRoleConflictException;
-import org.gelecekbilimde.scienceplatform.user.exception.AuthorRequestNotFound;
-import org.gelecekbilimde.scienceplatform.user.exception.UserRoleConflictException;
-import org.gelecekbilimde.scienceplatform.user.model.entity.AuthorRequestEntity;
+import org.gelecekbilimde.scienceplatform.auth.exception.AdminRoleConflictException;
+import org.gelecekbilimde.scienceplatform.auth.exception.AuthorRequestNotFound;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserRoleConflictException;
+import org.gelecekbilimde.scienceplatform.auth.model.entity.AuthorRequestEntity;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
-import org.gelecekbilimde.scienceplatform.user.model.mapper.AuthorRequestEntityToUserRoleResponse;
-import org.gelecekbilimde.scienceplatform.user.model.request.RoleChangeRequest;
-import org.gelecekbilimde.scienceplatform.user.model.response.UserRoleResponse;
-import org.gelecekbilimde.scienceplatform.user.repository.AuthorRequestRepository;
+import org.gelecekbilimde.scienceplatform.auth.model.mapper.AuthorRequestEntityToUserRoleResponse;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.response.UserRoleResponse;
+import org.gelecekbilimde.scienceplatform.auth.repository.AuthorRequestRepository;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
-import org.gelecekbilimde.scienceplatform.user.service.RoleService;
+import org.gelecekbilimde.scienceplatform.auth.service.RoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,7 +86,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public UserRoleResponse makeUserToAdmin(RoleChangeRequest request) {
-		UserEntity user = userRepository.findById(request.getUserId()).orElseThrow(UserNotFoundException::new); //todo tek bir metotta
+		UserEntity user = userRepository.findById(request.getUserId()).orElseThrow(UserNotFoundException::new);
 		RoleEntity roleEntity = roleRepository.findByName("ADMIN").orElseThrow(RoleNotFoundException::new);
 		if (user.getRoleId().equals(roleEntity.getId())){
 			throw new AdminRoleConflictException();
