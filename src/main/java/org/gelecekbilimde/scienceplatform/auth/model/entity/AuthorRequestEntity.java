@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.user.model.entity;
+package org.gelecekbilimde.scienceplatform.auth.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.checkerframework.common.aliasing.qual.Unique;
+import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 
 @Data
 @SuperBuilder
