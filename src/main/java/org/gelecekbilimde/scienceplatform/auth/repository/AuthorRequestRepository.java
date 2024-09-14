@@ -1,6 +1,6 @@
-package org.gelecekbilimde.scienceplatform.user.repository;
+package org.gelecekbilimde.scienceplatform.auth.repository;
 
-import org.gelecekbilimde.scienceplatform.user.model.entity.AuthorRequestEntity;
+import org.gelecekbilimde.scienceplatform.auth.model.entity.AuthorRequestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
