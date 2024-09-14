@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.user.exception;
+package org.gelecekbilimde.scienceplatform.auth.exception;
 
 import java.io.Serial;
 

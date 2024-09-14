@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.user.model.request;
+package org.gelecekbilimde.scienceplatform.auth.model.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -9,6 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoleChangeRequest {
+
 	@NotNull
 	private String userId;
+
 }
