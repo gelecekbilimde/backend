@@ -34,8 +34,8 @@ class GlobalExceptionHandler {
 		return trowException(request, status, message, INFO, new HashMap<>());
 	}
 
-	@ExceptionHandler(value = {NotAllowedException.class})
-	public ResponseEntity<Object> handleNotAllowedException(NotAllowedException e, HttpServletRequest request) {
+	@ExceptionHandler(value = {AbstractConflictException.class})
+	public ResponseEntity<Object> handleNotAllowedException(AbstractConflictException e, HttpServletRequest request) {
 
 		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
 		String message = e.getMessage();
