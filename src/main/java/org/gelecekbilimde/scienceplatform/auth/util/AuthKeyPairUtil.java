@@ -6,6 +6,7 @@ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.gelecekbilimde.scienceplatform.auth.exception.KeyPairGenerationException;
 import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.common.util.FileUtil;
 
@@ -27,8 +28,7 @@ public class AuthKeyPairUtil {
 			keyPairGenerator.initialize(2048);
 			return keyPairGenerator.generateKeyPair();
 		} catch (NoSuchAlgorithmException exception) {
-			log.error("KeyPair generation error: {}", exception.getMessage());
-			throw new ServerException(exception.getMessage());
+			throw new KeyPairGenerationException(exception);
 		}
 	}
 
