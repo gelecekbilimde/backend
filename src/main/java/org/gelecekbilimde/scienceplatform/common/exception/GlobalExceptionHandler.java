@@ -53,7 +53,7 @@ class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(value = {AbstractAuthException.class})
-	public ResponseEntity<Object> handleUnAuthorizedException(AbstractAuthException e, HttpServletRequest request) {
+	public ResponseEntity<Object> handleAuthException(AbstractAuthException e, HttpServletRequest request) {
 
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
 		String message = e.getMessage();
