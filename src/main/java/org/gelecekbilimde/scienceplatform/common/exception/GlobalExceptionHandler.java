@@ -35,7 +35,7 @@ class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(value = {AbstractConflictException.class})
-	public ResponseEntity<Object> handleNotAllowedException(AbstractConflictException e, HttpServletRequest request) {
+	public ResponseEntity<Object> handleConflictException(AbstractConflictException e, HttpServletRequest request) {
 
 		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
 		String message = e.getMessage();
