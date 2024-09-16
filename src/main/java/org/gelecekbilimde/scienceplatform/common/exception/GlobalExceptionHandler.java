@@ -52,8 +52,8 @@ class GlobalExceptionHandler {
 		return trowException(request, status, message, INFO, new HashMap<>());
 	}
 
-	@ExceptionHandler(value = {UnauthorizedException.class})
-	public ResponseEntity<Object> handleUnAuthorizedException(UnauthorizedException e, HttpServletRequest request) {
+	@ExceptionHandler(value = {AbstractAuthException.class})
+	public ResponseEntity<Object> handleUnAuthorizedException(AbstractAuthException e, HttpServletRequest request) {
 
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
 		String message = e.getMessage();
