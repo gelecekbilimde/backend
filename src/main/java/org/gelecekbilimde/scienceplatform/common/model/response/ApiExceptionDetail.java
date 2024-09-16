@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.common.exception;
+package org.gelecekbilimde.scienceplatform.common.model.response;
 
 import lombok.Getter;
 import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
