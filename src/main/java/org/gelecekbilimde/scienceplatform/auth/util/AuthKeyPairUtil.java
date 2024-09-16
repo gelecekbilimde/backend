@@ -6,8 +6,8 @@ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.gelecekbilimde.scienceplatform.auth.exception.KeyPairConversionException;
 import org.gelecekbilimde.scienceplatform.auth.exception.KeyPairGenerationException;
-import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
 import org.gelecekbilimde.scienceplatform.common.util.FileUtil;
 
 import java.io.IOException;
@@ -40,8 +40,7 @@ public class AuthKeyPairUtil {
 				.getInstance(new PEMParser(keyReader).readObject());
 			return new JcaPEMKeyConverter().getPrivateKey(privateKeyInfo);
 		} catch (IOException exception) {
-			log.error("PrivateKey conversion error: {}", exception.getMessage());
-			throw new ServerException(exception.getMessage());
+			throw new KeyPairConversionException(exception);
 		}
 	}
 
@@ -53,8 +52,7 @@ public class AuthKeyPairUtil {
 				.getInstance(new PEMParser(keyReader).readObject());
 			return new JcaPEMKeyConverter().getPublicKey(publicKeyInfo);
 		} catch (IOException exception) {
-			log.error("PublicKey conversion error: {}", exception.getMessage());
-			throw new ServerException(exception.getMessage());
+			throw new KeyPairConversionException(exception);
 		}
 	}
 
