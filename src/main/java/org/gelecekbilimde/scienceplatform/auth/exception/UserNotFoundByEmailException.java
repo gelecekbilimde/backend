@@ -1,10 +1,10 @@
 package org.gelecekbilimde.scienceplatform.auth.exception;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
 
 import java.io.Serial;
 
-public final class UserNotFoundByEmailException extends UsernameNotFoundException {
+public final class UserNotFoundByEmailException extends NotFoundException {
 
 	@Serial
 	private static final long serialVersionUID = 3275707458511858867L;
