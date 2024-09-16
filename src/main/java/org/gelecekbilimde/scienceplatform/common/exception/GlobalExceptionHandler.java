@@ -43,8 +43,8 @@ class GlobalExceptionHandler {
 		return trowException(request, status, message, WARN, new HashMap<>());
 	}
 
-	@ExceptionHandler(value = {NotFoundException.class})
-	public ResponseEntity<Object> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+	@ExceptionHandler(value = {AbstractNotFoundException.class})
+	public ResponseEntity<Object> handleNotFoundException(AbstractNotFoundException e, HttpServletRequest request) {
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		String message = e.getMessage();
