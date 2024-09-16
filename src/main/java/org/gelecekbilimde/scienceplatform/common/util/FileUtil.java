@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.common.util;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
+import org.gelecekbilimde.scienceplatform.common.exception.FileReadException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,8 +22,7 @@ public class FileUtil {
 			byte[] keyBytes = Files.readAllBytes(Paths.get(path));
 			return new String(keyBytes);
 		} catch (IOException exception) {
-			log.error("File read error: {}", exception.getMessage());
-			throw new ServerException(exception.getMessage());
+			throw new FileReadException(exception);
 		}
 	}
 
