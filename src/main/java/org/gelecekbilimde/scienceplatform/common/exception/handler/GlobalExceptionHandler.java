@@ -1,8 +1,13 @@
-package org.gelecekbilimde.scienceplatform.common.exception;
+package org.gelecekbilimde.scienceplatform.common.exception.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailException;
+import org.gelecekbilimde.scienceplatform.common.exception.AbstractAuthException;
+import org.gelecekbilimde.scienceplatform.common.exception.AbstractConflictException;
+import org.gelecekbilimde.scienceplatform.common.exception.AbstractNotFoundException;
+import org.gelecekbilimde.scienceplatform.common.exception.ApiExceptionDetail;
+import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
