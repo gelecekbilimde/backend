@@ -94,7 +94,7 @@ class PostProcessServiceImpl implements PostProcessService {
 		PostProcessEntity postProcessEntity = postProcessRepository.getTopByPostIdOrderByCreatedAtDesc(postId)
 			.orElseThrow(() -> new PostProcessNotFoundByPostIdException(postId));
 
-		Process accessibleProcess = switch (currentProcess) {
+		Process accessibleProcess = switch (currentProcess) { // TODO : burası request objesine taşınmalı
 			case CONTROL -> Process.CREATE;
 			case LAST_CONTROL -> Process.CONTROL;
 			case CREATOR_CONTROL -> Process.LAST_CONTROL;
