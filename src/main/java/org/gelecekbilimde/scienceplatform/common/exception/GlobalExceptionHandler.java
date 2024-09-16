@@ -25,15 +25,6 @@ class GlobalExceptionHandler {
 	private static final String WARN = "warn";
 	private static final String INFO = "info";
 
-	@ExceptionHandler(value = {ClientException.class})
-	public ResponseEntity<Object> handleClientException(ClientException e, HttpServletRequest request) {
-
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		String message = e.getMessage();
-
-		return trowException(request, status, message, INFO, new HashMap<>());
-	}
-
 	@ExceptionHandler(value = {AbstractConflictException.class})
 	public ResponseEntity<Object> handleConflictException(AbstractConflictException e, HttpServletRequest request) {
 
