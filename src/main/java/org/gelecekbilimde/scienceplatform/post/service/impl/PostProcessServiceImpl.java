@@ -3,7 +3,7 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
+import org.gelecekbilimde.scienceplatform.post.exception.PostNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostProcessEntity;
@@ -108,8 +108,9 @@ class PostProcessServiceImpl implements PostProcessService {
 
 
 	private PostEntity control(PostManagerControlRequest postManagerControlRequest, Process nextProcess) {
+
 		final PostEntity postEntity = postRepository.findById(postManagerControlRequest.getPostId())
-			.orElseThrow(() -> new NotFoundException("Post not found! id:" + postManagerControlRequest.getPostId()));
+			.orElseThrow(() -> new PostNotFoundByIdException(postManagerControlRequest.getPostId()));
 
 		postManagerControlRequest.setProcess(nextProcess);
 		postEntity.setLastProcess(nextProcess);
