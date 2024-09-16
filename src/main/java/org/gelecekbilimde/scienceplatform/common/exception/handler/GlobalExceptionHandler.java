@@ -6,7 +6,7 @@ import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailExce
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractAuthException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractConflictException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractNotFoundException;
-import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
+import org.gelecekbilimde.scienceplatform.common.exception.AbstractServerException;
 import org.gelecekbilimde.scienceplatform.common.model.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +57,8 @@ class GlobalExceptionHandler {
 		return trowException(request, status, message, WARN, new HashMap<>());
 	}
 
-	@ExceptionHandler(value = {ServerException.class})
-	public ResponseEntity<Object> handleServerException(ServerException e, HttpServletRequest request) {
+	@ExceptionHandler(value = {AbstractServerException.class})
+	public ResponseEntity<Object> handleServerException(AbstractServerException e, HttpServletRequest request) {
 
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String message = e.getMessage();
