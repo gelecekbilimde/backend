@@ -6,8 +6,8 @@ import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailExce
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractAuthException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractConflictException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractNotFoundException;
-import org.gelecekbilimde.scienceplatform.common.exception.ApiExceptionDetail;
 import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
+import org.gelecekbilimde.scienceplatform.common.model.response.ApiExceptionDetail;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
