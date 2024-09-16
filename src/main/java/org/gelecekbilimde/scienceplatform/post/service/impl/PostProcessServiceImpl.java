@@ -98,7 +98,7 @@ class PostProcessServiceImpl implements PostProcessService {
 			case CONTROL -> Process.CREATE;
 			case LAST_CONTROL -> Process.CONTROL;
 			case CREATOR_CONTROL -> Process.LAST_CONTROL;
-			default -> throw new ClientException("Yanlış bir status: " + postId + "--->" + currentProcess);
+			default -> throw new RuntimeException("Yanlış bir status: " + postId + "--->" + currentProcess);
 		};
 
 		if (!postProcessEntity.getProcess().equals(accessibleProcess)) {
