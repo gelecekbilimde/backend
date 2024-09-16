@@ -1,8 +1,9 @@
 package org.gelecekbilimde.scienceplatform.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
-import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
+import org.gelecekbilimde.scienceplatform.user.exception.UserAlreadyUnfollowedException;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserFollowEntity;
@@ -28,29 +29,34 @@ public class UserFollowServiceImpl implements UserFollowService {
 	@Override
 	public List<User> findAllFollowings(String id) {
 		final UserEntity userEntity = userRepository.findById(id)
-			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
+			.orElseThrow(() -> new UserNotFoundByIdException(id));
 
 		return userEntityToUserMapper.map(userEntity.getFollowings());
 	}
 
+
 	@Override
 	public List<User> findAllFollowers(String id) {
 		final UserEntity userEntity = userRepository.findById(id)
-			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
+			.orElseThrow(() -> new UserNotFoundByIdException(id));
 
 		return userEntityToUserMapper.map(userEntity.getFollowers());
 	}
 
+
 	@Override
 	public void followToggle(String id) {
 		final UserEntity userEntity = userRepository.findById(id)
-			.orElseThrow(() -> new NotFoundException("User could not found! id:" + id));
+			.orElseThrow(() -> new UserNotFoundByIdException(id));
 
-		Optional<UserFollowEntity> followerUserFromDatabase = userFollowRepository.findByFollowedUserIdAndFollowerUserId(id, identity.getUserId());
+		Optional<UserFollowEntity> followerUserFromDatabase = userFollowRepository
+			.findByFollowedUserIdAndFollowerUserId(userEntity.getId(), identity.getUserId());
+
 		if (followerUserFromDatabase.isPresent()) {
 			this.unfollowUser(followerUserFromDatabase.get());
 			return;
 		}
+
 		this.followUser(userEntity);
 	}
 
@@ -66,13 +72,16 @@ public class UserFollowServiceImpl implements UserFollowService {
 		userFollowRepository.save(userFollowEntity);
 	}
 
+
 	@Override
 	public void removeFollower(UnfollowRequest request) {
-		final UserEntity userEntity = userRepository.findById(request.getFollowerId())
-			.orElseThrow(() -> new NotFoundException("User could not found! id:" + request.getFollowerId()));
 
-		final UserFollowEntity userFollowEntity = userFollowRepository.findByFollowedUserIdAndFollowerUserId(identity.getUserId(), userEntity.getId())
-			.orElseThrow(() -> new NotFoundException("Follower and followed could not found! id:" + userEntity.getId() + identity.getUserId()));
+		final UserEntity userEntity = userRepository.findById(request.getFollowerId())
+			.orElseThrow(() -> new UserNotFoundByIdException(request.getFollowerId()));
+
+		final UserFollowEntity userFollowEntity = userFollowRepository
+			.findByFollowedUserIdAndFollowerUserId(identity.getUserId(), userEntity.getId())
+			.orElseThrow(() -> new UserAlreadyUnfollowedException(userEntity.getId(), identity.getUserId()));
 
 		userFollowRepository.delete(userFollowEntity);
 	}
