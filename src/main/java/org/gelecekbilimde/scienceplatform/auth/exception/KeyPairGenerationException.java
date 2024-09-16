@@ -5,7 +5,7 @@ import java.io.Serial;
 public class KeyPairGenerationException extends RuntimeException {
 
 	@Serial
-	private static final long serialVersionUID = 7472270543754656424L;
+	private static final long serialVersionUID = 7666167175325870801L;
 
 	public KeyPairGenerationException(Throwable cause) {
 		super("error occurred while generating key pair", cause);
