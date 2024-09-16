@@ -8,6 +8,7 @@ import org.gelecekbilimde.scienceplatform.settings.model.mapper.SettingsEntityTo
 import org.gelecekbilimde.scienceplatform.settings.repository.SettingsRepository;
 import org.gelecekbilimde.scienceplatform.settings.service.SettingService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -21,8 +22,11 @@ class SettingServiceImpl implements SettingService {
 
 	public List<Settings> getSettings(String groupName, String name) {
 
-		List<SettingsEntity> settings = settingsRepository.getByGroupName(groupName)
-			.orElseThrow(() -> new SettingsNotFoundByGroupNameException(groupName));
+		List<SettingsEntity> settings = settingsRepository.findAllByGroupName(groupName);
+
+		if (CollectionUtils.isEmpty(settings)) {
+			throw new SettingsNotFoundByGroupNameException(groupName);
+		}
 
 		return settingsEntityToSettingsMapper.map(settings);
 	}
