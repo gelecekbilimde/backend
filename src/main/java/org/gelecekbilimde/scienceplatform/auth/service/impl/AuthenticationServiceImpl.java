@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ClaimsBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailException;
 import org.gelecekbilimde.scienceplatform.auth.exception.VerifyException;
 import org.gelecekbilimde.scienceplatform.auth.exception.WrongEmailOrPasswordException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
@@ -37,7 +37,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 	public Token login(LoginRequest request) {
 
 		UserEntity userEntity = userRepository.findByEmail(request.getEmail())
-			.orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+			.orElseThrow(() -> new UserNotFoundByEmailException(request.getEmail()));
 
 		if (!userEntity.isVerified()) {
 			throw new VerifyException(request.getEmail());
@@ -59,7 +59,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 
 		final String email = payload.get(TokenClaims.USER_MAIL.getValue(), String.class);
 		final UserEntity userEntity = this.userRepository.findByEmail(email)
-			.orElseThrow(() -> new UserNotFoundException(email));
+			.orElseThrow(() -> new UserNotFoundByEmailException(email));
 
 		final Claims claims = this.getClaimsBuilder(userEntity);
 

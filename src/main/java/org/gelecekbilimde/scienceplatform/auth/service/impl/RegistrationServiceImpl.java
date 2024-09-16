@@ -3,7 +3,7 @@ package org.gelecekbilimde.scienceplatform.auth.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.AlreadyRegisteredException;
 import org.gelecekbilimde.scienceplatform.auth.exception.DefaultRoleNotDefinedException;
-import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationAlreadyCompletedException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationIsNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
@@ -90,7 +90,7 @@ class RegistrationServiceImpl implements RegistrationService {
 
 
 		UserEntity userEntity = userRepository.findById(userVerificationEntity.getUserId())
-			.orElseThrow(UserNotFoundException::new);
+				.orElseThrow(UserNotFoundByEmailException::new);
 
 		userEntity.verify();
 		userRepository.save(userEntity);

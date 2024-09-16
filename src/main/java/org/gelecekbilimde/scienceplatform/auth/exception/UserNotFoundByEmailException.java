@@ -4,16 +4,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.io.Serial;
 
-public final class UserNotFoundException extends UsernameNotFoundException {
+public final class UserNotFoundByEmailException extends UsernameNotFoundException {
 
 	@Serial
 	private static final long serialVersionUID = -6354173425539337989L;
 
-	public UserNotFoundException() {
+	public UserNotFoundByEmailException() {
 		super("User not found!");
 	}
 
-	public UserNotFoundException(String email) {
+	public UserNotFoundByEmailException(String email) {
 		super("User not found! " + email);
 	}
 
