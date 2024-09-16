@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
-import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
+import org.gelecekbilimde.scienceplatform.post.exception.PostNotAvailableToUpdateException;
 import org.gelecekbilimde.scienceplatform.post.exception.PostNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.post.exception.PostProcessNotFoundByPostIdException;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
@@ -47,7 +47,7 @@ class PostProcessServiceImpl implements PostProcessService {
 		Optional<PostProcessEntity> accessProcess = accessProcess(postManagerControlRequest.getProcess(), postManagerControlRequest.getPostId());
 
 		if (accessProcess.isEmpty()) {
-			throw new ClientException("Post son kontrol aşaması için uygun değil");
+			throw new PostNotAvailableToUpdateException(postManagerControlRequest.getPostId());
 		}
 
 		PostProcessEntity postProcessEntity = accessProcess.get();
