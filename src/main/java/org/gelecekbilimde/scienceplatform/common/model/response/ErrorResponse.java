@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-public class ApiExceptionDetail {
+public class ErrorResponse {
 
 	private final String path;
 	private final String message;
@@ -20,7 +20,7 @@ public class ApiExceptionDetail {
 	private final Map<String, String> validationMessage;
 	private String errorCode;
 
-	public ApiExceptionDetail(String path, HttpStatus httpStatus, String httpMethod, String message, @Nullable Map<String, String> validationMessage, @Nullable Map<String, Object> args) {
+	public ErrorResponse(String path, HttpStatus httpStatus, String httpMethod, String message, @Nullable Map<String, String> validationMessage, @Nullable Map<String, Object> args) {
 		this.path = path;
 		this.message = message;
 		this.statusText = httpStatus;

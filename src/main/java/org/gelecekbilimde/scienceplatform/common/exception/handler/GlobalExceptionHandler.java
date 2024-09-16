@@ -7,7 +7,7 @@ import org.gelecekbilimde.scienceplatform.common.exception.AbstractAuthException
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractConflictException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractNotFoundException;
 import org.gelecekbilimde.scienceplatform.common.exception.ServerException;
-import org.gelecekbilimde.scienceplatform.common.model.response.ApiExceptionDetail;
+import org.gelecekbilimde.scienceplatform.common.model.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -138,15 +138,15 @@ class GlobalExceptionHandler {
 			message = "Internal Server Error";
 		}
 
-		ApiExceptionDetail apiExceptionDetail = new ApiExceptionDetail(path, status, method, message, validationMessage, new HashMap<>());
+		ErrorResponse errorResponse = new ErrorResponse(path, status, method, message, validationMessage, new HashMap<>());
 
 		if (validationMessage != null && !validationMessage.isEmpty()) {
 			originalMessage += validationMessage.toString();
 		}
 
-		writeLog(logLevel, apiExceptionDetail.getErrorCode(), originalMessage);
+		writeLog(logLevel, errorResponse.getErrorCode(), originalMessage);
 
-		return new ResponseEntity<>(apiExceptionDetail, status);
+		return new ResponseEntity<>(errorResponse, status);
 	}
 
 	private void writeLog(String level, String errorCode, String message) {
