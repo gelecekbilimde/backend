@@ -1,10 +1,10 @@
 package org.gelecekbilimde.scienceplatform.auth.exception;
 
-import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
+import org.gelecekbilimde.scienceplatform.common.exception.AbstractNotFoundException;
 
 import java.io.Serial;
 
-public final class UserNotFoundByIdException extends NotFoundException {
+public final class UserNotFoundByIdException extends AbstractNotFoundException {
 
     @Serial
     private static final long serialVersionUID = -4173490660693121294L;
