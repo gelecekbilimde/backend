@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.common.exception;
 
 import java.io.Serial;
 
-public final class FileReadException extends RuntimeException {
+public final class FileReadException extends AbstractServerException {
 
 	@Serial
 	private static final long serialVersionUID = 7827987875237716345L;
