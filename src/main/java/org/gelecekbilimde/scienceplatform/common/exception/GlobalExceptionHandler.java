@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.common.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -70,8 +70,8 @@ class GlobalExceptionHandler {
 		return trowException(request, status, message, ERROR, new HashMap<>());
 	}
 
-	@ExceptionHandler(value = {UserNotFoundException.class})
-	public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException e, HttpServletRequest request) {
+	@ExceptionHandler(value = {UserNotFoundByEmailException.class})
+	public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundByEmailException e, HttpServletRequest request) {
 
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
 		String message = e.getMessage();
