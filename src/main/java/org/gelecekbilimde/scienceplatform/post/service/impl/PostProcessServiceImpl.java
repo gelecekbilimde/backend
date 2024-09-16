@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.post.exception.PostNotFoundByIdException;
+import org.gelecekbilimde.scienceplatform.post.exception.PostProcessNotFoundByPostIdException;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostProcessEntity;
@@ -89,8 +90,9 @@ class PostProcessServiceImpl implements PostProcessService {
 	}
 
 	private Optional<PostProcessEntity> accessProcess(Process currentProcess, String postId) {
+
 		PostProcessEntity postProcessEntity = postProcessRepository.getTopByPostIdOrderByCreatedAtDesc(postId)
-			.orElseThrow(() -> new ClientException("Postun aktif süreci bulunamadı"));
+			.orElseThrow(() -> new PostProcessNotFoundByPostIdException(postId));
 
 		Process accessibleProcess = switch (currentProcess) {
 			case CONTROL -> Process.CREATE;
