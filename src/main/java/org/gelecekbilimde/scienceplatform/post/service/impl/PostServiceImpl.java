@@ -2,7 +2,6 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
-import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.common.model.BaseSpecification;
 import org.gelecekbilimde.scienceplatform.common.model.Paging;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
@@ -41,8 +40,8 @@ class PostServiceImpl implements PostService {
 	@Transactional
 	public Post save(PostCreateRequest postCreateRequest) {
 
-		if (postCreateRequest.getMedias() != null && !postCreateRequest.getMedias().stream().allMatch(postMediaCreate -> true)) { // TODO : Bu kontrol request objesi içerisine taşınmalı
-			throw new ClientException("Posta media yüklerken media id zorunlu |" + postCreateRequest.getMedias().toString());
+		if (postCreateRequest.getMedias() != null && !postCreateRequest.getMedias().stream().allMatch(postMediaCreate -> true)) {
+			// TODO : Bu kontrol request objesi içerisine taşınmalı
 		}
 
 		postCreateRequest.setLastProcess(Process.CREATE);
