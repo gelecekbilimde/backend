@@ -9,11 +9,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_ROOT_PASSWORD: postgres
-      POSTGRES_PORT: 5432
+      POSTGRES_PORT: 5433
     volumes:
       - ./docker/postgresql:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5432"
   application:
     build:
       context: .
