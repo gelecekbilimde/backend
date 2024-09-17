@@ -1,21 +1,19 @@
 version: "3.9"
 
 services:
-  postgres:
-    image: postgres:alpine3.18
-    container_name: postgres
+  database:
+    image: postgres:latest
+    container_name: database
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_ROOT_PASSWORD: postgres
-      POSTGRES_PORT: 5433
+      POSTGRES_PORT: 5432
     volumes:
       - ./docker/postgresql:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
-    networks:
-      - app-network
+      - "5432:5432"
   application:
     build:
       context: .
@@ -26,11 +24,5 @@ services:
       - "8080:8080"
     environment:
       - DATABASE_IP=host.docker.internal
-    networks:
-      - app-network
     depends_on:
-      - postgres
-
-networks:
-  app-network:
-    driver: bridge
+      - database
