@@ -14,9 +14,6 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   flyway:
     baseline-on-migrate: true
-    enabled: true
-    baseline-description: "init"
-    baseline-version: 0
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
