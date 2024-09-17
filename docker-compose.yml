@@ -1,31 +1,6 @@
 version: "3.9"
 
 services:
-  redis:
-    container_name: redis
-    image: redislabs/redisearch
-    command: --save 60 1 --loglevel warning --appendonly yes --loadmodule /usr/lib/redis/modules/redisearch.so
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./docker/redis:/usr/local/etc/redis
-    networks:
-      - app-network
-  elasticsearch:
-    image: elasticsearch:8.1.0
-    container_name: elasticsearch
-    volumes:
-      - ./docker/elasticsearch:/usr/share/elasticsearch/data
-    environment:
-      - "xpack.security.enabled=false"
-      - "xpack.security.transport.ssl.enabled=false"
-      - "xpack.security.http.ssl.enabled=false"
-      - "discovery.type=single-node"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    networks:
-      - app-network
   postgres:
     image: postgres:alpine3.18
     container_name: postgres
@@ -53,8 +28,6 @@ services:
       - app-network
     depends_on:
       - postgres
-      - redis
-      - elasticsearch
 
 networks:
   app-network:
