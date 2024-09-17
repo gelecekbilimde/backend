@@ -5,9 +5,11 @@ services:
     image: postgres:alpine3.18
     container_name: postgres
     environment:
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: 5433
+      POSTGRES_ROOT_PASSWORD: postgres
+      POSTGRES_PORT: 5433
     volumes:
       - ./docker/postgresql:/var/lib/postgresql/data
     ports:
