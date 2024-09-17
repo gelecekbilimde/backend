@@ -18,9 +18,9 @@ https://www.postman.com/gelecek-bilimde-team/workspace/gelecek-bilimde/collectio
 
 ---
 
-## Local Environment Setup
+## Running All Components as Container on Docker
 
-The following command can be executed to stand up the application's dependencies on Docker.
+The following command can be executed to stand up the application and application's dependencies on Docker.
 Then the application can be run and proceed.
 
 ```bash
@@ -34,10 +34,29 @@ The following command can be used to remove Docker Containers.
 ```
 
 > When used with the -v flag, volumes are also deleted.
- If you want the volumes to be deleted completely, you must also delete the `docker` directory in the application directory.
- is required.
-
+> If you want the volumes to be deleted completely, you must also delete the `docker` directory in the application
+> directory.
+> is required.
 
 ---
 
+## Running PostgreSQL, ElasticSearch, Redis Cache Containers on Docker
+
+The following command can be executed to stand up just the application's dependencies on Docker.
+Then the application can be run and proceed.
+
+```bash
+  docker compose up -d --build postgres redis elasticsearch
+```
+
+The following command can be used to remove Docker Containers.
+
+```bash
+  docker compose down -v
+```
+
+> When used with the -v flag, volumes are also deleted.
+> If you want the volumes to be deleted completely, you must also delete the `docker` directory in the application
+> directory.
+> is required.
 
