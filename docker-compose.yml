@@ -39,6 +39,22 @@ services:
       - "5433:5432"
     networks:
       - app-network
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: application
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_IP=host.docker.internal
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+      - redis
+      - elasticsearch
 
 networks:
   app-network:
