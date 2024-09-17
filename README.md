@@ -1,26 +1,16 @@
 # Gelecek Bilimde Community Science Communication Platform
 
-[![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)
-
-![Elasticsearch](https://img.shields.io/badge/Elasticsearch-=&nbsp;&nbsp;&nbsp;v8.1.0-green) ![Redis](https://img.shields.io/badge/Redis-=&nbsp;&nbsp;v6.2.7-green) ![Postgres](https://img.shields.io/badge/Postgres-=&nbsp;&nbsp;v15.3-green) ![Docker](https://img.shields.io/badge/Docker-=&nbsp;&nbsp;v20.10.22-green) ![Docker Compose](https://img.shields.io/badge/Docker&nbsp;Compose-=&nbsp;&nbsp;v2.15.1-green)
-
 ---
 
 ## Postman Collection: Gelecek Bilimde API
 
 https://www.postman.com/gelecek-bilimde-team/workspace/gelecek-bilimde/collection/37702250-8bfe54f1-1864-410a-b960-ab4e7122dd3e?action=share&creator=37702250
 
-## Related Projects
-
-[Frontend](https://github.com/gelecekbilimde/gelecek-bilimde-frontend)
-
-[Android](https://github.com/gelecekbilimde/Android-Application)
-
 ---
 
 ## Running All Components as Container on Docker
 
-The following command can be executed to stand up the application and application's dependencies on Docker.
+The following command can be executed to stand up the application and database on Docker.
 Then the application can be run and proceed.
 
 ```bash
@@ -40,13 +30,13 @@ The following command can be used to remove Docker Containers.
 
 ---
 
-## Running PostgreSQL, ElasticSearch, Redis Cache Containers on Docker
+## Running PostgreSQL Container on Docker
 
-The following command can be executed to stand up just the application's dependencies on Docker.
+The following command can be executed to stand up the database on Docker.
 Then the application can be run and proceed.
 
 ```bash
-  docker compose up -d --build postgres redis elasticsearch
+  docker compose up -d --build database
 ```
 
 The following command can be used to remove Docker Containers.
