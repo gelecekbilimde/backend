@@ -1,46 +1,28 @@
 version: "3.9"
 
 services:
-
-  redis:
-    container_name: redis
-    image: redislabs/redisearch
-    command: --save 60 1 --loglevel warning --appendonly yes --loadmodule /usr/lib/redis/modules/redisearch.so
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./docker/redis:/usr/local/etc/redis
-    networks:
-      - app-network
-  elasticsearch:
-    image: elasticsearch:8.1.0
-    container_name: es
-    volumes:
-      - ./docker/elasticsearch:/usr/share/elasticsearch/data
+  database:
+    image: postgres:latest
+    container_name: database
     environment:
-      - "xpack.security.enabled=false"
-      - "xpack.security.transport.ssl.enabled=false"
-      - "xpack.security.http.ssl.enabled=false"
-      - "discovery.type=single-node"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    networks:
-      - app-network
-  postgres:
-    image: postgres:alpine3.18
-    container_name: pg
-    environment:
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: 5433
+      POSTGRES_ROOT_PASSWORD: postgres
+      POSTGRES_PORT: 5433
     volumes:
       - ./docker/postgresql:/var/lib/postgresql/data
     ports:
       - "5433:5432"
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: application
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_IP=host.docker.internal
+    depends_on:
+      - database
