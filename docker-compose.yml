@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-
   redis:
     container_name: redis
     image: redislabs/redisearch
@@ -14,7 +13,7 @@ services:
       - app-network
   elasticsearch:
     image: elasticsearch:8.1.0
-    container_name: es
+    container_name: elasticsearch
     volumes:
       - ./docker/elasticsearch:/usr/share/elasticsearch/data
     environment:
@@ -29,7 +28,7 @@ services:
       - app-network
   postgres:
     image: postgres:alpine3.18
-    container_name: pg
+    container_name: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
