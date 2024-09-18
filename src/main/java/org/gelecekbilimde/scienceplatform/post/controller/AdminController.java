@@ -3,8 +3,8 @@ package org.gelecekbilimde.scienceplatform.post.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.Paging;
+import org.gelecekbilimde.scienceplatform.common.model.response.GenericResponse;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
-import org.gelecekbilimde.scienceplatform.common.model.response.Response;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.PostToAdminPostResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.AdminPostListRequest;
@@ -32,7 +32,7 @@ class AdminController {
 	private final PostToAdminPostResponseMapper postToAdminPostResponseMapper = PostToAdminPostResponseMapper.initialize();
 
 	@GetMapping
-	public Response<PagingResponse<AdminPostResponse>> getPostList(@Valid AdminPostListRequest request) {
+	GenericResponse<PagingResponse<AdminPostResponse>> getPostList(@Valid AdminPostListRequest request) {
 
 		final Paging<Post> postList = postService.getPostListAdmin(request);
 
@@ -40,20 +40,20 @@ class AdminController {
 			.of(postList)
 			.content(postToAdminPostResponseMapper.map(postList.getContent()))
 			.build();
-		return Response.ok(pageOfAdminUsersResponse);
+		return GenericResponse.success(pageOfAdminUsersResponse);
 	}
 
 	@GetMapping("/{postId}")
-	public Response<Void> getPost(@Valid AdminPostListRequest request, @PathVariable Long postId) {
-		return Response.NO_CONTENT;
+	GenericResponse<Void> getPost(@Valid AdminPostListRequest request, @PathVariable Long postId) {
+		return GenericResponse.success();
 	}
 
 
 	@PutMapping("/{postId}")
 	@PreAuthorize("hasAnyAuthority('admin:control','admin:last:control','post:create')")
-	public Response<Void> updatePostProcess(@RequestBody @Valid PostManagerControlRequest request, @PathVariable Long postId) {
+	GenericResponse<Void> updatePostProcess(@RequestBody @Valid PostManagerControlRequest request, @PathVariable Long postId) {
 		postProcessService.updatePostProcess(request);
-		return Response.NO_CONTENT;
+		return GenericResponse.success();
 	}
 
 }
