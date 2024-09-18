@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -24,6 +25,9 @@ public class ErrorResponse {
 
     @Builder.Default
     private LocalDateTime time = LocalDateTime.now();
+
+    @Builder.Default
+    private String code = RandomUtil.generateUUID();
 
     private String header;
 
