@@ -3,8 +3,8 @@ package org.gelecekbilimde.scienceplatform.post.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.Paging;
-import org.gelecekbilimde.scienceplatform.common.model.response.GenericResponse;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
+import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.PostToAdminPostResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.AdminPostListRequest;
@@ -32,7 +32,7 @@ class AdminController {
 	private final PostToAdminPostResponseMapper postToAdminPostResponseMapper = PostToAdminPostResponseMapper.initialize();
 
 	@GetMapping
-	GenericResponse<PagingResponse<AdminPostResponse>> getPostList(@Valid AdminPostListRequest request) {
+	SuccessResponse<PagingResponse<AdminPostResponse>> getPostList(@Valid AdminPostListRequest request) {
 
 		final Paging<Post> postList = postService.getPostListAdmin(request);
 
@@ -40,20 +40,20 @@ class AdminController {
 			.of(postList)
 			.content(postToAdminPostResponseMapper.map(postList.getContent()))
 			.build();
-		return GenericResponse.success(pageOfAdminUsersResponse);
+		return SuccessResponse.success(pageOfAdminUsersResponse);
 	}
 
 	@GetMapping("/{postId}")
-	GenericResponse<Void> getPost(@Valid AdminPostListRequest request, @PathVariable Long postId) {
-		return GenericResponse.success();
+	SuccessResponse<Void> getPost(@Valid AdminPostListRequest request, @PathVariable Long postId) {
+		return SuccessResponse.success();
 	}
 
 
 	@PutMapping("/{postId}")
 	@PreAuthorize("hasAnyAuthority('admin:control','admin:last:control','post:create')")
-	GenericResponse<Void> updatePostProcess(@RequestBody @Valid PostManagerControlRequest request, @PathVariable Long postId) {
+	SuccessResponse<Void> updatePostProcess(@RequestBody @Valid PostManagerControlRequest request, @PathVariable Long postId) {
 		postProcessService.updatePostProcess(request);
-		return GenericResponse.success();
+		return SuccessResponse.success();
 	}
 
 }

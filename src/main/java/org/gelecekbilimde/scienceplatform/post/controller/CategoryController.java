@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.model.response.GenericResponse;
+import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
@@ -26,16 +26,16 @@ class CategoryController {
 	private final CategoryToResponseMapper categoryToResponseMapper = CategoryToResponseMapper.initialize();
 
 	@GetMapping
-	GenericResponse<List<CategoryResponse>> getCategoryList() {
+	SuccessResponse<List<CategoryResponse>> getCategoryList() {
 		List<Category> categories = categoryService.getCategories();
 		List<CategoryResponse> categoryResponses = categoryToResponseMapper.map(categories);
-		return GenericResponse.success(categoryResponses);
+		return SuccessResponse.success(categoryResponses);
 	}
 
 	@PostMapping("/create")
-	GenericResponse<Void> createCategory(@RequestBody @Valid CategoryCreateRequest request) {
+	SuccessResponse<Void> createCategory(@RequestBody @Valid CategoryCreateRequest request) {
 		categoryService.createCategory(request);
-		return GenericResponse.success();
+		return SuccessResponse.success();
 	}
 
 }

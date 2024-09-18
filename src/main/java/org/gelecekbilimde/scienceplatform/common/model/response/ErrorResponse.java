@@ -29,129 +29,127 @@ public class ErrorResponse {
     @Builder.Default
     private String code = RandomUtil.generateUUID();
 
-    private String header;
+	private String header;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String message;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String message;
 
-    @Builder.Default
-    private final Boolean isSuccess = false;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<SubError> subErrors;
-
-    @Getter
-    @Builder
-    public static class SubError {
-
-        private String message;
-
-        private String field;
-
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        private Object value;
-
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        private String type;
-
-    }
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private List<SubError> subErrors;
 
 
-    @Getter
-    @RequiredArgsConstructor
-    public enum Header {
+	@Getter
+	@Builder
+	public static class SubError {
 
-        API_ERROR("API ERROR"),
-        CONFLICT_ERROR("CONFLICT ERROR"),
-        NOT_FOUND_ERROR("NOT FOUND ERROR"),
-        VALIDATION_ERROR("VALIDATION ERROR"),
-        DATABASE_ERROR("DATABASE ERROR"),
-        PROCESS_ERROR("PROCESS ERROR"),
-        BAD_REQUEST_ERROR("BAD REQUEST ERROR"),
-        AUTH_ERROR("AUTH ERROR");
+		private String message;
 
-        private final String name;
-    }
+		private String field;
+
+		@JsonInclude(JsonInclude.Include.NON_NULL)
+		private Object value;
+
+		@JsonInclude(JsonInclude.Include.NON_NULL)
+		private String type;
+
+	}
 
 
-    public static ErrorResponseBuilder subErrors(final List<FieldError> fieldErrors) {
+	@Getter
+	@RequiredArgsConstructor
+	public enum Header {
 
-        if (CollectionUtils.isEmpty(fieldErrors)) {
-            return ErrorResponse.builder();
-        }
+		API_ERROR("API ERROR"),
+		CONFLICT_ERROR("CONFLICT ERROR"),
+		NOT_FOUND_ERROR("NOT FOUND ERROR"),
+		VALIDATION_ERROR("VALIDATION ERROR"),
+		DATABASE_ERROR("DATABASE ERROR"),
+		PROCESS_ERROR("PROCESS ERROR"),
+		BAD_REQUEST_ERROR("BAD REQUEST ERROR"),
+		AUTH_ERROR("AUTH ERROR");
 
-        final List<SubError> subErrorErrors = new ArrayList<>();
+		private final String name;
+	}
 
-        fieldErrors.forEach(fieldError -> {
-            final SubError.SubErrorBuilder subErrorBuilder = SubError.builder();
 
-            List<String> codes = List.of(Objects.requireNonNull(fieldError.getCodes()));
-            if (!codes.isEmpty()) {
+	public static ErrorResponseBuilder subErrors(final List<FieldError> fieldErrors) {
 
-                subErrorBuilder.field(StringUtils.substringAfterLast(codes.get(0), "."));
+		if (CollectionUtils.isEmpty(fieldErrors)) {
+			return ErrorResponse.builder();
+		}
 
-                if (!"AssertTrue".equals(codes.get(codes.size() - 1))) {
-                    subErrorBuilder.type(StringUtils.substringAfterLast(codes.get(codes.size() - 2), ".").replace('$', '.'));
-                }
-            }
-            subErrorBuilder.value(fieldError.getRejectedValue() != null ? fieldError.getRejectedValue().toString() : null);
-            subErrorBuilder.message(fieldError.getDefaultMessage());
+		final List<SubError> subErrorErrors = new ArrayList<>();
 
-            subErrorErrors.add(subErrorBuilder.build());
-        });
+		fieldErrors.forEach(fieldError -> {
+			final SubError.SubErrorBuilder subErrorBuilder = SubError.builder();
 
-        return ErrorResponse.builder().subErrors(subErrorErrors);
-    }
+			List<String> codes = List.of(Objects.requireNonNull(fieldError.getCodes()));
+			if (!codes.isEmpty()) {
 
-    public static ErrorResponseBuilder subErrors(final Set<ConstraintViolation<?>> constraintViolations) {
+				subErrorBuilder.field(StringUtils.substringAfterLast(codes.get(0), "."));
 
-        if (CollectionUtils.isEmpty(constraintViolations)) {
-            return ErrorResponse.builder();
-        }
+				if (!"AssertTrue".equals(codes.get(codes.size() - 1))) {
+					subErrorBuilder.type(StringUtils.substringAfterLast(codes.get(codes.size() - 2), ".").replace('$', '.'));
+				}
+			}
+			subErrorBuilder.value(fieldError.getRejectedValue() != null ? fieldError.getRejectedValue().toString() : null);
+			subErrorBuilder.message(fieldError.getDefaultMessage());
 
-        final List<SubError> subErrors = new ArrayList<>();
+			subErrorErrors.add(subErrorBuilder.build());
+		});
 
-        constraintViolations.forEach(constraintViolation ->
-                subErrors.add(
-                        SubError.builder()
-                                .message(constraintViolation.getMessage())
-                                .field(StringUtils.substringAfterLast(constraintViolation.getPropertyPath().toString(), "."))
-                                .value(constraintViolation.getInvalidValue() != null ? constraintViolation.getInvalidValue().toString() : null)
-                                .type(constraintViolation.getInvalidValue().getClass().getSimpleName()).build()
-                )
-        );
+		return ErrorResponse.builder().subErrors(subErrorErrors);
+	}
 
-        return ErrorResponse.builder().subErrors(subErrors);
-    }
+	public static ErrorResponseBuilder subErrors(final Set<ConstraintViolation<?>> constraintViolations) {
 
-    public static ErrorResponseBuilder subErrors(final MethodArgumentTypeMismatchException exception) {
-        return ErrorResponse.builder()
-                .subErrors(List.of(
-                        SubError.builder()
-                                .message(exception.getMessage().split(";")[0])
-                                .field(exception.getName())
-                                .value(Objects.requireNonNull(exception.getValue()).toString())
-                                .type(Objects.requireNonNull(exception.getRequiredType()).getSimpleName()).build()
-                ));
-    }
+		if (CollectionUtils.isEmpty(constraintViolations)) {
+			return ErrorResponse.builder();
+		}
 
-    public static ErrorResponseBuilder subErrors(final InvalidFormatException exception) {
+		final List<SubError> subErrors = new ArrayList<>();
 
-        return ErrorResponse.builder()
-                .subErrors(List.of(
-                        SubError.builder()
-                                .message("must be accepted value")
-                                .field(
-                                        Optional.of(exception.getPath())
-                                                .filter(path -> path.size() > 1)
-                                                .map(path -> Optional.ofNullable(path.get(path.size() - 1).getFieldName())
-                                                        .orElse(path.get(path.size() - 2).getFieldName()))
-                                                .orElse(exception.getPath().get(0).getFieldName())
-                                )
-                                .value(exception.getValue())
-                                .type(StringUtils.substringAfterLast(exception.getTargetType().getName(), ".").replace('$', '.'))
-                                .build()
-                ));
-    }
+		constraintViolations.forEach(constraintViolation ->
+			subErrors.add(
+				SubError.builder()
+					.message(constraintViolation.getMessage())
+					.field(StringUtils.substringAfterLast(constraintViolation.getPropertyPath().toString(), "."))
+					.value(constraintViolation.getInvalidValue() != null ? constraintViolation.getInvalidValue().toString() : null)
+					.type(constraintViolation.getInvalidValue().getClass().getSimpleName()).build()
+			)
+		);
+
+		return ErrorResponse.builder().subErrors(subErrors);
+	}
+
+	public static ErrorResponseBuilder subErrors(final MethodArgumentTypeMismatchException exception) {
+		return ErrorResponse.builder()
+			.subErrors(List.of(
+				SubError.builder()
+					.message(exception.getMessage().split(";")[0])
+					.field(exception.getName())
+					.value(Objects.requireNonNull(exception.getValue()).toString())
+					.type(Objects.requireNonNull(exception.getRequiredType()).getSimpleName()).build()
+			));
+	}
+
+	public static ErrorResponseBuilder subErrors(final InvalidFormatException exception) {
+
+		return ErrorResponse.builder()
+			.subErrors(List.of(
+				SubError.builder()
+					.message("must be accepted value")
+					.field(
+						Optional.of(exception.getPath())
+							.filter(path -> path.size() > 1)
+							.map(path -> Optional.ofNullable(path.get(path.size() - 1).getFieldName())
+								.orElse(path.get(path.size() - 2).getFieldName()))
+							.orElse(exception.getPath().get(0).getFieldName())
+					)
+					.value(exception.getValue())
+					.type(StringUtils.substringAfterLast(exception.getTargetType().getName(), ".").replace('$', '.'))
+					.build()
+			));
+	}
 
 }
