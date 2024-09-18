@@ -11,7 +11,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.request.VerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.response.TokenResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.AuthenticationService;
 import org.gelecekbilimde.scienceplatform.auth.service.RegistrationService;
-import org.gelecekbilimde.scienceplatform.common.model.response.GenericResponse;
+import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,22 +27,22 @@ class AuthController {
 
 
 	@PostMapping("/register")
-	GenericResponse<Void> register(@RequestBody @Valid RegisterRequest request) {
+	SuccessResponse<Void> register(@RequestBody @Valid RegisterRequest request) {
 		registrationService.register(request);
-		return GenericResponse.success();
+		return SuccessResponse.success();
 	}
 
 	@PostMapping("/verify")
-	GenericResponse<Void> verify(@RequestBody @Valid VerifyRequest verifyRequest) {
+	SuccessResponse<Void> verify(@RequestBody @Valid VerifyRequest verifyRequest) {
 		registrationService.verify(verifyRequest);
-		return GenericResponse.success();
+		return SuccessResponse.success();
 	}
 
 
 	@PostMapping("/login")
-	GenericResponse<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
+	SuccessResponse<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
 		Token token = authenticationService.login(request);
-		return GenericResponse.success(
+		return SuccessResponse.success(
 			TokenResponse.builder()
 				.accessToken(token.getAccessToken())
 				.refreshToken(token.getRefreshToken())
@@ -51,9 +51,9 @@ class AuthController {
 	}
 
 	@PostMapping("/refresh")
-	GenericResponse<TokenResponse> refresh(@RequestBody @Valid RefreshRequest refreshRequest) {
+	SuccessResponse<TokenResponse> refresh(@RequestBody @Valid RefreshRequest refreshRequest) {
 		Token token = authenticationService.refresh(refreshRequest);
-		return GenericResponse.success(
+		return SuccessResponse.success(
 			TokenResponse.builder()
 				.accessToken(token.getAccessToken())
 				.refreshToken(token.getRefreshToken())
@@ -62,9 +62,9 @@ class AuthController {
 	}
 
 	@PostMapping("/logout")
-	GenericResponse<Void> logout(@RequestBody @Valid LogoutRequest logoutRequest) {
+	SuccessResponse<Void> logout(@RequestBody @Valid LogoutRequest logoutRequest) {
 		authenticationService.logout(logoutRequest.getRefreshToken());
-		return GenericResponse.success();
+		return SuccessResponse.success();
 	}
 
 }

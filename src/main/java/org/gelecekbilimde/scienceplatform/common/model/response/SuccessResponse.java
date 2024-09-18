@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class GenericResponse<T> {
+public class SuccessResponse<T> {
 
     @Builder.Default
     private LocalDateTime time = LocalDateTime.now();
@@ -20,19 +20,19 @@ public class GenericResponse<T> {
     @Builder.Default
     private Boolean isSuccess = true;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private T content;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private T content;
 
 
-    public static GenericResponse<Void> success() {
-        return GenericResponse.<Void>builder()
-                .build();
-    }
+	public static SuccessResponse<Void> success() {
+		return SuccessResponse.<Void>builder()
+			.build();
+	}
 
-    public static <T> GenericResponse<T> success(final T content) {
-        return GenericResponse.<T>builder()
-                .content(content)
-                .build();
-    }
+	public static <T> SuccessResponse<T> success(final T content) {
+		return SuccessResponse.<T>builder()
+			.content(content)
+			.build();
+	}
 
 }

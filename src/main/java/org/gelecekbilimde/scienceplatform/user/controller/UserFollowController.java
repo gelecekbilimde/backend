@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.model.response.GenericResponse;
+import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.mapper.UserToUserFollowResponseMapper;
 import org.gelecekbilimde.scienceplatform.user.model.request.UnfollowRequest;
@@ -29,29 +29,29 @@ class UserFollowController {
 	private final UserToUserFollowResponseMapper userToUserFollowResponseMapper = UserToUserFollowResponseMapper.initialize();
 
 	@PostMapping("/{id}/follow/toggle")
-	GenericResponse<Void> followToggle(@PathVariable @UUID String id) {
+	SuccessResponse<Void> followToggle(@PathVariable @UUID String id) {
 		this.userFollowService.followToggle(id);
-		return GenericResponse.success();
+		return SuccessResponse.success();
 	}
 
 	@PostMapping("/followers/remove")
-	GenericResponse<Void> removeFollowers(@RequestBody @Valid UnfollowRequest request) {
+	SuccessResponse<Void> removeFollowers(@RequestBody @Valid UnfollowRequest request) {
 		this.userFollowService.removeFollower(request);
-		return GenericResponse.success();
+		return SuccessResponse.success();
 	}
 
 	@GetMapping("/{id}/followers")
-	GenericResponse<List<UserFollowResponse>> findAllFollowers(@PathVariable @UUID String id) {
+	SuccessResponse<List<UserFollowResponse>> findAllFollowers(@PathVariable @UUID String id) {
 		List<User> users = this.userFollowService.findAllFollowers(id);
 		List<UserFollowResponse> userFollowResponses = userToUserFollowResponseMapper.map(users);
-		return GenericResponse.success(userFollowResponses);
+		return SuccessResponse.success(userFollowResponses);
 	}
 
 	@GetMapping("/{id}/followings")
-	GenericResponse<List<UserFollowResponse>> findAllFollowings(@PathVariable @UUID String id) {
+	SuccessResponse<List<UserFollowResponse>> findAllFollowings(@PathVariable @UUID String id) {
 		List<User> users = this.userFollowService.findAllFollowings(id);
 		List<UserFollowResponse> userFollowResponses = userToUserFollowResponseMapper.map(users);
-		return GenericResponse.success(userFollowResponses);
+		return SuccessResponse.success(userFollowResponses);
 	}
 
 }
