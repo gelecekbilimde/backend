@@ -11,14 +11,14 @@ import java.time.LocalDateTime;
 @Builder
 public class SuccessResponse<T> {
 
-    @Builder.Default
-    private LocalDateTime time = LocalDateTime.now();
+	@Builder.Default
+	private final LocalDateTime time = LocalDateTime.now();
 
-    @Builder.Default
-    private String code = RandomUtil.generateUUID();
+	@Builder.Default
+	private final String code = RandomUtil.generateUUID();
 
-    @Builder.Default
-    private Boolean isSuccess = true;
+	@Builder.Default
+	private final Boolean isSuccess = true;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private T content;

@@ -23,11 +23,14 @@ import java.util.Set;
 @Builder
 public class ErrorResponse {
 
-    @Builder.Default
-    private LocalDateTime time = LocalDateTime.now();
+	@Builder.Default
+	private final LocalDateTime time = LocalDateTime.now();
 
-    @Builder.Default
-    private String code = RandomUtil.generateUUID();
+	@Builder.Default
+	private final String code = RandomUtil.generateUUID();
+
+	@Builder.Default
+	private final Boolean isSuccess = false;
 
 	private String header;
 
