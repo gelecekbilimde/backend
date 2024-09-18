@@ -1,164 +1,188 @@
 package org.gelecekbilimde.scienceplatform.common.exception.handler;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractAuthException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractConflictException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractNotFoundException;
 import org.gelecekbilimde.scienceplatform.common.exception.AbstractServerException;
 import org.gelecekbilimde.scienceplatform.common.model.response.ErrorResponse;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.sql.SQLException;
 
 @Slf4j
 @RestControllerAdvice
 class GlobalExceptionHandler {
 
-	private static final String ERROR = "error";
-	private static final String WARN = "warn";
-	private static final String INFO = "info";
 
-	@ExceptionHandler(value = {AbstractConflictException.class})
-	public ResponseEntity<Object> handleConflictException(AbstractConflictException e, HttpServletRequest request) {
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	ErrorResponse handleJsonParseErrors(final HttpMessageNotReadableException exception) {
+		log.error(exception.getMessage(), exception);
 
-		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
-		String message = e.getMessage();
-
-		return trowException(request, status, message, WARN, new HashMap<>());
-	}
-
-	@ExceptionHandler(value = {AbstractNotFoundException.class})
-	public ResponseEntity<Object> handleNotFoundException(AbstractNotFoundException e, HttpServletRequest request) {
-
-		HttpStatus status = HttpStatus.NOT_FOUND;
-		String message = e.getMessage();
-
-		return trowException(request, status, message, INFO, new HashMap<>());
-	}
-
-	@ExceptionHandler(value = {AbstractAuthException.class})
-	public ResponseEntity<Object> handleAuthException(AbstractAuthException e, HttpServletRequest request) {
-
-		HttpStatus status = HttpStatus.UNAUTHORIZED;
-		String message = e.getMessage();
-
-		return trowException(request, status, message, WARN, new HashMap<>());
-	}
-
-	@ExceptionHandler(value = {AbstractServerException.class})
-	public ResponseEntity<Object> handleServerException(AbstractServerException e, HttpServletRequest request) {
-
-		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-		String message = e.getMessage();
-
-		return trowException(request, status, message, ERROR, new HashMap<>());
-	}
-
-	@ExceptionHandler(value = {UserNotFoundByEmailException.class})
-	public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundByEmailException e, HttpServletRequest request) {
-
-		HttpStatus status = HttpStatus.UNAUTHORIZED;
-		String message = e.getMessage();
-
-		return trowException(request, status, message, ERROR, new HashMap<>());
-	}
-
-	@ExceptionHandler(value = {MethodArgumentNotValidException.class})
-	public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException e, HttpServletRequest request) {
-
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		String message = "Doğrulama Hatası";
-		HashMap<String, String> validationMessage = new HashMap<>();
-
-		for (ObjectError error : e.getBindingResult().getGlobalErrors()) {
-			validationMessage.put(error.getObjectName(), error.getDefaultMessage());
+		if (exception.getCause() instanceof InvalidFormatException invalidFormatException) {
+			return ErrorResponse.subErrors(invalidFormatException)
+				.header(ErrorResponse.Header.VALIDATION_ERROR.getName())
+				.build();
 		}
 
-		for (FieldError error : e.getBindingResult().getFieldErrors()) {
-			validationMessage.put(error.getField(), error.getDefaultMessage());
-		}
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.VALIDATION_ERROR.getName())
+			.build();
+	}
 
-		return trowException(request, status, message, ERROR, validationMessage);
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	ErrorResponse handleValidationErrors(final MethodArgumentTypeMismatchException exception) {
+
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.subErrors(exception)
+			.header(ErrorResponse.Header.VALIDATION_ERROR.getName())
+			.build();
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	ErrorResponse handleValidationErrors(final MethodArgumentNotValidException exception) {
+
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.subErrors(exception.getBindingResult().getFieldErrors())
+			.header(ErrorResponse.Header.VALIDATION_ERROR.getName())
+			.build();
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	ErrorResponse handlePathVariableErrors(final ConstraintViolationException exception) {
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.subErrors(exception.getConstraintViolations())
+			.header(ErrorResponse.Header.VALIDATION_ERROR.getName())
+			.build();
+	}
+
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+	ErrorResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.VALIDATION_ERROR.getName())
+			.build();
+	}
+
+	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+	@ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+	ErrorResponse handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
+
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.VALIDATION_ERROR.getName())
+			.build();
 	}
 
 
-	@ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
-	public ResponseEntity<Object> handleArgumentTypeMisMatchException(MethodArgumentTypeMismatchException e, HttpServletRequest request) {
+	@ExceptionHandler(AbstractNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	ErrorResponse handleNotExistError(final AbstractNotFoundException exception) {
+		log.error(exception.getMessage(), exception);
 
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-
-		String paramName = e.getName();
-		Class<?> requiredType = e.getRequiredType();
-		String invalidValue = e.getValue() != null ? e.getValue().toString() : "null"; // TODO: Burada NullPointerException alınabilir
-		String expectedType = requiredType != null ? requiredType.getSimpleName() : "unknown";
-
-		StringJoiner enumList = new StringJoiner(", ");
-		if (requiredType != null) {
-			Object[] its = requiredType.getEnumConstants();
-			if (its != null) {
-				for (Object it : its) {
-					enumList.add(it.toString());
-				}
-			}
-		}
-
-		String message = "Parameter error: " + paramName + ". " +
-			"Expected type: " + expectedType + ". " +
-			"Invalid value: " + invalidValue + ". ";
-
-		if (!enumList.toString().isEmpty()) {
-			message += "The parameter must be one of the following values: " + enumList;
-		}
-
-		return trowException(request, status, message, ERROR, new HashMap<>());
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.NOT_FOUND_ERROR.getName())
+			.message(exception.getMessage())
+			.build();
 	}
 
 
-	private ResponseEntity<Object> trowException(HttpServletRequest request, HttpStatus status, String message, String logLevel, @Nullable Map<String, String> validationMessage) {
+	@ExceptionHandler(AbstractConflictException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	ErrorResponse handleAlreadyExistError(final AbstractConflictException exception) {
+		log.error(exception.getMessage(), exception);
 
-		String path = request.getRequestURI();
-		String method = request.getMethod();
-
-		String originalMessage = message;
-		message = message.substring(0, message.lastIndexOf("|"));
-
-		if (status == HttpStatus.INTERNAL_SERVER_ERROR) {
-			message = "Internal Server Error";
-		}
-
-		ErrorResponse errorResponse = new ErrorResponse(path, status, method, message, validationMessage, new HashMap<>());
-
-		if (validationMessage != null && !validationMessage.isEmpty()) {
-			originalMessage += validationMessage.toString();
-		}
-
-		writeLog(logLevel, errorResponse.getErrorCode(), originalMessage);
-
-		return new ResponseEntity<>(errorResponse, status);
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.CONFLICT_ERROR.getName())
+			.message(exception.getMessage())
+			.build();
 	}
 
-	private void writeLog(String level, String errorCode, String message) {
-		String formatMessage = messageFormat(message, errorCode);
-		switch (level) {
-			case WARN -> log.warn(formatMessage);
-			case ERROR -> log.error(formatMessage);
-			default -> log.info(formatMessage);
-		}
+
+	@ExceptionHandler(AbstractAuthException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	ErrorResponse handleAuthError(final AbstractAuthException exception) {
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.AUTH_ERROR.getName())
+			.build();
 	}
 
-	private String messageFormat(String message, String errorCode) {
-		return String.format("ErrorId :: %5s | %s", errorCode, message);
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	ErrorResponse handleAccessDeniedError(final AccessDeniedException exception) {
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.AUTH_ERROR.getName())
+			.build();
 	}
+
+
+	@ExceptionHandler(SQLException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	ErrorResponse handleSQLError(final SQLException exception) {
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.DATABASE_ERROR.getName())
+			.build();
+	}
+
+	@ExceptionHandler(DataAccessException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	ErrorResponse handleDataAccessException(DataAccessException exception) {
+
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.DATABASE_ERROR.getName())
+			.build();
+	}
+
+
+	@ExceptionHandler(AbstractServerException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	ErrorResponse handleProcessError(final AbstractServerException exception) {
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.PROCESS_ERROR.getName())
+			.message(exception.getMessage())
+			.build();
+	}
+
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	ErrorResponse handleProcessError(final Exception exception) {
+		log.error(exception.getMessage(), exception);
+
+		return ErrorResponse.builder()
+			.header(ErrorResponse.Header.PROCESS_ERROR.getName())
+			.build();
+	}
+
 }
