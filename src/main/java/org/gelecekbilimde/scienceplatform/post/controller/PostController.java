@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.model.response.Response;
+import org.gelecekbilimde.scienceplatform.common.model.response.GenericResponse;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.PostLike;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.PostLikeToResponseMapper;
@@ -33,17 +33,18 @@ class PostController {
 
 	@PostMapping
 	@PreAuthorize("hasAuthority('post:create')")
-	public Response<PostResponse> savePost(@RequestBody @Valid PostCreateRequest request) {
+	GenericResponse<PostResponse> savePost(@RequestBody @Valid PostCreateRequest request) {
 		Post post = postService.save(request);
-		return Response.create(postToResponseMapper.map(post));
+		PostResponse postResponse = postToResponseMapper.map(post);
+		return GenericResponse.success(postResponse);
 	}
 
 	@PutMapping("/{id}/like/toggle")
 	@PreAuthorize("hasAuthority('post:create')")
-	public Response<PostLikeResponse> toggleLikeOfPost(@PathVariable String id) {
+	GenericResponse<PostLikeResponse> toggleLikeOfPost(@PathVariable String id) {
 		PostLike postLike = postLikeToggleService.toggleLikeOfPost(id);
 		PostLikeResponse postLikeResponse = postLikeToResponseMapper.map(postLike);
-		return Response.ok(postLikeResponse);
+		return GenericResponse.success(postLikeResponse);
 	}
 
 }
