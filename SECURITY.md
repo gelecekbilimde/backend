@@ -1,14 +1,5 @@
 # Security Policy
 
-## Supported Versions
-
-We take security seriously. Below is the list of currently supported versions of our project and their respective security updates.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.0.x   | :white_check_mark:  |
-| 0.x     | :x:                |
-
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability in this project, we appreciate your responsible disclosure. To report a vulnerability, please follow these steps:
@@ -37,4 +28,3 @@ If you discover a security vulnerability in this project, we appreciate your res
 
 We continuously monitor and update dependencies for security patches. Please ensure you are using the latest version of our software to stay protected.
 
----
