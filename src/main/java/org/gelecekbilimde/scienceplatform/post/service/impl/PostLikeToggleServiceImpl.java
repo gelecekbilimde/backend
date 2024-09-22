@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
-import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
+import org.gelecekbilimde.scienceplatform.post.exception.PostNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.post.model.PostLike;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostLikeEntity;
@@ -27,7 +27,7 @@ class PostLikeToggleServiceImpl implements PostLikeToggleService {
 	public PostLike toggleLikeOfPost(String id) {
 
 		final PostEntity postEntity = postRepository.findById(id)
-			.orElseThrow(() -> new NotFoundException("Post not found! id:" + id));
+			.orElseThrow(() -> new PostNotFoundByIdException(id));
 
 		Optional<PostLikeEntity> postLikeFromDatabase = postLikeRepository.findByPostIdAndUserId(id, identity.getUserId());
 		if (postLikeFromDatabase.isPresent()) {

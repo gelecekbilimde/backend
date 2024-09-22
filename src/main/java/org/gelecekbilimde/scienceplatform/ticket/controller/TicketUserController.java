@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
-import org.gelecekbilimde.scienceplatform.common.model.response.Response;
+import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketCreateRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketResponse;
@@ -26,16 +26,16 @@ class TicketUserController {
 	@GetMapping
 	@Valid
 	@PreAuthorize("hasAuthority('self:ticket:read')")
-	public Response<PagingResponse<TicketResponse>> ticketReadSelf(PagingRequest request) {
+	SuccessResponse<PagingResponse<TicketResponse>> ticketReadSelf(PagingRequest request) {
 		final PagingResponse<TicketResponse> ticketResponses = ticketService.ticketReadSelf(request);
-		return Response.ok(ticketResponses);
+		return SuccessResponse.success(ticketResponses);
 	}
 
 	@PostMapping
 	@PreAuthorize("hasAuthority('self:ticket:create')")
-	public Response<Ticket> ticketCreateSelf(@RequestBody @Valid TicketCreateRequest request) {
+	SuccessResponse<Ticket> ticketCreateSelf(@RequestBody @Valid TicketCreateRequest request) {
 		Ticket ticketResponse = ticketService.ticketCreateSelf(request);
-		return Response.create(ticketResponse);
+		return SuccessResponse.success(ticketResponse);
 	}
 
 }

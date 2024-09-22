@@ -2,8 +2,9 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
-import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
-import org.gelecekbilimde.scienceplatform.common.exception.NotFoundException;
+import org.gelecekbilimde.scienceplatform.post.exception.PostNotAvailableToUpdateException;
+import org.gelecekbilimde.scienceplatform.post.exception.PostNotFoundByIdException;
+import org.gelecekbilimde.scienceplatform.post.exception.PostProcessNotFoundByPostIdException;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostProcessEntity;
@@ -46,7 +47,7 @@ class PostProcessServiceImpl implements PostProcessService {
 		Optional<PostProcessEntity> accessProcess = accessProcess(postManagerControlRequest.getProcess(), postManagerControlRequest.getPostId());
 
 		if (accessProcess.isEmpty()) {
-			throw new ClientException("Post son kontrol aşaması için uygun değil");
+			throw new PostNotAvailableToUpdateException(postManagerControlRequest.getPostId());
 		}
 
 		PostProcessEntity postProcessEntity = accessProcess.get();
@@ -89,14 +90,15 @@ class PostProcessServiceImpl implements PostProcessService {
 	}
 
 	private Optional<PostProcessEntity> accessProcess(Process currentProcess, String postId) {
-		PostProcessEntity postProcessEntity = postProcessRepository.getTopByPostIdOrderByCreatedAtDesc(postId)
-			.orElseThrow(() -> new ClientException("Postun aktif süreci bulunamadı"));
 
-		Process accessibleProcess = switch (currentProcess) {
+		PostProcessEntity postProcessEntity = postProcessRepository.getTopByPostIdOrderByCreatedAtDesc(postId)
+			.orElseThrow(() -> new PostProcessNotFoundByPostIdException(postId));
+
+		Process accessibleProcess = switch (currentProcess) { // TODO : burası request objesine taşınmalı
 			case CONTROL -> Process.CREATE;
 			case LAST_CONTROL -> Process.CONTROL;
 			case CREATOR_CONTROL -> Process.LAST_CONTROL;
-			default -> throw new ClientException("Yanlış bir status: " + postId + "--->" + currentProcess);
+			default -> throw new RuntimeException("Yanlış bir status: " + postId + "--->" + currentProcess);
 		};
 
 		if (!postProcessEntity.getProcess().equals(accessibleProcess)) {
@@ -108,8 +110,9 @@ class PostProcessServiceImpl implements PostProcessService {
 
 
 	private PostEntity control(PostManagerControlRequest postManagerControlRequest, Process nextProcess) {
+
 		final PostEntity postEntity = postRepository.findById(postManagerControlRequest.getPostId())
-			.orElseThrow(() -> new NotFoundException("Post not found! id:" + postManagerControlRequest.getPostId()));
+			.orElseThrow(() -> new PostNotFoundByIdException(postManagerControlRequest.getPostId()));
 
 		postManagerControlRequest.setProcess(nextProcess);
 		postEntity.setLastProcess(nextProcess);

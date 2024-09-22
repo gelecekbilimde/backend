@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
-import org.gelecekbilimde.scienceplatform.common.model.response.Response;
+import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketUpdateRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketResponse;
@@ -25,16 +25,16 @@ class TicketController {
 
 	@GetMapping
 	@PreAuthorize("hasAuthority('ticket:read')")
-	public Response<PagingResponse<TicketResponse>> ticketRead(@Valid PagingRequest request) {
+	SuccessResponse<PagingResponse<TicketResponse>> ticketRead(@Valid PagingRequest request) {
 		final PagingResponse<TicketResponse> ticketResponses = ticketService.ticketRead(request);
-		return Response.ok(ticketResponses);
+		return SuccessResponse.success(ticketResponses);
 	}
 
 	@PutMapping
 	@PreAuthorize("hasAuthority('ticket:update')")
-	public Response<Ticket> ticketUpdate(@RequestBody @Valid TicketUpdateRequest request) {
+	SuccessResponse<Ticket> ticketUpdate(@RequestBody @Valid TicketUpdateRequest request) {
 		Ticket ticketResponse = ticketService.updateTicket(request);
-		return Response.create(ticketResponse);
+		return SuccessResponse.success(ticketResponse);
 	}
 
 }

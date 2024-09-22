@@ -1,10 +1,10 @@
 package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.auth.exception.TokenNotValidException;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.InvalidTokenEntity;
 import org.gelecekbilimde.scienceplatform.auth.repository.InvalidTokenRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.InvalidTokenService;
-import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +19,7 @@ class InvalidTokenServiceImpl implements InvalidTokenService {
 	public void checkForInvalidityOfToken(final String tokenId) {
 		final boolean isTokenInvalid = invalidTokenRepository.findByTokenId(tokenId).isPresent();
 		if (isTokenInvalid) {
-			throw new ClientException("Token is invalid");
+			throw new TokenNotValidException();
 		}
 	}
 

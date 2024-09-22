@@ -2,8 +2,8 @@ package org.gelecekbilimde.scienceplatform.media.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
-import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
+import org.gelecekbilimde.scienceplatform.media.exception.MediaGroupNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.media.model.entity.MediaEntity;
 import org.gelecekbilimde.scienceplatform.media.model.entity.MediaGroupEntity;
 import org.gelecekbilimde.scienceplatform.media.model.enums.MediaContentType;
@@ -66,7 +66,8 @@ class MediaServiceImpl implements MediaService {
 
 	@Override
 	public MediaRequest saveMedia(MediaRequest mediaRequest) {
-		MediaGroupEntity mediaGroupEntity = this.mediaGroupRepository.findById(mediaRequest.getGroupId()).orElseThrow(() -> new ClientException("Klasör Bulunamadı"));
+		MediaGroupEntity mediaGroupEntity = this.mediaGroupRepository.findById(mediaRequest.getGroupId())
+			.orElseThrow(() -> new MediaGroupNotFoundByIdException(mediaRequest.getGroupId()));
 
 		MediaEntity mediaEntity = MediaEntity.builder()
 			.url(mediaRequest.getUrl())
