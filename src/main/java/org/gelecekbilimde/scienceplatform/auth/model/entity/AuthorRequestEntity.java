@@ -1,14 +1,11 @@
 package org.gelecekbilimde.scienceplatform.auth.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.checkerframework.common.aliasing.qual.Unique;
+import org.gelecekbilimde.scienceplatform.auth.model.enums.Role;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 
 @Data
@@ -16,14 +13,17 @@ import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "author_request")
+@Table(name = "gb_author_request")
 public class AuthorRequestEntity {
 
 	@Id
-	private String id;
+	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@OneToOne
-	@Unique
 	private UserEntity user;
+
+	private Role requestRoleName;
 
 }
