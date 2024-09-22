@@ -4,6 +4,7 @@ services:
   database:
     image: postgres:latest
     container_name: database
+    restart: always
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres

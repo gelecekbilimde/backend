@@ -12,10 +12,10 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.time.DateUtils;
 import org.gelecekbilimde.scienceplatform.auth.config.TokenConfiguration;
+import org.gelecekbilimde.scienceplatform.auth.exception.TokenNotValidException;
 import org.gelecekbilimde.scienceplatform.auth.model.Token;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.TokenClaims;
 import org.gelecekbilimde.scienceplatform.auth.service.TokenService;
-import org.gelecekbilimde.scienceplatform.common.exception.ClientException;
 import org.gelecekbilimde.scienceplatform.common.util.ListUtil;
 import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -118,7 +118,7 @@ class TokenServiceImpl implements TokenService {
 			}
 
 		} catch (MalformedJwtException | ExpiredJwtException | SignatureException | RequiredTypeException exception) {
-			throw new ClientException("Token is not valid: " + exception.getMessage());
+			throw new TokenNotValidException();
 		}
 	}
 
