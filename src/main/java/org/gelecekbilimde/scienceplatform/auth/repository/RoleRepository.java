@@ -9,5 +9,6 @@ public interface RoleRepository extends JpaRepository<RoleEntity, String> {
 
 	Optional<RoleEntity> getByIsDefaultTrue();
 
-    Optional<RoleEntity> findByName(String admin);
+    Optional<RoleEntity> findByName(String role);
+
 }
