@@ -195,8 +195,7 @@ To maintain a consistent commit history, start your commit messages with a keywo
 - `#3 | fix: Resolved permission error when editing user's comment`
 
  ### Pull Request Title Standard
-- For pull requests, include the issue number and a brief description of the change:
-- Use #<issue_number> | prefix followed by the commit type and a concise description.
+For detailed guidelines on pull request titles, please refer to the [Pull Request Template](.github/PULL_REQUEST_TEMPLATE/pull_request_template.md).
 
 ## API Response Examples
 
