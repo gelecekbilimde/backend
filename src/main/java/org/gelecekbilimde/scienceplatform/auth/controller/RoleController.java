@@ -2,12 +2,17 @@ package org.gelecekbilimde.scienceplatform.auth.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.UserRole;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequest;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleService;
-import org.gelecekbilimde.scienceplatform.common.model.response.Response;
+import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -16,40 +21,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoleController {
 
-	private final RoleService roleService;
+    private final RoleService roleService;
 
-	@PutMapping("/author-requests")
-	@PreAuthorize("hasRole('USER')")
-	public Response<Void> requestToBeAuthor() {
-		roleService.userRoleToAuthorRoleRequest();
-		return Response.NO_CONTENT;
-	}
+    @PutMapping("/author-requests")
+    @PreAuthorize("hasRole('USER')")
+    public SuccessResponse<Void> requestToBeAuthor() {
+        roleService.userRoleToAuthorRoleRequest();
+        return SuccessResponse.success();
+    }
 
-	@GetMapping("/author-requests")
-	@PreAuthorize("hasRole('ADMIN')")
-	public Response<List<UserRole>> getAllRequestToBeAuthor() {
-		return Response.ok(roleService.getAllUserRoleToAuthorRoleRequest());
-	}
+    @GetMapping("/author-requests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public SuccessResponse<List<UserRole>> getAllRequestToBeAuthor() {
+        return SuccessResponse.success(roleService.getAllUserRoleToAuthorRoleRequest());
+    }
 
-	@DeleteMapping("/author-requests")
-	@PreAuthorize("hasRole('ADMIN')")
-	public Response<Void> deleteRequestToBeAuthor(@RequestBody @Valid RoleChangeRequest request) {
-		roleService.deleteUserRoleToAuthorRoleRequest(request);
-		return Response.NO_CONTENT;
-	}
+    @DeleteMapping("/author-requests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public SuccessResponse<Void> deleteRequestToBeAuthor(@RequestBody @Valid RoleChangeRequest request) {
+        roleService.deleteUserRoleToAuthorRoleRequest(request);
+        return SuccessResponse.success();
+    }
 
-	@PutMapping("/moderator-requests")
-	@PreAuthorize("hasRole('AUTHOR')")
-	public Response<Void> requestToBeModerator() {
-		roleService.authorRoleToModeratorRoleRequest();
-		return Response.NO_CONTENT;
-	}
+    @PutMapping("/moderator-requests")
+    @PreAuthorize("hasRole('AUTHOR')")
+    public SuccessResponse<Void> requestToBeModerator() {
+        roleService.authorRoleToModeratorRoleRequest();
+        return SuccessResponse.success();
+    }
 
-	@PutMapping("/role-assigments")
-	@PreAuthorize("hasRole('ADMIN')")
-	public Response<Void> makeUserAuthor(@RequestBody @Valid RoleChangeRequest request) {
-		roleService.changeUserRole(request);
-		return Response.NO_CONTENT;
-	}
+    @PutMapping("/role-assigments")
+    @PreAuthorize("hasRole('ADMIN')")
+    public SuccessResponse<Void> makeUserAuthor(@RequestBody @Valid RoleChangeRequest request) {
+        roleService.changeUserRole(request);
+        return SuccessResponse.success();
+    }
 
 }
