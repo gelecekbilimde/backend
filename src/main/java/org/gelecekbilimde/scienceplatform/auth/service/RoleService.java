@@ -1,19 +1,20 @@
 package org.gelecekbilimde.scienceplatform.auth.service;
 
-import org.gelecekbilimde.scienceplatform.common.model.response.Response;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequest;
-import org.gelecekbilimde.scienceplatform.auth.model.response.UserRoleResponse;
+import org.gelecekbilimde.scienceplatform.auth.model.UserRole;
 
 import java.util.List;
 
 public interface RoleService {
-	UserRoleResponse userRoletoAuthorRoleRequest();
 
-	UserRoleResponse makeUserToAuthor(RoleChangeRequest request);
+	void userRoleToAuthorRoleRequest();
 
-	List<UserRoleResponse> getAllUserRoletoAuthorRoleRequest();
+	List<UserRole> getAllUserRoleToAuthorRoleRequest();
 
-	Response deleteUserRoletoAuthorRoleRequest(RoleChangeRequest request);
+	void deleteUserRoleToAuthorRoleRequest(RoleChangeRequest request);
 
-	UserRoleResponse makeUserToAdmin(RoleChangeRequest request);
+	void changeUserRole(RoleChangeRequest request);
+
+	void authorRoleToModeratorRoleRequest();
+
 }
