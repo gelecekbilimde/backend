@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.media.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.model.response.Response;
+import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.media.model.enums.MediaContentType;
 import org.gelecekbilimde.scienceplatform.media.service.MediaService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,12 +22,12 @@ class MediaController {
 
 	@PostMapping
 	@PreAuthorize("hasAuthority('post:create')")
-	public Response<List<Object>> secretVersionRole(@RequestParam("files") List<MultipartFile> files,
+	SuccessResponse<List<Object>> secretVersionRole(@RequestParam("files") List<MultipartFile> files,
 													@RequestParam("groupId") Long groupId,
 													@RequestParam("contentType") MediaContentType contentType) {
 
 		//todo size kontrol
-		return Response.ok(mediaService.uploadMedia(groupId, contentType, files));
+		return SuccessResponse.success(mediaService.uploadMedia(groupId, contentType, files));
 	}
 
 }
