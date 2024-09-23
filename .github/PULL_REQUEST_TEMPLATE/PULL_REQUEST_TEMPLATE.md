@@ -2,9 +2,8 @@
 Before submitting your pull request, ensure the following:
 
 ### Pull Request Title Standard
-- [ ] The pull request title includes the issue number and a brief description of the change.
-- [ ] The title follows this format: `#<issue_number> | prefix followed by the commit type and a concise description`.
-
+- [ ] The pull request title follows the standard: [Pull Request Naming Conventions](CONTRIBUTING.md#pull-request-title-standard).
+    
 ### Branch Naming Conventions
 - [ ] The branch name follows one of the conventions outlined in the Branch Naming Conventions.
 
@@ -20,7 +19,7 @@ Before submitting your pull request, ensure the following:
 - [ ] Necessary documentation has been added or existing documentation has been updated, specifically detailing changes made in Postman.
 
 ### Testing
-- [ ] Relevant unit tests have been written and included.
+- [ ] Relevant manuel tests have been written and included.
 - [ ] Relevant integration tests have been written and included.
 
 ### Reviewers and Assignees
