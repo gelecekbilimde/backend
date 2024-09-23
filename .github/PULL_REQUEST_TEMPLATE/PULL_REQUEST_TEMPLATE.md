@@ -15,12 +15,8 @@ Before submitting your pull request, ensure the following:
 ### Documentation
 - [ ] Necessary documentation has been added or existing documentation has been updated, specifically detailing changes made in Postman.
 
-### Testing
-- [ ] Relevant manuel tests have been written and included.
-- [ ] Relevant integration tests have been written and included.
-
 ### Reviewers and Assignees
-- [ ] Default reviewers have been assigned to this pull request.
+- [ ] Default reviewers have been assigned to this pull request (all team members).
 - [ ] Assignees have been added if necessary.
 
 ### Labels and Associations
