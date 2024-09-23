@@ -10,7 +10,7 @@ If you discover a security vulnerability in this project, we appreciate your res
 2. **Send a Report**  
    You can report any vulnerabilities via email to the following contact:
    
-   **Security Team Contact**: [mert.cikla@gelecekbilimde.net](mailto:mert.cikla@gelecekbilimde.net)
+   **Security Team Contact**: [yazilim@gelecekbilimde.net](mailto:yazilim@gelecekbilimde.net)
 
 3. **Include the Following Information**  
    - Detailed description of the vulnerability
