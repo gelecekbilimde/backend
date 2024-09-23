@@ -22,7 +22,7 @@ services:
     container_name: application
     restart: on-failure
     ports:
-      - "8080:8080"
+      - "9090:9090"
     environment:
       - DATABASE_IP=host.docker.internal
     depends_on:

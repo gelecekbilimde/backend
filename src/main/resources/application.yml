@@ -1,3 +1,6 @@
+server:
+  address: 9090
+
 spring:
   datasource:
     url: jdbc:postgresql://${DATABASE_IP:localhost}:${DATABASE_PORT:5433}/postgres
