@@ -2,10 +2,7 @@
 Before submitting your pull request, ensure the following:
 
 ### Pull Request Title Standard
-- [ ] The pull request title follows the standard: [Pull Request Naming Conventions](CONTRIBUTING.md#pull-request-title-standard).
-    
-### Branch Naming Conventions
-- [ ] The branch name follows one of the conventions outlined in the Branch Naming Conventions.
+- [ ] The pull request title follows the standard: [Pull Request Naming Conventions](https://github.com/gelecekbilimde/gelecekbilimde-backend/blob/main/CONTRIBUTING.md#pull-request-title-standard).    
 
 ### Local Testing
 - [ ] I have tested my changes locally on Postman, and they are working as expected.
