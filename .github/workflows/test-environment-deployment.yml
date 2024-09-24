@@ -1,0 +1,46 @@
+name: Pull Request Checker
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+      - ready_for_review
+      - unlocked
+#on:
+#  push:
+#    branches:
+#      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update package cache
+        run: sudo apt-get update
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      - name: Install Maven
+        run: sudo apt-get install -y maven
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Deploy to server
+        env:
+          TEST_ENVIRONMENT_PRIVATE_KEY: ${{ secrets.TEST_ENVIRONMENT_PRIVATE_KEY }}
+          TEST_ENVIRONMENT_USERNAME: ${{ secrets.TEST_ENVIRONMENT_USERNAME }}
+          TEST_ENVIRONMENT_IP: ${{ secrets.TEST_ENVIRONMENT_IP }}
+          TEST_ENVIRONMENT_BE_APP_PATH: ${{ secrets.TEST_ENVIRONMENT_BE_APP_PATH }}
+          TEST_ENVIRONMENT_DEPLOYMENT_BRANCH: ${{ env.TEST_ENVIRONMENT_DEPLOYMENT_BRANCH }}
+        run: bash .github/workflows/test/deploy.sh
