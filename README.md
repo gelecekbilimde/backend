@@ -9,9 +9,9 @@ Page.
 
 ---
 
-## Postman Collection:
+## Postman
 
-https://www.postman.com/gelecek-bilimde-team/workspace/gelecek-bilimde/collection/37702250-8bfe54f1-1864-410a-b960-ab4e7122dd3e?action=share&creator=37702250
+### [Documentation](https://documenter.getpostman.com/view/37702250/2sA3sAhTGQ) & [Workspace](https://www.postman.com/gelecek-bilimde-team/workspace/gelecek-bilimde)
 
 ---
 
