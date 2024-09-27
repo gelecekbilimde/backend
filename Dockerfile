@@ -13,6 +13,6 @@ COPY --from=build app/src/main/resources/serviceAccountKey.json /src/main/resour
 
 COPY --from=build app/target/*.jar /app/gelecekbilimde-be.jar
 
-EXPOSE 8080
+EXPOSE 9090
 
 ENTRYPOINT ["java", "-jar", "/app/gelecekbilimde-be.jar"]
