@@ -2,11 +2,13 @@ package org.gelecekbilimde.scienceplatform.common.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 @Getter
+@Setter
 @Builder
 public class Paging<R> {
 
