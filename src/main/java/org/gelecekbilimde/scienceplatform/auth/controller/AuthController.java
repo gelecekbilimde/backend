@@ -25,7 +25,6 @@ class AuthController {
 	private final RegistrationService registrationService;
 	private final AuthenticationService authenticationService;
 
-
 	@PostMapping("/register")
 	SuccessResponse<Void> register(@RequestBody @Valid RegisterRequest request) {
 		registrationService.register(request);
@@ -38,27 +37,16 @@ class AuthController {
 		return SuccessResponse.success();
 	}
 
-
 	@PostMapping("/login")
 	SuccessResponse<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
 		Token token = authenticationService.login(request);
-		return SuccessResponse.success(
-			TokenResponse.builder()
-				.accessToken(token.getAccessToken())
-				.refreshToken(token.getRefreshToken())
-				.build()
-		);
+		return SuccessResponse.success(TokenResponse.builder().accessToken(token.getAccessToken()).refreshToken(token.getRefreshToken()).build());
 	}
 
 	@PostMapping("/refresh")
 	SuccessResponse<TokenResponse> refresh(@RequestBody @Valid RefreshRequest refreshRequest) {
 		Token token = authenticationService.refresh(refreshRequest);
-		return SuccessResponse.success(
-			TokenResponse.builder()
-				.accessToken(token.getAccessToken())
-				.refreshToken(token.getRefreshToken())
-				.build()
-		);
+		return SuccessResponse.success(TokenResponse.builder().accessToken(token.getAccessToken()).refreshToken(token.getRefreshToken()).build());
 	}
 
 	@PostMapping("/logout")

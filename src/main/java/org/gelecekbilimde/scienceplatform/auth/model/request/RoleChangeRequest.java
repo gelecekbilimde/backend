@@ -1,7 +1,6 @@
 package org.gelecekbilimde.scienceplatform.auth.model.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +9,9 @@ import lombok.Setter;
 public class RoleChangeRequest {
 
 	@NotBlank
-	private String userId;
+	private Long roleChangeId;
 
-	@NotNull
-	private String roleName;
+	@NotBlank
+	private String status;
 
 }
