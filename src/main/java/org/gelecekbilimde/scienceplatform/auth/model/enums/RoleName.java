@@ -1,9 +1,10 @@
 package org.gelecekbilimde.scienceplatform.auth.model.enums;
 
-public enum Role {
-	GUEST,
+public enum RoleName {
+
 	USER,
 	AUTHOR,
 	MODERATOR,
 	ADMIN
+
 }
