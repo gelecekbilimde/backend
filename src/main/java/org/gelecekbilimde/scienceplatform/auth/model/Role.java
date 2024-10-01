@@ -17,6 +17,6 @@ public class Role {
 	private boolean isDefault;
 	private boolean isHidden;
 	private RoleStatus status;
-	private List<PermissionEntity> permissionEntities;
+	private List<PermissionEntity> permissions;
 
 }
