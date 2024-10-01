@@ -74,7 +74,7 @@ class PostServiceImpl implements PostService {
 
 	@Override
 	public BasePage<Post> getPostListAdmin(AdminPostListRequest listRequest) {
-		if (listRequest.getIsActive() == null) {
+		if (listRequest.getFilter() == null || listRequest.getFilter().getIsActive() == null) {
 			return this.getPostListForAdmin(listRequest);
 		}
 		return this.getFilteredPostListForAdmin(listRequest);
@@ -87,7 +87,8 @@ class PostServiceImpl implements PostService {
 	}
 
 	private BasePage<Post> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
-		final Map<String, Object> filter = Map.of("active", listRequest.getIsActive());
+		Boolean isActive = listRequest.getFilter().getIsActive();
+		final Map<String, Object> filter = Map.of("active", isActive);
 		final Specification<PostEntity> specification = BaseSpecification.<PostEntity>builder().and(filter);
 		final Page<PostEntity> postEntities = postRepository.findAll(specification, listRequest.getPageable().toPageable());
 		final List<Post> posts = postEntityToPostMapper.map(postEntities.getContent());
