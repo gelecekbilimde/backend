@@ -14,8 +14,8 @@ public interface RoleApplicationService {
 
 	void createModeratorApplication();
 
-	void approve(Long requestId);
+	void approve(Long id);
 
-	void reject(Long requestId);
+	void reject(Long id);
 
 }
