@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/role-application")
 @RequiredArgsConstructor
-public class RoleController {
+public class RoleApplicationController {
 
     private final RoleService roleService;
 	private final RoleApplicationDomainToRoleApplicationResponse roleApplicationDomainToRoleApplicationResponse = RoleApplicationDomainToRoleApplicationResponse.initialize();
