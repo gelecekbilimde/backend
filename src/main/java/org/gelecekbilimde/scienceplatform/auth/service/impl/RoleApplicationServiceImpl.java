@@ -101,10 +101,10 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 
 	@Override
 	@Transactional
-	public void approve(Long requestId) {
+	public void approve(final Long id) {
 
-		RoleApplicationEntity application = roleChangeRepository.findById(requestId)
-			.orElseThrow(() -> new RoleChangeNotFoundByIdException(requestId));
+		RoleApplicationEntity application = roleChangeRepository.findById(id)
+			.orElseThrow(() -> new RoleChangeNotFoundByIdException(id));
 
 		// TODO : Check if the user has a role change request in progress
 
@@ -119,10 +119,10 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 
 
 	@Override
-	public void reject(Long requestId) {
+	public void reject(final Long id) {
 
-		RoleApplicationEntity application = roleChangeRepository.findById(requestId)
-			.orElseThrow(() -> new RoleChangeNotFoundByIdException(requestId));
+		RoleApplicationEntity application = roleChangeRepository.findById(id)
+			.orElseThrow(() -> new RoleChangeNotFoundByIdException(id));
 
 		// TODO : Check if the user has a role change request in progress
 
