@@ -20,57 +20,53 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/role-application")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class RoleApplicationController {
 
-    private final RoleService roleService;
+	private final RoleService roleService;
 	private final RoleApplicationDomainToRoleApplicationResponse roleApplicationDomainToRoleApplicationResponse = RoleApplicationDomainToRoleApplicationResponse.initialize();
 
-    @PostMapping("/author")
-    @PreAuthorize("hasAuthority('role:request:author')")
-    public SuccessResponse<Void> requestToBeAuthor() {
-        roleService.userRoleToAuthorRoleRequest();
-        return SuccessResponse.success();
-    }
+	@PostMapping("/role-applications")
+	@PreAuthorize("hasAuthority('role:application:list')")
+	public SuccessResponse<List<RoleApplicationResponse>> findAll(@RequestBody @Valid List<RoleChangeRequestsFilter> filters,
+																  @RequestParam(value = "page", defaultValue = "0") int page,
+																  @RequestParam(value = "size", defaultValue = "10") int size) {
 
-    @PostMapping("/requests")
-    @PreAuthorize("hasAuthority('role:change:authority')")
-    public SuccessResponse<List<RoleApplicationResponse>> getAllRoleChangeRequests(
-		@RequestBody @Valid List<RoleChangeRequestsFilter> filters,
-		@RequestParam(value = "page",defaultValue = "0") int page,
-		@RequestParam(value = "size",defaultValue = "10") int size
-	) {
 		List<RoleApplicationResponse> roleApplicationResponses = roleApplicationDomainToRoleApplicationResponse
-			.toRoleApplicationResponseList(roleService.getAllRoleChangeRequests(filters,page,size).stream().toList());
-        return SuccessResponse.success(roleApplicationResponses);
-    }
+			.toRoleApplicationResponseList(roleService.getAllRoleChangeRequests(filters, page, size).stream().toList());
+		return SuccessResponse.success(roleApplicationResponses);
+	}
 
-    @PutMapping("/moderator")
-    @PreAuthorize("hasAuthority('role:request:moderator')")
-    public SuccessResponse<Void> requestToBeModerator() {
-        roleService.authorRoleToModeratorRoleRequest();
-        return SuccessResponse.success();
-    }
+	@PostMapping("/role-application/author")
+	@PreAuthorize("hasAuthority('role:application:create:author')")
+	public SuccessResponse<Void> createAuthorApplication() {
 
-	@PatchMapping("/{id}/approve")
-	@PreAuthorize("hasAuthority('role:change:authority')")
-	public SuccessResponse<Void> approveRoleRequest(@PathVariable Long id) {
+		roleService.userRoleToAuthorRoleRequest();
+		return SuccessResponse.success();
+	}
+
+	@PutMapping("/role-application/moderator")
+	@PreAuthorize("hasAuthority('role:application:create:moderator')")
+	public SuccessResponse<Void> createModeratorApplication() {
+
+		roleService.authorRoleToModeratorRoleRequest();
+		return SuccessResponse.success();
+	}
+
+	@PatchMapping("/role-application/{id}/approve")
+	@PreAuthorize("hasAuthority('role:application:conclude')")
+	public SuccessResponse<Void> approve(@PathVariable Long id) {
+
 		roleService.approveRoleChangeRequest(id);
 		return SuccessResponse.success();
 	}
 
-	@PatchMapping("/{id}/reject")
-	@PreAuthorize("hasAuthority('role:change:authority')")
-	public SuccessResponse<Void> rejectRoleRequest(@PathVariable Long id) {
-		roleService.rejectRoleChangeRequest(id);
-		return SuccessResponse.success();
-	}
+	@PatchMapping("/role-application/{id}/reject")
+	@PreAuthorize("hasAuthority('role:application:conclude')")
+	public SuccessResponse<Void> reject(@PathVariable Long id) {
 
-	@PatchMapping("/{id}/moderator")
-	@PreAuthorize("hasAuthority('role:change:authority')")
-	public SuccessResponse<Void> moderatorAssignment(@PathVariable String id){
-		roleService.moderatorAssignment(id);
+		roleService.rejectRoleChangeRequest(id);
 		return SuccessResponse.success();
 	}
 
