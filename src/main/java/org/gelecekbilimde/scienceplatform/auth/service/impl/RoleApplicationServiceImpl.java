@@ -14,7 +14,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleChangeStatus;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.AuthorRequestEntityToUserRoleResponseMapper;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
-import org.gelecekbilimde.scienceplatform.auth.repository.RoleChangeRepository;
+import org.gelecekbilimde.scienceplatform.auth.repository.RoleApplicationRepository;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
@@ -34,7 +34,7 @@ import java.util.List;
 class RoleApplicationServiceImpl implements RoleApplicationService {
 
 	private final UserRepository userRepository;
-	private final RoleChangeRepository roleChangeRepository;
+	private final RoleApplicationRepository roleApplicationRepository;
 	private final RoleRepository roleRepository;
 	private final Identity identity;
 
@@ -45,7 +45,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 	@Override
 	public Page<RoleApplication> findAll(List<RoleChangeRequestsFilter> filters, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-		Page<RoleApplicationEntity> authorRequests = roleChangeRepository.findAll(RoleChangeSpecification.columnEqual(filters), pageable);
+		Page<RoleApplicationEntity> authorRequests = roleApplicationRepository.findAll(RoleChangeSpecification.columnEqual(filters), pageable);
 		List<RoleApplication> roleApplications = authorRequests.stream().map(authorRequestEntityToUserRoleResponseMapper::map).toList();
 		return new PageImpl<>(roleApplications, pageable, authorRequests.getTotalElements());
 	}
@@ -57,7 +57,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		UserEntity user = userRepository.findById(identity.getUserId())
 			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
 
-		boolean existAnyApplicationInReview = roleChangeRepository
+		boolean existAnyApplicationInReview = roleApplicationRepository
 			.existsByUserAndStatus(user, RoleChangeStatus.IN_REVIEW);
 		if (existAnyApplicationInReview) {
 			throw new RoleApplicationAlreadyExistException();
@@ -71,7 +71,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 			.role(role)
 			.status(RoleChangeStatus.IN_REVIEW)
 			.build();
-		roleChangeRepository.save(application);
+		roleApplicationRepository.save(application);
 	}
 
 
@@ -81,7 +81,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		UserEntity user = userRepository.findById(identity.getUserId())
 			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
 
-		boolean existAnyApplicationInReview = roleChangeRepository
+		boolean existAnyApplicationInReview = roleApplicationRepository
 			.existsByUserAndStatus(user, RoleChangeStatus.IN_REVIEW);
 		if (existAnyApplicationInReview) {
 			throw new RoleApplicationAlreadyExistException();
@@ -95,7 +95,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 			.role(role)
 			.status(RoleChangeStatus.IN_REVIEW)
 			.build();
-		roleChangeRepository.save(application);
+		roleApplicationRepository.save(application);
 	}
 
 
@@ -103,7 +103,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 	@Transactional
 	public void approve(final Long id) {
 
-		RoleApplicationEntity application = roleChangeRepository.findById(id)
+		RoleApplicationEntity application = roleApplicationRepository.findById(id)
 			.orElseThrow(() -> new RoleChangeNotFoundByIdException(id));
 
 		// TODO : Check if the user has a role change request in progress
@@ -114,20 +114,20 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		userRepository.save(user);
 
 		application.approve();
-		roleChangeRepository.save(application);
+		roleApplicationRepository.save(application);
 	}
 
 
 	@Override
 	public void reject(final Long id) {
 
-		RoleApplicationEntity application = roleChangeRepository.findById(id)
+		RoleApplicationEntity application = roleApplicationRepository.findById(id)
 			.orElseThrow(() -> new RoleChangeNotFoundByIdException(id));
 
 		// TODO : Check if the user has a role change request in progress
 
 		application.reject();
-		roleChangeRepository.save(application);
+		roleApplicationRepository.save(application);
 	}
 
 }
