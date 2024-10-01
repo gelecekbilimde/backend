@@ -1,6 +1,6 @@
 package org.gelecekbilimde.scienceplatform.auth.model.enums;
 
-public enum RoleChangeStatus {
+public enum RoleApplicationStatus {
 
 	IN_REVIEW,
 	APPROVED,

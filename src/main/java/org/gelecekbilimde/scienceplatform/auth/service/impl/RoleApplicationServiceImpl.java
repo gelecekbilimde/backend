@@ -10,7 +10,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleChangeSpecification;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
-import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleChangeStatus;
+import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.AuthorRequestEntityToUserRoleResponseMapper;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
@@ -58,7 +58,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
 
 		boolean existAnyApplicationInReview = roleApplicationRepository
-			.existsByUserAndStatus(user, RoleChangeStatus.IN_REVIEW);
+			.existsByUserAndStatus(user, RoleApplicationStatus.IN_REVIEW);
 		if (existAnyApplicationInReview) {
 			throw new RoleApplicationAlreadyExistException();
 		}
@@ -69,7 +69,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		RoleApplicationEntity application = RoleApplicationEntity.builder()
 			.user(user)
 			.role(role)
-			.status(RoleChangeStatus.IN_REVIEW)
+			.status(RoleApplicationStatus.IN_REVIEW)
 			.build();
 		roleApplicationRepository.save(application);
 	}
@@ -82,7 +82,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
 
 		boolean existAnyApplicationInReview = roleApplicationRepository
-			.existsByUserAndStatus(user, RoleChangeStatus.IN_REVIEW);
+			.existsByUserAndStatus(user, RoleApplicationStatus.IN_REVIEW);
 		if (existAnyApplicationInReview) {
 			throw new RoleApplicationAlreadyExistException();
 		}
@@ -93,7 +93,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		RoleApplicationEntity application = RoleApplicationEntity.builder()
 			.user(user)
 			.role(role)
-			.status(RoleChangeStatus.IN_REVIEW)
+			.status(RoleApplicationStatus.IN_REVIEW)
 			.build();
 		roleApplicationRepository.save(application);
 	}
