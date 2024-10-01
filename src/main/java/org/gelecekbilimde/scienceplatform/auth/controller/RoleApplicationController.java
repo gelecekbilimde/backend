@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationDomainToRoleApplicationResponse;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
 import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationResponse;
-import org.gelecekbilimde.scienceplatform.auth.service.RoleService;
+import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 class RoleApplicationController {
 
-	private final RoleService roleService;
+	private final RoleApplicationService roleApplicationService;
 	private final RoleApplicationDomainToRoleApplicationResponse roleApplicationDomainToRoleApplicationResponse = RoleApplicationDomainToRoleApplicationResponse.initialize();
 
 	@PostMapping("/role-applications")
@@ -34,7 +34,7 @@ class RoleApplicationController {
 														   @RequestParam(value = "size", defaultValue = "10") int size) {
 
 		List<RoleApplicationResponse> roleApplicationResponses = roleApplicationDomainToRoleApplicationResponse
-			.toRoleApplicationResponseList(roleService.getAllRoleChangeRequests(filters, page, size).stream().toList());
+			.toRoleApplicationResponseList(roleApplicationService.getAllRoleChangeRequests(filters, page, size).stream().toList());
 		return SuccessResponse.success(roleApplicationResponses);
 	}
 
@@ -42,7 +42,7 @@ class RoleApplicationController {
 	@PreAuthorize("hasAuthority('role:application:create:author')")
 	SuccessResponse<Void> createAuthorApplication() {
 
-		roleService.userRoleToAuthorRoleRequest();
+		roleApplicationService.userRoleToAuthorRoleRequest();
 		return SuccessResponse.success();
 	}
 
@@ -50,7 +50,7 @@ class RoleApplicationController {
 	@PreAuthorize("hasAuthority('role:application:create:moderator')")
 	SuccessResponse<Void> createModeratorApplication() {
 
-		roleService.authorRoleToModeratorRoleRequest();
+		roleApplicationService.authorRoleToModeratorRoleRequest();
 		return SuccessResponse.success();
 	}
 
@@ -58,7 +58,7 @@ class RoleApplicationController {
 	@PreAuthorize("hasAuthority('role:application:conclude')")
 	SuccessResponse<Void> approve(@PathVariable Long id) {
 
-		roleService.approveRoleChangeRequest(id);
+		roleApplicationService.approveRoleChangeRequest(id);
 		return SuccessResponse.success();
 	}
 
@@ -66,7 +66,7 @@ class RoleApplicationController {
 	@PreAuthorize("hasAuthority('role:application:conclude')")
 	SuccessResponse<Void> reject(@PathVariable Long id) {
 
-		roleService.rejectRoleChangeRequest(id);
+		roleApplicationService.rejectRoleChangeRequest(id);
 		return SuccessResponse.success();
 	}
 

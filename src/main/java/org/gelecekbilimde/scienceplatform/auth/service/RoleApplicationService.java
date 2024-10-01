@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface RoleService {
+public interface RoleApplicationService {
 
 	void userRoleToAuthorRoleRequest();
 
