@@ -1,18 +1,19 @@
 package org.gelecekbilimde.scienceplatform.auth.model.mapper;
 
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
-import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationResponse;
+import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationsResponse;
 import org.gelecekbilimde.scienceplatform.common.model.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
-public interface RoleApplicationDomainToRoleApplicationResponse extends BaseMapper<RoleApplication, RoleApplicationResponse> {
-	default List<RoleApplicationResponse> toRoleApplicationResponseList(List<RoleApplication> roleApplications){
+public interface RoleApplicationDomainToRoleApplicationResponse extends BaseMapper<RoleApplication, RoleApplicationsResponse> {
+	default List<RoleApplicationsResponse> toRoleApplicationResponseList(List<RoleApplication> roleApplications) {
 		return roleApplications.stream().map(roleApplication -> {
-			return RoleApplicationResponse.builder()
+			return RoleApplicationsResponse.builder()
 				.id(roleApplication.getId())
 				.requestRoleName(roleApplication.getRole().getName())
 				.firstName(roleApplication.getUser().getFirstName())
