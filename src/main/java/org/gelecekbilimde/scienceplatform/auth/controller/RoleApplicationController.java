@@ -3,7 +3,8 @@ package org.gelecekbilimde.scienceplatform.auth.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationDomainToRoleApplicationResponse;
+import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
+import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationToRoleApplicationResponseMapper;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
 import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationsResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
@@ -30,7 +31,7 @@ class RoleApplicationController {
 	private final RoleApplicationService roleApplicationService;
 
 
-	private final RoleApplicationDomainToRoleApplicationResponse roleApplicationDomainToRoleApplicationResponse = RoleApplicationDomainToRoleApplicationResponse.initialize();
+	private final RoleApplicationToRoleApplicationResponseMapper roleApplicationToRoleApplicationResponseMapper = RoleApplicationToRoleApplicationResponseMapper.initialize();
 
 
 	@PostMapping("/role-applications")
@@ -39,8 +40,11 @@ class RoleApplicationController {
 															@RequestParam(value = "page", defaultValue = "0") int page,
 															@RequestParam(value = "size", defaultValue = "10") int size) {
 
-		List<RoleApplicationsResponse> roleApplicationsResponses = roleApplicationDomainToRoleApplicationResponse
-			.toRoleApplicationResponseList(roleApplicationService.findAll(filters, page, size).stream().toList());
+		final List<RoleApplication> roleApplications = roleApplicationService.findAll(filters, page, size)
+			.stream()
+			.toList();
+		final List<RoleApplicationsResponse> roleApplicationsResponses = roleApplicationToRoleApplicationResponseMapper
+			.map(roleApplications);
 		return SuccessResponse.success(roleApplicationsResponses);
 	}
 
