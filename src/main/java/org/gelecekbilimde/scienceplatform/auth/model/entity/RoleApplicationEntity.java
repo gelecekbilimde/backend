@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleChangeStatus;
+import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 
@@ -43,15 +43,15 @@ public class RoleApplicationEntity extends BaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
-	private RoleChangeStatus status;
+	private RoleApplicationStatus status;
 
 
 	public void approve() {
-		this.status = RoleChangeStatus.APPROVED;
+		this.status = RoleApplicationStatus.APPROVED;
 	}
 
 	public void reject() {
-		this.status = RoleChangeStatus.REJECTED;
+		this.status = RoleApplicationStatus.REJECTED;
 	}
 
 }

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.EnumUtils;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleChangeStatusNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
-import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleChangeStatus;
+import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,8 +36,8 @@ public class RoleChangeSpecification {
 						Join<RoleApplicationEntity, UserEntity> userJoin = root.join("user");
 						predicates.add(criteriaBuilder.equal(userJoin.get(columnName), columnValue));
 					}else if ("status".equalsIgnoreCase(columnName)) {
-						if (EnumUtils.isValidEnum(RoleChangeStatus.class, columnValue.toString())) {
-							RoleChangeStatus statusEnum = RoleChangeStatus.valueOf(columnValue.toString());
+						if (EnumUtils.isValidEnum(RoleApplicationStatus.class, columnValue.toString())) {
+							RoleApplicationStatus statusEnum = RoleApplicationStatus.valueOf(columnValue.toString());
 							predicates.add(criteriaBuilder.equal(root.get("status"), statusEnum));
 						} else {
 							throw new RoleChangeStatusNotFoundException(columnValue.toString());

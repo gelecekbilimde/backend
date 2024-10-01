@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.auth.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleChangeStatus;
+import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 
 @Getter
@@ -15,6 +15,6 @@ public class RoleApplication {
 
 	private RoleDomain role;
 
-	private RoleChangeStatus status;
+	private RoleApplicationStatus status;
 
 }
