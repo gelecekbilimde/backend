@@ -9,20 +9,14 @@ import java.util.List;
 
 @Getter
 @Setter
-public class RoleDomain {
+public class Role {
 
 	private String id;
-
 	private String name;
-
 	private String description;
-
 	private boolean isDefault;
-
 	private boolean isHidden;
-
 	private RoleStatus status;
-
 	private List<PermissionEntity> permissionEntities;
 
 }
