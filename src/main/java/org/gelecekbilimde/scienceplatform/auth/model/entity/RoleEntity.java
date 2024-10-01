@@ -41,9 +41,6 @@ public class RoleEntity extends BaseEntity {
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "is_default")
-	private boolean isDefault;
-
 	@Column(name = "is_hidden")
 	private boolean isHidden;
 
