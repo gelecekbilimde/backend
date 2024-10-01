@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class RoleApplicationResponse {
+public class RoleApplicationsResponse {
 
 	private Long id;
 	private String firstName;

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationDomainToRoleApplicationResponse;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
-import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationResponse;
+import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationsResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,13 +35,13 @@ class RoleApplicationController {
 
 	@PostMapping("/role-applications")
 	@PreAuthorize("hasAnyAuthority('role:application:list')")
-	SuccessResponse<List<RoleApplicationResponse>> findAll(@RequestBody @Valid List<RoleChangeRequestsFilter> filters,
-														   @RequestParam(value = "page", defaultValue = "0") int page,
-														   @RequestParam(value = "size", defaultValue = "10") int size) {
+	SuccessResponse<List<RoleApplicationsResponse>> findAll(@RequestBody @Valid List<RoleChangeRequestsFilter> filters,
+															@RequestParam(value = "page", defaultValue = "0") int page,
+															@RequestParam(value = "size", defaultValue = "10") int size) {
 
-		List<RoleApplicationResponse> roleApplicationResponses = roleApplicationDomainToRoleApplicationResponse
+		List<RoleApplicationsResponse> roleApplicationsResponses = roleApplicationDomainToRoleApplicationResponse
 			.toRoleApplicationResponseList(roleApplicationService.findAll(filters, page, size).stream().toList());
-		return SuccessResponse.success(roleApplicationResponses);
+		return SuccessResponse.success(roleApplicationsResponses);
 	}
 
 	@PostMapping("/role-application/author")
