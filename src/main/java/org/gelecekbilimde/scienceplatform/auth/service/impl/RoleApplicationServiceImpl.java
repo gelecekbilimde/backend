@@ -16,7 +16,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.mapper.AuthorRequestEntityT
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleChangeRepository;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
-import org.gelecekbilimde.scienceplatform.auth.service.RoleService;
+import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RoleServiceImpl implements RoleService {
+public class RoleApplicationServiceImpl implements RoleApplicationService {
 
 	private final Identity identity;
 	private final UserRepository userRepository;
