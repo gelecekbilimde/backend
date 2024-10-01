@@ -2,8 +2,8 @@ package org.gelecekbilimde.scienceplatform.auth.model.enums;
 
 public enum RoleChangeStatus {
 
-	CONFIRMED,
-	IN_ASSESSMENT,
+	IN_REVIEW,
+	APPROVED,
 	REJECTED
 
 }

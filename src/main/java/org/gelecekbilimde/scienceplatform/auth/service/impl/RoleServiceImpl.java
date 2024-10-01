@@ -48,7 +48,7 @@ public class RoleServiceImpl implements RoleService {
 		RoleApplicationEntity authorRequest = RoleApplicationEntity.builder()
 			.user(getUserById())
 			.role(role)
-			.status(RoleChangeStatus.IN_ASSESSMENT)
+			.status(RoleChangeStatus.IN_REVIEW)
 			.createdAt(LocalDateTime.now())
 			.createdBy(getUserById().getId())
 			.build();
@@ -63,7 +63,7 @@ public class RoleServiceImpl implements RoleService {
 		RoleApplicationEntity authorRequest = RoleApplicationEntity.builder()
 			.user(getUserById())
 			.role(role)
-			.status(RoleChangeStatus.IN_ASSESSMENT)
+			.status(RoleChangeStatus.IN_REVIEW)
 			.build();
 		roleChangeRepository.save(authorRequest);
 	}
@@ -77,7 +77,7 @@ public class RoleServiceImpl implements RoleService {
 		user.setRoleId(roleChange.getRole().getId());
 		user.setRoleEntity(roleChange.getUser().getRoleEntity());
 		userRepository.save(user);
-		roleChange.setStatus(RoleChangeStatus.CONFIRMED);
+		roleChange.setStatus(RoleChangeStatus.APPROVED);
 		roleChangeRepository.save(roleChange);
 	}
 
@@ -113,7 +113,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	private void hasInAssesmentRequest() {
-		boolean hasInAssesmentRequest = roleChangeRepository.existsByUserAndStatus(getUserById(), RoleChangeStatus.IN_ASSESSMENT);
+		boolean hasInAssesmentRequest = roleChangeRepository.existsByUserAndStatus(getUserById(), RoleChangeStatus.IN_REVIEW);
 		if (hasInAssesmentRequest) {
 			throw new RoleChangeInAssesmentException();
 		}
