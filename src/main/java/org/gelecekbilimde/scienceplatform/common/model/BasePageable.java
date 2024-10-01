@@ -23,7 +23,7 @@ public class BasePageable extends BaseSort {
 	private int page;
 
 
-	@Range(min = 1, max = 99999999)
+	@Range(min = 1, max = 10)
 	private int pageSize;
 
 
