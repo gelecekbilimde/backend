@@ -57,11 +57,11 @@ public class RoleEntity extends BaseEntity {
 		joinColumns = @JoinColumn(name = "role_id"),
 		inverseJoinColumns = @JoinColumn(name = "permission_id")
 	)
-	private List<PermissionEntity> permissionEntities;
+	private List<PermissionEntity> permissions;
 
 
 	public List<String> getPermissionNames() {
-		return permissionEntities.stream()
+		return permissions.stream()
 			.map(PermissionEntity::getName)
 			.toList();
 	}
