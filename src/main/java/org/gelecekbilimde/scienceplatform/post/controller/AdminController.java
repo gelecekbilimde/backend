@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.common.model.Paging;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
@@ -34,7 +34,7 @@ class AdminController {
 	@GetMapping
 	SuccessResponse<PagingResponse<AdminPostResponse>> getPostList(@Valid AdminPostListRequest request) {
 
-		final Paging<Post> postList = postService.getPostListAdmin(request);
+		final BasePage<Post> postList = postService.getPostListAdmin(request);
 
 		final PagingResponse<AdminPostResponse> pageOfAdminUsersResponse = PagingResponse.<AdminPostResponse>builder()
 			.of(postList)

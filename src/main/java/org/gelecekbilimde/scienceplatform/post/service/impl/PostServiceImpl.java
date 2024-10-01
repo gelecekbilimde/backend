@@ -3,7 +3,7 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.common.model.BaseSpecification;
-import org.gelecekbilimde.scienceplatform.common.model.Paging;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
@@ -73,25 +73,25 @@ class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Paging<Post> getPostListAdmin(AdminPostListRequest listRequest) {
+	public BasePage<Post> getPostListAdmin(AdminPostListRequest listRequest) {
 		if (listRequest.getIsActive() == null) {
 			return this.getPostListForAdmin(listRequest);
 		}
 		return this.getFilteredPostListForAdmin(listRequest);
 	}
 
-	private Paging<Post> getPostListForAdmin(AdminPostListRequest listRequest) {
-		Page<PostEntity> postEntities = postRepository.findAll(listRequest.toPageable());
+	private BasePage<Post> getPostListForAdmin(AdminPostListRequest listRequest) {
+		Page<PostEntity> postEntities = postRepository.findAll(listRequest.getPageable().toPageable());
 		List<Post> posts = postEntityToPostMapper.map(postEntities.getContent());
-		return Paging.of(postEntities, posts);
+		return BasePage.of(postEntities, posts);
 	}
 
-	private Paging<Post> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
+	private BasePage<Post> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
 		final Map<String, Object> filter = Map.of("active", listRequest.getIsActive());
 		final Specification<PostEntity> specification = BaseSpecification.<PostEntity>builder().and(filter);
-		final Page<PostEntity> postEntities = postRepository.findAll(specification, listRequest.toPageable());
+		final Page<PostEntity> postEntities = postRepository.findAll(specification, listRequest.getPageable().toPageable());
 		final List<Post> posts = postEntityToPostMapper.map(postEntities.getContent());
-		return Paging.of(postEntities, posts);
+		return BasePage.of(postEntities, posts);
 	}
 
 }
