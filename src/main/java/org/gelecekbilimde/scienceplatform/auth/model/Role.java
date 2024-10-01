@@ -14,7 +14,6 @@ public class Role {
 	private String id;
 	private String name;
 	private String description;
-	private boolean isDefault;
 	private boolean isHidden;
 	private RoleStatus status;
 	private List<PermissionEntity> permissions;
