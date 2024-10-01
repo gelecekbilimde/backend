@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.TicketMessageFilter;
 
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 public class TicketMessageRequest extends PagingRequest {
 
 	@NotNull
-	private Integer id;
+	private TicketMessageFilter filter;
 
 	@Override
 	public boolean isOrderPropertyAccepted() {
