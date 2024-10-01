@@ -5,6 +5,7 @@ import jakarta.validation.constraints.AssertTrue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
+import org.gelecekbilimde.scienceplatform.post.model.AdminPostFilter;
 
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 @Data
 public class AdminPostListRequest extends PagingRequest {
 
-	public Boolean isActive;
+	private AdminPostFilter filter;
 
 	@JsonIgnore
 	@AssertTrue
