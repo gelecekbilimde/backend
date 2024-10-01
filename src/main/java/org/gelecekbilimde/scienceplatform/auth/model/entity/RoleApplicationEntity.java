@@ -43,4 +43,13 @@ public class RoleApplicationEntity extends BaseEntity {
 	@Column(name = "status")
 	private RoleChangeStatus status;
 
+
+	public void approve() {
+		this.status = RoleChangeStatus.APPROVED;
+	}
+
+	public void reject() {
+		this.status = RoleChangeStatus.REJECTED;
+	}
+
 }
