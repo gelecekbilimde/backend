@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/post")
-@PreAuthorize("hasAuthority('admin:access')")
+@PreAuthorize("hasAuthority('panel:admin')")
 class AdminController {
 
 	private final PostService postService;
