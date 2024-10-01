@@ -10,11 +10,8 @@ import org.gelecekbilimde.scienceplatform.user.model.User;
 public class RoleApplication {
 
 	private Long id;
-
 	private User user;
-
 	private RoleDomain role;
-
 	private RoleApplicationStatus status;
 
 }
