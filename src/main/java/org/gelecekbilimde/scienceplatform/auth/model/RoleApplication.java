@@ -11,7 +11,7 @@ public class RoleApplication {
 
 	private Long id;
 	private User user;
-	private RoleDomain role;
+	private Role role;
 	private RoleApplicationStatus status;
 
 }
