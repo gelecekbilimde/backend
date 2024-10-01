@@ -22,16 +22,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class RoleApplicationController {
+class RoleApplicationController {
 
 	private final RoleService roleService;
 	private final RoleApplicationDomainToRoleApplicationResponse roleApplicationDomainToRoleApplicationResponse = RoleApplicationDomainToRoleApplicationResponse.initialize();
 
 	@PostMapping("/role-applications")
 	@PreAuthorize("hasAuthority('role:application:list')")
-	public SuccessResponse<List<RoleApplicationResponse>> findAll(@RequestBody @Valid List<RoleChangeRequestsFilter> filters,
-																  @RequestParam(value = "page", defaultValue = "0") int page,
-																  @RequestParam(value = "size", defaultValue = "10") int size) {
+	SuccessResponse<List<RoleApplicationResponse>> findAll(@RequestBody @Valid List<RoleChangeRequestsFilter> filters,
+														   @RequestParam(value = "page", defaultValue = "0") int page,
+														   @RequestParam(value = "size", defaultValue = "10") int size) {
 
 		List<RoleApplicationResponse> roleApplicationResponses = roleApplicationDomainToRoleApplicationResponse
 			.toRoleApplicationResponseList(roleService.getAllRoleChangeRequests(filters, page, size).stream().toList());
@@ -40,7 +40,7 @@ public class RoleApplicationController {
 
 	@PostMapping("/role-application/author")
 	@PreAuthorize("hasAuthority('role:application:create:author')")
-	public SuccessResponse<Void> createAuthorApplication() {
+	SuccessResponse<Void> createAuthorApplication() {
 
 		roleService.userRoleToAuthorRoleRequest();
 		return SuccessResponse.success();
@@ -48,7 +48,7 @@ public class RoleApplicationController {
 
 	@PutMapping("/role-application/moderator")
 	@PreAuthorize("hasAuthority('role:application:create:moderator')")
-	public SuccessResponse<Void> createModeratorApplication() {
+	SuccessResponse<Void> createModeratorApplication() {
 
 		roleService.authorRoleToModeratorRoleRequest();
 		return SuccessResponse.success();
@@ -56,7 +56,7 @@ public class RoleApplicationController {
 
 	@PatchMapping("/role-application/{id}/approve")
 	@PreAuthorize("hasAuthority('role:application:conclude')")
-	public SuccessResponse<Void> approve(@PathVariable Long id) {
+	SuccessResponse<Void> approve(@PathVariable Long id) {
 
 		roleService.approveRoleChangeRequest(id);
 		return SuccessResponse.success();
@@ -64,7 +64,7 @@ public class RoleApplicationController {
 
 	@PatchMapping("/role-application/{id}/reject")
 	@PreAuthorize("hasAuthority('role:application:conclude')")
-	public SuccessResponse<Void> reject(@PathVariable Long id) {
+	SuccessResponse<Void> reject(@PathVariable Long id) {
 
 		roleService.rejectRoleChangeRequest(id);
 		return SuccessResponse.success();
