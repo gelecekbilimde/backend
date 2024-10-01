@@ -1,8 +1,11 @@
+server:
+  port: 9090
+
 spring:
   datasource:
-    url: jdbc:postgresql://${DATABASE_IP:localhost}:${DATABASE_PORT:5433}/postgres
-    username: ${DATABASE_USER:postgres}
-    password: ${DATABASE_PASSWORD:postgres}
+    url: jdbc:postgresql://${DATABASE_IP:localhost}:${DATABASE_PORT:5433}/gelecekbilimde
+    username: ${DATABASE_USER:gelecekbilimde}
+    password: ${DATABASE_PASSWORD:gelecekbilimdepass}
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:

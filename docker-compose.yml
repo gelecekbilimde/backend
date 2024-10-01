@@ -6,15 +6,17 @@ services:
     container_name: database
     restart: always
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_ROOT_PASSWORD: postgres
+      POSTGRES_DB: gelecekbilimde
+      POSTGRES_USER: gelecekbilimde
+      POSTGRES_PASSWORD: gelecekbilimdepass
+      POSTGRES_ROOT_PASSWORD: gelecekbilimdepass
       POSTGRES_PORT: 5433
     volumes:
       - ./docker/postgresql:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+    networks:
+      - gb_network
   application:
     build:
       context: .
@@ -22,8 +24,13 @@ services:
     container_name: application
     restart: on-failure
     ports:
-      - "8080:8080"
+      - "9090:9090"
     environment:
       - DATABASE_IP=host.docker.internal
     depends_on:
       - database
+    networks:
+      - gb_network
+networks:
+  gb_network:
+    driver: bridge
