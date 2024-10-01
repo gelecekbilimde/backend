@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.exception.RoleChangeInAssesmentException;
+import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationAlreadyExistException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleChangeNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
@@ -27,96 +27,107 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RoleApplicationServiceImpl implements RoleApplicationService {
+class RoleApplicationServiceImpl implements RoleApplicationService {
 
-	private final Identity identity;
 	private final UserRepository userRepository;
 	private final RoleChangeRepository roleChangeRepository;
 	private final RoleRepository roleRepository;
+	private final Identity identity;
+
+
 	private final AuthorRequestEntityToUserRoleResponseMapper authorRequestEntityToUserRoleResponseMapper = AuthorRequestEntityToUserRoleResponseMapper.initialize();
 
-	@Override
-	public void userRoleToAuthorRoleRequest() {
-		hasInAssesmentRequest();
-		RoleEntity role = roleRepository.findByName(RoleName.AUTHOR.name())
-			.orElseThrow(RoleNotFoundException::new);
-		RoleApplicationEntity authorRequest = RoleApplicationEntity.builder()
-			.user(getUserById())
-			.role(role)
-			.status(RoleChangeStatus.IN_REVIEW)
-			.createdAt(LocalDateTime.now())
-			.createdBy(getUserById().getId())
-			.build();
-		roleChangeRepository.save(authorRequest);
-	}
 
 	@Override
-	public void authorRoleToModeratorRoleRequest() {
-		hasInAssesmentRequest();
-		RoleEntity role = roleRepository.findByName(RoleName.MODERATOR.name())
-			.orElseThrow(RoleNotFoundException::new);
-		RoleApplicationEntity authorRequest = RoleApplicationEntity.builder()
-			.user(getUserById())
-			.role(role)
-			.status(RoleChangeStatus.IN_REVIEW)
-			.build();
-		roleChangeRepository.save(authorRequest);
-	}
-
-	@Override
-	@Transactional
-	public void approveRoleChangeRequest(Long requestId) {
-		RoleApplicationEntity roleChange = roleChangeRepository.findById(requestId)
-			.orElseThrow(() -> new RoleChangeNotFoundByIdException(requestId));
-		UserEntity user = roleChange.getUser();
-		user.setRoleId(roleChange.getRole().getId());
-		user.setRoleEntity(roleChange.getUser().getRoleEntity());
-		userRepository.save(user);
-		roleChange.setStatus(RoleChangeStatus.APPROVED);
-		roleChangeRepository.save(roleChange);
-	}
-
-	@Override
-	public void rejectRoleChangeRequest(Long requestId) {
-		RoleApplicationEntity roleChange = roleChangeRepository.findById(requestId)
-			.orElseThrow(() -> new RoleChangeNotFoundByIdException(requestId));
-		roleChange.setStatus(RoleChangeStatus.REJECTED);
-		roleChangeRepository.save(roleChange);
-	}
-
-	@Override
-	public void moderatorAssignment(String id) {
-		RoleEntity role = roleRepository.findByName(RoleName.MODERATOR.name())
-			.orElseThrow(RoleNotFoundException::new);
-		UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundByIdException(id));
-		user.setRoleId(role.getId());
-		user.setRoleEntity(role);
-		userRepository.save(user);
-	}
-
-	@Override
-	public Page<RoleApplication> getAllRoleChangeRequests(List<RoleChangeRequestsFilter> filters, int page, int size) {
-		Pageable pageable = PageRequest.of(page,size,Sort.by("createdAt").descending());
-		Page<RoleApplicationEntity> authorRequests = roleChangeRepository.findAll(RoleChangeSpecification.columnEqual(filters),pageable);
+	public Page<RoleApplication> findAll(List<RoleChangeRequestsFilter> filters, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+		Page<RoleApplicationEntity> authorRequests = roleChangeRepository.findAll(RoleChangeSpecification.columnEqual(filters), pageable);
 		List<RoleApplication> roleApplications = authorRequests.stream().map(authorRequestEntityToUserRoleResponseMapper::map).toList();
 		return new PageImpl<>(roleApplications, pageable, authorRequests.getTotalElements());
 	}
 
-	private UserEntity getUserById() {
-		return userRepository.findById(identity.getUserId())
+
+	@Override
+	public void createAuthorApplication() {
+
+		UserEntity user = userRepository.findById(identity.getUserId())
 			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
+
+		boolean existAnyApplicationInReview = roleChangeRepository
+			.existsByUserAndStatus(user, RoleChangeStatus.IN_REVIEW);
+		if (existAnyApplicationInReview) {
+			throw new RoleApplicationAlreadyExistException();
+		}
+
+		RoleEntity role = roleRepository.findByName(RoleName.AUTHOR.name())
+			.orElseThrow(RoleNotFoundException::new);
+
+		RoleApplicationEntity application = RoleApplicationEntity.builder()
+			.user(user)
+			.role(role)
+			.status(RoleChangeStatus.IN_REVIEW)
+			.build();
+		roleChangeRepository.save(application);
 	}
 
-	private void hasInAssesmentRequest() {
-		boolean hasInAssesmentRequest = roleChangeRepository.existsByUserAndStatus(getUserById(), RoleChangeStatus.IN_REVIEW);
-		if (hasInAssesmentRequest) {
-			throw new RoleChangeInAssesmentException();
+
+	@Override
+	public void createModeratorApplication() {
+
+		UserEntity user = userRepository.findById(identity.getUserId())
+			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
+
+		boolean existAnyApplicationInReview = roleChangeRepository
+			.existsByUserAndStatus(user, RoleChangeStatus.IN_REVIEW);
+		if (existAnyApplicationInReview) {
+			throw new RoleApplicationAlreadyExistException();
 		}
+
+		RoleEntity role = roleRepository.findByName(RoleName.MODERATOR.name())
+			.orElseThrow(RoleNotFoundException::new);
+
+		RoleApplicationEntity application = RoleApplicationEntity.builder()
+			.user(user)
+			.role(role)
+			.status(RoleChangeStatus.IN_REVIEW)
+			.build();
+		roleChangeRepository.save(application);
+	}
+
+
+	@Override
+	@Transactional
+	public void approve(Long requestId) {
+
+		RoleApplicationEntity application = roleChangeRepository.findById(requestId)
+			.orElseThrow(() -> new RoleChangeNotFoundByIdException(requestId));
+
+		// TODO : Check if the user has a role change request in progress
+
+		UserEntity user = application.getUser();
+		user.setRoleId(application.getRole().getId());
+		user.setRoleEntity(application.getUser().getRoleEntity());
+		userRepository.save(user);
+
+		application.approve();
+		roleChangeRepository.save(application);
+	}
+
+
+	@Override
+	public void reject(Long requestId) {
+
+		RoleApplicationEntity application = roleChangeRepository.findById(requestId)
+			.orElseThrow(() -> new RoleChangeNotFoundByIdException(requestId));
+
+		// TODO : Check if the user has a role change request in progress
+
+		application.reject();
+		roleChangeRepository.save(application);
 	}
 
 }

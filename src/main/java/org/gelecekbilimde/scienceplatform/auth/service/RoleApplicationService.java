@@ -8,16 +8,14 @@ import java.util.List;
 
 public interface RoleApplicationService {
 
-	void userRoleToAuthorRoleRequest();
+	Page<RoleApplication> findAll(List<RoleChangeRequestsFilter> filters, int page, int size);
 
-	Page<RoleApplication> getAllRoleChangeRequests(List<RoleChangeRequestsFilter> filters, int page, int size);
+	void createAuthorApplication();
 
-	void authorRoleToModeratorRoleRequest();
+	void createModeratorApplication();
 
-	void approveRoleChangeRequest(Long requestId);
+	void approve(Long requestId);
 
-	void rejectRoleChangeRequest(Long requestId);
-
-	void moderatorAssignment(String id);
+	void reject(Long requestId);
 
 }

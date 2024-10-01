@@ -34,7 +34,7 @@ class RoleApplicationController {
 														   @RequestParam(value = "size", defaultValue = "10") int size) {
 
 		List<RoleApplicationResponse> roleApplicationResponses = roleApplicationDomainToRoleApplicationResponse
-			.toRoleApplicationResponseList(roleApplicationService.getAllRoleChangeRequests(filters, page, size).stream().toList());
+			.toRoleApplicationResponseList(roleApplicationService.findAll(filters, page, size).stream().toList());
 		return SuccessResponse.success(roleApplicationResponses);
 	}
 
@@ -42,7 +42,7 @@ class RoleApplicationController {
 	@PreAuthorize("hasAuthority('role:application:create:author')")
 	SuccessResponse<Void> createAuthorApplication() {
 
-		roleApplicationService.userRoleToAuthorRoleRequest();
+		roleApplicationService.createAuthorApplication();
 		return SuccessResponse.success();
 	}
 
@@ -50,7 +50,7 @@ class RoleApplicationController {
 	@PreAuthorize("hasAuthority('role:application:create:moderator')")
 	SuccessResponse<Void> createModeratorApplication() {
 
-		roleApplicationService.authorRoleToModeratorRoleRequest();
+		roleApplicationService.createModeratorApplication();
 		return SuccessResponse.success();
 	}
 
@@ -58,7 +58,7 @@ class RoleApplicationController {
 	@PreAuthorize("hasAuthority('role:application:conclude')")
 	SuccessResponse<Void> approve(@PathVariable Long id) {
 
-		roleApplicationService.approveRoleChangeRequest(id);
+		roleApplicationService.approve(id);
 		return SuccessResponse.success();
 	}
 
@@ -66,7 +66,7 @@ class RoleApplicationController {
 	@PreAuthorize("hasAuthority('role:application:conclude')")
 	SuccessResponse<Void> reject(@PathVariable Long id) {
 
-		roleApplicationService.rejectRoleChangeRequest(id);
+		roleApplicationService.reject(id);
 		return SuccessResponse.success();
 	}
 
