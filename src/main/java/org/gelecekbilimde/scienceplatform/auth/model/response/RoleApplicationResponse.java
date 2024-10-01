@@ -9,11 +9,11 @@ import lombok.Setter;
 @Builder
 public class RoleApplicationResponse {
 
-	Long id;
-	String firstName;
-	String lastName;
-	String email;
-	String requestRoleName;
-	String status;
+	private Long id;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String requestRoleName;
+	private String status;
 
 }
