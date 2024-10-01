@@ -34,7 +34,7 @@ class RoleApplicationController {
 
 
 	@PostMapping("/role-applications")
-	@PreAuthorize("hasAuthority('role:application:list')")
+	@PreAuthorize("hasAnyAuthority('role:application:list')")
 	SuccessResponse<List<RoleApplicationResponse>> findAll(@RequestBody @Valid List<RoleChangeRequestsFilter> filters,
 														   @RequestParam(value = "page", defaultValue = "0") int page,
 														   @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -45,7 +45,7 @@ class RoleApplicationController {
 	}
 
 	@PostMapping("/role-application/author")
-	@PreAuthorize("hasAuthority('role:application:create:author')")
+	@PreAuthorize("hasAnyAuthority('role:application:create:author')")
 	SuccessResponse<Void> createAuthorApplication() {
 
 		roleApplicationService.createAuthorApplication();
@@ -53,7 +53,7 @@ class RoleApplicationController {
 	}
 
 	@PutMapping("/role-application/moderator")
-	@PreAuthorize("hasAuthority('role:application:create:moderator')")
+	@PreAuthorize("hasAnyAuthority('role:application:create:moderator')")
 	SuccessResponse<Void> createModeratorApplication() {
 
 		roleApplicationService.createModeratorApplication();
@@ -61,7 +61,7 @@ class RoleApplicationController {
 	}
 
 	@PatchMapping("/role-application/{id}/approve")
-	@PreAuthorize("hasAuthority('role:application:conclude')")
+	@PreAuthorize("hasAnyAuthority('role:application:conclude')")
 	SuccessResponse<Void> approve(@PathVariable @Positive Long id) {
 
 		roleApplicationService.approve(id);
@@ -69,7 +69,7 @@ class RoleApplicationController {
 	}
 
 	@PatchMapping("/role-application/{id}/reject")
-	@PreAuthorize("hasAuthority('role:application:conclude')")
+	@PreAuthorize("hasAnyAuthority('role:application:conclude')")
 	SuccessResponse<Void> reject(@PathVariable @Positive Long id) {
 
 		roleApplicationService.reject(id);
