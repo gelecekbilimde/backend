@@ -12,7 +12,6 @@ import org.gelecekbilimde.scienceplatform.auth.model.request.RegisterRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.request.VerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.RegistrationService;
-import org.gelecekbilimde.scienceplatform.common.util.RandomUtil;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserVerificationEntity;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
@@ -47,8 +46,7 @@ class RegistrationServiceImpl implements RegistrationService {
 		RoleEntity roleEntity = roleRepository.findByName(RoleName.USER.name())
 			.orElseThrow(RoleNotFoundException::new);
 
-		UserEntity userEntity = UserEntity.builder()
-			.id(RandomUtil.generateUUID())
+		UserEntity user = UserEntity.builder()
 			.firstName(request.getFirstname())
 			.lastName(request.getLastname())
 			.email(request.getEmail())
@@ -62,16 +60,15 @@ class RegistrationServiceImpl implements RegistrationService {
 			.password(passwordEncoder.encode(request.getPassword()))
 			.build();
 
-		userRepository.save(userEntity);
-
+		UserEntity savedUser = userRepository.save(user);
 
 		UserVerificationEntity userVerificationEntity = UserVerificationEntity.builder()
-			.userId(userEntity.getId())
+			.userId(savedUser.getId())
 			.status(UserVerificationStatus.WAITING)
 			.build();
 		userVerificationRepository.save(userVerificationEntity);
 
-		CompletableFuture.runAsync(() -> userEmailService.sendVerifyMessage(userEntity.getEmail(), userVerificationEntity.getId()));
+		CompletableFuture.runAsync(() -> userEmailService.sendVerifyMessage(savedUser.getEmail(), userVerificationEntity.getId()));
 	}
 
 	@Override
