@@ -5,8 +5,8 @@ import io.jsonwebtoken.ClaimsBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserNotVerifiedException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserPasswordNotValidException;
-import org.gelecekbilimde.scienceplatform.auth.exception.VerifyException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.auth.model.Token;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
@@ -40,7 +40,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 			.orElseThrow(() -> new UserNotFoundByEmailException(request.getEmail()));
 
 		if (!userEntity.isVerified()) {
-			throw new VerifyException(request.getEmail());
+			throw new UserNotVerifiedException(request.getEmail());
 		}
 
 		if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
