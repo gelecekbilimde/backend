@@ -46,6 +46,11 @@ public class RoleApplicationEntity extends BaseEntity {
 	private RoleApplicationStatus status;
 
 
+	public boolean isConcluded() {
+		return this.status == RoleApplicationStatus.APPROVED || this.status == RoleApplicationStatus.REJECTED;
+	}
+
+
 	public void approve() {
 		this.status = RoleApplicationStatus.APPROVED;
 	}
