@@ -303,10 +303,10 @@ create table if not exists gb_ticket_message
 
 create table if not exists gb_role_application
 (
-  id      bigint generated always as identity primary key,
+  id      varchar(36) not null primary key,
   user_id varchar(36) not null,
   role_id varchar(36) not null,
-  status  varchar(36) not null,
+  status  varchar(10) not null,
   created_by varchar(255) not null,
   created_at timestamp(0) not null,
   updated_by varchar(255),

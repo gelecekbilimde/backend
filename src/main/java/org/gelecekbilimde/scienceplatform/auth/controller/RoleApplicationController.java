@@ -1,7 +1,6 @@
 package org.gelecekbilimde.scienceplatform.auth.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationToRoleApplicationResponseMapper;
@@ -9,6 +8,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsF
 import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationsResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -66,7 +66,7 @@ class RoleApplicationController {
 
 	@PatchMapping("/role-application/{id}/approve")
 	@PreAuthorize("hasAnyAuthority('role:application:conclude')")
-	SuccessResponse<Void> approve(@PathVariable @Positive Long id) {
+	SuccessResponse<Void> approve(@PathVariable @UUID String id) {
 
 		roleApplicationService.approve(id);
 		return SuccessResponse.success();
@@ -74,7 +74,7 @@ class RoleApplicationController {
 
 	@PatchMapping("/role-application/{id}/reject")
 	@PreAuthorize("hasAnyAuthority('role:application:conclude')")
-	SuccessResponse<Void> reject(@PathVariable @Positive Long id) {
+	SuccessResponse<Void> reject(@PathVariable @UUID String id) {
 
 		roleApplicationService.reject(id);
 		return SuccessResponse.success();

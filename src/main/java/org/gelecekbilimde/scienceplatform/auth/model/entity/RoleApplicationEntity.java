@@ -30,8 +30,8 @@ public class RoleApplicationEntity extends BaseEntity {
 
 	@Id
 	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 
 	@OneToOne
 	@JoinColumn(name = "user_id")

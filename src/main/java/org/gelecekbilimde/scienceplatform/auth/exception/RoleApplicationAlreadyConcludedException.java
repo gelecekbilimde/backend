@@ -7,9 +7,9 @@ import java.io.Serial;
 public class RoleApplicationAlreadyConcludedException extends AbstractConflictException {
 
 	@Serial
-	private static final long serialVersionUID = -4854149711093320907L;
+	private static final long serialVersionUID = -7807528937254572325L;
 
-	public RoleApplicationAlreadyConcludedException(Long id) {
+	public RoleApplicationAlreadyConcludedException(String id) {
 		super("role application already concluded id: " + id);
 	}
 

@@ -102,7 +102,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 
 	@Override
 	@Transactional
-	public void approve(final Long id) {
+	public void approve(final String id) {
 
 		RoleApplicationEntity application = roleApplicationRepository.findById(id)
 			.orElseThrow(() -> new RoleApplicationNotFoundByIdException(id));
@@ -122,7 +122,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 
 
 	@Override
-	public void reject(final Long id) {
+	public void reject(final String id) {
 
 		RoleApplicationEntity application = roleApplicationRepository.findById(id)
 			.orElseThrow(() -> new RoleApplicationNotFoundByIdException(id));
