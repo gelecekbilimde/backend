@@ -6,7 +6,6 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.apache.commons.lang3.EnumUtils;
-import org.gelecekbilimde.scienceplatform.auth.exception.RoleChangeStatusNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
@@ -35,18 +34,15 @@ public class RoleChangeSpecification {
 					if ("firstName".equalsIgnoreCase(columnName) || "lastName".equalsIgnoreCase(columnName) || "email".equalsIgnoreCase(columnName)) {
 						Join<RoleApplicationEntity, UserEntity> userJoin = root.join("user");
 						predicates.add(criteriaBuilder.equal(userJoin.get(columnName), columnValue));
-					}else if ("status".equalsIgnoreCase(columnName)) {
+					} else if ("status".equalsIgnoreCase(columnName)) {
 						if (EnumUtils.isValidEnum(RoleApplicationStatus.class, columnValue.toString())) {
 							RoleApplicationStatus statusEnum = RoleApplicationStatus.valueOf(columnValue.toString());
 							predicates.add(criteriaBuilder.equal(root.get("status"), statusEnum));
-						} else {
-							throw new RoleChangeStatusNotFoundException(columnValue.toString());
 						}
-					}else if ("requestRoleName".equalsIgnoreCase(columnName)){
+					} else if ("requestRoleName".equalsIgnoreCase(columnName)) {
 						Join<RoleApplicationEntity, RoleEntity> roleJoin = root.join("role");
-						predicates.add(criteriaBuilder.equal(roleJoin.get("name"),columnValue));
-					}
-					else {
+						predicates.add(criteriaBuilder.equal(roleJoin.get("name"), columnValue));
+					} else {
 						predicates.add(criteriaBuilder.equal(root.get(columnName), columnValue));
 					}
 				}
