@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,7 +55,7 @@ class RoleApplicationController {
 		return SuccessResponse.success();
 	}
 
-	@PutMapping("/role-application/moderator")
+	@PostMapping("/role-application/moderator")
 	@PreAuthorize("hasAnyAuthority('role:application:create:moderator')")
 	SuccessResponse<Void> createModeratorApplication() {
 
