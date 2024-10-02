@@ -3,7 +3,7 @@ package org.gelecekbilimde.scienceplatform.auth.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationAlreadyExistException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationNotFoundByIdException;
-import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundException;
+import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundByNameException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
@@ -64,7 +64,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		}
 
 		RoleEntity role = roleRepository.findByName(RoleName.AUTHOR.name())
-			.orElseThrow(RoleNotFoundException::new);
+			.orElseThrow(() -> new RoleNotFoundByNameException(RoleName.AUTHOR.name()));
 
 		RoleApplicationEntity application = RoleApplicationEntity.builder()
 			.user(user)
@@ -88,7 +88,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		}
 
 		RoleEntity role = roleRepository.findByName(RoleName.MODERATOR.name())
-			.orElseThrow(RoleNotFoundException::new);
+			.orElseThrow(() -> new RoleNotFoundByNameException(RoleName.MODERATOR.name()));
 
 		RoleApplicationEntity application = RoleApplicationEntity.builder()
 			.user(user)
