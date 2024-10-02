@@ -16,16 +16,16 @@ create table if not exists gb_permission
 create table if not exists gb_role
 (
   id          varchar(36)  not null primary key,
-  description varchar(255),
   name        varchar(55)  not null,
-  is_hidden   boolean,
-  status      varchar(25),
+  description varchar(255) not null,
+  is_hidden   boolean default false,
+  status      varchar(25)  not null,
   created_by  varchar(255) not null,
   created_at  timestamp(0) not null,
   updated_by  varchar(255),
   updated_at  timestamp(0),
   constraint u__gb_role__name unique (name),
-  constraint c__gb_role__status check ( status in ('ACTIVE', 'PASSIVE'))
+  constraint c__gb_role__status check (status in ('ACTIVE', 'PASSIVE'))
 );
 
 
