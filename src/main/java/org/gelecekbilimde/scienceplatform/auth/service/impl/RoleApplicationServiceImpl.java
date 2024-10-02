@@ -54,30 +54,16 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 
 	@Override
 	public void createAuthorApplication() {
-
-		UserEntity user = userRepository.findById(identity.getUserId())
-			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
-
-		boolean existAnyApplicationInReview = roleApplicationRepository
-			.existsByUserAndStatus(user, RoleApplicationStatus.IN_REVIEW);
-		if (existAnyApplicationInReview) {
-			throw new RoleApplicationAlreadyExistException();
-		}
-
-		RoleEntity role = roleRepository.findByName(RoleName.AUTHOR.name())
-			.orElseThrow(() -> new RoleNotFoundByNameException(RoleName.AUTHOR.name()));
-
-		RoleApplicationEntity application = RoleApplicationEntity.builder()
-			.user(user)
-			.role(role)
-			.status(RoleApplicationStatus.IN_REVIEW)
-			.build();
-		roleApplicationRepository.save(application);
+		this.createApplication(RoleName.AUTHOR);
 	}
 
 
 	@Override
 	public void createModeratorApplication() {
+		this.createApplication(RoleName.MODERATOR);
+	}
+
+	private void createApplication(final RoleName roleName) {
 
 		UserEntity user = userRepository.findById(identity.getUserId())
 			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
@@ -88,8 +74,8 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 			throw new RoleApplicationAlreadyExistException();
 		}
 
-		RoleEntity role = roleRepository.findByName(RoleName.MODERATOR.name())
-			.orElseThrow(() -> new RoleNotFoundByNameException(RoleName.MODERATOR.name()));
+		RoleEntity role = roleRepository.findByName(roleName.name())
+			.orElseThrow(() -> new RoleNotFoundByNameException(roleName.name()));
 
 		RoleApplicationEntity application = RoleApplicationEntity.builder()
 			.user(user)
