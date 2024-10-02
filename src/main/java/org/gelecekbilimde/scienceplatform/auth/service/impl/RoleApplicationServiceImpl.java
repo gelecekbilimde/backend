@@ -13,7 +13,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntit
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
-import org.gelecekbilimde.scienceplatform.auth.model.mapper.AuthorRequestEntityToUserRoleResponseMapper;
+import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationEntityToDomainMapper;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleApplicationRepository;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
@@ -40,7 +40,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 	private final Identity identity;
 
 
-	private final AuthorRequestEntityToUserRoleResponseMapper authorRequestEntityToUserRoleResponseMapper = AuthorRequestEntityToUserRoleResponseMapper.initialize();
+	private final RoleApplicationEntityToDomainMapper authorRequestEntityToUserRoleResponseMapper = RoleApplicationEntityToDomainMapper.initialize();
 
 
 	@Override

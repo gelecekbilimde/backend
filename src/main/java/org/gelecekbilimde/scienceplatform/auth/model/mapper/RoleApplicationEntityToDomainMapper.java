@@ -7,10 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface AuthorRequestEntityToUserRoleResponseMapper extends BaseMapper<RoleApplicationEntity, RoleApplication> {
+public interface RoleApplicationEntityToDomainMapper extends BaseMapper<RoleApplicationEntity, RoleApplication> {
 
-	static AuthorRequestEntityToUserRoleResponseMapper initialize() {
-		return Mappers.getMapper(AuthorRequestEntityToUserRoleResponseMapper.class);
+	static RoleApplicationEntityToDomainMapper initialize() {
+		return Mappers.getMapper(RoleApplicationEntityToDomainMapper.class);
 	}
 
 }
