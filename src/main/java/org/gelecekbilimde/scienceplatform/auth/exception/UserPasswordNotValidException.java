@@ -10,7 +10,7 @@ public class UserPasswordNotValidException extends AbstractAuthException {
 	private static final long serialVersionUID = 359664997679732461L;
 
 	public UserPasswordNotValidException() {
-		super("user password does not valid");
+		super("user password is not valid");
 	}
 
 }
