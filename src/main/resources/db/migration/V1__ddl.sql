@@ -312,5 +312,6 @@ create table if not exists gb_role_application
   updated_by varchar(255),
   updated_at timestamp(0),
   constraint fk__gb_role_changes__user_id foreign key (user_id) references gb_user (id),
+  constraint fk__gb_role_application__role_id foreign key (role_id) references gb_role (id),
   constraint c__gb_role_changes__status check ( status in ('IN_REVIEW', 'APPROVED', 'REJECTED'))
 );
