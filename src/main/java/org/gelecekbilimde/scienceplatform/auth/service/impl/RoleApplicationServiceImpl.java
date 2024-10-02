@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationAlreadyExistException;
-import org.gelecekbilimde.scienceplatform.auth.exception.RoleChangeNotFoundByIdException;
+import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
@@ -104,7 +104,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 	public void approve(final Long id) {
 
 		RoleApplicationEntity application = roleApplicationRepository.findById(id)
-			.orElseThrow(() -> new RoleChangeNotFoundByIdException(id));
+			.orElseThrow(() -> new RoleApplicationNotFoundByIdException(id));
 
 		// TODO : Check if the user has a role change request in progress
 
@@ -122,7 +122,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 	public void reject(final Long id) {
 
 		RoleApplicationEntity application = roleApplicationRepository.findById(id)
-			.orElseThrow(() -> new RoleChangeNotFoundByIdException(id));
+			.orElseThrow(() -> new RoleApplicationNotFoundByIdException(id));
 
 		// TODO : Check if the user has a role change request in progress
 
