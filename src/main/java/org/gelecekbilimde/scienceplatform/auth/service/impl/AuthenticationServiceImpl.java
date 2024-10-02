@@ -5,8 +5,8 @@ import io.jsonwebtoken.ClaimsBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserPasswordNotValidException;
 import org.gelecekbilimde.scienceplatform.auth.exception.VerifyException;
-import org.gelecekbilimde.scienceplatform.auth.exception.WrongEmailOrPasswordException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.auth.model.Token;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
@@ -44,7 +44,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		}
 
 		if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
-			throw new WrongEmailOrPasswordException();
+			throw new UserPasswordNotValidException();
 		}
 
 		final Claims claims = this.getClaimsBuilder(userEntity);
