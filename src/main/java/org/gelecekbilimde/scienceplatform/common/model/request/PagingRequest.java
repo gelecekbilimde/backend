@@ -1,32 +1,56 @@
 package org.gelecekbilimde.scienceplatform.common.model.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+import org.gelecekbilimde.scienceplatform.common.model.BasePageable;
+import org.gelecekbilimde.scienceplatform.common.model.BaseSort;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Set;
 
 
-@Data
-public class PagingRequest {
+@Getter
+@Setter
+@NoArgsConstructor
+public abstract class PagingRequest {
 
+	@Valid
 	@NotNull
-	@Range(min = 1)
-	public Integer page = 1;
+	protected BasePageable pageable;
 
-	@NotNull
-	@Range(min = 2, max = 100)
-	public Integer pageSize = 20;
+	public abstract boolean isOrderPropertyAccepted();
 
+	@SuppressWarnings("all")
+	public boolean isPropertyAccepted(final Set<String> acceptedProperties) {
 
-	public Pageable toPageable() {
-		return PageRequest.of(
-			this.getPage(),
-			this.getPageSize()
-		);
-	}
+		if (this.pageable == null || CollectionUtils.isEmpty(this.pageable.getOrders())) {
+			return true;
+		}
 
-	public Integer getPage() {
-		return this.page - 1;
+		for (BaseSort.BaseOrder order : this.pageable.getOrders()) {
+			if (StringUtils.isBlank(order.getProperty()) || order.getDirection() == null) {
+				return true;
+			}
+		}
+
+		final List<BaseSort.BaseOrder> orders = this.pageable.getOrders();
+		if (CollectionUtils.isEmpty(orders)) {
+			return true;
+		}
+
+		final boolean isAnyDirectionEmpty = orders.stream().anyMatch(order -> order.getDirection() == null);
+		final boolean isAnyPropertyEmpty = orders.stream().anyMatch(order -> order.getProperty() == null);
+		if (isAnyDirectionEmpty || isAnyPropertyEmpty) {
+			return true;
+		}
+
+		return orders.stream()
+			.map(BaseSort.BaseOrder::getProperty)
+			.allMatch(acceptedProperties::contains);
 	}
 }

@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.ticket.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
-import org.gelecekbilimde.scienceplatform.common.model.Paging;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
@@ -34,10 +34,10 @@ class TicketServiceImpl implements TicketService {
 
 	@Override
 	public PagingResponse<TicketResponse> ticketRead(PagingRequest request) {
-		Pageable pageable = request.toPageable();
+		Pageable pageable = request.getPageable().toPageable();
 		Page<TicketEntity> ticketPage = ticketRepository.findAll(pageable);
 		List<TicketResponse> ticketResponses = ticketEntityToResponseMapper.map(ticketPage.getContent());
-		final Paging<TicketResponse> posts = Paging.of(ticketPage, ticketResponses);
+		final BasePage<TicketResponse> posts = BasePage.of(ticketPage, ticketResponses);
 		return PagingResponse.<TicketResponse>builder().of(posts).content(ticketEntityToResponseMapper.map(ticketPage.getContent())).build();
 	}
 
@@ -59,9 +59,9 @@ class TicketServiceImpl implements TicketService {
 	@Override
 	public PagingResponse<TicketResponse> ticketReadSelf(PagingRequest request) {
 		Specification<TicketEntity> spec = (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("userId"), identity.getUserId());
-		Page<TicketEntity> ticketPage = ticketRepository.findAll(spec, request.toPageable());
+		Page<TicketEntity> ticketPage = ticketRepository.findAll(spec, request.getPageable().toPageable());
 		List<TicketResponse> ticketResponses = ticketEntityToResponseMapper.map(ticketPage.getContent());
-		final Paging<TicketResponse> posts = Paging.of(ticketPage, ticketResponses);
+		final BasePage<TicketResponse> posts = BasePage.of(ticketPage, ticketResponses);
 		return PagingResponse.<TicketResponse>builder().of(posts).content(ticketEntityToResponseMapper.map(ticketPage.getContent())).build();
 	}
 }
