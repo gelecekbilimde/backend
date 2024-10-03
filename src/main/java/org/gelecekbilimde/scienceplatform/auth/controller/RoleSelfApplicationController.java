@@ -5,6 +5,7 @@ import org.gelecekbilimde.scienceplatform.auth.service.RoleSelfApplicationServic
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,13 @@ class RoleSelfApplicationController {
     SuccessResponse<Void> createModeratorApplication() {
 
         roleSelfApplicationService.createModeratorApplication();
+        return SuccessResponse.success();
+    }
+
+    @PatchMapping("/role-application/self/cancel")
+    @PreAuthorize("hasAnyAuthority('role:application:cancel:self')")
+    SuccessResponse<Void> cancel() {
+        roleSelfApplicationService.cancel();
         return SuccessResponse.success();
     }
 

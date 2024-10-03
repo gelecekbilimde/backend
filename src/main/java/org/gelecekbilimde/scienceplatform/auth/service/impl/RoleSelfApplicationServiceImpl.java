@@ -2,6 +2,7 @@ package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationAlreadyExistException;
+import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationNotFoundByUserIdAndStatusException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundByNameException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
@@ -57,6 +58,22 @@ class RoleSelfApplicationServiceImpl implements RoleSelfApplicationService {
 			.role(role)
 			.status(RoleApplicationStatus.IN_REVIEW)
 			.build();
+		roleApplicationRepository.save(application);
+	}
+
+
+	@Override
+	public void cancel() {
+
+		RoleApplicationEntity application = roleApplicationRepository
+			.findByUserIdAndStatus(identity.getUserId(), RoleApplicationStatus.IN_REVIEW)
+			.orElseThrow(() -> new RoleApplicationNotFoundByUserIdAndStatusException(
+					identity.getUserId(),
+					RoleApplicationStatus.IN_REVIEW
+				)
+			);
+
+		application.cancel();
 		roleApplicationRepository.save(application);
 	}
 
