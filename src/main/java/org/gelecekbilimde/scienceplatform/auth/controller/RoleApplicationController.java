@@ -47,22 +47,6 @@ class RoleApplicationController {
 		return SuccessResponse.success(roleApplicationsResponses);
 	}
 
-	@PostMapping("/role-application/author")
-	@PreAuthorize("hasAnyAuthority('role:application:create:author')")
-	SuccessResponse<Void> createAuthorApplication() {
-
-		roleApplicationService.createAuthorApplication();
-		return SuccessResponse.success();
-	}
-
-	@PostMapping("/role-application/moderator")
-	@PreAuthorize("hasAnyAuthority('role:application:create:moderator')")
-	SuccessResponse<Void> createModeratorApplication() {
-
-		roleApplicationService.createModeratorApplication();
-		return SuccessResponse.success();
-	}
-
 	@PatchMapping("/role-application/{id}/approve")
 	@PreAuthorize("hasAnyAuthority('role:application:conclude')")
 	SuccessResponse<Void> approve(@PathVariable @UUID String id) {

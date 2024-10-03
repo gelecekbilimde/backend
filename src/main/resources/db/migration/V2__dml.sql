@@ -67,11 +67,11 @@ insert into gb_permission (id, description, name, is_hidden, created_by, created
 values ('31366d9d-5282-4fe2-9d45-4551e114bc7d', 'Rol Başvurusunu Sonuçlandırır',
         'role:application:conclude', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('edfb8180-92ef-4a9e-8913-1bdfa606d297', 'Yazar Olmak İçin Başvuru Oluşturur',
-        'role:application:create:author', false, 'gelecekbilimde', current_timestamp);
+values ('edfb8180-92ef-4a9e-8913-1bdfa606d297', 'Yazar Olmak İçin Kendi Adına Başvuru Oluşturur',
+        'role:application:create:self:author', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('171ca9a7-311d-40b6-b538-024b5870471a', 'Moderatör Olmak İçin Başvuru Oluşturur',
-        'role:application:create:moderator', false, 'gelecekbilimde', current_timestamp);
+values ('171ca9a7-311d-40b6-b538-024b5870471a', 'Moderatör Olmak İçin Kendi Adına Başvuru Oluşturur',
+        'role:application:create:self:moderator', false, 'gelecekbilimde', current_timestamp);
 
 
 insert into gb_role_permission (role_id, permission_id)
