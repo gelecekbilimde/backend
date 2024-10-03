@@ -2,21 +2,13 @@ package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationAlreadyConcludedException;
-import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationAlreadyExistException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationNotFoundByIdException;
-import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundByNameException;
-import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
-import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleChangeSpecification;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
-import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
-import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
-import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationEntityToDomainMapper;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleApplicationRepository;
-import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
@@ -36,8 +28,6 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 
 	private final UserRepository userRepository;
 	private final RoleApplicationRepository roleApplicationRepository;
-	private final RoleRepository roleRepository;
-	private final Identity identity;
 
 
 	private final RoleApplicationEntityToDomainMapper authorRequestEntityToUserRoleResponseMapper = RoleApplicationEntityToDomainMapper.initialize();
@@ -50,41 +40,6 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		List<RoleApplication> roleApplications = authorRequests.stream().map(authorRequestEntityToUserRoleResponseMapper::map).toList();
 		return new PageImpl<>(roleApplications, pageable, authorRequests.getTotalElements());
 	}
-
-
-	@Override
-	public void createAuthorApplication() {
-		this.createApplication(RoleName.AUTHOR);
-	}
-
-
-	@Override
-	public void createModeratorApplication() {
-		this.createApplication(RoleName.MODERATOR);
-	}
-
-	private void createApplication(final RoleName roleName) {
-
-		UserEntity user = userRepository.findById(identity.getUserId())
-			.orElseThrow(() -> new UserNotFoundByIdException(identity.getUserId()));
-
-		boolean existAnyApplicationInReview = roleApplicationRepository
-			.existsByUserAndStatus(user, RoleApplicationStatus.IN_REVIEW);
-		if (existAnyApplicationInReview) {
-			throw new RoleApplicationAlreadyExistException();
-		}
-
-		RoleEntity role = roleRepository.findByName(roleName.name())
-			.orElseThrow(() -> new RoleNotFoundByNameException(roleName.name()));
-
-		RoleApplicationEntity application = RoleApplicationEntity.builder()
-			.user(user)
-			.role(role)
-			.status(RoleApplicationStatus.IN_REVIEW)
-			.build();
-		roleApplicationRepository.save(application);
-	}
-
 
 	@Override
 	@Transactional

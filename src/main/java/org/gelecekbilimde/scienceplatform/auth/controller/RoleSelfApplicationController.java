@@ -1,7 +1,7 @@
 package org.gelecekbilimde.scienceplatform.auth.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
+import org.gelecekbilimde.scienceplatform.auth.service.RoleSelfApplicationService;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class RoleSelfApplicationController {
 
-    private final RoleApplicationService roleApplicationService;
+    private final RoleSelfApplicationService roleSelfApplicationService;
 
 
     @PostMapping("/role-application/self/author")
     @PreAuthorize("hasAnyAuthority('role:application:create:self:author')")
     SuccessResponse<Void> createAuthorApplication() {
 
-        roleApplicationService.createAuthorApplication();
+        roleSelfApplicationService.createAuthorApplication();
         return SuccessResponse.success();
     }
 
@@ -30,7 +30,7 @@ class RoleSelfApplicationController {
     @PreAuthorize("hasAnyAuthority('role:application:create:self:moderator')")
     SuccessResponse<Void> createModeratorApplication() {
 
-        roleApplicationService.createModeratorApplication();
+        roleSelfApplicationService.createModeratorApplication();
         return SuccessResponse.success();
     }
 
