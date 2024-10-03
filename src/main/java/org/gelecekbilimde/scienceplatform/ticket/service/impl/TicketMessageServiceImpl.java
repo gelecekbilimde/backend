@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.ticket.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
-import org.gelecekbilimde.scienceplatform.common.model.Paging;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
 import org.gelecekbilimde.scienceplatform.ticket.model.entity.TicketMessageEntity;
 import org.gelecekbilimde.scienceplatform.ticket.model.mapper.TicketMessageEntityToMessageResponseMapper;
@@ -31,10 +31,10 @@ class TicketMessageServiceImpl implements TicketMessageService {
 
 	@Override
 	public PagingResponse<TicketMessageResponse> ticketMessageRead(TicketMessageRequest request) {
-		Pageable pageable = request.toPageable();
+		Pageable pageable = request.getPageable().toPageable();
 		Page<TicketMessageEntity> messagePage = ticketMessageRepository.findAll(pageable);
 		List<TicketMessageResponse> ticketResponses = ticketMessageEntityToMessageResponseMapper.map(messagePage.getContent());
-		final Paging<TicketMessageResponse> posts = Paging.of(messagePage, ticketResponses);
+		final BasePage<TicketMessageResponse> posts = BasePage.of(messagePage, ticketResponses);
 		return PagingResponse.<TicketMessageResponse>builder()
 			.of(posts)
 			.content(ticketMessageEntityToMessageResponseMapper.map(messagePage.getContent()))
@@ -44,9 +44,9 @@ class TicketMessageServiceImpl implements TicketMessageService {
 	@Override
 	public PagingResponse<TicketMessageResponse> ticketMessageReadSelf(TicketMessageRequest request) {
 		Specification<TicketMessageEntity> spec = (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("userId"), identity.getUserId());
-		Page<TicketMessageEntity> messagePage = ticketMessageRepository.findAll(spec, request.toPageable());
+		Page<TicketMessageEntity> messagePage = ticketMessageRepository.findAll(spec, request.getPageable().toPageable());
 		List<TicketMessageResponse> ticketMessageRespons = ticketMessageEntityToMessageResponseMapper.map(messagePage.getContent());
-		final Paging<TicketMessageResponse> messageResponsesPage = Paging.of(messagePage, ticketMessageRespons);
+		final BasePage<TicketMessageResponse> messageResponsesPage = BasePage.of(messagePage, ticketMessageRespons);
 		return PagingResponse.<TicketMessageResponse>builder()
 			.of(messageResponsesPage)
 			.content(ticketMessageEntityToMessageResponseMapper.map(messagePage.getContent()))
