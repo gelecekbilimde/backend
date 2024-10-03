@@ -51,6 +51,10 @@ public class RoleApplicationEntity extends BaseEntity {
 	}
 
 
+	public void cancel() {
+		this.status = RoleApplicationStatus.CANCELLED;
+	}
+
 	public void approve() {
 		this.status = RoleApplicationStatus.APPROVED;
 	}

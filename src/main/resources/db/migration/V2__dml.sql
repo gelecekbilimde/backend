@@ -67,11 +67,14 @@ insert into gb_permission (id, description, name, is_hidden, created_by, created
 values ('31366d9d-5282-4fe2-9d45-4551e114bc7d', 'Rol Başvurusunu Sonuçlandırır',
         'role:application:conclude', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('edfb8180-92ef-4a9e-8913-1bdfa606d297', 'Yazar Olmak İçin Kendi Adına Başvuru Oluşturur',
+values ('edfb8180-92ef-4a9e-8913-1bdfa606d297', 'Yazar Olmak İçin Kendi Adına Rol Başvurusu Oluşturur',
         'role:application:create:self:author', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('171ca9a7-311d-40b6-b538-024b5870471a', 'Moderatör Olmak İçin Kendi Adına Başvuru Oluşturur',
+values ('171ca9a7-311d-40b6-b538-024b5870471a', 'Moderatör Olmak İçin Kendi Adına Rol Başvurusu Oluşturur',
         'role:application:create:self:moderator', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('d7a49ea4-fae1-4dac-8e07-c1d823841b50', 'Kendi Adına Var Olan Rol Başvurusunu İptal Eder',
+        'role:application:cancel:self', false, 'gelecekbilimde', current_timestamp);
 
 
 insert into gb_role_permission (role_id, permission_id)
@@ -140,6 +143,8 @@ insert into gb_role_permission (role_id, permission_id)
 values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', 'f8217f8d-8d67-496f-8761-53201e690078');
 insert into gb_role_permission (role_id, permission_id)
 values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '171ca9a7-311d-40b6-b538-024b5870471a');
+insert into gb_role_permission (role_id, permission_id)
+values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', 'd7a49ea4-fae1-4dac-8e07-c1d823841b50');
 
 insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', '01bc1089-bd27-4b41-bfde-8e63c988fec3');
@@ -159,6 +164,8 @@ insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', 'f8217f8d-8d67-496f-8761-53201e690078');
 insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', 'edfb8180-92ef-4a9e-8913-1bdfa606d297');
+insert into gb_role_permission (role_id, permission_id)
+values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b80', 'd7a49ea4-fae1-4dac-8e07-c1d823841b50');
 
 
 
