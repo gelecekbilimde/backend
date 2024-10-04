@@ -1,15 +1,15 @@
-insert into gb_role (id, name, description, is_hidden, status, created_by, created_at)
-values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', 'ADMIN', 'Yönetici', true,
-        'ACTIVE', 'gelecekbilimde', current_timestamp);
-insert into gb_role (id, name, description, is_hidden, status, created_by, created_at)
-values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', 'MODERATOR', 'Moderatör', false,
-        'ACTIVE', 'gelecekbilimde', current_timestamp);
-insert into gb_role (id, name, description, is_hidden, status, created_by, created_at)
-values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', 'AUTHOR', 'Yazar', false,
-        'ACTIVE', 'gelecekbilimde', current_timestamp);
-insert into gb_role (id, name, description, is_hidden, status, created_by, created_at)
-values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', 'USER', 'Kullanıcı', false,
-        'ACTIVE', 'gelecekbilimde', current_timestamp);
+insert into gb_role (id, name, description, status, created_by, created_at)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', 'ADMIN', 'Yönetici', 'ACTIVE',
+        'gelecekbilimde', current_timestamp);
+insert into gb_role (id, name, description, status, created_by, created_at)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', 'MODERATOR', 'Moderatör', 'ACTIVE',
+        'gelecekbilimde', current_timestamp);
+insert into gb_role (id, name, description, status, created_by, created_at)
+values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', 'AUTHOR', 'Yazar', 'ACTIVE',
+        'gelecekbilimde', current_timestamp);
+insert into gb_role (id, name, description, status, created_by, created_at)
+values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', 'USER', 'Kullanıcı', 'ACTIVE',
+        'gelecekbilimde', current_timestamp);
 
 
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)

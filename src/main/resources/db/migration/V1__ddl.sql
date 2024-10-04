@@ -18,7 +18,6 @@ create table if not exists gb_role
   id          varchar(36)  not null primary key,
   name        varchar(55)  not null,
   description varchar(255) not null,
-  is_hidden   boolean default false,
   status      varchar(25)  not null,
   created_by  varchar(255) not null,
   created_at  timestamp(0) not null,
