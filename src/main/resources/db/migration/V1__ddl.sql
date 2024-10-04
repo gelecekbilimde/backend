@@ -107,6 +107,7 @@ create table if not exists gb_category
   order_number integer      not null,
   parent_id    bigint,
   name         varchar(36)  not null,
+  description  varchar(255) not null,
   slug         varchar(36)  not null,
   icon         varchar(36),
   created_by   varchar(255) not null,

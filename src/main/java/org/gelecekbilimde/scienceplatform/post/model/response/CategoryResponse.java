@@ -14,6 +14,6 @@ public class CategoryResponse {
 	private Long order;
 	private String slug;
 	private String icon;
-
 	private Long parentId;
+	private String description;
 }

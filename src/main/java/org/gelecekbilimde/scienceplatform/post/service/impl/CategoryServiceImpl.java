@@ -10,6 +10,7 @@ import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryCreateRequestToCategoryEntityMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryEntityToCategoryMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
 import org.gelecekbilimde.scienceplatform.post.repository.CategoryRepository;
 import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,6 @@ import java.util.Optional;
 class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryRepository categoryRepository;
-
 	private final CategoryEntityToCategoryMapper categoryEntityToCategoryMapper = CategoryEntityToCategoryMapper.initialize();
 	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper = CategoryCreateRequestToCategoryEntityMapper.initialize();
 
@@ -60,12 +60,29 @@ class CategoryServiceImpl implements CategoryService {
 		categoryRepository.saveAll(categories);
 	}
 
+
 	@Override
-	public void changeCategoryName(Long id, String newName) {
+	public void updateCategory(Long id, CategoryUpdateRequest request) {
 		CategoryEntity categoryEntity = categoryRepository.findById(id)
 			.orElseThrow(() -> new CategoryNotFoundException(id));
 
-		categoryEntity.setName(newName);
+		if (request.getName() != null) {
+			if (categoryRepository.existsByName(request.getName())) {
+				throw new CategoryAlreadyExistException(request.getName());
+			}
+			categoryEntity.setName(request.getName());
+		}
+
+		if (request.getParentId() != null) {
+			if (!categoryRepository.existsById(request.getParentId())) {
+				throw new CategoryParentNotFoundException(request.getParentId());
+			}
+			categoryEntity.setParentId(request.getParentId());
+		}
+
+		if (request.getDescription() != null) {
+			categoryEntity.setDescription(request.getDescription());
+		}
 		categoryRepository.save(categoryEntity);
 	}
 
