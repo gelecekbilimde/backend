@@ -70,8 +70,7 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 		}
 
 		UserEntity user = application.getUser();
-		user.setRoleId(application.getRole().getId());
-		user.setRoleEntity(application.getRole());
+		user.setRole(application.getRole());
 		userRepository.save(user);
 
 		application.approve();
