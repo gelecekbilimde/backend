@@ -14,10 +14,10 @@ public class Category extends BaseDomainModel {
 
 	private Long id;
 	private String name;
+	private String description;
 	private Integer order;
 	private String slug;
 	private String icon;
-
 	private Long parentId;
 
 }
