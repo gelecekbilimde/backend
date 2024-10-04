@@ -1,6 +1,5 @@
 package org.gelecekbilimde.scienceplatform.auth.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
@@ -13,7 +12,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Builder
 public class RoleApplicationFilter implements BaseFilter {
 
 	private Set<RoleApplicationStatus> statuses;
