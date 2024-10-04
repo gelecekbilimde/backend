@@ -119,7 +119,7 @@ insert into gb_category (order_number, parent_id, name, description, slug, icon,
 values (2, 6, 'Ahlak Felsefesi', 'Ahlak Felsefesi kategorisidir.', 'ahlak-felsefesi', null,
         'gelecekbilimde', current_timestamp);
 insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
-values (0, 6, 'Epistemoloji', 'Epistemoloji kategorisidir.', 'epistelomoji', null,
+values (0, 6, 'Epistemoloji', 'Epistemoloji kategorisidir.', 'epistemoloji', null,
         'gelecekbilimde', current_timestamp);
 insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
 values (0, null, 'Bilim', 'Bilim kategorisidir.', 'bilim', 'flask-conical',
