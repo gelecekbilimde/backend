@@ -17,13 +17,21 @@ import java.util.Set;
 public class RoleSelfApplicationFilter implements BaseFilter {
 
 	private Set<RoleApplicationStatus> statuses;
-	private String userId;
+	private User user;
+
+	@Getter
+	@Setter
+	@Builder
+	public static class User {
+		private String id;
+	}
 
 
 	@Override
 	public Specification<RoleApplicationEntity> toSpecification() {
 
-		Specification<RoleApplicationEntity> specification = Specification.where(null);
+		Specification<RoleApplicationEntity> specification = (root, query, criteriaBuilder) ->
+			criteriaBuilder.equal(root.join("user").get("id"), this.user.getId());
 
 		if (!CollectionUtils.isEmpty(this.statuses)) {
 
