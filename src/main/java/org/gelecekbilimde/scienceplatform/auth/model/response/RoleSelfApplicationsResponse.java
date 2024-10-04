@@ -10,7 +10,6 @@ import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus
 @Builder
 public class RoleSelfApplicationsResponse {
 
-	private String id;
 	private Role role;
 	private RoleApplicationStatus status;
 
