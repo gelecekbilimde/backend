@@ -17,7 +17,6 @@ import java.util.Set;
 public class RoleApplicationFilter implements BaseFilter {
 
 	private Set<RoleApplicationStatus> statuses;
-	private String userId;
 
 
 	@Override

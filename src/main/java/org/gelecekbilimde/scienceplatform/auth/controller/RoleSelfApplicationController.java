@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationToRoleApplicationResponseMapper;
-import org.gelecekbilimde.scienceplatform.auth.model.request.RoleApplicationListRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RoleSelfApplicationListRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationsResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleSelfApplicationService;
 import org.gelecekbilimde.scienceplatform.common.model.BasePage;
@@ -32,7 +32,7 @@ class RoleSelfApplicationController {
 
 	@PostMapping("/role-applications/self")
 	@PreAuthorize("hasAnyAuthority('role:application:list:self')")
-	SuccessResponse<PagingResponse<RoleApplicationsResponse>> findAll(@RequestBody @Valid RoleApplicationListRequest listRequest) {
+	SuccessResponse<PagingResponse<RoleApplicationsResponse>> findAll(@RequestBody @Valid RoleSelfApplicationListRequest listRequest) {
 
 		final BasePage<RoleApplication> pageOfRoleApplications = roleSelfApplicationService.findAll(listRequest);
 
