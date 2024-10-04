@@ -9,7 +9,7 @@ import org.gelecekbilimde.scienceplatform.user.model.User;
 @Setter
 public class RoleApplication {
 
-	private Long id;
+	private String id;
 	private User user;
 	private Role role;
 	private RoleApplicationStatus status;
