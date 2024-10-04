@@ -3,9 +3,9 @@ package org.gelecekbilimde.scienceplatform.auth.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
-import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationToRoleApplicationResponseMapper;
+import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationToRoleSelfApplicationsResponseMapper;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleSelfApplicationListRequest;
-import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationsResponse;
+import org.gelecekbilimde.scienceplatform.auth.model.response.RoleSelfApplicationsResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleSelfApplicationService;
 import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
@@ -27,20 +27,20 @@ class RoleSelfApplicationController {
 	private final RoleSelfApplicationService roleSelfApplicationService;
 
 
-	private final RoleApplicationToRoleApplicationResponseMapper roleApplicationToRoleApplicationResponseMapper = RoleApplicationToRoleApplicationResponseMapper.initialize();
+	private final RoleApplicationToRoleSelfApplicationsResponseMapper roleApplicationToRoleSelfApplicationsResponseMapper = RoleApplicationToRoleSelfApplicationsResponseMapper.initialize();
 
 
 	@PostMapping("/role-applications/self")
 	@PreAuthorize("hasAnyAuthority('role:application:list:self')")
-	SuccessResponse<PagingResponse<RoleApplicationsResponse>> findAll(@RequestBody @Valid RoleSelfApplicationListRequest listRequest) {
+	SuccessResponse<PagingResponse<RoleSelfApplicationsResponse>> findAll(@RequestBody @Valid RoleSelfApplicationListRequest listRequest) {
 
 		final BasePage<RoleApplication> pageOfRoleApplications = roleSelfApplicationService.findAll(listRequest);
 
-		final PagingResponse<RoleApplicationsResponse> pageResponseOfRoleApplication = PagingResponse
-			.<RoleApplicationsResponse>builder()
+		final PagingResponse<RoleSelfApplicationsResponse> pageResponseOfRoleApplication = PagingResponse
+			.<RoleSelfApplicationsResponse>builder()
 			.of(pageOfRoleApplications)
 			.content(
-				roleApplicationToRoleApplicationResponseMapper.map(pageOfRoleApplications.getContent())
+				roleApplicationToRoleSelfApplicationsResponseMapper.map(pageOfRoleApplications.getContent())
 			)
 			.filteredBy(listRequest.getFilter())
 			.build();
