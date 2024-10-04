@@ -14,9 +14,10 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-public class RoleApplicationFilter implements BaseFilter {
+public class RoleSelfApplicationFilter implements BaseFilter {
 
 	private Set<RoleApplicationStatus> statuses;
+	private String userId;
 
 
 	@Override

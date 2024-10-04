@@ -6,13 +6,13 @@ import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationNotFound
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundByNameException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
-import org.gelecekbilimde.scienceplatform.auth.model.RoleApplicationFilter;
+import org.gelecekbilimde.scienceplatform.auth.model.RoleSelfApplicationFilter;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationEntityToDomainMapper;
-import org.gelecekbilimde.scienceplatform.auth.model.request.RoleApplicationListRequest;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RoleSelfApplicationListRequest;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleApplicationRepository;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleSelfApplicationService;
@@ -39,7 +39,7 @@ class RoleSelfApplicationServiceImpl implements RoleSelfApplicationService {
 
 
 	@Override
-	public BasePage<RoleApplication> findAll(final RoleApplicationListRequest listRequest) {
+	public BasePage<RoleApplication> findAll(final RoleSelfApplicationListRequest listRequest) {
 
 		final Pageable pageable = listRequest.getPageable().toPageable();
 
@@ -47,7 +47,7 @@ class RoleSelfApplicationServiceImpl implements RoleSelfApplicationService {
 			.ifPresentOrElse(
 				filter -> filter.setUserId(identity.getUserId()),
 				() -> {
-					RoleApplicationFilter filter = RoleApplicationFilter.builder()
+					RoleSelfApplicationFilter filter = RoleSelfApplicationFilter.builder()
 						.userId(identity.getUserId())
 						.build();
 
@@ -57,7 +57,7 @@ class RoleSelfApplicationServiceImpl implements RoleSelfApplicationService {
 
 		final Specification<RoleApplicationEntity> specification = Optional
 			.ofNullable(listRequest.getFilter())
-			.map(RoleApplicationFilter::toSpecification)
+			.map(RoleSelfApplicationFilter::toSpecification)
 			.orElse(Specification.allOf());
 
 		final Page<RoleApplicationEntity> roleApplicationEntitiesPage = roleApplicationRepository
