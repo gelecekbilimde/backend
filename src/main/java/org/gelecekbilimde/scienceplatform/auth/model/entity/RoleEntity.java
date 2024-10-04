@@ -41,9 +41,6 @@ public class RoleEntity extends BaseEntity {
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "is_hidden")
-	private boolean isHidden;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private RoleStatus status;
