@@ -4,23 +4,23 @@ import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationAlreadyConcludedException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
-import org.gelecekbilimde.scienceplatform.auth.model.RoleChangeSpecification;
+import org.gelecekbilimde.scienceplatform.auth.model.RoleApplicationFilter;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationEntityToDomainMapper;
-import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RoleApplicationListRequest;
 import org.gelecekbilimde.scienceplatform.auth.repository.RoleApplicationRepository;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,15 +30,32 @@ class RoleApplicationServiceImpl implements RoleApplicationService {
 	private final RoleApplicationRepository roleApplicationRepository;
 
 
-	private final RoleApplicationEntityToDomainMapper authorRequestEntityToUserRoleResponseMapper = RoleApplicationEntityToDomainMapper.initialize();
+	private final RoleApplicationEntityToDomainMapper roleApplicationEntityToDomainMapper = RoleApplicationEntityToDomainMapper.initialize();
 
 
 	@Override
-	public Page<RoleApplication> findAll(List<RoleChangeRequestsFilter> filters, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-		Page<RoleApplicationEntity> authorRequests = roleApplicationRepository.findAll(RoleChangeSpecification.columnEqual(filters), pageable);
-		List<RoleApplication> roleApplications = authorRequests.stream().map(authorRequestEntityToUserRoleResponseMapper::map).toList();
-		return new PageImpl<>(roleApplications, pageable, authorRequests.getTotalElements());
+	public BasePage<RoleApplication> findAll(final RoleApplicationListRequest listRequest) {
+
+		final Pageable pageable = listRequest.getPageable().toPageable();
+
+		final RoleApplicationFilter filter = listRequest.getFilter();
+
+		final Specification<RoleApplicationEntity> specification = Optional
+			.ofNullable(filter)
+			.map(RoleApplicationFilter::toSpecification)
+			.orElse(Specification.allOf());
+
+		final Page<RoleApplicationEntity> roleApplicationEntitiesPage = roleApplicationRepository
+			.findAll(specification, pageable);
+
+		final List<RoleApplication> roleApplications = roleApplicationEntityToDomainMapper
+			.map(roleApplicationEntitiesPage.getContent());
+
+		return BasePage.of(
+			filter,
+			roleApplicationEntitiesPage,
+			roleApplications
+		);
 	}
 
 	@Override

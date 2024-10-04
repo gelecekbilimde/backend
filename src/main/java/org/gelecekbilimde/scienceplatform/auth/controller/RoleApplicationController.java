@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationToRoleApplicationResponseMapper;
-import org.gelecekbilimde.scienceplatform.auth.model.request.RoleChangeRequestsFilter;
+import org.gelecekbilimde.scienceplatform.auth.model.request.RoleApplicationListRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.response.RoleApplicationsResponse;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleApplicationService;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
+import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Validated
 @RestController
@@ -35,16 +34,20 @@ class RoleApplicationController {
 
 	@PostMapping("/role-applications")
 	@PreAuthorize("hasAnyAuthority('role:application:list')")
-	SuccessResponse<List<RoleApplicationsResponse>> findAll(@RequestBody @Valid List<RoleChangeRequestsFilter> filters,
-															@RequestParam(value = "page", defaultValue = "0") int page,
-															@RequestParam(value = "size", defaultValue = "10") int size) {
+	SuccessResponse<PagingResponse<RoleApplicationsResponse>> findAll(@RequestBody @Valid RoleApplicationListRequest listRequest) {
 
-		final List<RoleApplication> roleApplications = roleApplicationService.findAll(filters, page, size)
-			.stream()
-			.toList();
-		final List<RoleApplicationsResponse> roleApplicationsResponses = roleApplicationToRoleApplicationResponseMapper
-			.map(roleApplications);
-		return SuccessResponse.success(roleApplicationsResponses);
+		final BasePage<RoleApplication> pageOfRoleApplications = roleApplicationService.findAll(listRequest);
+
+		final PagingResponse<RoleApplicationsResponse> pageResponseOfRoleApplication = PagingResponse
+			.<RoleApplicationsResponse>builder()
+			.of(pageOfRoleApplications)
+			.content(
+				roleApplicationToRoleApplicationResponseMapper.map(pageOfRoleApplications.getContent())
+			)
+			.filteredBy(listRequest.getFilter())
+			.build();
+
+		return SuccessResponse.success(pageResponseOfRoleApplication);
 	}
 
 	@PatchMapping("/role-application/{id}/approve")
