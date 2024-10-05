@@ -16,17 +16,15 @@ create table if not exists gb_permission
 create table if not exists gb_role
 (
   id          varchar(36)  not null primary key,
-  description varchar(255),
-  is_default  boolean default false,
   name        varchar(55)  not null,
-  is_hidden   boolean,
-  status      varchar(25),
+  description varchar(255) not null,
+  status      varchar(25)  not null,
   created_by  varchar(255) not null,
   created_at  timestamp(0) not null,
   updated_by  varchar(255),
   updated_at  timestamp(0),
   constraint u__gb_role__name unique (name),
-  constraint c__gb_role__status check ( status in ('ACTIVE', 'PASSIVE'))
+  constraint c__gb_role__status check (status in ('ACTIVE', 'PASSIVE'))
 );
 
 
@@ -66,7 +64,7 @@ create table if not exists gb_user
 
 create table if not exists gb_user_verification
 (
-  id varchar(36) not null primary key,
+  id         varchar(36)  not null primary key,
   user_id    varchar(36)  not null,
   status     varchar(25)  not null,
   created_by varchar(255) not null,
@@ -300,4 +298,20 @@ create table if not exists gb_ticket_message
   created_at timestamp(0) not null,
   updated_by varchar(255),
   updated_at timestamp(0)
+);
+
+
+create table if not exists gb_role_application
+(
+  id      varchar(36) not null primary key,
+  user_id varchar(36) not null,
+  role_id varchar(36) not null,
+  status  varchar(10) not null,
+  created_by varchar(255) not null,
+  created_at timestamp(0) not null,
+  updated_by varchar(255),
+  updated_at timestamp(0),
+  constraint fk__gb_role_application__user_id foreign key (user_id) references gb_user (id),
+  constraint fk__gb_role_application__role_id foreign key (role_id) references gb_role (id),
+  constraint c__gb_role_application__status check ( status in ('IN_REVIEW', 'CANCELLED', 'APPROVED', 'REJECTED'))
 );

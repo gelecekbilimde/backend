@@ -41,12 +41,6 @@ public class RoleEntity extends BaseEntity {
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "is_default")
-	private boolean isDefault;
-
-	@Column(name = "is_hidden")
-	private boolean isHidden;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private RoleStatus status;
@@ -57,11 +51,11 @@ public class RoleEntity extends BaseEntity {
 		joinColumns = @JoinColumn(name = "role_id"),
 		inverseJoinColumns = @JoinColumn(name = "permission_id")
 	)
-	private List<PermissionEntity> permissionEntities;
+	private List<PermissionEntity> permissions;
 
 
 	public List<String> getPermissionNames() {
-		return permissionEntities.stream()
+		return permissions.stream()
 			.map(PermissionEntity::getName)
 			.toList();
 	}
