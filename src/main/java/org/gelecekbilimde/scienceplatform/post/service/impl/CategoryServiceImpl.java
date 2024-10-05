@@ -27,7 +27,7 @@ class CategoryServiceImpl implements CategoryService {
 	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper = CategoryCreateRequestToCategoryEntityMapper.initialize();
 
 	@Override
-	public List<Category> getCategories() {
+	public List<Category> findAll() {
 		return categoryEntityToCategoryMapper.map(categoryRepository.findAll());
 	}
 
@@ -41,7 +41,7 @@ class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void createCategory(CategoryCreateRequest request) {
+	public void create(CategoryCreateRequest request) {
 		if (categoryRepository.existsByName(request.getName())) {
 			throw new CategoryAlreadyExistException(request.getName());
 		}
@@ -51,7 +51,7 @@ class CategoryServiceImpl implements CategoryService {
 		List<CategoryEntity> categories = categoryRepository.findAllByParentId(request.getParentId()).stream().toList();
 
 		for (CategoryEntity categoryEntity : categories) {
-			if (categoryEntity.getOrder() >= request.getOrder()) {
+			if (categoryEntity.getOrderNumber() >= request.getOrderNumber()) {
 				categoryEntity.increaseOrder();
 			}
 		}
@@ -62,16 +62,16 @@ class CategoryServiceImpl implements CategoryService {
 
 
 	@Override
-	public void updateCategory(Long id, CategoryUpdateRequest request) {
+	public void update(Long id, CategoryUpdateRequest request) {
 		CategoryEntity categoryEntity = categoryRepository.findById(id)
 			.orElseThrow(() -> new CategoryNotFoundException(id));
 
-		if (request.getName() != null) {
-			if (categoryRepository.existsByName(request.getName())) {
-				throw new CategoryAlreadyExistException(request.getName());
-			}
-			categoryEntity.setName(request.getName());
+		if (categoryRepository.findByName(request.getName())
+			.filter(existingCategory -> !existingCategory.getId().equals(id))
+			.isPresent()) {
+			throw new CategoryAlreadyExistException(request.getName());
 		}
+		categoryEntity.setName(request.getName());
 
 		if (request.getParentId() != null) {
 			if (!categoryRepository.existsById(request.getParentId())) {
@@ -80,14 +80,13 @@ class CategoryServiceImpl implements CategoryService {
 			categoryEntity.setParentId(request.getParentId());
 		}
 
-		if (request.getDescription() != null) {
-			categoryEntity.setDescription(request.getDescription());
-		}
+		categoryEntity.setDescription(request.getDescription());
+
 		categoryRepository.save(categoryEntity);
 	}
 
 	@Override
-	public void deleteCategory(Long id) {
+	public void delete(Long id) {
 		CategoryEntity categoryEntity = categoryRepository.findById(id)
 			.orElseThrow(() -> new CategoryNotFoundException(id));
 

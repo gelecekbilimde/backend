@@ -1,6 +1,7 @@
 package org.gelecekbilimde.scienceplatform.post.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
@@ -22,35 +23,35 @@ class CategoryController {
 
 	private final CategoryToResponseMapper categoryToResponseMapper = CategoryToResponseMapper.initialize();
 
-	@GetMapping
+	@GetMapping("/categories")
 	SuccessResponse<List<CategoryResponse>> getCategoryList() {
-		List<Category> categories = categoryService.getCategories();
+		List<Category> categories = categoryService.findAll();
 		List<CategoryResponse> categoryResponses = categoryToResponseMapper.map(categories);
 		return SuccessResponse.success(categoryResponses);
 	}
 
-	@GetMapping("/{id}")
-	SuccessResponse<CategoryResponse> getCategoryById(@PathVariable Long id) {
+	@GetMapping("/category/{id}")
+	SuccessResponse<CategoryResponse> findById(@PathVariable @Positive Long id) {
 		Category category = categoryService.getCategory(id);
 		CategoryResponse categoryResponse = categoryToResponseMapper.map(category);
 		return SuccessResponse.success(categoryResponse);
 	}
 
-	@PostMapping("/create")
-	SuccessResponse<Void> createCategory(@RequestBody @Valid CategoryCreateRequest request) {
-		categoryService.createCategory(request);
+	@PostMapping("/category")
+	SuccessResponse<Void> create(@RequestBody @Valid CategoryCreateRequest request) {
+		categoryService.create(request);
 		return SuccessResponse.success();
 	}
 
-	@PutMapping("/{id}/update")
-	SuccessResponse<Void> updateCategory(@PathVariable Long id, @RequestBody @Valid CategoryUpdateRequest request) {
-		categoryService.updateCategory(id, request);
+	@PutMapping("/category/{id}")
+	SuccessResponse<Void> update(@PathVariable @Positive Long id, @RequestBody @Valid CategoryUpdateRequest request) {
+		categoryService.update(id, request);
 		return SuccessResponse.success();
 	}
 
-	@DeleteMapping("/{id}/delete")
-	SuccessResponse<Void> deleteCategory(@PathVariable Long id) {
-		categoryService.deleteCategory(id);
+	@DeleteMapping("/category/{id}")
+	SuccessResponse<Void> delete(@PathVariable @Positive Long id) {
+		categoryService.delete(id);
 		return SuccessResponse.success();
 	}
 
