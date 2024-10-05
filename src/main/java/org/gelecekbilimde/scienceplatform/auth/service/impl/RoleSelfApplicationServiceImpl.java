@@ -45,22 +45,10 @@ class RoleSelfApplicationServiceImpl implements RoleSelfApplicationService {
 
 		Optional.ofNullable(listRequest.getFilter())
 			.ifPresentOrElse(
-				filter -> {
-					RoleSelfApplicationFilter.User user = RoleSelfApplicationFilter.User.builder()
-						.id(identity.getUserId())
-						.build();
-
-					filter.setUser(user);
-				},
+				filter -> filter.addUserId(identity.getUserId()),
 				() -> {
-					RoleSelfApplicationFilter.User user = RoleSelfApplicationFilter.User.builder()
-						.id(identity.getUserId())
-						.build();
-
-					RoleSelfApplicationFilter filter = RoleSelfApplicationFilter.builder()
-						.user(user)
-						.build();
-
+					RoleSelfApplicationFilter filter = RoleSelfApplicationFilter.builder().build();
+					filter.addUserId(identity.getUserId());
 					listRequest.setFilter(filter);
 				}
 			);

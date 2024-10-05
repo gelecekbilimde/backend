@@ -26,6 +26,12 @@ public class RoleSelfApplicationFilter implements BaseFilter {
 		private String id;
 	}
 
+	public void addUserId(String userId) {
+		this.user = User.builder()
+			.id(userId)
+			.build();
+	}
+
 
 	@Override
 	public Specification<RoleApplicationEntity> toSpecification() {
