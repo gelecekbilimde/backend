@@ -12,7 +12,7 @@ public class CategoryResponse {
 	private Long id;
 	private String name;
 	private String description;
-	private Long order;
+	private Long orderNumber;
 	private String slug;
 	private String icon;
 	private Long parentId;
