@@ -81,7 +81,7 @@ class GlobalExceptionHandler {
 		log.error(exception.getMessage(), exception);
 
 		return ErrorResponse.builder()
-			.header(ErrorResponse.Header.VALIDATION_ERROR.getName())
+			.header(ErrorResponse.Header.API_ERROR.getName())
 			.build();
 	}
 

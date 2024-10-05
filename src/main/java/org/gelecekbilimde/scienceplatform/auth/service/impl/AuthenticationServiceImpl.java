@@ -5,8 +5,8 @@ import io.jsonwebtoken.ClaimsBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByEmailException;
-import org.gelecekbilimde.scienceplatform.auth.exception.VerifyException;
-import org.gelecekbilimde.scienceplatform.auth.exception.WrongEmailOrPasswordException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserNotVerifiedException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserPasswordNotValidException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.auth.model.Token;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
@@ -40,11 +40,11 @@ class AuthenticationServiceImpl implements AuthenticationService {
 			.orElseThrow(() -> new UserNotFoundByEmailException(request.getEmail()));
 
 		if (!userEntity.isVerified()) {
-			throw new VerifyException(request.getEmail());
+			throw new UserNotVerifiedException(request.getEmail());
 		}
 
 		if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
-			throw new WrongEmailOrPasswordException();
+			throw new UserPasswordNotValidException();
 		}
 
 		final Claims claims = this.getClaimsBuilder(userEntity);
@@ -67,7 +67,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
 	}
 
 	private Claims getClaimsBuilder(UserEntity userEntity) {
-		RoleEntity roleEntity = userEntity.getRoleEntity();
+		RoleEntity role = userEntity.getRole();
 
 		final ClaimsBuilder claimsBuilder = Jwts.claims();
 		claimsBuilder.add(TokenClaims.USER_ID.getValue(), userEntity.getId());
@@ -75,8 +75,8 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		claimsBuilder.add(TokenClaims.USER_LAST_NAME.getValue(), userEntity.getLastName());
 		claimsBuilder.add(TokenClaims.USER_STATUS.getValue(), userEntity.getStatus());
 		claimsBuilder.add(TokenClaims.USER_MAIL.getValue(), userEntity.getEmail());
-		claimsBuilder.add(TokenClaims.USER_ROLE.getValue(), roleEntity.getName());
-		claimsBuilder.add(TokenClaims.USER_PERMISSIONS.getValue(), roleEntity.getPermissionNames());
+		claimsBuilder.add(TokenClaims.USER_ROLE.getValue(), role.getName());
+		claimsBuilder.add(TokenClaims.USER_PERMISSIONS.getValue(), role.getPermissionNames());
 		return claimsBuilder.build();
 	}
 
