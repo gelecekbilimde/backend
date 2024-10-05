@@ -39,14 +39,22 @@ class AuthController {
 
 	@PostMapping("/login")
 	SuccessResponse<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
-		Token token = authenticationService.login(request);
-		return SuccessResponse.success(TokenResponse.builder().accessToken(token.getAccessToken()).refreshToken(token.getRefreshToken()).build());
+		final Token token = authenticationService.login(request);
+		final TokenResponse tokenResponse = TokenResponse.builder()
+			.accessToken(token.getAccessToken())
+			.refreshToken(token.getRefreshToken())
+			.build();
+		return SuccessResponse.success(tokenResponse);
 	}
 
 	@PostMapping("/refresh")
 	SuccessResponse<TokenResponse> refresh(@RequestBody @Valid RefreshRequest refreshRequest) {
-		Token token = authenticationService.refresh(refreshRequest);
-		return SuccessResponse.success(TokenResponse.builder().accessToken(token.getAccessToken()).refreshToken(token.getRefreshToken()).build());
+		final Token token = authenticationService.refresh(refreshRequest);
+		final TokenResponse tokenResponse = TokenResponse.builder()
+			.accessToken(token.getAccessToken())
+			.refreshToken(token.getRefreshToken())
+			.build();
+		return SuccessResponse.success(tokenResponse);
 	}
 
 	@PostMapping("/logout")
