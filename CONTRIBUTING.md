@@ -32,7 +32,8 @@ Thank you for your interest in contributing to the Gelecek Bilimde project! We a
     - Be responsive to feedback and make necessary changes.
 
 ## Development Standards
-# Branch Naming Conventions:
+
+### Branch Naming Conventions:
 
 Use the following format for branch names:
 
@@ -42,18 +43,18 @@ Use the following format for branch names:
 * documentation/{jira-issue-number}/{optional-description}
 Example: feature/GBS-1/add-feature-to-handle-user-authentication
 
-# Pull Request Naming Conventions:
+### Pull Request Naming Conventions:
 
 Use the following format for pull request titles:
 
 * {jira-issue-number} | {header-for-summary-of-development}
 Example: GBS-1 | Add feature to handle user authentication
 
-# Branch Linkage: 
+### Branch Linkage: 
 * Link your feature branch to the corresponding GitHub issue.
 * Protected Main Branch: The main branch is protected.
 
-# PR Requirements:
+### PR Requirements:
 
 * PR should be linked to the relevant issue within the GitHub Project.
 * Only one code owner's approval is needed for merging feature branches.
@@ -61,27 +62,27 @@ Example: GBS-1 | Add feature to handle user authentication
 * Resolve comments within the PR by the commenter.
 * PR should be concise and address one specific issue or feature.
 
-# Security: 
-Avoid including secret or credential information in your code.
+### Security: 
+* Avoid including secret or credential information in your code.
 
-# Coding Standards: 
-Ensure your code complies with existing coding standards; do not introduce new standards without justification.
+### Coding Standards: 
+* Ensure your code complies with existing coding standards; do not introduce new standards without justification.
 
-# Branch Management:
-Delete the branch after merging.
+### Branch Management:
+* Delete the branch after merging.
 
-# API Documentation: 
-Share the relevant Postman collection for any endpoint you’ve developed.
+### API Documentation: 
+* Share the relevant Postman collection for any endpoint you’ve developed.
 
-# Testing: 
-Add unit tests and Javadocs (or relevant documentation) for each method you’ve implemented.
+### Testing: 
+* Add unit tests and Javadocs (or relevant documentation) for each method you’ve implemented.
 
-# Bug Reporting:
-If your development includes known bugs, explain them in detail in the related discussion page. You can also report bugs with screenshots and code snippets.
+### Bug Reporting:
+* If your development includes known bugs, explain them in detail in the related discussion page. You can also report bugs with screenshots and code snippets.
 
 ## Code Review
 
-Code reviews are a crucial part of our development process to ensure code quality and maintainability. Here's how you can contribute effectively during code reviews:
+* Code reviews are a crucial part of our development process to ensure code quality and maintainability. Here's how you can contribute effectively during code reviews:
 
 ### Review Guidelines
 
