@@ -28,17 +28,27 @@ class UserFollowServiceImpl implements UserFollowService {
 
 	@Override
 	public List<User> findAllFollowings(final String id) {
+
 		final User user = userReadPort.findById(id)
 			.orElseThrow(() -> new UserNotFoundByIdException(id));
-		return user.getFollowings();
+
+		return userFollowReadPort.findAllByFollower(user)
+			.stream()
+			.map(UserFollow::getFollowed)
+			.toList();
 	}
 
 
 	@Override
 	public List<User> findAllFollowers(final String id) {
+
 		final User user = userReadPort.findById(id)
 			.orElseThrow(() -> new UserNotFoundByIdException(id));
-		return user.getFollowers();
+
+		return userFollowReadPort.findAllByFollowed(user)
+			.stream()
+			.map(UserFollow::getFollower)
+			.toList();
 	}
 
 
@@ -49,7 +59,7 @@ class UserFollowServiceImpl implements UserFollowService {
 			.orElseThrow(() -> new UserNotFoundByIdException(id));
 
 		Optional<UserFollow> followerUserFromDatabase = userFollowReadPort
-			.findByFollowedUserIdAndFollowerUserId(user.getId(), identity.getUserId());
+			.findByFollowedAndFollower(user, User.builder().id(identity.getUserId()).build());
 
 		if (followerUserFromDatabase.isPresent()) {
 			this.unfollowUser(followerUserFromDatabase.get());
