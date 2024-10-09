@@ -33,6 +33,11 @@ public class User extends BaseDomainModel {
 	private Role role;
 
 
+	public boolean isVerified() {
+		return this.status == UserStatus.VERIFIED;
+	}
+
+
 	public void verify() {
 		this.status = UserStatus.VERIFIED;
 	}

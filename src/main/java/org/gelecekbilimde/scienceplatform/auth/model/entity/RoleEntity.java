@@ -55,11 +55,4 @@ public class RoleEntity extends BaseEntity {
 	)
 	private List<PermissionEntity> permissions;
 
-
-	public List<String> getPermissionNames() {
-		return permissions.stream()
-			.map(PermissionEntity::getName)
-			.toList();
-	}
-
 }
