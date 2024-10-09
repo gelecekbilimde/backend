@@ -26,17 +26,18 @@ class UserFollowController {
 	private final UserFollowService userFollowService;
 	private final UserToUserFollowResponseMapper userToUserFollowResponseMapper = UserToUserFollowResponseMapper.initialize();
 
-	@GetMapping("/user/{id}/followers")
-	SuccessResponse<List<UserFollowResponse>> findAllFollowers(@PathVariable @UUID String id) {
-		List<User> users = this.userFollowService.findAllFollowers(id);
+
+	@GetMapping("/user/{id}/followings")
+	SuccessResponse<List<UserFollowResponse>> findAllFollowings(@PathVariable @UUID String id) {
+		List<User> users = this.userFollowService.findAllFollowings(id);
 		List<UserFollowResponse> userFollowResponses = userToUserFollowResponseMapper.map(users);
 		return SuccessResponse.success(userFollowResponses);
 	}
 
 
-	@GetMapping("/user/{id}/followings")
-	SuccessResponse<List<UserFollowResponse>> findAllFollowings(@PathVariable @UUID String id) {
-		List<User> users = this.userFollowService.findAllFollowings(id);
+	@GetMapping("/user/{id}/followers")
+	SuccessResponse<List<UserFollowResponse>> findAllFollowers(@PathVariable @UUID String id) {
+		List<User> users = this.userFollowService.findAllFollowers(id);
 		List<UserFollowResponse> userFollowResponses = userToUserFollowResponseMapper.map(users);
 		return SuccessResponse.success(userFollowResponses);
 	}
