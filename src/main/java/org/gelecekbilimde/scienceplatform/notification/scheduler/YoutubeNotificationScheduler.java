@@ -77,8 +77,7 @@ class YoutubeNotificationScheduler {
 				.thumbnailLink(playlistItemsResponse.getItems().get(0).getSnippet().getThumbnails().getMaxres().getUrl())
 				.build();
 		} catch (Exception exception) {
-			log.error(exception.getMessage(), exception);
-			throw new LastYouTubeVideoNotFoundException();
+			throw new LastYouTubeVideoNotFoundException(exception);
 		}
 	}
 
