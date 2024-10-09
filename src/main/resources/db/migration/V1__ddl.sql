@@ -258,18 +258,16 @@ create table if not exists gb_invalid_token
 );
 
 
-create table if not exists gb_setting
+create table if not exists gb_parameter
 (
   id         bigint generated always as identity primary key,
-  group_name varchar(100) not null,
   name       varchar(100) not null,
   definition text,
   is_hidden  boolean,
   created_by varchar(255) not null,
   created_at timestamp(0) not null,
   updated_by varchar(255),
-  updated_at timestamp(0),
-  constraint u__gb_setting__name__group_name unique (group_name, name)
+  updated_at timestamp(0)
 );
 
 
