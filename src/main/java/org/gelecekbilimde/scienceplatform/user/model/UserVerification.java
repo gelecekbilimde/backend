@@ -17,4 +17,14 @@ public class UserVerification extends BaseDomainModel {
     private User user;
     private UserVerificationStatus status;
 
+
+    public void complete() {
+        this.status = UserVerificationStatus.COMPLETED;
+    }
+
+
+    public boolean isCompleted() {
+        return this.status == UserVerificationStatus.COMPLETED;
+    }
+
 }

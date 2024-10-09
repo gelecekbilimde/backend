@@ -13,12 +13,13 @@ import org.gelecekbilimde.scienceplatform.auth.model.request.VerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.port.RoleReadPort;
 import org.gelecekbilimde.scienceplatform.auth.service.RegistrationService;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.gelecekbilimde.scienceplatform.user.model.entity.UserVerificationEntity;
+import org.gelecekbilimde.scienceplatform.user.model.UserVerification;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserVerificationStatus;
 import org.gelecekbilimde.scienceplatform.user.port.UserReadPort;
 import org.gelecekbilimde.scienceplatform.user.port.UserSavePort;
-import org.gelecekbilimde.scienceplatform.user.repository.UserVerificationRepository;
+import org.gelecekbilimde.scienceplatform.user.port.UserVerificationReadPort;
+import org.gelecekbilimde.scienceplatform.user.port.UserVerificationSavePort;
 import org.gelecekbilimde.scienceplatform.user.service.UserEmailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,9 @@ class RegistrationServiceImpl implements RegistrationService {
 	private final UserSavePort userSavePort;
 	private final RoleReadPort roleReadPort;
 	private final PasswordEncoder passwordEncoder;
-	private final UserVerificationRepository userVerificationRepository;
 	private final UserEmailService userEmailService;
+	private final UserVerificationReadPort userVerificationReadPort;
+	private final UserVerificationSavePort userVerificationSavePort;
 
 	@Override
 	@Transactional
@@ -63,33 +65,36 @@ class RegistrationServiceImpl implements RegistrationService {
 
 		User savedUser = userSavePort.save(user);
 
-		UserVerificationEntity userVerificationEntity = UserVerificationEntity.builder()
-			.userId(savedUser.getId())
+		UserVerification userVerification = UserVerification.builder()
+			.user(savedUser)
 			.status(UserVerificationStatus.WAITING)
 			.build();
-		userVerificationRepository.save(userVerificationEntity);
+		userVerificationSavePort.save(userVerification);
 
-		CompletableFuture.runAsync(() -> userEmailService.sendVerifyMessage(savedUser.getEmail(), userVerificationEntity.getId()));
+		CompletableFuture.runAsync(
+			() -> userEmailService
+				.sendVerifyMessage(savedUser.getEmail(), userVerification.getId())
+		);
 	}
 
 	@Override
 	@Transactional
 	public void verify(VerifyRequest verifyRequest) {
 
-		UserVerificationEntity userVerificationEntity = userVerificationRepository
+		UserVerification userVerification = userVerificationReadPort
 			.findById(verifyRequest.getVerificationId())
 			.orElseThrow(() -> new UserVerificationIsNotFoundException(verifyRequest.getVerificationId()));
 
-		if (userVerificationEntity.isCompleted()) {
+		if (userVerification.isCompleted()) {
 			throw new UserVerificationAlreadyCompletedException();
 		}
 
-		userVerificationEntity.complete();
-		userVerificationRepository.save(userVerificationEntity);
+		userVerification.complete();
+		userVerificationSavePort.save(userVerification);
 
 
-		User user = userReadPort.findById(userVerificationEntity.getUserId())
-			.orElseThrow(() -> new UserNotFoundByIdException(userVerificationEntity.getUserId()));
+		User user = userReadPort.findById(userVerification.getUser().getId())
+			.orElseThrow(() -> new UserNotFoundByIdException(userVerification.getUser().getId()));
 
 		user.verify();
 		userSavePort.save(user);
