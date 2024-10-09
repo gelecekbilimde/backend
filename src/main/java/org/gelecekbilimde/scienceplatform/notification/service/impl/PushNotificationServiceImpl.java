@@ -27,7 +27,8 @@ class PushNotificationServiceImpl implements PushNotificationService {
 		try {
 			fcmService.sendMessageToTokenList(request);
 		} catch (FirebaseMessagingException exception) {
-			log.error(exception.getMessage(), exception);
+			log.error("Error while sending push notification to userId: {}", request.getUserId());
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -46,7 +47,9 @@ class PushNotificationServiceImpl implements PushNotificationService {
 		try {
 			fcmService.sendMessageToTopic(request);
 		} catch (InterruptedException | ExecutionException exception) {
-			log.error(exception.getMessage(), exception);
+			log.error("Error while sending push notification to topic: {}", request.getTopic());
+			Thread.currentThread().interrupt();
 		}
 	}
+
 }
