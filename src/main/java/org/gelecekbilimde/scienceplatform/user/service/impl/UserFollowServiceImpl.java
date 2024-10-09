@@ -5,12 +5,10 @@ import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdExcepti
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.user.exception.UserAlreadyUnfollowedException;
 import org.gelecekbilimde.scienceplatform.user.model.User;
-import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserFollowEntity;
-import org.gelecekbilimde.scienceplatform.user.model.mapper.UserEntityToUserMapper;
 import org.gelecekbilimde.scienceplatform.user.model.request.UnfollowRequest;
+import org.gelecekbilimde.scienceplatform.user.port.UserReadPort;
 import org.gelecekbilimde.scienceplatform.user.repository.UserFollowRepository;
-import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
 import org.gelecekbilimde.scienceplatform.user.service.UserFollowService;
 import org.springframework.stereotype.Service;
 
@@ -19,55 +17,53 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserFollowServiceImpl implements UserFollowService {
+class UserFollowServiceImpl implements UserFollowService {
 
-	private final Identity identity;
-	private final UserRepository userRepository;
 	private final UserFollowRepository userFollowRepository;
-	private final UserEntityToUserMapper userEntityToUserMapper = UserEntityToUserMapper.initialize();
+	private final UserReadPort userReadPort;
+	private final Identity identity;
+
 
 	@Override
 	public List<User> findAllFollowings(String id) {
-		final UserEntity userEntity = userRepository.findById(id)
+		final User user = userReadPort.findById(id)
 			.orElseThrow(() -> new UserNotFoundByIdException(id));
-
-		return userEntityToUserMapper.map(userEntity.getFollowings());
+		return user.getFollowings();
 	}
 
 
 	@Override
 	public List<User> findAllFollowers(String id) {
-		final UserEntity userEntity = userRepository.findById(id)
+		final User user = userReadPort.findById(id)
 			.orElseThrow(() -> new UserNotFoundByIdException(id));
-
-		return userEntityToUserMapper.map(userEntity.getFollowers());
+		return user.getFollowers();
 	}
 
 
 	@Override
 	public void followToggle(String id) {
-		final UserEntity userEntity = userRepository.findById(id)
+		final User user = userReadPort.findById(id)
 			.orElseThrow(() -> new UserNotFoundByIdException(id));
 
 		Optional<UserFollowEntity> followerUserFromDatabase = userFollowRepository
-			.findByFollowedUserIdAndFollowerUserId(userEntity.getId(), identity.getUserId());
+			.findByFollowedUserIdAndFollowerUserId(user.getId(), identity.getUserId());
 
 		if (followerUserFromDatabase.isPresent()) {
 			this.unfollowUser(followerUserFromDatabase.get());
 			return;
 		}
 
-		this.followUser(userEntity);
+		this.followUser(user);
 	}
 
 	private void unfollowUser(UserFollowEntity followerUserFromDatabase) {
 		userFollowRepository.delete(followerUserFromDatabase);
 	}
 
-	private void followUser(UserEntity userEntity) {
+	private void followUser(User user) {
 		UserFollowEntity userFollowEntity = UserFollowEntity.builder()
 			.followerUserId(identity.getUserId())
-			.followedUserId(userEntity.getId())
+			.followedUserId(user.getId())
 			.build();
 		userFollowRepository.save(userFollowEntity);
 	}
@@ -76,13 +72,14 @@ public class UserFollowServiceImpl implements UserFollowService {
 	@Override
 	public void removeFollower(UnfollowRequest request) {
 
-		final UserEntity userEntity = userRepository.findById(request.getFollowerId())
+		final User user = userReadPort.findById(request.getFollowerId())
 			.orElseThrow(() -> new UserNotFoundByIdException(request.getFollowerId()));
 
 		final UserFollowEntity userFollowEntity = userFollowRepository
-			.findByFollowedUserIdAndFollowerUserId(identity.getUserId(), userEntity.getId())
-			.orElseThrow(() -> new UserAlreadyUnfollowedException(userEntity.getId(), identity.getUserId()));
+			.findByFollowedUserIdAndFollowerUserId(identity.getUserId(), user.getId())
+			.orElseThrow(() -> new UserAlreadyUnfollowedException(user.getId(), identity.getUserId()));
 
 		userFollowRepository.delete(userFollowEntity);
 	}
+
 }
