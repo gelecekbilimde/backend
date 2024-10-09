@@ -10,14 +10,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.notification.model.entity.NotificationTokenEntity;
+import org.gelecekbilimde.scienceplatform.notification.model.NotificationToken;
 import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationTopicRequest;
 import org.gelecekbilimde.scienceplatform.notification.model.request.PushNotificationUserRequest;
-import org.gelecekbilimde.scienceplatform.notification.repository.NotificationTokenRepository;
+import org.gelecekbilimde.scienceplatform.notification.port.NotificationTokenReadPort;
 import org.gelecekbilimde.scienceplatform.notification.service.FCMService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -25,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 @RequiredArgsConstructor
 class FCMServiceImpl implements FCMService {
 
-	private final NotificationTokenRepository userTokenRepository;
+	private final NotificationTokenReadPort notificationTokenReadPort;
 	private final FirebaseMessaging firebaseMessaging;
 
 	@Override
@@ -60,10 +61,10 @@ class FCMServiceImpl implements FCMService {
 	}
 
 	private MulticastMessage.Builder getPreconfiguredMulticastMessageBuilder(PushNotificationUserRequest request) {
-		List<String> deviceTokens = userTokenRepository.findAllByUserId(request.getUserId())
+		List<String> deviceTokens = notificationTokenReadPort.findAllByUserId(request.getUserId())
 			.stream()
-			.filter(notificationToken -> notificationToken.getDeviceToken() != null)
-			.map(NotificationTokenEntity::getDeviceToken)
+			.map(NotificationToken::getDeviceToken)
+			.filter(Objects::nonNull)
 			.toList();
 		log.info("Find Device Tokens : {}", deviceTokens);
 
