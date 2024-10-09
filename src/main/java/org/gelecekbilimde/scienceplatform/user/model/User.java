@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.gelecekbilimde.scienceplatform.auth.model.Role;
 import org.gelecekbilimde.scienceplatform.common.model.BaseDomainModel;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserDegree;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
@@ -27,5 +28,7 @@ public class User extends BaseDomainModel {
 	private UserDegree degree;
 	private UserGender gender;
 	private UserStatus status;
+
+	private Role role;
 
 }

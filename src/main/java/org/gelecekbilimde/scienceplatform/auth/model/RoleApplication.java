@@ -14,4 +14,18 @@ public class RoleApplication {
 	private Role role;
 	private RoleApplicationStatus status;
 
+
+	public boolean isConcluded() {
+		return this.status == RoleApplicationStatus.APPROVED || this.status == RoleApplicationStatus.REJECTED;
+	}
+
+
+	public void approve() {
+		this.status = RoleApplicationStatus.APPROVED;
+	}
+
+	public void reject() {
+		this.status = RoleApplicationStatus.REJECTED;
+	}
+
 }
