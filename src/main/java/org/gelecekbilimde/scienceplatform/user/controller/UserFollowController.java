@@ -7,6 +7,7 @@ import org.gelecekbilimde.scienceplatform.user.model.mapper.UserToUserFollowResp
 import org.gelecekbilimde.scienceplatform.user.model.response.UserFollowResponse;
 import org.gelecekbilimde.scienceplatform.user.service.UserFollowService;
 import org.hibernate.validator.constraints.UUID;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ class UserFollowController {
 
 
 	@PostMapping("/user/{id}/follow/toggle")
+	@PreAuthorize("hasAnyAuthority('user:follow', 'user:unfollow')")
 	SuccessResponse<Void> followToggle(@PathVariable @UUID String id) {
 		this.userFollowService.followToggle(id);
 		return SuccessResponse.success();
