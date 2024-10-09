@@ -100,9 +100,4 @@ public class UserEntity extends BaseEntity {
 	@OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
 	private List<PostEntity> postEntity;
 
-
-	public boolean isVerified() {
-		return this.status == UserStatus.VERIFIED;
-	}
-
 }
