@@ -6,17 +6,18 @@ import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundByNameExcep
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationAlreadyCompletedException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationIsNotFoundException;
-import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
+import org.gelecekbilimde.scienceplatform.auth.model.Role;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RegisterRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.request.VerifyRequest;
-import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
+import org.gelecekbilimde.scienceplatform.auth.port.RoleReadPort;
 import org.gelecekbilimde.scienceplatform.auth.service.RegistrationService;
-import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
+import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.entity.UserVerificationEntity;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserVerificationStatus;
-import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
+import org.gelecekbilimde.scienceplatform.user.port.UserReadPort;
+import org.gelecekbilimde.scienceplatform.user.port.UserSavePort;
 import org.gelecekbilimde.scienceplatform.user.repository.UserVerificationRepository;
 import org.gelecekbilimde.scienceplatform.user.service.UserEmailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,24 +30,25 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 class RegistrationServiceImpl implements RegistrationService {
 
-	private final UserRepository userRepository;
+	private final UserReadPort userReadPort;
+	private final UserSavePort userSavePort;
+	private final RoleReadPort roleReadPort;
 	private final PasswordEncoder passwordEncoder;
-	private final RoleRepository roleRepository;
-	private final UserEmailService userEmailService;
 	private final UserVerificationRepository userVerificationRepository;
+	private final UserEmailService userEmailService;
 
 	@Override
 	@Transactional
 	public void register(RegisterRequest request) {
 
-		if (userRepository.existsByEmail(request.getEmail())) {
+		if (userReadPort.existsByEmail(request.getEmail())) {
 			throw new AlreadyRegisteredException(request.getEmail());
 		}
 
-		RoleEntity role = roleRepository.findByName(RoleName.USER)
+		Role role = roleReadPort.findByName(RoleName.USER)
 			.orElseThrow(() -> new RoleNotFoundByNameException(RoleName.USER.name()));
 
-		UserEntity user = UserEntity.builder()
+		User user = User.builder()
 			.firstName(request.getFirstname())
 			.lastName(request.getLastname())
 			.email(request.getEmail())
@@ -59,7 +61,7 @@ class RegistrationServiceImpl implements RegistrationService {
 			.password(passwordEncoder.encode(request.getPassword()))
 			.build();
 
-		UserEntity savedUser = userRepository.save(user);
+		User savedUser = userSavePort.save(user);
 
 		UserVerificationEntity userVerificationEntity = UserVerificationEntity.builder()
 			.userId(savedUser.getId())
@@ -86,13 +88,13 @@ class RegistrationServiceImpl implements RegistrationService {
 		userVerificationRepository.save(userVerificationEntity);
 
 
-		UserEntity userEntity = userRepository.findById(userVerificationEntity.getUserId())
+		User user = userReadPort.findById(userVerificationEntity.getUserId())
 			.orElseThrow(() -> new UserNotFoundByIdException(userVerificationEntity.getUserId()));
 
-		userEntity.verify();
-		userRepository.save(userEntity);
+		user.verify();
+		userSavePort.save(user);
 
-		CompletableFuture.runAsync(() -> userEmailService.sendWelcomeMessage(userEntity.getEmail()));
+		CompletableFuture.runAsync(() -> userEmailService.sendWelcomeMessage(user.getEmail()));
 	}
 
 }
