@@ -11,6 +11,7 @@ import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,8 +30,10 @@ public class User extends BaseDomainModel {
 	private UserDegree degree;
 	private UserGender gender;
 	private UserStatus status;
-
 	private Role role;
+
+	private List<User> followings;
+	private List<User> followers;
 
 
 	public boolean isVerified() {
