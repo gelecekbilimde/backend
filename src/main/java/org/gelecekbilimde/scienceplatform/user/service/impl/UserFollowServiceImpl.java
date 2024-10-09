@@ -3,6 +3,7 @@ package org.gelecekbilimde.scienceplatform.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
+import org.gelecekbilimde.scienceplatform.user.exception.UserCannotFollowItselfException;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.UserFollow;
 import org.gelecekbilimde.scienceplatform.user.port.UserFollowDeletePort;
@@ -54,6 +55,10 @@ class UserFollowServiceImpl implements UserFollowService {
 
 	@Override
 	public void followToggle(final String id) {
+
+		if (identity.getUserId().equals(id)) {
+			throw new UserCannotFollowItselfException(id);
+		}
 
 		final User user = userReadPort.findById(id)
 			.orElseThrow(() -> new UserNotFoundByIdException(id));
