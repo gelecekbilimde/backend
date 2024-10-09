@@ -20,6 +20,7 @@ public class User extends BaseDomainModel {
 
 	private String id;
 	private String email;
+	private String password;
 	private String firstName;
 	private String lastName;
 	private String avatarPath;
@@ -30,5 +31,10 @@ public class User extends BaseDomainModel {
 	private UserStatus status;
 
 	private Role role;
+
+
+	public void verify() {
+		this.status = UserStatus.VERIFIED;
+	}
 
 }

@@ -101,11 +101,6 @@ public class UserEntity extends BaseEntity {
 	private List<PostEntity> postEntity;
 
 
-	public void verify() {
-		this.status = UserStatus.VERIFIED;
-	}
-
-
 	public boolean isVerified() {
 		return this.status == UserStatus.VERIFIED;
 	}
