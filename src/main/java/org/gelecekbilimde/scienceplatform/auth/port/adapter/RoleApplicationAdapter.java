@@ -37,7 +37,10 @@ class RoleApplicationAdapter implements RoleApplicationReadPort, RoleApplication
 
 		final Pageable pageable = basePageable.toPageable();
 
-		final Specification<RoleApplicationEntity> specification = filter.toSpecification();
+		final Specification<RoleApplicationEntity> specification = Optional
+			.ofNullable(filter)
+			.map(RoleApplicationFilter::toSpecification)
+			.orElse(Specification.allOf());
 
 		final Page<RoleApplicationEntity> roleApplicationEntitiesPage = roleApplicationRepository
 			.findAll(specification, pageable);
