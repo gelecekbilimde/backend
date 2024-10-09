@@ -43,7 +43,7 @@ class RegistrationServiceImpl implements RegistrationService {
 			throw new AlreadyRegisteredException(request.getEmail());
 		}
 
-		RoleEntity role = roleRepository.findByName(RoleName.USER.name())
+		RoleEntity role = roleRepository.findByName(RoleName.USER)
 			.orElseThrow(() -> new RoleNotFoundByNameException(RoleName.USER.name()));
 
 		UserEntity user = UserEntity.builder()

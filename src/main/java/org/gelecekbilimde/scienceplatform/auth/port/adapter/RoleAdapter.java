@@ -22,7 +22,7 @@ class RoleAdapter implements RoleReadPort {
 
 	@Override
 	public Optional<Role> findByName(RoleName name) {
-		return roleRepository.findByName(name.name())
+		return roleRepository.findByName(name)
 			.map(roleEntityToDomainMapper::map);
 	}
 
