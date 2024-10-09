@@ -22,16 +22,15 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 class YoutubeNotificationScheduler {
 
-	@Value("${youtubeDataApi.playlistId}")
-	private String playlistId;
-	@Value("${youtubeDataApi.key}")
-	private String apiKey;
-
-	public static final String YOUTUBE_NEW_VIDEO_TOPIC = "youtube-yeni-video";
-	public static final String YOUTUBE_NEW_VIDEO_TITLE = "Yeni Video Yayınlandı!";
-
 	private final YoutubeClient youtubeClient;
 	private final PushNotificationService pushNotificationService;
+
+
+	@Value("${youtubeDataApi.playlistId}")
+	private String playlistId;
+
+	@Value("${youtubeDataApi.key}")
+	private String apiKey;
 
 	private String lastVideoId;
 
@@ -39,6 +38,7 @@ class YoutubeNotificationScheduler {
 	private void init() {
 		this.lastVideoId = this.getLastVideo().getId();
 	}
+
 
 	/**
 	 * This method will be executed every minute.
@@ -51,15 +51,16 @@ class YoutubeNotificationScheduler {
 
 		if (!this.lastVideoId.equals(videoId)) {
 			log.info("New video: {}", videoId);
-			pushNotificationService.sendPushNotificationToTopic(
-				PushNotificationTopicRequest.builder()
-					.topic(YOUTUBE_NEW_VIDEO_TOPIC)
-					.title(YOUTUBE_NEW_VIDEO_TITLE)
-					.message("Yeni video: " + lastVideo.getTitle())
-					.thumbnailLink(lastVideo.getThumbnailLink())
-					.build()
-			);
-			log.info("Notifications has been sent to topic: {}", YOUTUBE_NEW_VIDEO_TOPIC);
+
+			PushNotificationTopicRequest notificationTopicRequest = PushNotificationTopicRequest.builder()
+				.topic("youtube-yeni-video")
+				.title("Yeni Video Yayınlandı!")
+				.message("Yeni video: " + lastVideo.getTitle())
+				.thumbnailLink(lastVideo.getThumbnailLink())
+				.build();
+
+			pushNotificationService.sendPushNotificationToTopic(notificationTopicRequest);
+			log.info("Notifications has been sent to topic: {}", notificationTopicRequest.getTopic());
 
 			this.lastVideoId = videoId;
 		}
@@ -88,4 +89,5 @@ class YoutubeNotificationScheduler {
 		private String title;
 		private String thumbnailLink;
 	}
+
 }
