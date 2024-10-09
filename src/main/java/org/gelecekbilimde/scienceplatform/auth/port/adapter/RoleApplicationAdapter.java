@@ -2,7 +2,7 @@ package org.gelecekbilimde.scienceplatform.auth.port.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
-import org.gelecekbilimde.scienceplatform.auth.model.RoleApplicationFilter;
+import org.gelecekbilimde.scienceplatform.auth.model.RoleApplicationAbstractFilter;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
 import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationEntityToDomainMapper;
@@ -33,13 +33,13 @@ class RoleApplicationAdapter implements RoleApplicationReadPort, RoleApplication
 
 	@Override
 	public BasePage<RoleApplication> findAll(final BasePageable basePageable,
-											 final RoleApplicationFilter filter) {
+											 final RoleApplicationAbstractFilter filter) {
 
 		final Pageable pageable = basePageable.toPageable();
 
 		final Specification<RoleApplicationEntity> specification = Optional
 			.ofNullable(filter)
-			.map(RoleApplicationFilter::toSpecification)
+			.map(RoleApplicationAbstractFilter::toSpecification)
 			.orElse(Specification.allOf());
 
 		final Page<RoleApplicationEntity> roleApplicationEntitiesPage = roleApplicationRepository

@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleStatus;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 
@@ -35,8 +36,9 @@ public class RoleEntity extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "name")
-	private String name;
+	private RoleName name;
 
 	@Column(name = "description")
 	private String description;
