@@ -45,9 +45,4 @@ public class RoleApplicationEntity extends BaseEntity {
 	@Column(name = "status")
 	private RoleApplicationStatus status;
 
-
-	public void cancel() {
-		this.status = RoleApplicationStatus.CANCELLED;
-	}
-
 }

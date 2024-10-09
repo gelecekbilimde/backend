@@ -5,43 +5,34 @@ import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationAlreadyE
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleApplicationNotFoundByUserIdAndStatusException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundByNameException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
+import org.gelecekbilimde.scienceplatform.auth.model.Role;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleApplication;
 import org.gelecekbilimde.scienceplatform.auth.model.RoleSelfApplicationFilter;
-import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
-import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
-import org.gelecekbilimde.scienceplatform.auth.model.mapper.RoleApplicationEntityToDomainMapper;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RoleSelfApplicationListRequest;
-import org.gelecekbilimde.scienceplatform.auth.repository.RoleApplicationRepository;
-import org.gelecekbilimde.scienceplatform.auth.repository.RoleRepository;
+import org.gelecekbilimde.scienceplatform.auth.port.RoleApplicationReadPort;
+import org.gelecekbilimde.scienceplatform.auth.port.RoleApplicationSavePort;
+import org.gelecekbilimde.scienceplatform.auth.port.RoleReadPort;
 import org.gelecekbilimde.scienceplatform.auth.service.RoleSelfApplicationService;
 import org.gelecekbilimde.scienceplatform.common.model.BasePage;
-import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 class RoleSelfApplicationServiceImpl implements RoleSelfApplicationService {
 
-	private final RoleApplicationRepository roleApplicationRepository;
-	private final RoleRepository roleRepository;
+	private final RoleApplicationReadPort roleApplicationReadPort;
+	private final RoleApplicationSavePort roleApplicationSavePort;
+	private final RoleReadPort roleReadPort;
 	private final Identity identity;
-
-
-	private final RoleApplicationEntityToDomainMapper roleApplicationEntityToDomainMapper = RoleApplicationEntityToDomainMapper.initialize();
 
 
 	@Override
 	public BasePage<RoleApplication> findAll(final RoleSelfApplicationListRequest listRequest) {
-
-		final Pageable pageable = listRequest.getPageable().toPageable();
 
 		Optional.ofNullable(listRequest.getFilter())
 			.ifPresentOrElse(
@@ -53,60 +44,45 @@ class RoleSelfApplicationServiceImpl implements RoleSelfApplicationService {
 				}
 			);
 
-		final Specification<RoleApplicationEntity> specification = Optional
-			.ofNullable(listRequest.getFilter())
-			.map(RoleSelfApplicationFilter::toSpecification)
-			.orElse(Specification.allOf());
-
-		final Page<RoleApplicationEntity> roleApplicationEntitiesPage = roleApplicationRepository
-			.findAll(specification, pageable);
-
-		final List<RoleApplication> roleApplications = roleApplicationEntityToDomainMapper
-			.map(roleApplicationEntitiesPage.getContent());
-
-		return BasePage.of(
-			listRequest.getFilter(),
-			roleApplicationEntitiesPage,
-			roleApplications
-		);
+		return roleApplicationReadPort.findAll(listRequest.getPageable(), listRequest.getFilter());
 	}
+
 
 	@Override
 	public void createAuthorApplication() {
 		this.createApplication(RoleName.AUTHOR);
 	}
 
-
 	@Override
 	public void createModeratorApplication() {
 		this.createApplication(RoleName.MODERATOR);
 	}
 
-
 	private void createApplication(final RoleName roleName) {
 
-		boolean existAnyApplicationInReview = roleApplicationRepository
+		boolean existAnyApplicationInReview = roleApplicationReadPort
 			.existsByUserIdAndStatus(identity.getUserId(), RoleApplicationStatus.IN_REVIEW);
 		if (existAnyApplicationInReview) {
 			throw new RoleApplicationAlreadyExistException();
 		}
 
-		final RoleEntity role = roleRepository.findByName(roleName.name())
+		final Role role = roleReadPort.findByName(roleName)
 			.orElseThrow(() -> new RoleNotFoundByNameException(roleName.name()));
 
-		final RoleApplicationEntity application = RoleApplicationEntity.builder()
-			.user(UserEntity.builder().id(identity.getUserId()).build())
+		final RoleApplication application = RoleApplication.builder()
+			.user(User.builder().id(identity.getUserId()).build())
 			.role(role)
 			.status(RoleApplicationStatus.IN_REVIEW)
 			.build();
-		roleApplicationRepository.save(application);
+
+		roleApplicationSavePort.save(application);
 	}
 
 
 	@Override
 	public void cancel() {
 
-		final RoleApplicationEntity application = roleApplicationRepository
+		final RoleApplication application = roleApplicationReadPort
 			.findByUserIdAndStatus(identity.getUserId(), RoleApplicationStatus.IN_REVIEW)
 			.orElseThrow(() -> new RoleApplicationNotFoundByUserIdAndStatusException(
 					identity.getUserId(),
@@ -115,7 +91,7 @@ class RoleSelfApplicationServiceImpl implements RoleSelfApplicationService {
 			);
 
 		application.cancel();
-		roleApplicationRepository.save(application);
+		roleApplicationSavePort.save(application);
 	}
 
 }
