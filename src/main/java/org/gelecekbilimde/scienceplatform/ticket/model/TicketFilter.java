@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.ticket;
+package org.gelecekbilimde.scienceplatform.ticket.model;
 
 import lombok.Getter;
 import lombok.Setter;

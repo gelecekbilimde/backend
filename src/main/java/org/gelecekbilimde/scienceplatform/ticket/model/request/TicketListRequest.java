@@ -6,7 +6,7 @@ import jakarta.validation.constraints.AssertTrue;
 import lombok.Getter;
 import lombok.Setter;
 import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
-import org.gelecekbilimde.scienceplatform.ticket.TicketFilter;
+import org.gelecekbilimde.scienceplatform.ticket.model.TicketFilter;
 
 import java.util.Set;
 
