@@ -1,8 +1,8 @@
 package org.gelecekbilimde.scienceplatform.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.gelecekbilimde.scienceplatform.auth.exception.AlreadyRegisteredException;
 import org.gelecekbilimde.scienceplatform.auth.exception.RoleNotFoundByNameException;
+import org.gelecekbilimde.scienceplatform.auth.exception.UserAlreadyRegisteredException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationAlreadyCompletedException;
 import org.gelecekbilimde.scienceplatform.auth.exception.UserVerificationIsNotFoundException;
@@ -44,7 +44,7 @@ class RegistrationServiceImpl implements RegistrationService {
 	public void register(RegisterRequest request) {
 
 		if (userReadPort.existsByEmail(request.getEmail())) {
-			throw new AlreadyRegisteredException(request.getEmail());
+			throw new UserAlreadyRegisteredException(request.getEmail());
 		}
 
 		Role role = roleReadPort.findByName(RoleName.USER)
