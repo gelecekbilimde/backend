@@ -273,9 +273,9 @@ create table if not exists gb_parameter
 
 create table if not exists gb_ticket
 (
-  id          varchar(36)  not null primary key,
+  id       bigint generated always as identity primary key,
   user_id     varchar(36)  not null,
-  subject     varchar(255) not null,
+  category varchar(255) not null,
   description text         not null,
   status      varchar(50)  not null,
   created_by  varchar(255) not null,
@@ -283,8 +283,8 @@ create table if not exists gb_ticket
   updated_by  varchar(255),
   updated_at  timestamp(0),
   constraint fk__gb_ticket__user_id foreign key (user_id) references gb_user (id),
-  constraint c__gb_ticket__subject check ( status in ('TECHNICAL', 'POST', 'YOUR_QUESTION_REQUESTS', 'FEEDBACK',
-                                                      'COLLABORATION', 'OTHER')),
+  constraint c__gb_ticket__category check ( category in ('TECHNICAL', 'POST', 'YOUR_QUESTION_REQUESTS', 'FEEDBACK',
+                                                         'COLLABORATION', 'OTHER')),
   constraint c__gb_ticket__status check ( status in ('OPEN', 'IN_PROGRESS', 'ON_HOLD', 'CLOSED',
                                                      'REOPENED', 'CANCELED', 'RESOLVED'))
 );
@@ -293,13 +293,15 @@ create table if not exists gb_ticket
 create table if not exists gb_ticket_message
 (
   id         bigint generated always as identity primary key,
-  ticket_id  varchar(36)  not null,
+  ticket_id  bigint not null,
   user_id    varchar(36)  not null,
-  message    text,
+  content    text,
   created_by varchar(255) not null,
   created_at timestamp(0) not null,
   updated_by varchar(255),
-  updated_at timestamp(0)
+  updated_at timestamp(0),
+  constraint fk__gb_ticket_message__ticket_id foreign key (ticket_id) references gb_ticket (id),
+  constraint fk__gb_ticket_message__user_id foreign key (user_id) references gb_user (id)
 );
 
 
