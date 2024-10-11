@@ -7,10 +7,12 @@ import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
+import org.gelecekbilimde.scienceplatform.ticket.model.mapper.TicketToResponseMapper;
 import org.gelecekbilimde.scienceplatform.ticket.model.mapper.TicketToTicketsResponseMapper;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketCreateRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketListRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketUpdateRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketResponse;
 import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketsResponse;
 import org.gelecekbilimde.scienceplatform.ticket.service.TicketService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +33,7 @@ class TicketController {
 	private final TicketService ticketService;
 
 	private final TicketToTicketsResponseMapper ticketToTicketsResponseMapper = TicketToTicketsResponseMapper.initialize();
+	private final TicketToResponseMapper ticketToResponseMapper = TicketToResponseMapper.initialize();
 
 
 	@PostMapping("/tickets")
@@ -49,6 +52,15 @@ class TicketController {
 			.build();
 
 		return SuccessResponse.success(pageResponseOfTicket);
+	}
+
+
+	@PostMapping("/ticket/{id}")
+	@PreAuthorize("hasAuthority('ticket:detail')")
+	SuccessResponse<TicketResponse> findById(@PathVariable @Positive Long id) {
+		Ticket ticket = ticketService.findById(id);
+		TicketResponse ticketResponse = ticketToResponseMapper.map(ticket);
+		return SuccessResponse.success(ticketResponse);
 	}
 
 

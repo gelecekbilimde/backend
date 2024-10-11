@@ -22,10 +22,27 @@ class TicketServiceImpl implements TicketService {
 	private final TicketSavePort ticketSavePort;
 	private final Identity identity;
 
+
 	@Override
 	public BasePage<Ticket> findAll(final TicketListRequest listRequest) {
 		return ticketReadPort
 			.findAll(listRequest.getPageable(), listRequest.getFilter());
+	}
+
+
+	@Override
+	public Ticket findById(final Long id) {
+
+		final Ticket ticket = ticketReadPort.findById(id)
+			.orElseThrow(() -> new TicketNotFoundByIdException(id));
+
+		boolean isNotAdmin = !identity.isAdmin();
+		boolean isNotOwner = !ticket.getUserId().equals(identity.getUserId());
+		if (isNotAdmin || isNotOwner) {
+			throw new TicketNotFoundByIdException(id);
+		}
+
+		return ticket;
 	}
 
 

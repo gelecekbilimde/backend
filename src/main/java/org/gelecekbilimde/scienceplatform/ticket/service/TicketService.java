@@ -11,6 +11,8 @@ public interface TicketService {
 
 	BasePage<Ticket> findAll(final TicketListRequest listRequest);
 
+	Ticket findById(Long id);
+
 	void create(TicketCreateRequest createRequest);
 
 	void update(Long id, TicketUpdateRequest updateRequest);
