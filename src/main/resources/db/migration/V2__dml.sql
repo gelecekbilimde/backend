@@ -52,6 +52,12 @@ insert into gb_permission (id, description, name, is_hidden, created_by, created
 values ('7572d942-b048-40bf-8cf4-c7a87d9be586', 'Çağrı Kaydını Günceller',
         'ticket:update', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('06d282c7-efc1-4178-ad4d-8af912ce1aa2', 'Çağrı Kaydındaki Yorumları Görüntüler',
+        'ticket:comment:list', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('08cc7245-ed0f-47ee-a892-702f000a2ab5', 'Çağrı Kaydına Yorum Ekler',
+        'ticket:comment:add', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('0150a560-8536-427e-8e76-fb1f6d41f5e7', 'Kendi Çağrı Kayıtlarını Listeler',
         'ticket:self:list', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
@@ -102,6 +108,10 @@ insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', 'b7c4f0d1-3f0e-46aa-9c02-ee7e7cbf49bb');
 insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '7572d942-b048-40bf-8cf4-c7a87d9be586');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '06d282c7-efc1-4178-ad4d-8af912ce1aa2');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '08cc7245-ed0f-47ee-a892-702f000a2ab5');
 insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '0352ee79-e844-4e91-968f-c9f3e4a27515');
 insert into gb_role_permission (role_id, permission_id)
