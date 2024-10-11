@@ -46,17 +46,17 @@ insert into gb_permission (id, description, name, is_hidden, created_by, created
 values ('d16020f2-1331-4e2f-94aa-7f6d08b6e157', 'Yorum Beğenir',
         'comment:like', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('0150a560-8536-427e-8e76-fb1f6d41f5e7', 'Kendi Çağrısı Kayıtlarını Listeler',
-        'self:ticket:read', false, 'gelecekbilimde', current_timestamp);
-insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('b7c4f0d1-3f0e-46aa-9c02-ee7e7cbf49bb', 'Bütün Çağrı Kayıtlarını Listeler',
-        'ticket:read', false, 'gelecekbilimde', current_timestamp);
-insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('1bb69fdf-d470-4c37-8075-58ff0fa0d19e', 'Çağrı Kaydı Oluşturur',
-        'self:ticket:create', false, 'gelecekbilimde', current_timestamp);
+        'ticket:list', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('7572d942-b048-40bf-8cf4-c7a87d9be586', 'Çağrı Kaydını Günceller',
         'ticket:update', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('0150a560-8536-427e-8e76-fb1f6d41f5e7', 'Kendi Çağrısı Kayıtlarını Listeler',
+        'self:ticket:read', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('1bb69fdf-d470-4c37-8075-58ff0fa0d19e', 'Çağrı Kaydı Oluşturur',
+        'self:ticket:create', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('f8217f8d-8d67-496f-8761-53201e690078', 'Profil Düzenler',
         'profile:edit', false, 'gelecekbilimde', current_timestamp);
