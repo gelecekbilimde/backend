@@ -276,6 +276,7 @@ create table if not exists gb_ticket
   id       bigint generated always as identity primary key,
   user_id     varchar(36)  not null,
   category varchar(255) not null,
+  title varchar(512) not null,
   description text         not null,
   status      varchar(50)  not null,
   created_by  varchar(255) not null,

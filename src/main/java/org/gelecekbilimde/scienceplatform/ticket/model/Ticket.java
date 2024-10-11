@@ -18,6 +18,7 @@ public class Ticket extends BaseDomainModel {
 	private Long id;
 	private String userId;
 	private TicketCategory category;
+	private String title;
 	private String description;
 	@Builder.Default
 	private TicketStatus status = TicketStatus.OPEN;

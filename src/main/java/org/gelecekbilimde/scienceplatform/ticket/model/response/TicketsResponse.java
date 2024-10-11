@@ -14,7 +14,7 @@ public class TicketsResponse {
 
 	private Long id;
 	private String userId;
-	private String description;
+	private String title;
 	private TicketStatus status;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
