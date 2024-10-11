@@ -22,7 +22,7 @@ import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "gb_ticket_comment")
-public class TicketMessageEntity extends BaseEntity {
+public class TicketCommentEntity extends BaseEntity {
 
 	@Id
 	@Column(name = "id")
