@@ -19,6 +19,5 @@ public class TicketsResponse {
 	private String title;
 	private TicketStatus status;
 	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
 
 }
