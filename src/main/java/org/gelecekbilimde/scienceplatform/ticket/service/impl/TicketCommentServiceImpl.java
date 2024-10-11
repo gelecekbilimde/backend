@@ -27,17 +27,16 @@ class TicketCommentServiceImpl implements TicketCommentService {
 
 	@Override
 	public List<TicketComment> findAllByTicketId(final Long ticketId) {
+
+		this.validateTicketIdAndCurrentUserPermission(ticketId);
+
 		return ticketCommentReadPort.findAllByTicketId(ticketId);
 	}
 
 	@Override
 	public void add(final Long ticketId, final TicketCommentAddRequest request) {
 
-		final Optional<Ticket> ticket = ticketReadPort.findById(ticketId);
-
-		if (ticket.isEmpty()) {
-			throw new TicketNotFoundByIdException(ticketId);
-		}
+		this.validateTicketIdAndCurrentUserPermission(ticketId);
 
 		final TicketComment ticketComment = TicketComment.builder()
 			.ticketId(ticketId)
@@ -45,6 +44,22 @@ class TicketCommentServiceImpl implements TicketCommentService {
 			.content(request.getContent())
 			.build();
 		ticketCommentSavePort.save(ticketComment);
+	}
+
+	private void validateTicketIdAndCurrentUserPermission(final Long ticketId) {
+
+		final Optional<Ticket> ticket = ticketReadPort.findById(ticketId);
+
+		boolean ticketNotExists = ticket.isEmpty();
+		if (ticketNotExists) {
+			throw new TicketNotFoundByIdException(ticketId);
+		}
+
+		boolean isNotAdmin = !identity.isAdmin();
+		boolean isNotOwner = !ticket.get().getUserId().equals(identity.getUserId());
+		if (isNotAdmin && isNotOwner) {
+			throw new TicketNotFoundByIdException(ticketId);
+		}
 	}
 
 }
