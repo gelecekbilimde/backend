@@ -1,6 +1,6 @@
 package org.gelecekbilimde.scienceplatform.ticket.model.enums;
 
-public enum TicketSubject {
+public enum TicketCategory {
 	TECHNICAL,
 	POST,
 	YOUR_QUESTION_REQUESTS,

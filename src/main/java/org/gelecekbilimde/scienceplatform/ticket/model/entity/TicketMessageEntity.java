@@ -35,7 +35,7 @@ public class TicketMessageEntity extends BaseEntity {
 	@Column(name = "user_id")
 	private String userId;
 
-	@Column(name = "message")
-	private String message;
+	@Column(name = "content")
+	private String content;
 
 }

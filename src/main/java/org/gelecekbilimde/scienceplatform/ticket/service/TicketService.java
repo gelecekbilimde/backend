@@ -1,21 +1,20 @@
 package org.gelecekbilimde.scienceplatform.ticket.service;
 
-import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
-import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketCreateRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketListRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketUpdateRequest;
-import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketResponse;
 
 
 public interface TicketService {
 
-	PagingResponse<TicketResponse> ticketRead(PagingRequest request);
+	BasePage<Ticket> findAll(final TicketListRequest listRequest);
 
-	PagingResponse<TicketResponse> ticketReadSelf(PagingRequest request);
+	void update(Long id, TicketUpdateRequest updateRequest);
 
-	Ticket updateTicket(TicketUpdateRequest request);
+	BasePage<Ticket> findAllSelf(final TicketListRequest listRequest);
 
-	Ticket ticketCreateSelf(TicketCreateRequest request);
+	void create(TicketCreateRequest request);
 
 }
