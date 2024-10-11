@@ -8,6 +8,7 @@ import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
 import org.gelecekbilimde.scienceplatform.ticket.model.mapper.TicketToTicketsResponseMapper;
+import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketCreateRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketListRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketUpdateRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketsResponse;
@@ -48,6 +49,14 @@ class TicketController {
 			.build();
 
 		return SuccessResponse.success(pageResponseOfTicket);
+	}
+
+
+	@PostMapping("/ticket")
+	@PreAuthorize("hasAuthority('ticket:create')")
+	SuccessResponse<Void> create(@RequestBody @Valid TicketCreateRequest createRequest) {
+		ticketService.create(createRequest);
+		return SuccessResponse.success();
 	}
 
 
