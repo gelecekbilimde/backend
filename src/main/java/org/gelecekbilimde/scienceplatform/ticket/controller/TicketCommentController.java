@@ -33,7 +33,7 @@ class TicketCommentController {
 
 
 	@GetMapping("/ticket/{id}/comments")
-	@PreAuthorize("hasAuthority('ticket:comment:list')")
+	@PreAuthorize("hasAuthority('ticket:detail')")
 	SuccessResponse<List<TicketCommentResponse>> findAllByTicketId(@PathVariable(name = "id") @Positive Long ticketId) {
 
 		final List<TicketComment> ticketComments = ticketService.findAllByTicketId(ticketId);
