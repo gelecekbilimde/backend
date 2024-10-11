@@ -17,6 +17,7 @@ import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketsResponse;
 import org.gelecekbilimde.scienceplatform.ticket.service.TicketService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,7 +56,7 @@ class TicketController {
 	}
 
 
-	@PostMapping("/ticket/{id}")
+	@GetMapping("/ticket/{id}")
 	@PreAuthorize("hasAuthority('ticket:detail')")
 	SuccessResponse<TicketResponse> findById(@PathVariable @Positive Long id) {
 		Ticket ticket = ticketService.findById(id);
