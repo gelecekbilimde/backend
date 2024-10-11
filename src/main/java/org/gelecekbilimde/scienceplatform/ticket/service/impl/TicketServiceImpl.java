@@ -38,7 +38,7 @@ class TicketServiceImpl implements TicketService {
 
 		boolean isNotAdmin = !identity.isAdmin();
 		boolean isNotOwner = !ticket.getUserId().equals(identity.getUserId());
-		if (isNotAdmin || isNotOwner) {
+		if (isNotAdmin && isNotOwner) {
 			throw new TicketNotFoundByIdException(id);
 		}
 
