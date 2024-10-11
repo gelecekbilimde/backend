@@ -9,12 +9,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @SuperBuilder
-public class TicketMessageResponse {
+public class TicketCommentResponse {
 
 	private Long id;
-	private Long userId;
-	private Long ticketId;
-	private String message;
+	private String userId;
+	private String content;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
