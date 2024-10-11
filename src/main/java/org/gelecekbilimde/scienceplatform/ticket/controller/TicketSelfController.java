@@ -10,7 +10,7 @@ import org.gelecekbilimde.scienceplatform.ticket.model.mapper.TicketToTicketsRes
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketCreateRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketListRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketsResponse;
-import org.gelecekbilimde.scienceplatform.ticket.service.TicketService;
+import org.gelecekbilimde.scienceplatform.ticket.service.TicketSelfService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 class TicketSelfController {
 
-	private final TicketService ticketService;
+	private final TicketSelfService ticketSelfService;
 
 
 	private final TicketToTicketsResponseMapper ticketToTicketsResponseMapper = TicketToTicketsResponseMapper.initialize();
@@ -34,7 +34,7 @@ class TicketSelfController {
 	@PreAuthorize("hasAuthority('ticket:self:list')")
 	SuccessResponse<PagingResponse<TicketsResponse>> findAll(@RequestBody @Valid TicketListRequest listRequest) {
 
-		final BasePage<Ticket> pageOfTickets = ticketService.findAll(listRequest);
+		final BasePage<Ticket> pageOfTickets = ticketSelfService.findAll(listRequest);
 
 		final PagingResponse<TicketsResponse> pageResponseOfTicket = PagingResponse
 			.<TicketsResponse>builder()
@@ -52,7 +52,7 @@ class TicketSelfController {
 	@PostMapping
 	@PreAuthorize("hasAuthority('ticket:self:create')")
 	SuccessResponse<Void> create(@RequestBody @Valid TicketCreateRequest createRequest) {
-		ticketService.create(createRequest);
+		ticketSelfService.create(createRequest);
 		return SuccessResponse.success();
 	}
 
