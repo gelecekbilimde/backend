@@ -55,7 +55,7 @@ class TicketMessageServiceImpl implements TicketMessageService {
 
 	@Override
 	public TicketMessageResponse ticketMessageCreate(TicketMessageCreateRequest request) {
-		TicketMessageEntity message = TicketMessageEntity.builder().userId(identity.getUserId()).ticketId(request.getId()).message(request.getMessage()).build();
+		TicketMessageEntity message = TicketMessageEntity.builder().userId(identity.getUserId()).ticketId(request.getId()).content(request.getMessage()).build();
 		TicketMessageEntity saveTicket = this.ticketMessageRepository.save(message);
 		return ticketMessageEntityToMessageResponseMapper.map(saveTicket);
 	}

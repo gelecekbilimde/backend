@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.gelecekbilimde.scienceplatform.ticket.model.enums.TicketSubject;
+import org.gelecekbilimde.scienceplatform.ticket.model.enums.TicketCategory;
 
 @Getter
 @Setter
@@ -20,6 +20,6 @@ public class TicketMessageCreateRequest {
 	private String message;
 
 	@Enumerated(EnumType.STRING)
-	private TicketSubject subject;
+	private TicketCategory subject;
 
 }

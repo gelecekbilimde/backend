@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @SuperBuilder
-public class TicketResponse {
+public class TicketsResponse {
 
 	private Long id;
 	private String userId;
-	private String message;
+	private String description;
 	private TicketStatus status;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
