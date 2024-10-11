@@ -4,10 +4,10 @@ import org.gelecekbilimde.scienceplatform.common.exception.AbstractConflictExcep
 
 import java.io.Serial;
 
-public class RoleApplicationAlreadyConcludedException extends AbstractConflictException {
+public final class RoleApplicationAlreadyConcludedException extends AbstractConflictException {
 
 	@Serial
-	private static final long serialVersionUID = -7807528937254572325L;
+	private static final long serialVersionUID = 6963403850981238210L;
 
 	public RoleApplicationAlreadyConcludedException(String id) {
 		super("role application already concluded id: " + id);
