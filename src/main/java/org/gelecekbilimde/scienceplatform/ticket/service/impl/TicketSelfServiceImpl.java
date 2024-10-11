@@ -32,6 +32,7 @@ class TicketSelfServiceImpl implements TicketSelfService {
 
 		Ticket ticket = Ticket.builder()
 			.userId(identity.getUserId())
+			.title(createRequest.getTitle())
 			.description(createRequest.getDescription())
 			.build();
 

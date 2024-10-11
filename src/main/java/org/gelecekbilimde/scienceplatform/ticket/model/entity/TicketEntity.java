@@ -38,6 +38,9 @@ public class TicketEntity extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private TicketCategory category;
 
+	@Column(name = "title")
+	private String title;
+
 	@Column(name = "description")
 	private String description;
 
