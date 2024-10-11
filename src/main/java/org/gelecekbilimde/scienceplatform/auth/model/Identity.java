@@ -20,7 +20,9 @@ public class Identity {
 	}
 
 	public boolean isAdmin() {
-		final RoleName roleName = this.getJwt().getClaim(TokenClaims.USER_ROLE.getValue());
+		final RoleName roleName = RoleName.valueOf(
+			this.getJwt().getClaim(TokenClaims.USER_ROLE.getValue())
+		);
 		return RoleName.ADMIN == roleName;
 	}
 
