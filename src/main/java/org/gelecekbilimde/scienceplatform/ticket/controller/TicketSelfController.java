@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-class TicketUserController {
+class TicketSelfController {
 
 	private final TicketService ticketService;
 
