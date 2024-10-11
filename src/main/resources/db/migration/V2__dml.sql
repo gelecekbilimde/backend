@@ -49,6 +49,9 @@ insert into gb_permission (id, description, name, is_hidden, created_by, created
 values ('b7c4f0d1-3f0e-46aa-9c02-ee7e7cbf49bb', 'Bütün Çağrı Kayıtlarını Listeler',
         'ticket:list', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('6270e6e9-28a4-4811-bf20-a7c4b7dc41b5', 'Çağrı Kaydının Detayını Görüntüler',
+        'ticket:detail', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('1bb69fdf-d470-4c37-8075-58ff0fa0d19e', 'Çağrı Kaydı Oluşturur',
         'ticket:create', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
@@ -104,6 +107,8 @@ values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '35bc91b4-3b92-4ff5-b204-439ef21
 insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', 'b7c4f0d1-3f0e-46aa-9c02-ee7e7cbf49bb');
 insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '6270e6e9-28a4-4811-bf20-a7c4b7dc41b5');
+insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '7572d942-b048-40bf-8cf4-c7a87d9be586');
 insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '08cc7245-ed0f-47ee-a892-702f000a2ab5');
@@ -126,6 +131,8 @@ INSERT INTO gb_role_permission (role_id, permission_id)
 VALUES ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '6842cfea-0568-4970-af2e-bc9e3f7ed2cf');
 INSERT INTO gb_role_permission (role_id, permission_id)
 VALUES ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', 'd16020f2-1331-4e2f-94aa-7f6d08b6e157');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '6270e6e9-28a4-4811-bf20-a7c4b7dc41b5');
 insert into gb_role_permission (role_id, permission_id)
 values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '1bb69fdf-d470-4c37-8075-58ff0fa0d19e');
 insert into gb_role_permission (role_id, permission_id)
@@ -153,6 +160,8 @@ INSERT INTO gb_role_permission (role_id, permission_id)
 VALUES ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '6842cfea-0568-4970-af2e-bc9e3f7ed2cf');
 INSERT INTO gb_role_permission (role_id, permission_id)
 VALUES ('4d98a76c-9841-4aea-b296-2f27aa610b6c', 'd16020f2-1331-4e2f-94aa-7f6d08b6e157');
+insert into gb_role_permission (role_id, permission_id)
+values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '6270e6e9-28a4-4811-bf20-a7c4b7dc41b5');
 insert into gb_role_permission (role_id, permission_id)
 values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '1bb69fdf-d470-4c37-8075-58ff0fa0d19e');
 insert into gb_role_permission (role_id, permission_id)
@@ -184,6 +193,8 @@ insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', '6842cfea-0568-4970-af2e-bc9e3f7ed2cf');
 insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', 'd16020f2-1331-4e2f-94aa-7f6d08b6e157');
+insert into gb_role_permission (role_id, permission_id)
+values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', '6270e6e9-28a4-4811-bf20-a7c4b7dc41b5');
 insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', '1bb69fdf-d470-4c37-8075-58ff0fa0d19e');
 insert into gb_role_permission (role_id, permission_id)
