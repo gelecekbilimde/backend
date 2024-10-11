@@ -290,10 +290,10 @@ create table if not exists gb_ticket
 );
 
 
-create table if not exists gb_ticket_message
+create table if not exists gb_ticket_comment
 (
   id         bigint generated always as identity primary key,
-  ticket_id  bigint not null,
+  ticket_id bigint not null,
   user_id    varchar(36)  not null,
   content    text,
   created_by varchar(255) not null,
