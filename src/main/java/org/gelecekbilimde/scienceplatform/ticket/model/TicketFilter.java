@@ -1,5 +1,6 @@
 package org.gelecekbilimde.scienceplatform.ticket.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.gelecekbilimde.scienceplatform.common.model.BaseFilter;
@@ -12,9 +13,24 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 public class TicketFilter implements BaseFilter {
 
 	private Set<TicketCategory> categories;
+	private User user;
+
+	@Getter
+	@Setter
+	@Builder
+	public static class User {
+		private String id;
+	}
+
+	public void addUserId(String userId) {
+		this.user = User.builder()
+			.id(userId)
+			.build();
+	}
 
 
 	@Override
