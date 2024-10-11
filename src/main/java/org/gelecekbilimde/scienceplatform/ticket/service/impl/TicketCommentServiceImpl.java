@@ -13,7 +13,6 @@ import org.gelecekbilimde.scienceplatform.ticket.service.TicketCommentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,15 +47,11 @@ class TicketCommentServiceImpl implements TicketCommentService {
 
 	private void validateTicketIdAndCurrentUserPermission(final Long ticketId) {
 
-		final Optional<Ticket> ticket = ticketReadPort.findById(ticketId);
-
-		boolean ticketNotExists = ticket.isEmpty();
-		if (ticketNotExists) {
-			throw new TicketNotFoundByIdException(ticketId);
-		}
+		final Ticket ticket = ticketReadPort.findById(ticketId)
+			.orElseThrow(() -> new TicketNotFoundByIdException(ticketId));
 
 		boolean isNotAdmin = !identity.isAdmin();
-		boolean isNotOwner = !ticket.get().getUserId().equals(identity.getUserId());
+		boolean isNotOwner = !ticket.getUserId().equals(identity.getUserId());
 		if (isNotAdmin && isNotOwner) {
 			throw new TicketNotFoundByIdException(ticketId);
 		}
