@@ -4,10 +4,10 @@ import org.gelecekbilimde.scienceplatform.common.exception.AbstractConflictExcep
 
 import java.io.Serial;
 
-public class RoleApplicationAlreadyExistException extends AbstractConflictException {
+public final class RoleApplicationAlreadyExistException extends AbstractConflictException {
 
 	@Serial
-	private static final long serialVersionUID = 3834570698226426742L;
+	private static final long serialVersionUID = 8186687324812319190L;
 
 	public RoleApplicationAlreadyExistException() {
 		super("user already has a role application in review");
