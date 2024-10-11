@@ -15,7 +15,7 @@ import java.util.Set;
 public class Identity {
 
 	public String getUserId() {
-		return this.getJwt().getClaim("userId");
+		return this.getJwt().getClaim(TokenClaims.USER_ID.getValue());
 	}
 
 	public boolean hasPermission(String requiredPermission) {
