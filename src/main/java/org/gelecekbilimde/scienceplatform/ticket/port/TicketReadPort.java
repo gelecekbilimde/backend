@@ -2,8 +2,8 @@ package org.gelecekbilimde.scienceplatform.ticket.port;
 
 import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.common.model.BasePageable;
-import org.gelecekbilimde.scienceplatform.ticket.TicketFilter;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
+import org.gelecekbilimde.scienceplatform.ticket.model.TicketFilter;
 
 import java.util.Optional;
 
