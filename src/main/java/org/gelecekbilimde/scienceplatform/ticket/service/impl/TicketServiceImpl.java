@@ -6,6 +6,7 @@ import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.ticket.exception.TicketAlreadyHasStatusException;
 import org.gelecekbilimde.scienceplatform.ticket.exception.TicketNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
+import org.gelecekbilimde.scienceplatform.ticket.model.TicketFilter;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketCreateRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketListRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketUpdateRequest;
@@ -13,6 +14,8 @@ import org.gelecekbilimde.scienceplatform.ticket.port.TicketReadPort;
 import org.gelecekbilimde.scienceplatform.ticket.port.TicketSavePort;
 import org.gelecekbilimde.scienceplatform.ticket.service.TicketService;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +28,22 @@ class TicketServiceImpl implements TicketService {
 
 	@Override
 	public BasePage<Ticket> findAll(final TicketListRequest listRequest) {
-		return ticketReadPort
-			.findAll(listRequest.getPageable(), listRequest.getFilter());
+
+		if (identity.isAdmin()) {
+			return ticketReadPort.findAll(listRequest.getPageable(), listRequest.getFilter());
+		}
+
+		Optional.ofNullable(listRequest.getFilter())
+			.ifPresentOrElse(
+				filter -> filter.addUserId(identity.getUserId()),
+				() -> {
+					TicketFilter filter = TicketFilter.builder().build();
+					filter.addUserId(identity.getUserId());
+					listRequest.setFilter(filter);
+				}
+			);
+
+		return ticketReadPort.findAll(listRequest.getPageable(), listRequest.getFilter());
 	}
 
 
