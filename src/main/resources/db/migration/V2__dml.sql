@@ -138,6 +138,10 @@ values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '0150a560-8536-427e-8e76-fb1f6d4
 insert into gb_role_permission (role_id, permission_id)
 values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '1bb69fdf-d470-4c37-8075-58ff0fa0d19e');
 insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '06d282c7-efc1-4178-ad4d-8af912ce1aa2');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '08cc7245-ed0f-47ee-a892-702f000a2ab5');
+insert into gb_role_permission (role_id, permission_id)
 values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '5b27d86c-ae00-49c2-8adc-07ed762920ce');
 insert into gb_role_permission (role_id, permission_id)
 values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', 'e7c0ddb6-5371-449f-841e-65b14f53f200');
@@ -162,6 +166,10 @@ insert into gb_role_permission (role_id, permission_id)
 values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '0150a560-8536-427e-8e76-fb1f6d41f5e7');
 insert into gb_role_permission (role_id, permission_id)
 values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '1bb69fdf-d470-4c37-8075-58ff0fa0d19e');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '06d282c7-efc1-4178-ad4d-8af912ce1aa2');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '08cc7245-ed0f-47ee-a892-702f000a2ab5');
 insert into gb_role_permission (role_id, permission_id)
 values ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '5b27d86c-ae00-49c2-8adc-07ed762920ce');
 insert into gb_role_permission (role_id, permission_id)
@@ -189,6 +197,10 @@ insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', '0150a560-8536-427e-8e76-fb1f6d41f5e7');
 insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', '1bb69fdf-d470-4c37-8075-58ff0fa0d19e');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '06d282c7-efc1-4178-ad4d-8af912ce1aa2');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '08cc7245-ed0f-47ee-a892-702f000a2ab5');
 insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', '5b27d86c-ae00-49c2-8adc-07ed762920ce');
 insert into gb_role_permission (role_id, permission_id)
