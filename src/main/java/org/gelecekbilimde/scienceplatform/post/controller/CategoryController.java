@@ -12,7 +12,14 @@ import org.gelecekbilimde.scienceplatform.post.model.response.CategoryResponse;
 import org.gelecekbilimde.scienceplatform.post.model.response.CategorySummaryResponse;
 import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -26,7 +33,7 @@ class CategoryController {
 
 
 	@GetMapping
-	@PreAuthorize("hasAuthority('category:get:list')")
+	@PreAuthorize("hasAuthority('category:list')")
 	SuccessResponse<List<CategoryResponse>> getCategoryList() {
 		List<Category> categories = categoryService.findAll();
 		List<CategoryResponse> categoryResponses = categoryToResponseMapper.map(categories);

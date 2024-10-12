@@ -80,7 +80,7 @@ values ('d7a49ea4-fae1-4dac-8e07-c1d823841b50', 'Kendi Adına Var Olan Rol Başv
         'role:application:cancel:self', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('5a32defb-14c0-44b2-b518-fb482ca768e6', 'Kategori listesini görüntüler',
-        'category:get:list', false, 'gelecekbilimde', current_timestamp);
+        'category:list', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4', 'ID ile kategori bilgilerini görüntüler',
         'category:get:id', false, 'gelecekbilimde', current_timestamp);
