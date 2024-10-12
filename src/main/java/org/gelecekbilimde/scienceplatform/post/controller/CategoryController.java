@@ -25,14 +25,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/category")
+@RequestMapping("/api/v1")
 class CategoryController {
 
 	private final CategoryService categoryService;
 	private final CategoryToResponseMapper categoryToResponseMapper = CategoryToResponseMapper.initialize();
 
 
-	@GetMapping
+	@PostMapping("/categories")
 	@PreAuthorize("hasAuthority('category:list')")
 	SuccessResponse<List<CategoryResponse>> getCategoryList() {
 		List<Category> categories = categoryService.findAll();
@@ -40,13 +40,13 @@ class CategoryController {
 		return SuccessResponse.success(categoryResponses);
 	}
 
-	@GetMapping("/summary")
+	@GetMapping("/categories/summary")
 	SuccessResponse<List<CategorySummaryResponse>> getCategorySummary() {
 		List<CategorySummaryResponse> summaryResponses = categoryService.findAllSummary();
 		return SuccessResponse.success(summaryResponses);
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/category/{id}")
 	@PreAuthorize("hasAuthority('category:detail')")
 	SuccessResponse<CategoryResponse> findById(@PathVariable @Positive Long id) {
 		Category category = categoryService.findById(id);
@@ -54,21 +54,21 @@ class CategoryController {
 		return SuccessResponse.success(categoryResponse);
 	}
 
-	@PostMapping
+	@PostMapping("/category")
 	@PreAuthorize("hasAuthority('category:create')")
 	SuccessResponse<Void> create(@RequestBody @Valid CategoryCreateRequest request) {
 		categoryService.create(request);
 		return SuccessResponse.success();
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/category/{id}")
 	@PreAuthorize("hasAuthority('category:update')")
 	SuccessResponse<Void> update(@PathVariable @Positive Long id, @RequestBody @Valid CategoryUpdateRequest request) {
 		categoryService.update(id, request);
 		return SuccessResponse.success();
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/category/{id}")
 	@PreAuthorize("hasAuthority('category:delete')")
 	SuccessResponse<Void> delete(@PathVariable @Positive Long id) {
 		categoryService.delete(id);
