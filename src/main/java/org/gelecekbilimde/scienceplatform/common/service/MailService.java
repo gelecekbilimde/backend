@@ -1,6 +1,6 @@
 package org.gelecekbilimde.scienceplatform.common.service;
 
-import org.gelecekbilimde.scienceplatform.common.model.MailSendRequest;
+import org.gelecekbilimde.scienceplatform.common.model.request.MailSendRequest;
 
 public interface MailService {
 

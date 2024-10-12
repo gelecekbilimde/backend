@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.common.model;
+package org.gelecekbilimde.scienceplatform.common.model.request;
 
 import lombok.Builder;
 import lombok.Getter;
