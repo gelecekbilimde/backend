@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.common.mail.model.request;
+package org.gelecekbilimde.scienceplatform.common.model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class EmailSendRequest {
+public class MailSendRequest {
 	private String to;
 	private String templateFileName;
 	@Builder.Default

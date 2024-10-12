@@ -1,10 +1,10 @@
-package org.gelecekbilimde.scienceplatform.common.mail.service.impl;
+package org.gelecekbilimde.scienceplatform.common.service.impl;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gelecekbilimde.scienceplatform.common.mail.model.request.EmailSendRequest;
-import org.gelecekbilimde.scienceplatform.common.mail.service.EmailService;
+import org.gelecekbilimde.scienceplatform.common.model.MailSendRequest;
+import org.gelecekbilimde.scienceplatform.common.service.MailService;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -17,12 +17,12 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class EmailServiceImpl implements EmailService {
+class MailServiceImpl implements MailService {
 
 	private final JavaMailSender javaMailSender;
 
 	@Override
-	public void send(EmailSendRequest sendRequest) {
+	public void send(MailSendRequest sendRequest) {
 
 		try {
 			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
