@@ -7,10 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface CategoryEntityToCategoryMapper extends BaseMapper<CategoryEntity, Category> {
+public interface CategoryEntityToDomainMapper extends BaseMapper<CategoryEntity, Category> {
 
-	static CategoryEntityToCategoryMapper initialize() {
-		return Mappers.getMapper(CategoryEntityToCategoryMapper.class);
+	static CategoryEntityToDomainMapper initialize() {
+		return Mappers.getMapper(CategoryEntityToDomainMapper.class);
 	}
 
 }
