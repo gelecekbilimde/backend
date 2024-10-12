@@ -9,12 +9,12 @@ import lombok.Setter;
 @Setter
 public class CategoryUpdateRequest {
 
-	@NotBlank(message = "Category name cannot be blank")
-	@Size(max = 36, message = "Category name cannot exceed 36 characters")
+	@NotBlank
+	@Size(min = 2, max = 50)
 	private String name;
 
-	@NotBlank(message = "Description cannot be blank")
-	@Size(max = 255, message = "Description cannot exceed 255 characters")
+	@NotBlank
+	@Size(min = 2, max = 255)
 	private String description;
 
 	private Long parentId;

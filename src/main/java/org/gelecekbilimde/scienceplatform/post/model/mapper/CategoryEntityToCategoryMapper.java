@@ -8,7 +8,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface CategoryEntityToCategoryMapper extends BaseMapper<CategoryEntity, Category> {
-
 	static CategoryEntityToCategoryMapper initialize() {
 		return Mappers.getMapper(CategoryEntityToCategoryMapper.class);
 	}

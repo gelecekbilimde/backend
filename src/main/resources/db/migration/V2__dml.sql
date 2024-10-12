@@ -78,6 +78,24 @@ values ('171ca9a7-311d-40b6-b538-024b5870471a', 'Moderatör Olmak İçin Kendi A
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('d7a49ea4-fae1-4dac-8e07-c1d823841b50', 'Kendi Adına Var Olan Rol Başvurusunu İptal Eder',
         'role:application:cancel:self', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('5a32defb-14c0-44b2-b518-fb482ca768e6', 'Kategori listesini görüntüler',
+        'category:get:list', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4', 'ID ile kategori bilgilerini görüntüler',
+        'category:get:id', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('6db2bee3-5f77-4782-8d87-6baa22048a47', 'Yeni kategori oluşturur',
+        'category:create', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('0920ce1f-fdda-4f73-963f-304b98d7af2f', 'Mevcut kategoriyi günceller',
+        'category:update', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('889c4c62-73c8-465f-a6e3-ee54ab790007', 'Mevcut kategoriyi siler',
+        'category:delete', false, 'gelecekbilimde', current_timestamp);
+
+
+
 
 
 insert into gb_role_permission (role_id, permission_id)
@@ -100,6 +118,16 @@ insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '0352ee79-e844-4e91-968f-c9f3e4a27515');
 insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '31366d9d-5282-4fe2-9d45-4551e114bc7d');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '5a32defb-14c0-44b2-b518-fb482ca768e6');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '6db2bee3-5f77-4782-8d87-6baa22048a47');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '0920ce1f-fdda-4f73-963f-304b98d7af2f');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '889c4c62-73c8-465f-a6e3-ee54ab790007');
 
 INSERT INTO gb_role_permission (role_id, permission_id)
 VALUES ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '9c032c81-5c0e-4d08-b3a6-e7d524b354cb');
@@ -123,6 +151,16 @@ insert into gb_role_permission (role_id, permission_id)
 values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', 'e7c0ddb6-5371-449f-841e-65b14f53f200');
 insert into gb_role_permission (role_id, permission_id)
 values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', 'f8217f8d-8d67-496f-8761-53201e690078');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '5a32defb-14c0-44b2-b518-fb482ca768e6');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '6db2bee3-5f77-4782-8d87-6baa22048a47');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '0920ce1f-fdda-4f73-963f-304b98d7af2f');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '889c4c62-73c8-465f-a6e3-ee54ab790007');
 
 INSERT INTO gb_role_permission (role_id, permission_id)
 VALUES ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '9c032c81-5c0e-4d08-b3a6-e7d524b354cb');

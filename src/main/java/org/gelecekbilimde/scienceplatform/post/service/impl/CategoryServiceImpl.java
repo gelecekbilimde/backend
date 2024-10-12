@@ -9,8 +9,10 @@ import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryCreateRequestToCategoryEntityMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryEntityToCategoryMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToCategorySummaryResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
+import org.gelecekbilimde.scienceplatform.post.model.response.CategorySummaryResponse;
 import org.gelecekbilimde.scienceplatform.post.repository.CategoryRepository;
 import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,13 @@ import java.util.Optional;
 class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryRepository categoryRepository;
-	private final CategoryEntityToCategoryMapper categoryEntityToCategoryMapper = CategoryEntityToCategoryMapper.initialize();
-	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper = CategoryCreateRequestToCategoryEntityMapper.initialize();
+	private final CategoryEntityToCategoryMapper categoryEntityToCategoryMapper =
+		CategoryEntityToCategoryMapper.initialize();
+	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper =
+		CategoryCreateRequestToCategoryEntityMapper.initialize();
+
+	private final CategoryToCategorySummaryResponseMapper categoryToCategorySummaryResponseMapper =
+		CategoryToCategorySummaryResponseMapper.initialize();
 
 	@Override
 	public List<Category> findAll() {
@@ -32,13 +39,23 @@ class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Category getCategory(Long id) {
+	public List<CategorySummaryResponse> findAllSummary() {
+		List<CategoryEntity> categoryEntities = categoryRepository.findAll();
+		return categoryEntities.stream()
+			.map(categoryEntityToCategoryMapper::map)
+			.map(categoryToCategorySummaryResponseMapper::map)
+			.toList();
+	}
+
+	@Override
+	public Category findById(Long id) {
 		Optional<CategoryEntity> category = categoryRepository.findById(id);
 		if (category.isEmpty()) {
 			throw new CategoryNotFoundException(id);
 		}
 		return categoryEntityToCategoryMapper.map(category.get());
 	}
+
 
 	@Override
 	public void create(CategoryCreateRequest request) {
@@ -66,9 +83,10 @@ class CategoryServiceImpl implements CategoryService {
 		CategoryEntity categoryEntity = categoryRepository.findById(id)
 			.orElseThrow(() -> new CategoryNotFoundException(id));
 
-		if (categoryRepository.findByName(request.getName())
+		final boolean categoryExists = categoryRepository.findByName(request.getName())
 			.filter(existingCategory -> !existingCategory.getId().equals(id))
-			.isPresent()) {
+			.isPresent();
+		if (categoryExists) {
 			throw new CategoryAlreadyExistException(request.getName());
 		}
 		categoryEntity.setName(request.getName());

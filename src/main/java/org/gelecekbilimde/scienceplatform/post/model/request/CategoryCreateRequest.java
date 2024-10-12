@@ -22,7 +22,7 @@ public class CategoryCreateRequest {
 	private Integer orderNumber;
 
 	@NotBlank
-	@Size(max = 50)
+	@Size(min = 2, max = 50)
 	private String slug;
 
 	@Size(max = 50)
