@@ -79,22 +79,20 @@ insert into gb_permission (id, description, name, is_hidden, created_by, created
 values ('d7a49ea4-fae1-4dac-8e07-c1d823841b50', 'Kendi Adına Var Olan Rol Başvurusunu İptal Eder',
         'role:application:cancel:self', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('5a32defb-14c0-44b2-b518-fb482ca768e6', 'Kategori listesini görüntüler',
+values ('5a32defb-14c0-44b2-b518-fb482ca768e6', 'Kategorileri Listeler',
         'category:list', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4', 'ID ile kategori bilgilerini görüntüler',
+values ('9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4', 'Kategori Detayını Görüntüler',
         'category:detail', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('6db2bee3-5f77-4782-8d87-6baa22048a47', 'Yeni kategori oluşturur',
+values ('6db2bee3-5f77-4782-8d87-6baa22048a47', 'Kategori Oluşturur',
         'category:create', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('0920ce1f-fdda-4f73-963f-304b98d7af2f', 'Mevcut kategoriyi günceller',
+values ('0920ce1f-fdda-4f73-963f-304b98d7af2f', 'Kategori Günceller',
         'category:update', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
-values ('889c4c62-73c8-465f-a6e3-ee54ab790007', 'Mevcut kategoriyi siler',
+values ('889c4c62-73c8-465f-a6e3-ee54ab790007', 'Kategori Siler',
         'category:delete', false, 'gelecekbilimde', current_timestamp);
-
-
 
 
 
