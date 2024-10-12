@@ -12,7 +12,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long>,
 
 	Set<CategoryEntity> findAllByParentId(Long parentId);
 
-	boolean existsByName(String name);
+	boolean existsBySlug(String slug);
 
 	boolean existsByParentId(Long parentId);
 

@@ -2,6 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.BasePage;
+import org.gelecekbilimde.scienceplatform.media.util.SlugUtil;
 import org.gelecekbilimde.scienceplatform.post.exception.CategoryAlreadyExistException;
 import org.gelecekbilimde.scienceplatform.post.exception.CategoryHasChildException;
 import org.gelecekbilimde.scienceplatform.post.exception.CategoryNotFoundException;
@@ -71,9 +72,13 @@ class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void create(CategoryCreateRequest request) {
-		if (categoryRepository.existsByName(request.getName())) {
+
+		final String slug = SlugUtil.slugging(request.getName());
+		final boolean exists = categoryRepository.existsBySlug(slug);
+		if (exists) {
 			throw new CategoryAlreadyExistException(request.getName());
 		}
+
 		if (request.getParentId() != null && !categoryRepository.existsById(request.getParentId())) {
 			throw new CategoryParentNotFoundException(request.getParentId());
 		}
@@ -85,7 +90,9 @@ class CategoryServiceImpl implements CategoryService {
 			}
 		}
 
-		categoryRepository.save(categoryCreateRequestToCategoryEntityMapper.map(request));
+		CategoryEntity categoryEntity = categoryCreateRequestToCategoryEntityMapper.map(request);
+		categoryEntity.setSlug(slug);
+		categoryRepository.save(categoryEntity);
 		categoryRepository.saveAll(categories);
 	}
 
