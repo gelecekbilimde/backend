@@ -99,16 +99,20 @@ class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void update(Long id, CategoryUpdateRequest request) {
+
 		CategoryEntity categoryEntity = categoryRepository.findById(id)
 			.orElseThrow(() -> new CategoryNotFoundException(id));
 
-		final boolean categoryExists = categoryRepository.findByName(request.getName())
+		final String slug = SlugUtil.slugging(request.getName());
+		final boolean exists = categoryRepository.findBySlug(slug)
 			.filter(existingCategory -> !existingCategory.getId().equals(id))
 			.isPresent();
-		if (categoryExists) {
+		if (exists) {
 			throw new CategoryAlreadyExistException(request.getName());
 		}
+
 		categoryEntity.setName(request.getName());
+		categoryEntity.setSlug(slug);
 
 		if (request.getParentId() != null) {
 			if (!categoryRepository.existsById(request.getParentId())) {

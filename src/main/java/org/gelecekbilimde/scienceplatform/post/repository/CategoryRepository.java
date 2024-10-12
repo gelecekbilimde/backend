@@ -12,10 +12,10 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long>,
 
 	Set<CategoryEntity> findAllByParentId(Long parentId);
 
+	Optional<CategoryEntity> findBySlug(String slug);
+
 	boolean existsBySlug(String slug);
 
 	boolean existsByParentId(Long parentId);
-
-	Optional<CategoryEntity> findByName(String name);
 
 }
