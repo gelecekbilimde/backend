@@ -10,7 +10,7 @@ import org.gelecekbilimde.scienceplatform.post.exception.CategoryParentNotFoundE
 import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryCreateRequestToCategoryEntityMapper;
-import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryEntityToCategoryMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryEntityToDomainMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryListRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
@@ -31,7 +31,7 @@ class CategoryServiceImpl implements CategoryService {
 	private final CategoryRepository categoryRepository;
 
 
-	private final CategoryEntityToCategoryMapper categoryEntityToCategoryMapper = CategoryEntityToCategoryMapper.initialize();
+	private final CategoryEntityToDomainMapper categoryEntityToDomainMapper = CategoryEntityToDomainMapper.initialize();
 	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper = CategoryCreateRequestToCategoryEntityMapper.initialize();
 
 
@@ -43,7 +43,7 @@ class CategoryServiceImpl implements CategoryService {
 		final Page<CategoryEntity> categoriesPage = categoryRepository
 			.findAll(Specification.allOf(), pageable);
 
-		final List<Category> categories = categoryEntityToCategoryMapper
+		final List<Category> categories = categoryEntityToDomainMapper
 			.map(categoriesPage.getContent());
 
 		return BasePage.of(
@@ -56,7 +56,7 @@ class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> findAll() {
 		List<CategoryEntity> categories = categoryRepository.findAll();
-		return categoryEntityToCategoryMapper.map(categories);
+		return categoryEntityToDomainMapper.map(categories);
 	}
 
 
@@ -66,7 +66,7 @@ class CategoryServiceImpl implements CategoryService {
 		if (category.isEmpty()) {
 			throw new CategoryNotFoundException(id);
 		}
-		return categoryEntityToCategoryMapper.map(category.get());
+		return categoryEntityToDomainMapper.map(category.get());
 	}
 
 
