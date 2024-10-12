@@ -31,7 +31,8 @@ class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> findAll() {
-		return categoryEntityToCategoryMapper.map(categoryRepository.findAll());
+		List<CategoryEntity> categories = categoryRepository.findAll();
+		return categoryEntityToCategoryMapper.map(categories);
 	}
 
 
