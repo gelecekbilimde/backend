@@ -34,7 +34,7 @@ class CategoryController {
 
 	@PostMapping("/categories")
 	@PreAuthorize("hasAuthority('category:list')")
-	SuccessResponse<List<CategoryResponse>> getCategoryList() {
+	SuccessResponse<List<CategoryResponse>> findAll() {
 		List<Category> categories = categoryService.findAll();
 		List<CategoryResponse> categoryResponses = categoryToResponseMapper.map(categories);
 		return SuccessResponse.success(categoryResponses);
