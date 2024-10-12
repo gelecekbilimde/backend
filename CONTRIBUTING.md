@@ -10,7 +10,7 @@ Thank you for your interest in contributing to the Gelecek Bilimde project! We a
 
 2. **Create a New Branch**
     - Create a branch for your contribution.
-    - Ensure your feature branch is associated with the corresponding GitHub issue from the 'Development' section in each issue page.
+    - Ensure your feature branch is associated with the corresponding GitHub issue from our Jira page at gelecekbilimde.atlassian.net/jira
 
 3. **Make Changes**
     - Implement your changes in the branch you created.
@@ -30,6 +30,8 @@ Thank you for your interest in contributing to the Gelecek Bilimde project! We a
 7. **Review and Feedback**
     - Once your PR is submitted, project maintainers will review it and provide feedback.
     - Be responsive to feedback and make necessary changes.
+  
+For additional information, our documents can be found on our Confluence page. If you're interested in leading development on an issue and becoming part of our volunteer IT team, you can apply via gelecekbilimde.net/basvur. For feature requests, feel free to mention them in the discussions section.
 
 ## Development Standards
 
