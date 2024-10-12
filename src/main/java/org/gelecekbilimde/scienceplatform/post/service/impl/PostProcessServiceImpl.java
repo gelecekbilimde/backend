@@ -2,6 +2,7 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
+import org.gelecekbilimde.scienceplatform.media.util.SlugUtil;
 import org.gelecekbilimde.scienceplatform.post.exception.PostNotAvailableToUpdateException;
 import org.gelecekbilimde.scienceplatform.post.exception.PostNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.post.exception.PostProcessNotFoundByPostIdException;
@@ -16,7 +17,6 @@ import org.gelecekbilimde.scienceplatform.post.model.request.PostManagerControlR
 import org.gelecekbilimde.scienceplatform.post.repository.PostProcessRepository;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
-import org.gelecekbilimde.scienceplatform.post.util.SlugUtil;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

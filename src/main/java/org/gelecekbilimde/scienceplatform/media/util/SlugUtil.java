@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.post.util;
+package org.gelecekbilimde.scienceplatform.media.util;
 
 import lombok.experimental.UtilityClass;
 
