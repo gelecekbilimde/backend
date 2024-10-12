@@ -8,8 +8,8 @@ import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToCategoriesResponseMapper;
-import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToCategorySummaryResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToResponseMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToSummaryResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryListRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
@@ -40,7 +40,7 @@ class CategoryController {
 
 
 	private final CategoryToResponseMapper categoryToResponseMapper = CategoryToResponseMapper.initialize();
-	private final CategoryToCategorySummaryResponseMapper categoryToCategorySummaryResponseMapper = CategoryToCategorySummaryResponseMapper.initialize();
+	private final CategoryToSummaryResponseMapper categoryToSummaryResponseMapper = CategoryToSummaryResponseMapper.initialize();
 	private final CategoryToCategoriesResponseMapper categoryToCategoriesResponseMapper = CategoryToCategoriesResponseMapper.initialize();
 
 
@@ -64,7 +64,7 @@ class CategoryController {
 	@GetMapping("/categories/summary")
 	SuccessResponse<List<CategorySummaryResponse>> findAllSummary() {
 		List<Category> categories = categoryService.findAll();
-		List<CategorySummaryResponse> summaryResponses = categoryToCategorySummaryResponseMapper
+		List<CategorySummaryResponse> summaryResponses = categoryToSummaryResponseMapper
 			.map(categories);
 		return SuccessResponse.success(summaryResponses);
 	}
