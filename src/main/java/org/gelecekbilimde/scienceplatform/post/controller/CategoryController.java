@@ -41,7 +41,7 @@ class CategoryController {
 	}
 
 	@GetMapping("/categories/summary")
-	SuccessResponse<List<CategorySummaryResponse>> getCategorySummary() {
+	SuccessResponse<List<CategorySummaryResponse>> findAllSummary() {
 		List<CategorySummaryResponse> summaryResponses = categoryService.findAllSummary();
 		return SuccessResponse.success(summaryResponses);
 	}
