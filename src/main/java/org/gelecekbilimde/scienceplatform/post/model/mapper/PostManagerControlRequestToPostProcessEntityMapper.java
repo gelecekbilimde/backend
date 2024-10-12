@@ -17,7 +17,6 @@ public interface PostManagerControlRequestToPostProcessEntityMapper extends Base
 			.categoryEntity(CategoryEntity.builder()
 				.name(postManagerControlRequest.getCategory().getName())
 				.orderNumber(postManagerControlRequest.getCategory().getOrderNumber())
-				.slug(postManagerControlRequest.getCategory().getSlug())
 				.icon(postManagerControlRequest.getCategory().getIcon())
 				.parentId(postManagerControlRequest.getCategory().getParentId())
 				.build())

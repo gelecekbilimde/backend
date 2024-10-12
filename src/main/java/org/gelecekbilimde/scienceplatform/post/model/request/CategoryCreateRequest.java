@@ -1,7 +1,9 @@
 package org.gelecekbilimde.scienceplatform.post.model.request;
 
-import jakarta.validation.constraints.*;
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,10 +22,6 @@ public class CategoryCreateRequest {
 	@NotNull
 	@Positive
 	private Integer orderNumber;
-
-	@NotBlank
-	@Size(min = 2, max = 50)
-	private String slug;
 
 	@Size(max = 50)
 	private String icon;
