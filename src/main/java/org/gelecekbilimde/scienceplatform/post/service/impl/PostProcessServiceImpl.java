@@ -16,7 +16,7 @@ import org.gelecekbilimde.scienceplatform.post.model.request.PostManagerControlR
 import org.gelecekbilimde.scienceplatform.post.repository.PostProcessRepository;
 import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
-import org.gelecekbilimde.scienceplatform.post.util.PostUtil;
+import org.gelecekbilimde.scienceplatform.post.util.SlugUtil;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,7 +82,7 @@ class PostProcessServiceImpl implements PostProcessService {
 
 		//TODO: Category kontrolü yapılacak
 
-		postManagerControlRequest.setSlug(PostUtil.slugging(postManagerControlRequest.getHeader()));
+		postManagerControlRequest.setSlug(SlugUtil.slugging(postManagerControlRequest.getHeader()));
 
 		final PostProcessEntity postProcessEntityBuild = postManagerControlRequestToPostProcessEntityMapper.mapForSaving(postManagerControlRequest, identity.getUserId(), true);
 		postProcessRepository.save(postProcessEntityBuild);
