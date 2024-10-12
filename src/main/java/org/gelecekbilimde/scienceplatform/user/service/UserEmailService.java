@@ -2,8 +2,8 @@ package org.gelecekbilimde.scienceplatform.user.service;
 
 public interface UserEmailService {
 
-	void sendVerifyMessage(String email, String verificationId);
+	void sendVerification(String email, String verificationId);
 
-	void sendWelcomeMessage(String email);
+	void sendWelcome(String email);
 
 }

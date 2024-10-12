@@ -25,8 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.CompletableFuture;
-
 @Service
 @RequiredArgsConstructor
 class RegistrationServiceImpl implements RegistrationService {
@@ -71,10 +69,7 @@ class RegistrationServiceImpl implements RegistrationService {
 			.build();
 		userVerificationSavePort.save(userVerification);
 
-		CompletableFuture.runAsync(
-			() -> userEmailService
-				.sendVerifyMessage(savedUser.getEmail(), userVerification.getId())
-		);
+		userEmailService.sendVerification(savedUser.getEmail(), userVerification.getId());
 	}
 
 	@Override
@@ -99,7 +94,7 @@ class RegistrationServiceImpl implements RegistrationService {
 		user.verify();
 		userSavePort.save(user);
 
-		CompletableFuture.runAsync(() -> userEmailService.sendWelcomeMessage(user.getEmail()));
+		userEmailService.sendWelcome(user.getEmail());
 	}
 
 }
