@@ -9,7 +9,7 @@ import org.gelecekbilimde.scienceplatform.post.exception.CategoryNotFoundExcepti
 import org.gelecekbilimde.scienceplatform.post.exception.CategoryParentNotFoundException;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
-import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryCreateRequestToCategoryEntityMapper;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryCreateRequestToEntityMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryEntityToDomainMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryListRequest;
@@ -32,7 +32,7 @@ class CategoryServiceImpl implements CategoryService {
 
 
 	private final CategoryEntityToDomainMapper categoryEntityToDomainMapper = CategoryEntityToDomainMapper.initialize();
-	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper = CategoryCreateRequestToCategoryEntityMapper.initialize();
+	private final CategoryCreateRequestToEntityMapper categoryCreateRequestToEntityMapper = CategoryCreateRequestToEntityMapper.initialize();
 
 
 	@Override
@@ -90,7 +90,7 @@ class CategoryServiceImpl implements CategoryService {
 			}
 		}
 
-		CategoryEntity categoryEntity = categoryCreateRequestToCategoryEntityMapper.map(request);
+		CategoryEntity categoryEntity = categoryCreateRequestToEntityMapper.map(request);
 		categoryEntity.setSlug(slug);
 		categoryRepository.save(categoryEntity);
 		categoryRepository.saveAll(categories);
