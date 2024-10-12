@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToCategorySummaryResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
@@ -31,7 +32,10 @@ import java.util.List;
 class CategoryController {
 
 	private final CategoryService categoryService;
+
+
 	private final CategoryToResponseMapper categoryToResponseMapper = CategoryToResponseMapper.initialize();
+	private final CategoryToCategorySummaryResponseMapper categoryToCategorySummaryResponseMapper = CategoryToCategorySummaryResponseMapper.initialize();
 
 
 	@PostMapping("/categories")
@@ -44,7 +48,9 @@ class CategoryController {
 
 	@GetMapping("/categories/summary")
 	SuccessResponse<List<CategorySummaryResponse>> findAllSummary() {
-		List<CategorySummaryResponse> summaryResponses = categoryService.findAllSummary();
+		List<Category> categories = categoryService.findAll();
+		List<CategorySummaryResponse> summaryResponses = categoryToCategorySummaryResponseMapper
+			.map(categories);
 		return SuccessResponse.success(summaryResponses);
 	}
 
