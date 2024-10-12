@@ -3,12 +3,17 @@ package org.gelecekbilimde.scienceplatform.post.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
+import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
 import org.gelecekbilimde.scienceplatform.common.model.response.SuccessResponse;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
+import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToCategoriesResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToCategorySummaryResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.model.request.CategoryListRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
+import org.gelecekbilimde.scienceplatform.post.model.response.CategoriesResponse;
 import org.gelecekbilimde.scienceplatform.post.model.response.CategoryResponse;
 import org.gelecekbilimde.scienceplatform.post.model.response.CategorySummaryResponse;
 import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
@@ -36,14 +41,24 @@ class CategoryController {
 
 	private final CategoryToResponseMapper categoryToResponseMapper = CategoryToResponseMapper.initialize();
 	private final CategoryToCategorySummaryResponseMapper categoryToCategorySummaryResponseMapper = CategoryToCategorySummaryResponseMapper.initialize();
+	private final CategoryToCategoriesResponseMapper categoryToCategoriesResponseMapper = CategoryToCategoriesResponseMapper.initialize();
 
 
 	@PostMapping("/categories")
 	@PreAuthorize("hasAuthority('category:list')")
-	SuccessResponse<List<CategoryResponse>> findAll() {
-		List<Category> categories = categoryService.findAll();
-		List<CategoryResponse> categoryResponses = categoryToResponseMapper.map(categories);
-		return SuccessResponse.success(categoryResponses);
+	SuccessResponse<PagingResponse<CategoriesResponse>> findAll(@RequestBody @Valid CategoryListRequest listRequest) {
+
+		BasePage<Category> pageOfCategories = categoryService.findAll(listRequest);
+
+		final PagingResponse<CategoriesResponse> pageResponseOfCategory = PagingResponse
+			.<CategoriesResponse>builder()
+			.of(pageOfCategories)
+			.content(
+				categoryToCategoriesResponseMapper.map(pageOfCategories.getContent())
+			)
+			.build();
+
+		return SuccessResponse.success(pageResponseOfCategory);
 	}
 
 	@GetMapping("/categories/summary")
