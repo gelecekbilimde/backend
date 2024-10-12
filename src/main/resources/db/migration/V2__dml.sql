@@ -83,7 +83,7 @@ values ('5a32defb-14c0-44b2-b518-fb482ca768e6', 'Kategori listesini görüntüle
         'category:list', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4', 'ID ile kategori bilgilerini görüntüler',
-        'category:get:id', false, 'gelecekbilimde', current_timestamp);
+        'category:detail', false, 'gelecekbilimde', current_timestamp);
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('6db2bee3-5f77-4782-8d87-6baa22048a47', 'Yeni kategori oluşturur',
         'category:create', false, 'gelecekbilimde', current_timestamp);
