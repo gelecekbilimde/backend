@@ -1,6 +1,7 @@
 package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.post.exception.CategoryAlreadyExistException;
 import org.gelecekbilimde.scienceplatform.post.exception.CategoryHasChildException;
 import org.gelecekbilimde.scienceplatform.post.exception.CategoryNotFoundException;
@@ -10,9 +11,13 @@ import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryCreateRequestToCategoryEntityMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryEntityToCategoryMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.model.request.CategoryListRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
 import org.gelecekbilimde.scienceplatform.post.repository.CategoryRepository;
 import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +32,24 @@ class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryEntityToCategoryMapper categoryEntityToCategoryMapper = CategoryEntityToCategoryMapper.initialize();
 	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper = CategoryCreateRequestToCategoryEntityMapper.initialize();
+
+
+	@Override
+	public BasePage<Category> findAll(final CategoryListRequest listRequest) {
+
+		final Pageable pageable = listRequest.getPageable().toPageable();
+
+		final Page<CategoryEntity> categoriesPage = categoryRepository
+			.findAll(Specification.allOf(), pageable);
+
+		final List<Category> categories = categoryEntityToCategoryMapper
+			.map(categoriesPage.getContent());
+
+		return BasePage.of(
+			categoriesPage,
+			categories
+		);
+	}
 
 
 	@Override
