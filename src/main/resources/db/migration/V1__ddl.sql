@@ -111,7 +111,9 @@ create table if not exists gb_category
   created_by   varchar(255) not null,
   created_at   timestamp(0) not null,
   updated_by   varchar(255),
-  updated_at   timestamp(0)
+  updated_at timestamp(0),
+  constraint u__gb_category__name unique (name),
+  constraint u__gb_category__slug unique (slug)
 );
 
 create table if not exists gb_media_group
