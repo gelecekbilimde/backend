@@ -47,7 +47,7 @@ class CategoryController {
 	}
 
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('category:get:id')")
+	@PreAuthorize("hasAuthority('category:detail')")
 	SuccessResponse<CategoryResponse> findById(@PathVariable @Positive Long id) {
 		Category category = categoryService.findById(id);
 		CategoryResponse categoryResponse = categoryToResponseMapper.map(category);
