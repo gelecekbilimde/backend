@@ -9,10 +9,8 @@ import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.post.model.entity.CategoryEntity;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryCreateRequestToCategoryEntityMapper;
 import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryEntityToCategoryMapper;
-import org.gelecekbilimde.scienceplatform.post.model.mapper.CategoryToCategorySummaryResponseMapper;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
-import org.gelecekbilimde.scienceplatform.post.model.response.CategorySummaryResponse;
 import org.gelecekbilimde.scienceplatform.post.repository.CategoryRepository;
 import org.gelecekbilimde.scienceplatform.post.service.CategoryService;
 import org.springframework.stereotype.Service;
@@ -25,27 +23,17 @@ import java.util.Optional;
 class CategoryServiceImpl implements CategoryService {
 
 	private final CategoryRepository categoryRepository;
-	private final CategoryEntityToCategoryMapper categoryEntityToCategoryMapper =
-		CategoryEntityToCategoryMapper.initialize();
-	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper =
-		CategoryCreateRequestToCategoryEntityMapper.initialize();
 
-	private final CategoryToCategorySummaryResponseMapper categoryToCategorySummaryResponseMapper =
-		CategoryToCategorySummaryResponseMapper.initialize();
+
+	private final CategoryEntityToCategoryMapper categoryEntityToCategoryMapper = CategoryEntityToCategoryMapper.initialize();
+	private final CategoryCreateRequestToCategoryEntityMapper categoryCreateRequestToCategoryEntityMapper = CategoryCreateRequestToCategoryEntityMapper.initialize();
+
 
 	@Override
 	public List<Category> findAll() {
 		return categoryEntityToCategoryMapper.map(categoryRepository.findAll());
 	}
 
-	@Override
-	public List<CategorySummaryResponse> findAllSummary() {
-		List<CategoryEntity> categoryEntities = categoryRepository.findAll();
-		return categoryEntities.stream()
-			.map(categoryEntityToCategoryMapper::map)
-			.map(categoryToCategorySummaryResponseMapper::map)
-			.toList();
-	}
 
 	@Override
 	public Category findById(Long id) {
