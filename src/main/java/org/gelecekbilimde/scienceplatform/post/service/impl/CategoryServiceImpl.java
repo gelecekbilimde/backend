@@ -22,7 +22,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,11 +61,9 @@ class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category findById(Long id) {
-		Optional<CategoryEntity> category = categoryRepository.findById(id);
-		if (category.isEmpty()) {
-			throw new CategoryNotFoundException(id);
-		}
-		return categoryEntityToDomainMapper.map(category.get());
+		CategoryEntity categoryEntity = categoryRepository.findById(id)
+			.orElseThrow(() -> new CategoryNotFoundException(id));
+		return categoryEntityToDomainMapper.map(categoryEntity);
 	}
 
 
