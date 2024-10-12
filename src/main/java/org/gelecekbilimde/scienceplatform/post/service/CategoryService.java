@@ -1,29 +1,28 @@
 package org.gelecekbilimde.scienceplatform.post.service;
 
-import org.gelecekbilimde.scienceplatform.post.exception.CategoryAlreadyExistException;
-import org.gelecekbilimde.scienceplatform.post.exception.CategoryNotFoundException;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.post.model.Category;
 import org.gelecekbilimde.scienceplatform.post.model.request.CategoryCreateRequest;
+import org.gelecekbilimde.scienceplatform.post.model.request.CategoryListRequest;
+import org.gelecekbilimde.scienceplatform.post.model.request.CategoryUpdateRequest;
 
 import java.util.List;
 
 public interface CategoryService {
 
-	List<Category> getCategories();
+	BasePage<Category> findAll(CategoryListRequest listRequest);
 
-	Category getCategory(Long categoryId);
+	List<Category> findAll();
 
-	/**
-	 * Creates a new category.
-	 * If there is a category with same order, it increases the order of the siblings (categories with the same parent).
-	 *
-	 * @param request The request object that contains the name,order and if it has a parent, parentId of the category.
-	 * @throws CategoryAlreadyExistException      throws if a category with the same name already exists.
-	 * @throws CategoryNotFoundException throws if there is no category with the given parentId.
-	 */
-	void createCategory(CategoryCreateRequest request);
+	Category findById(Long id);
 
-	void changeCategoryName(Long id, String newName);
+	void create(CategoryCreateRequest request);
 
-	void deleteCategory(Long categoryId);
+	void update(Long id, CategoryUpdateRequest request);
+
+	void delete(Long id);
+
 }
+
+
+
