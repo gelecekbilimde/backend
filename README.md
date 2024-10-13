@@ -4,7 +4,7 @@
 
 ## Project Documents
 
-For other information, you can check [Wiki](https://github.com/gelecekbilimde/gelecekbilimde-backend/wiki)
+For other information, you can check [Wiki](https://gelecekbilimde.atlassian.net/wiki/spaces/GBS/overview)
 Page.
 
 ---
