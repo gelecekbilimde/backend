@@ -1,4 +1,4 @@
-package org.gelecekbilimde.scienceplatform.post.util;
+package org.gelecekbilimde.scienceplatform.media.util;
 
 import lombok.experimental.UtilityClass;
 
@@ -6,7 +6,7 @@ import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 @UtilityClass
-public class PostUtil {
+public class SlugUtil {
 
 	public String slugging(String text) {
 		String normalizedText = Normalizer.normalize(text, Normalizer.Form.NFD)

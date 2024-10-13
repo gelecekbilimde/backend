@@ -77,7 +77,8 @@ create table if not exists gb_user_verification
 create table if not exists gb_user_follow
 (
   id               bigint generated always as identity primary key,
-  follower_user_id varchar(36)  not null,
+  follower_user_id
+                   varchar(36)  not null,
   followed_user_id varchar(36)  not null,
   created_by       varchar(255) not null,
   created_at       timestamp(0) not null,
@@ -109,13 +110,16 @@ create table if not exists gb_category
   id           bigint generated always as identity primary key,
   order_number integer      not null,
   parent_id    bigint,
-  name         varchar(36)  not null,
-  slug         varchar(36)  not null,
-  icon         varchar(36),
+  name         varchar(50)  not null,
+  description  varchar(255) not null,
+  slug         varchar(50)  not null,
+  icon         varchar(50),
   created_by   varchar(255) not null,
   created_at   timestamp(0) not null,
   updated_by   varchar(255),
-  updated_at   timestamp(0)
+  updated_at   timestamp(0),
+  constraint u__gb_category__name unique (name),
+  constraint u__gb_category__slug unique (slug)
 );
 
 create table if not exists gb_media_group
@@ -308,10 +312,10 @@ create table if not exists gb_ticket_comment
 
 create table if not exists gb_role_application
 (
-  id      varchar(36) not null primary key,
-  user_id varchar(36) not null,
-  role_id varchar(36) not null,
-  status  varchar(10) not null,
+  id         varchar(36)  not null primary key,
+  user_id    varchar(36)  not null,
+  role_id    varchar(36)  not null,
+  status     varchar(10)  not null,
   created_by varchar(255) not null,
   created_at timestamp(0) not null,
   updated_by varchar(255),
