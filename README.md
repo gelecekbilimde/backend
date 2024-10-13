@@ -57,3 +57,14 @@ The following command can be used to remove Docker Containers.
 > directory.
 > is required.
 
+---
+
+# Project Infrastucture
+
+## 🏛️ Layer Architecture
+
+![](/documents/architecture/gb-architecture.png?raw=true)
+
+## 📦 Package Architecture
+
+![](/documents/architecture/package-architecture-example.png?raw=true)
