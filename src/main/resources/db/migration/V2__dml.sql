@@ -87,6 +87,21 @@ values ('26474155-f207-45e9-8798-a4cdd9cf8f31', 'Kullanıcıyı Takip Eder',
 insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
 values ('91e30d16-b9f7-40a2-a4f6-eecf3157aa74', 'Kullanıcıyı Takibi Bırakır',
         'user:unfollow', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('5a32defb-14c0-44b2-b518-fb482ca768e6', 'Kategorileri Listeler',
+        'category:list', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4', 'Kategori Detayını Görüntüler',
+        'category:detail', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('6db2bee3-5f77-4782-8d87-6baa22048a47', 'Kategori Oluşturur',
+        'category:create', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('0920ce1f-fdda-4f73-963f-304b98d7af2f', 'Kategori Günceller',
+        'category:update', false, 'gelecekbilimde', current_timestamp);
+insert into gb_permission (id, description, name, is_hidden, created_by, created_at)
+values ('889c4c62-73c8-465f-a6e3-ee54ab790007', 'Kategori Siler',
+        'category:delete', false, 'gelecekbilimde', current_timestamp);
 
 
 insert into gb_role_permission (role_id, permission_id)
@@ -117,6 +132,16 @@ insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '26474155-f207-45e9-8798-a4cdd9cf8f31');
 insert into gb_role_permission (role_id, permission_id)
 values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '91e30d16-b9f7-40a2-a4f6-eecf3157aa74');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '5a32defb-14c0-44b2-b518-fb482ca768e6');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '6db2bee3-5f77-4782-8d87-6baa22048a47');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '0920ce1f-fdda-4f73-963f-304b98d7af2f');
+insert into gb_role_permission (role_id, permission_id)
+values ('c147b5c2-87f7-4bb7-a165-368f639d8c3c', '889c4c62-73c8-465f-a6e3-ee54ab790007');
 
 INSERT INTO gb_role_permission (role_id, permission_id)
 VALUES ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '9c032c81-5c0e-4d08-b3a6-e7d524b354cb');
@@ -146,6 +171,16 @@ insert into gb_role_permission (role_id, permission_id)
 values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '26474155-f207-45e9-8798-a4cdd9cf8f31');
 insert into gb_role_permission (role_id, permission_id)
 values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '91e30d16-b9f7-40a2-a4f6-eecf3157aa74');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '5a32defb-14c0-44b2-b518-fb482ca768e6');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '9e25ae21-9b35-4511-bdd5-c0e2ec96b8d4');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '6db2bee3-5f77-4782-8d87-6baa22048a47');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '0920ce1f-fdda-4f73-963f-304b98d7af2f');
+insert into gb_role_permission (role_id, permission_id)
+values ('1ed82a25-d348-4576-b4e6-1f2a7c430ca7', '889c4c62-73c8-465f-a6e3-ee54ab790007');
 
 INSERT INTO gb_role_permission (role_id, permission_id)
 VALUES ('4d98a76c-9841-4aea-b296-2f27aa610b6c', '9c032c81-5c0e-4d08-b3a6-e7d524b354cb');
@@ -210,35 +245,32 @@ insert into gb_role_permission (role_id, permission_id)
 values ('e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', '91e30d16-b9f7-40a2-a4f6-eecf3157aa74');
 
 
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (0, 1, 'Fizik', 'fizik', null,
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (0, 1, 'Fizik', 'Fizik kategorisidir.', 'fizik', null,
         'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (1, 1, 'Biyoloji', 'biyoloji', null,
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (1, 1, 'Biyoloji', 'Biyoloji kategorisidir.', 'biyoloji', null,
         'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (2, 1, 'Kimya', 'kimya', null,
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (2, 1, 'Kimya', 'Kimya kategorisidir.', 'kimya', null,
         'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (1, null, 'Teknoloji', 'teknoloji', 'cpu',
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (1, null, 'Teknoloji', 'Teknoloji kategorisidir.', 'teknoloji', 'cpu',
         'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (2, null, 'Felsefe', 'felsefe', 'book',
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (2, null, 'Felsefe', 'Felsefe kategorisidir.', 'felsefe', 'book',
         'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (1, 6, 'Ontoloji', 'ontoloji', null,
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (1, 6, 'Ontoloji', 'Ontoloji kategorisidir.', 'ontoloji', null,
         'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (2, 6, 'Ahlak Felsefesi', 'ahlak-felsefesi', null,
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (2, 6, 'Ahlak Felsefesi', 'Ahlak Felsefesi kategorisidir.', 'ahlak-felsefesi', null,
         'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (0, 6, 'Epistemoloji', 'epistelomoji', null,
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (0, 6, 'Epistemoloji', 'Epistemoloji kategorisidir.', 'epistemoloji', null,
         'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (5, null, 'testCat', 'test-category', 'g',
-        'gelecekbilimde', current_timestamp);
-insert into gb_category (order_number, parent_id, name, slug, icon, created_by, created_at)
-values (0, null, 'Bilim', 'bilim', 'flask-conical',
+insert into gb_category (order_number, parent_id, name, description, slug, icon, created_by, created_at)
+values (0, null, 'Bilim', 'Bilim kategorisidir.', 'bilim', 'flask-conical',
         'gelecekbilimde', current_timestamp);
 
 
