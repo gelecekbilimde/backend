@@ -59,7 +59,7 @@ The following command can be used to remove Docker Containers.
 
 ---
 
-# Project Infrastucture
+# Project Infrastructure
 
 ## 🏛️ Layer Architecture
 
