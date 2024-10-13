@@ -20,4 +20,9 @@ public class Category extends BaseDomainModel {
 	private String icon;
 	private Long parentId;
 
+
+	public void increaseOrderNumber() {
+		this.orderNumber++;
+	}
+
 }
