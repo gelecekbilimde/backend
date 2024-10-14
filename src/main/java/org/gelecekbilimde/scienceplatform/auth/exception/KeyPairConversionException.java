@@ -4,10 +4,10 @@ import org.gelecekbilimde.scienceplatform.common.exception.AbstractServerExcepti
 
 import java.io.Serial;
 
-public class KeyPairConversionException extends AbstractServerException {
+public final class KeyPairConversionException extends AbstractServerException {
 
 	@Serial
-	private static final long serialVersionUID = -714864829639781798L;
+	private static final long serialVersionUID = 304959574320527271L;
 
 	public KeyPairConversionException(Throwable cause) {
 		super("error occurred while converting key pair", cause);

@@ -3,65 +3,92 @@ package org.gelecekbilimde.scienceplatform.ticket.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.common.model.BasePage;
-import org.gelecekbilimde.scienceplatform.common.model.request.PagingRequest;
-import org.gelecekbilimde.scienceplatform.common.model.response.PagingResponse;
+import org.gelecekbilimde.scienceplatform.ticket.exception.TicketAlreadyHasStatusException;
+import org.gelecekbilimde.scienceplatform.ticket.exception.TicketNotFoundByIdException;
 import org.gelecekbilimde.scienceplatform.ticket.model.Ticket;
-import org.gelecekbilimde.scienceplatform.ticket.model.entity.TicketEntity;
-import org.gelecekbilimde.scienceplatform.ticket.model.mapper.TicketEntityToResponseMapper;
-import org.gelecekbilimde.scienceplatform.ticket.model.mapper.TicketEntityToTicketMapper;
+import org.gelecekbilimde.scienceplatform.ticket.model.TicketFilter;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketCreateRequest;
+import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketListRequest;
 import org.gelecekbilimde.scienceplatform.ticket.model.request.TicketUpdateRequest;
-import org.gelecekbilimde.scienceplatform.ticket.model.response.TicketResponse;
-import org.gelecekbilimde.scienceplatform.ticket.repository.TicketRepository;
+import org.gelecekbilimde.scienceplatform.ticket.port.TicketReadPort;
+import org.gelecekbilimde.scienceplatform.ticket.port.TicketSavePort;
 import org.gelecekbilimde.scienceplatform.ticket.service.TicketService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 class TicketServiceImpl implements TicketService {
 
+	private final TicketReadPort ticketReadPort;
+	private final TicketSavePort ticketSavePort;
 	private final Identity identity;
 
-	private final TicketRepository ticketRepository;
-
-	private final TicketEntityToResponseMapper ticketEntityToResponseMapper = TicketEntityToResponseMapper.initialize();
-	private final TicketEntityToTicketMapper ticketEntityToTicketMapper = TicketEntityToTicketMapper.initialize();
 
 	@Override
-	public PagingResponse<TicketResponse> ticketRead(PagingRequest request) {
-		Pageable pageable = request.getPageable().toPageable();
-		Page<TicketEntity> ticketPage = ticketRepository.findAll(pageable);
-		List<TicketResponse> ticketResponses = ticketEntityToResponseMapper.map(ticketPage.getContent());
-		final BasePage<TicketResponse> posts = BasePage.of(ticketPage, ticketResponses);
-		return PagingResponse.<TicketResponse>builder().of(posts).content(ticketEntityToResponseMapper.map(ticketPage.getContent())).build();
+	public BasePage<Ticket> findAll(final TicketListRequest listRequest) {
+
+		if (identity.isAdmin()) {
+			return ticketReadPort.findAll(listRequest.getPageable(), listRequest.getFilter());
+		}
+
+		Optional.ofNullable(listRequest.getFilter())
+			.ifPresentOrElse(
+				filter -> filter.addUserId(identity.getUserId()),
+				() -> {
+					TicketFilter filter = TicketFilter.builder().build();
+					filter.addUserId(identity.getUserId());
+					listRequest.setFilter(filter);
+				}
+			);
+
+		return ticketReadPort.findAll(listRequest.getPageable(), listRequest.getFilter());
 	}
 
-	@Override
-	public Ticket updateTicket(TicketUpdateRequest request) {
-		TicketEntity ticketEntity = ticketRepository.getReferenceById(request.getId()); // TODO : getReferenceById yerine findById kullanılmalı
-		ticketEntity.setStatus(request.getStatus());
-		ticketRepository.save(ticketEntity);
-		return ticketEntityToTicketMapper.map(ticketEntity);
-	}
 
 	@Override
-	public Ticket ticketCreateSelf(TicketCreateRequest request) {
-		TicketEntity ticketEntity = TicketEntity.builder().userId(identity.getUserId()).message(request.getMessage()).build();
-		TicketEntity saveTicketEntity = this.ticketRepository.save(ticketEntity);
-		return ticketEntityToTicketMapper.map(saveTicketEntity);
+	public Ticket findById(final Long id) {
+
+		final Ticket ticket = ticketReadPort.findById(id)
+			.orElseThrow(() -> new TicketNotFoundByIdException(id));
+
+		boolean isNotAdmin = !identity.isAdmin();
+		boolean isNotOwner = !ticket.getUserId().equals(identity.getUserId());
+		if (isNotAdmin && isNotOwner) {
+			throw new TicketNotFoundByIdException(id);
+		}
+
+		return ticket;
 	}
 
+
 	@Override
-	public PagingResponse<TicketResponse> ticketReadSelf(PagingRequest request) {
-		Specification<TicketEntity> spec = (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("userId"), identity.getUserId());
-		Page<TicketEntity> ticketPage = ticketRepository.findAll(spec, request.getPageable().toPageable());
-		List<TicketResponse> ticketResponses = ticketEntityToResponseMapper.map(ticketPage.getContent());
-		final BasePage<TicketResponse> posts = BasePage.of(ticketPage, ticketResponses);
-		return PagingResponse.<TicketResponse>builder().of(posts).content(ticketEntityToResponseMapper.map(ticketPage.getContent())).build();
+	public void create(final TicketCreateRequest createRequest) {
+
+		final Ticket ticket = Ticket.builder()
+			.userId(identity.getUserId())
+			.title(createRequest.getTitle())
+			.description(createRequest.getDescription())
+			.build();
+
+		ticketSavePort.save(ticket);
 	}
+
+
+	@Override
+	public void update(final Long id,
+					   final TicketUpdateRequest updateRequest) {
+
+		final Ticket ticket = ticketReadPort.findById(id)
+			.orElseThrow(() -> new TicketNotFoundByIdException(id));
+
+		if (updateRequest.getStatus() == ticket.getStatus()) {
+			throw new TicketAlreadyHasStatusException(ticket.getStatus());
+		}
+
+		ticket.setStatus(updateRequest.getStatus());
+		ticketSavePort.save(ticket);
+	}
+
 }

@@ -4,10 +4,10 @@ import org.gelecekbilimde.scienceplatform.common.exception.AbstractNotFoundExcep
 
 import java.io.Serial;
 
-public class RoleApplicationNotFoundByIdException extends AbstractNotFoundException {
+public final class RoleApplicationNotFoundByIdException extends AbstractNotFoundException {
 
 	@Serial
-	private static final long serialVersionUID = -7420720906649254998L;
+	private static final long serialVersionUID = -1036422987236610575L;
 
 	public RoleApplicationNotFoundByIdException(String id) {
 		super("role application does not found! id: " + id);
