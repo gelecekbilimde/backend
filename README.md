@@ -61,9 +61,11 @@ The following command can be used to remove Docker Containers.
 
 # Project Infrastructure
 
-## 🏛️ Layer Architecture
+## 🏛️ HexaLayered Architecture
 
 ![](/documents/architecture/gb-architecture.png?raw=true)
+
+> **Reference: [HexaLayered Architecture](https://github.com/agitrubard/hexalayered-architecture)**
 
 ## 📦 Package Architecture
 
