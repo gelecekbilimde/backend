@@ -9,15 +9,14 @@ import org.gelecekbilimde.scienceplatform.auth.exception.UserNotVerifiedExceptio
 import org.gelecekbilimde.scienceplatform.auth.exception.UserPasswordNotValidException;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
 import org.gelecekbilimde.scienceplatform.auth.model.Token;
-import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleEntity;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.TokenClaims;
 import org.gelecekbilimde.scienceplatform.auth.model.request.LoginRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.request.RefreshRequest;
 import org.gelecekbilimde.scienceplatform.auth.service.AuthenticationService;
 import org.gelecekbilimde.scienceplatform.auth.service.InvalidTokenService;
 import org.gelecekbilimde.scienceplatform.auth.service.TokenService;
-import org.gelecekbilimde.scienceplatform.user.model.entity.UserEntity;
-import org.gelecekbilimde.scienceplatform.user.repository.UserRepository;
+import org.gelecekbilimde.scienceplatform.user.model.User;
+import org.gelecekbilimde.scienceplatform.user.port.UserReadPort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,29 +26,31 @@ import java.util.List;
 @RequiredArgsConstructor
 class AuthenticationServiceImpl implements AuthenticationService {
 
-	private final UserRepository userRepository;
+	private final UserReadPort userReadPort;
 	private final PasswordEncoder passwordEncoder;
 	private final TokenService tokenService;
 	private final InvalidTokenService invalidTokenService;
 	private final Identity identity;
 
+
 	@Override
 	public Token login(LoginRequest request) {
 
-		UserEntity userEntity = userRepository.findByEmail(request.getEmail())
+		User user = userReadPort.findByEmail(request.getEmail())
 			.orElseThrow(() -> new UserNotFoundByEmailException(request.getEmail()));
 
-		if (!userEntity.isVerified()) {
+		if (!user.isVerified()) {
 			throw new UserNotVerifiedException(request.getEmail());
 		}
 
-		if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
+		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 			throw new UserPasswordNotValidException();
 		}
 
-		final Claims claims = this.getClaimsBuilder(userEntity);
+		final Claims claims = this.generateClaims(user);
 		return tokenService.generate(claims);
 	}
+
 
 	@Override
 	public Token refresh(RefreshRequest refreshRequest) {
@@ -58,27 +59,26 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		final Claims payload = tokenService.getPayload(refreshToken);
 
 		final String email = payload.get(TokenClaims.USER_MAIL.getValue(), String.class);
-		final UserEntity userEntity = this.userRepository.findByEmail(email)
+		final User user = userReadPort.findByEmail(email)
 			.orElseThrow(() -> new UserNotFoundByEmailException(email));
 
-		final Claims claims = this.getClaimsBuilder(userEntity);
+		final Claims claims = this.generateClaims(user);
 
 		return tokenService.generate(claims, refreshToken);
 	}
 
-	private Claims getClaimsBuilder(UserEntity userEntity) {
-		RoleEntity role = userEntity.getRole();
-
+	private Claims generateClaims(User user) {
 		final ClaimsBuilder claimsBuilder = Jwts.claims();
-		claimsBuilder.add(TokenClaims.USER_ID.getValue(), userEntity.getId());
-		claimsBuilder.add(TokenClaims.USER_FIRST_NAME.getValue(), userEntity.getFirstName());
-		claimsBuilder.add(TokenClaims.USER_LAST_NAME.getValue(), userEntity.getLastName());
-		claimsBuilder.add(TokenClaims.USER_STATUS.getValue(), userEntity.getStatus());
-		claimsBuilder.add(TokenClaims.USER_MAIL.getValue(), userEntity.getEmail());
-		claimsBuilder.add(TokenClaims.USER_ROLE.getValue(), role.getName());
-		claimsBuilder.add(TokenClaims.USER_PERMISSIONS.getValue(), role.getPermissionNames());
+		claimsBuilder.add(TokenClaims.USER_ID.getValue(), user.getId());
+		claimsBuilder.add(TokenClaims.USER_FIRST_NAME.getValue(), user.getFirstName());
+		claimsBuilder.add(TokenClaims.USER_LAST_NAME.getValue(), user.getLastName());
+		claimsBuilder.add(TokenClaims.USER_STATUS.getValue(), user.getStatus());
+		claimsBuilder.add(TokenClaims.USER_MAIL.getValue(), user.getEmail());
+		claimsBuilder.add(TokenClaims.USER_ROLE.getValue(), user.getRole().getName());
+		claimsBuilder.add(TokenClaims.USER_PERMISSIONS.getValue(), user.getRole().getPermissionNames());
 		return claimsBuilder.build();
 	}
+
 
 	@Override
 	public void logout(String refreshToken) {
@@ -89,4 +89,5 @@ class AuthenticationServiceImpl implements AuthenticationService {
 		final List<String> invalidTokenIds = List.of(refreshTokenId, tokenId);
 		invalidTokenService.saveAll(invalidTokenIds);
 	}
+
 }

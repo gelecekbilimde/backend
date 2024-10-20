@@ -45,22 +45,4 @@ public class RoleApplicationEntity extends BaseEntity {
 	@Column(name = "status")
 	private RoleApplicationStatus status;
 
-
-	public boolean isConcluded() {
-		return this.status == RoleApplicationStatus.APPROVED || this.status == RoleApplicationStatus.REJECTED;
-	}
-
-
-	public void cancel() {
-		this.status = RoleApplicationStatus.CANCELLED;
-	}
-
-	public void approve() {
-		this.status = RoleApplicationStatus.APPROVED;
-	}
-
-	public void reject() {
-		this.status = RoleApplicationStatus.REJECTED;
-	}
-
 }
