@@ -17,4 +17,11 @@ public class Role {
 	private RoleStatus status;
 	private List<PermissionEntity> permissions;
 
+
+	public List<String> getPermissionNames() {
+		return permissions.stream()
+			.map(PermissionEntity::getName)
+			.toList();
+	}
+
 }

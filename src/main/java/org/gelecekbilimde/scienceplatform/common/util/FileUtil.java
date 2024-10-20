@@ -1,7 +1,6 @@
 package org.gelecekbilimde.scienceplatform.common.util;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 import org.gelecekbilimde.scienceplatform.common.exception.FileReadException;
 
 import java.io.IOException;
@@ -9,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@Slf4j
 @UtilityClass
 public class FileUtil {
 

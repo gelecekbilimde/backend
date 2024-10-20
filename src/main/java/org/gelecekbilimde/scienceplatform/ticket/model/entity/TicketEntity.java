@@ -9,14 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.gelecekbilimde.scienceplatform.common.model.entity.BaseEntity;
+import org.gelecekbilimde.scienceplatform.ticket.model.enums.TicketCategory;
 import org.gelecekbilimde.scienceplatform.ticket.model.enums.TicketStatus;
-import org.gelecekbilimde.scienceplatform.ticket.model.enums.TicketSubject;
 
 @Entity
 @Getter
@@ -35,17 +34,18 @@ public class TicketEntity extends BaseEntity {
 	@Column(name = "user_id")
 	private String userId;
 
-	@Builder.Default
-	@Column(name = "subject")
+	@Column(name = "category")
 	@Enumerated(EnumType.STRING)
-	private TicketSubject subject = TicketSubject.OTHER;
+	private TicketCategory category;
+
+	@Column(name = "title")
+	private String title;
 
 	@Column(name = "description")
-	private String message;
+	private String description;
 
-	@Builder.Default
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
-	private TicketStatus status = TicketStatus.OPEN;
+	private TicketStatus status;
 
 }

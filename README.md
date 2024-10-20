@@ -4,7 +4,7 @@
 
 ## Project Documents
 
-For other information, you can check [Wiki](https://github.com/gelecekbilimde/gelecekbilimde-backend/wiki)
+For other information, you can check [Wiki](https://gelecekbilimde.atlassian.net/wiki/spaces/GBS/overview)
 Page.
 
 ---
@@ -57,3 +57,16 @@ The following command can be used to remove Docker Containers.
 > directory.
 > is required.
 
+---
+
+# Project Infrastructure
+
+## 🏛️ HexaLayered Architecture
+
+![](/documents/architecture/gb-architecture.png?raw=true)
+
+> **Reference: [HexaLayered Architecture](https://github.com/agitrubard/hexalayered-architecture)**
+
+## 📦 Package Architecture
+
+![](/documents/architecture/package-architecture-example.png?raw=true)

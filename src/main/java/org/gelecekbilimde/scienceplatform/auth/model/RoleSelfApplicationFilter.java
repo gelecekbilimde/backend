@@ -4,19 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.gelecekbilimde.scienceplatform.auth.model.entity.RoleApplicationEntity;
-import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleApplicationStatus;
-import org.gelecekbilimde.scienceplatform.common.model.BaseFilter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
-
-import java.util.Set;
 
 @Getter
 @Setter
 @Builder
-public class RoleSelfApplicationFilter implements BaseFilter {
+public class RoleSelfApplicationFilter extends RoleApplicationAbstractFilter {
 
-	private Set<RoleApplicationStatus> statuses;
 	private User user;
 
 	@Getter

@@ -43,15 +43,20 @@ class SecurityConfiguration {
 		httpSecurity.cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(customizer -> customizer
-				.requestMatchers(HttpMethod.GET, "/public/**").permitAll()
-				.requestMatchers("/api/v1/version", "/api/v1/auth/**", "/api/v1/category/**")
+				.requestMatchers(HttpMethod.GET, "/public/**")
 				.permitAll()
-				.requestMatchers(HttpMethod.GET, "/api/v1/users/*/followers", "/api/v1/users/*/followings")
+				.requestMatchers("/api/v1/auth/**")
+				.permitAll()
+				.requestMatchers("/api/v1/categories/summary")
+				.permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/v1/user/*/followers", "/api/v1/user/*/followings")
 				.permitAll()
 				.anyRequest()
-				.authenticated())
+				.authenticated()
+			)
 			.sessionManagement(customizer -> customizer
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			)
 			.addFilterBefore(bearerTokenAuthenticationFilter, BearerTokenAuthenticationFilter.class);
 
 		return httpSecurity.build();
@@ -71,4 +76,5 @@ class SecurityConfiguration {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 }

@@ -21,7 +21,7 @@ public class SuccessResponse<T> {
 	private final Boolean isSuccess = true;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private T content;
+	private T result;
 
 
 	public static SuccessResponse<Void> success() {
@@ -31,7 +31,7 @@ public class SuccessResponse<T> {
 
 	public static <T> SuccessResponse<T> success(final T content) {
 		return SuccessResponse.<T>builder()
-			.content(content)
+			.result(content)
 			.build();
 	}
 

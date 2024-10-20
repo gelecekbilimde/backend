@@ -51,7 +51,4 @@ public class CategoryEntity extends BaseEntity {
 	@JoinColumn(name = "parent_id", updatable = false, insertable = false)
 	private CategoryEntity parent;
 
-	public void increaseOrder() {
-		this.orderNumber++;
-	}
 }
