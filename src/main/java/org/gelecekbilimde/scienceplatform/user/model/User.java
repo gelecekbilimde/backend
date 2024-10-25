@@ -34,7 +34,7 @@ public class User extends BaseDomainModel {
 
 
 	public String getUsername() {
-		return username.toLowerCase();
+		return username != null ? username.toLowerCase() : null;
 	}
 
 
