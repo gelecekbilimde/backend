@@ -44,6 +44,12 @@ class UserAdapter implements UserReadPort, UserSavePort {
 
 
 	@Override
+	public boolean existsByUsername(String username) {
+		return userRepository.existsByUsername(username);
+	}
+
+
+	@Override
 	public User save(User user) {
 		final UserEntity userEntity = userToEntityMapper.map(user);
 		final UserEntity savedUserEntity = userRepository.save(userEntity);
