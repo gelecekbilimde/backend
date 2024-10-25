@@ -23,6 +23,7 @@ public class User extends BaseDomainModel {
 	private String password;
 	private String firstName;
 	private String lastName;
+	private String username;
 	private String avatarPath;
 	private String biography;
 	private LocalDate birthDate;
@@ -30,6 +31,11 @@ public class User extends BaseDomainModel {
 	private UserGender gender;
 	private UserStatus status;
 	private Role role;
+
+
+	public String getUsername() {
+		return username.toLowerCase();
+	}
 
 
 	public boolean isVerified() {
