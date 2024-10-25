@@ -16,7 +16,7 @@ class UsernameValidator implements ConstraintValidator<Username, String> {
 
 		String lowerCasedValue = value.toLowerCase();
 
-		if (value.startsWith(" ") || value.endsWith(" ")) {
+		if (!value.trim().equals(value)) {
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate("name must not start or end with whitespace")
 				.addConstraintViolation();
