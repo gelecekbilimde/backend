@@ -31,6 +31,7 @@ public class RegisterRequest {
 
 	@NotBlank
 	@Username
+	@Size(min = 3, max = 20)
 	private String username;
 
 	@NotBlank
