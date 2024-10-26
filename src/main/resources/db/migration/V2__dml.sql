@@ -277,7 +277,7 @@ values (0, null, 'Bilim', 'Bilim kategorisidir.', 'bilim', 'flask-conical',
 insert into gb_user (id, birth_date, email, gender, first_name, last_name, username, password,
                      status, role_id, created_by, created_at)
 values ('22afc9b4-807f-4eb2-b286-788631d1ed55', current_date, 'admin@gelecekbilimde.net',
-        'FEMALE', 'Test', 'Yönetici', '	administrator12',
+        'FEMALE', 'Test', 'Yönetici', 'administrator12',
         '$2a$10$atVE.cT5YpEOS7ZLSoVdk.QKVyYBCgvNhvQEuCcXbEMpohYIjbZDG', 'VERIFIED',
         'c147b5c2-87f7-4bb7-a165-368f639d8c3c', 'gelecekbilimde', current_timestamp);
 
