@@ -33,11 +33,6 @@ public class User extends BaseDomainModel {
 	private Role role;
 
 
-	public String getUsername() {
-		return username != null ? username.toLowerCase() : null;
-	}
-
-
 	public boolean isVerified() {
 		return this.status == UserStatus.VERIFIED;
 	}

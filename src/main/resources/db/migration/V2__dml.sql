@@ -277,27 +277,27 @@ values (0, null, 'Bilim', 'Bilim kategorisidir.', 'bilim', 'flask-conical',
 insert into gb_user (id, birth_date, email, gender, first_name, last_name, username, password,
                      status, role_id, created_by, created_at)
 values ('22afc9b4-807f-4eb2-b286-788631d1ed55', current_date, 'admin@gelecekbilimde.net',
-        'FEMALE', 'Test', 'Yönetici', 'yönetici12',
+        'FEMALE', 'Test', 'Yönetici', '	administrator12',
         '$2a$10$atVE.cT5YpEOS7ZLSoVdk.QKVyYBCgvNhvQEuCcXbEMpohYIjbZDG', 'VERIFIED',
         'c147b5c2-87f7-4bb7-a165-368f639d8c3c', 'gelecekbilimde', current_timestamp);
 
 insert into gb_user (id, birth_date, email, gender, first_name, last_name, username, password,
                      status, role_id, created_by, created_at)
 values ('99af408c-bec9-4cf2-a5ea-218b12b88a50', current_date, 'moderator@gelecekbilimde.net',
-        'FEMALE', 'Test', 'Moderatör', 'moderatör12',
+        'FEMALE', 'Test', 'Moderatör', 'moderator12',
         '$2a$10$atVE.cT5YpEOS7ZLSoVdk.QKVyYBCgvNhvQEuCcXbEMpohYIjbZDG', 'VERIFIED',
         '1ed82a25-d348-4576-b4e6-1f2a7c430ca7', 'gelecekbilimde', current_timestamp);
 
 insert into gb_user (id, birth_date, email, gender, first_name, last_name, username, password,
                      status, role_id, created_by, created_at)
 values ('fee95298-952d-4d1c-81dd-ae5a96b964e5', current_date, 'author@gelecekbilimde.net',
-        'MALE', 'Test', 'Yazar', 'yazar12',
+        'MALE', 'Test', 'Yazar', 'author12',
         '$2a$10$atVE.cT5YpEOS7ZLSoVdk.QKVyYBCgvNhvQEuCcXbEMpohYIjbZDG', 'VERIFIED',
         '4d98a76c-9841-4aea-b296-2f27aa610b6c', 'gelecekbilimde', current_timestamp);
 
 insert into gb_user (id, birth_date, email, gender, first_name, last_name, username, password,
                      status, role_id, created_by, created_at)
 values ('233d4054-e7b9-43ba-8b26-ca9254df78cd', current_date, 'user@gelecekbilimde.net',
-        'MALE', 'Test', 'Kullanıcı', 'kullanıcı12',
+        'MALE', 'Test', 'Kullanıcı', 'users12',
         '$2a$10$atVE.cT5YpEOS7ZLSoVdk.QKVyYBCgvNhvQEuCcXbEMpohYIjbZDG', 'VERIFIED',
         'e3a1a32d-fcd7-46f0-bb2b-201df6b2b808', 'gelecekbilimde', current_timestamp);

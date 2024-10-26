@@ -43,7 +43,7 @@ create table if not exists gb_user
 (
   id          varchar(36)  not null primary key,
   role_id     varchar(36)  not null,
-  email       varchar(255) not null,
+  email       varchar(255) not null unique,
   password    varchar(255) not null,
   first_name  varchar(25)  not null,
   last_name   varchar(25)  not null,

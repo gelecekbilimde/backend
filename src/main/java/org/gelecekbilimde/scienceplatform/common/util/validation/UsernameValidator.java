@@ -6,7 +6,7 @@ import org.springframework.util.StringUtils;
 
 class UsernameValidator implements ConstraintValidator<Username, String> {
 
-	private static final String USERNAME_REGEX = "^[a-zA-Z0-9]{3,20}$";
+	private static final String USERNAME_REGEX = "^[a-zA-Z0-9]$";
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -25,7 +25,7 @@ class UsernameValidator implements ConstraintValidator<Username, String> {
 
 		if (!lowerCasedValue.matches(USERNAME_REGEX)) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate("Username must be 3-20 characters long and alphanumeric")
+			context.buildConstraintViolationWithTemplate("Username must be alphanumeric")
 				.addConstraintViolation();
 			return false;
 		}
