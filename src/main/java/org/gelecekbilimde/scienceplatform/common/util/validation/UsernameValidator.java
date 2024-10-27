@@ -25,14 +25,14 @@ class UsernameValidator implements ConstraintValidator<Username, String> {
 
 		if (value.length() <= 3 || value.length() >= 20) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate("Username must be between 3 and 20 characters long")
+			context.buildConstraintViolationWithTemplate("must be between 3 and 20 characters long")
 				.addConstraintViolation();
 			return false;
 		}
 
 		if (!lowerCasedValue.matches(USERNAME_REGEX)) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate("Username must be alphanumeric")
+			context.buildConstraintViolationWithTemplate("must be alphanumeric")
 				.addConstraintViolation();
 			return false;
 		}
