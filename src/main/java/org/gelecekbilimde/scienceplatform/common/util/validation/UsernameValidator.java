@@ -6,7 +6,7 @@ import org.springframework.util.StringUtils;
 
 class UsernameValidator implements ConstraintValidator<Username, String> {
 
-	private static final String USERNAME_REGEX = "^[a-zA-Z0-9]$";
+	private static final String USERNAME_REGEX = "^[a-zA-Z0-9]{3,20}$";
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -19,6 +19,13 @@ class UsernameValidator implements ConstraintValidator<Username, String> {
 		if (!value.trim().equals(value)) {
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate("name must not start or end with whitespace")
+				.addConstraintViolation();
+			return false;
+		}
+
+		if (value.length() <= 3 || value.length() >= 20) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate("Username must be between 3 and 20 characters long")
 				.addConstraintViolation();
 			return false;
 		}
