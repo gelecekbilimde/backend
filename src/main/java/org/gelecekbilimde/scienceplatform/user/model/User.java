@@ -23,6 +23,7 @@ public class User extends BaseDomainModel {
 	private String password;
 	private String firstName;
 	private String lastName;
+	private String username;
 	private String avatarPath;
 	private String biography;
 	private LocalDate birthDate;
