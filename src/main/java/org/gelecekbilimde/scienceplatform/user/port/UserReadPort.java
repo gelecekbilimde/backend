@@ -12,4 +12,5 @@ public interface UserReadPort {
 
 	boolean existsByEmail(String email);
 
+	boolean existsByUsername(String username);
 }

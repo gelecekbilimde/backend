@@ -12,6 +12,7 @@ import org.gelecekbilimde.scienceplatform.auth.model.request.RegisterRequest;
 import org.gelecekbilimde.scienceplatform.auth.model.request.VerifyRequest;
 import org.gelecekbilimde.scienceplatform.auth.port.RoleReadPort;
 import org.gelecekbilimde.scienceplatform.auth.service.RegistrationService;
+import org.gelecekbilimde.scienceplatform.user.exception.UsernameAlreadyTakenException;
 import org.gelecekbilimde.scienceplatform.user.model.User;
 import org.gelecekbilimde.scienceplatform.user.model.UserVerification;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserStatus;
@@ -48,9 +49,14 @@ class RegistrationServiceImpl implements RegistrationService {
 		Role role = roleReadPort.findByName(RoleName.USER)
 			.orElseThrow(() -> new RoleNotFoundByNameException(RoleName.USER.name()));
 
+		if (userReadPort.existsByUsername(request.getUsername())) {
+			throw new UsernameAlreadyTakenException(request.getUsername());
+		}
+
 		User user = User.builder()
 			.firstName(request.getFirstname())
 			.lastName(request.getLastname())
+			.username(request.getUsername().toLowerCase())
 			.email(request.getEmail())
 			.birthDate(request.getBirthDate())
 			.biography(request.getBiography())

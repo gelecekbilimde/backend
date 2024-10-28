@@ -56,6 +56,9 @@ public class UserEntity extends BaseEntity {
 	@Column(name = "last_name")
 	private String lastName;
 
+	@Column(name = "username")
+	private String username;
+
 	@Column(name = "avatar_path")
 	private String avatar;
 
