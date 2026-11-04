@@ -39,3 +39,7 @@ build/
 /src/main/resources/serviceAccountKey.json
 
 /docker
+
+# Yerel ortam değişkenleri ve anahtarlar
+.env
+/src/main/resources/certs/

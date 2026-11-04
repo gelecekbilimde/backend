@@ -25,8 +25,12 @@ services:
     restart: on-failure
     ports:
       - "9090:9090"
+    env_file:
+      - path: .env
+        required: false
     environment:
-      - DATABASE_IP=host.docker.internal
+      - DATABASE_IP=database
+      - DATABASE_PORT=5432
     depends_on:
       - database
     networks:

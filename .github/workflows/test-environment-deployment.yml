@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  TEST_ENVIRONMENT_DEPLOYMENT_BRANCH: main
+
 jobs:
   build:
     runs-on: ubuntu-latest

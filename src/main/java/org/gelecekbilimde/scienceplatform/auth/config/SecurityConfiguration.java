@@ -2,6 +2,7 @@ package org.gelecekbilimde.scienceplatform.auth.config;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.filter.CustomBearerTokenAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,6 +31,9 @@ import java.util.List;
 @EnableMethodSecurity
 @EnableGlobalAuthentication
 class SecurityConfiguration {
+
+	@Value("${application.cors.allowed-origins}")
+	private List<String> allowedOrigins;
 
 	@Bean
 	protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
@@ -64,7 +68,7 @@ class SecurityConfiguration {
 
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of("*"));
+		configuration.setAllowedOrigins(allowedOrigins);
 		configuration.setAllowedMethods(List.of("*"));
 		configuration.setAllowedHeaders(List.of("*"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
