@@ -20,8 +20,8 @@ spring:
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:noreplygelecekbilimde@gmail.com}
-    password: ${MAIL_PASSWORD:ffctoaojqnivhkbd}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
     properties:
       mail:
         transport:
@@ -56,6 +56,8 @@ file:
 application:
   front-end:
     url: ${FRONT_END_URL:http://localhost:3000}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:2000}
   security:
     jwt:
       private-key: ${PRIVATE_KEY_PATH:src/main/resources/certs/private.key}
@@ -68,10 +70,10 @@ application:
 
 firebase:
   service-account:
-    path: ${FIREBASE_SERVICE_ACCOUNT_FILE:src/main/resources/serviceAccountKey.json}
+    path: ${FIREBASE_SERVICE_ACCOUNT_FILE:}
     database-url: ${FIREBASE_DATABASE_URL:https://push-notification-projec-86e67-default-rtdb.firebaseio.com}
 
 youtubeDataApi:
   playlistId: ${YOUTUBE_DATA_API_PLAYLIST_ID:UU03cpKIZShIWoSBhfVE5bog}
-  key: ${YOUTUBE_DATA_API_KEY:AIzaSyCdbZ_yQQbk6NpDVpObUlOvb7g-bv3Tgtw}
+  key: ${YOUTUBE_DATA_API_KEY:}
   url: ${YOUTUBE_DATA_API_URL:https://www.googleapis.com/youtube/v3}

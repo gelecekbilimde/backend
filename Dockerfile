@@ -9,8 +9,6 @@ RUN mvn clean install
 
 FROM amazoncorretto:17.0.12-al2023
 
-COPY --from=build app/src/main/resources/serviceAccountKey.json /src/main/resources/serviceAccountKey.json
-
 COPY --from=build app/target/*.jar /app/gelecekbilimde-be.jar
 
 EXPOSE 9090

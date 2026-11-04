@@ -40,7 +40,7 @@ class PostController {
 	}
 
 	@PutMapping("/{id}/like/toggle")
-	@PreAuthorize("hasAuthority('post:create')")
+	@PreAuthorize("hasAuthority('post:like')")
 	SuccessResponse<PostLikeResponse> toggleLikeOfPost(@PathVariable String id) {
 		PostLike postLike = postLikeToggleService.toggleLikeOfPost(id);
 		PostLikeResponse postLikeResponse = postLikeToResponseMapper.map(postLike);
