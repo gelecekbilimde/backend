@@ -4,7 +4,7 @@ import org.gelecekbilimde.scienceplatform.common.exception.AbstractAuthException
 
 import java.io.Serial;
 
-public class UserPasswordNotValidException extends AbstractAuthException {
+public final class UserPasswordNotValidException extends AbstractAuthException {
 
 	@Serial
 	private static final long serialVersionUID = 359664997679732461L;

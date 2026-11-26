@@ -56,6 +56,9 @@ public class UserEntity extends BaseEntity {
 	@Column(name = "last_name")
 	private String lastName;
 
+	@Column(name = "username")
+	private String username;
+
 	@Column(name = "avatar_path")
 	private String avatar;
 
@@ -99,15 +102,5 @@ public class UserEntity extends BaseEntity {
 
 	@OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
 	private List<PostEntity> postEntity;
-
-
-	public void verify() {
-		this.status = UserStatus.VERIFIED;
-	}
-
-
-	public boolean isVerified() {
-		return this.status == UserStatus.VERIFIED;
-	}
 
 }
