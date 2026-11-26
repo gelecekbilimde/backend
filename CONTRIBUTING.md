@@ -10,7 +10,7 @@ Thank you for your interest in contributing to the Gelecek Bilimde project! We a
 
 2. **Create a New Branch**
     - Create a branch for your contribution.
-    - Ensure your feature branch is associated with the corresponding GitHub issue from the 'Development' section in each issue page.
+    - Ensure your feature branch is associated with the corresponding GitHub issue from our Jira page at gelecekbilimde.atlassian.net/jira
 
 3. **Make Changes**
     - Implement your changes in the branch you created.
@@ -30,27 +30,61 @@ Thank you for your interest in contributing to the Gelecek Bilimde project! We a
 7. **Review and Feedback**
     - Once your PR is submitted, project maintainers will review it and provide feedback.
     - Be responsive to feedback and make necessary changes.
+  
+For additional information, our documents can be found on our Confluence page. If you're interested in leading development on an issue and becoming part of our volunteer IT team, you can apply via gelecekbilimde.net/basvur. For feature requests, feel free to mention them in the discussions section.
 
 ## Development Standards
 
-- **Branch Linkage**: Link your feature branch to the corresponding GitHub issue.
-- **Protected Main Branch**: The main branch is protected.
-- **PR Requirements**:
-    - PR should be linked to the relevant issue within the GitHub Project.
-    - Only one code owner's approval is needed for merging feature branches.
-    - PR should pass build and necessary tests before merging.
-    - Resolve comments within the PR by the commenter.
-    - PR should be concise and address one specific issue or feature.
-- **Security**: Avoid including secret or credential information in your code.
-- **Coding Standards**: Ensure your code complies with existing coding standards; do not introduce new standards without justification.
-- **Branch Management**: Delete the branch after merging.
-- **API Documentation**: Share the relevant Postman collection for any endpoint you’ve developed.
-- **Testing**: Add unit tests and Javadocs (or relevant documentation) for each method you’ve implemented.
-- **Bug Reporting**: If your development includes known bugs, explain them in detail in the related discussion page so someone else can solve them later. You can also report bugs with screenshots and code snippets.
+### Branch Naming Conventions:
+
+Use the following format for branch names:
+
+* bugfix/{jira-issue-number}/{optional-description}
+* feature/{jira-issue-number}/{optional-description}
+* refactor/{jira-issue-number}/{optional-description}
+* documentation/{jira-issue-number}/{optional-description}
+Example: feature/GBS-1/add-feature-to-handle-user-authentication
+
+### Pull Request Naming Conventions:
+
+Use the following format for pull request titles:
+
+* {jira-issue-number} | {header-for-summary-of-development}
+Example: GBS-1 | Add feature to handle user authentication
+
+### Branch Linkage: 
+* Link your feature branch to the corresponding GitHub issue.
+* Protected Main Branch: The main branch is protected.
+
+### PR Requirements:
+
+* PR should be linked to the relevant issue within the GitHub Project.
+* Only one code owner's approval is needed for merging feature branches.
+* PR should pass build and necessary tests before merging.
+* Resolve comments within the PR by the commenter.
+* PR should be concise and address one specific issue or feature.
+
+### Security: 
+* Avoid including secret or credential information in your code.
+
+### Coding Standards: 
+* Ensure your code complies with existing coding standards; do not introduce new standards without justification.
+
+### Branch Management:
+* Delete the branch after merging.
+
+### API Documentation: 
+* Share the relevant Postman collection for any endpoint you’ve developed.
+
+### Testing: 
+* Add unit tests and Javadocs (or relevant documentation) for each method you’ve implemented.
+
+### Bug Reporting:
+* If your development includes known bugs, explain them in detail in the related discussion page. You can also report bugs with screenshots and code snippets.
 
 ## Code Review
 
-Code reviews are a crucial part of our development process to ensure code quality and maintainability. Here's how you can contribute effectively during code reviews:
+* Code reviews are a crucial part of our development process to ensure code quality and maintainability. Here's how you can contribute effectively during code reviews:
 
 ### Review Guidelines
 
@@ -194,9 +228,6 @@ To maintain a consistent commit history, start your commit messages with a keywo
 - `#2 | imp: Added timestamp to API responses`
 - `#3 | fix: Resolved permission error when editing user's comment`
 
- ### Pull Request Title Standard
-- For pull requests, include the issue number and a brief description of the change:
-- Use #<issue_number> | prefix followed by the commit type and a concise description.
 
 ## API Response Examples
 

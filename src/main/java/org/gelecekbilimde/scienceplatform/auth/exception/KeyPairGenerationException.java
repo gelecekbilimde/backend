@@ -4,10 +4,10 @@ import org.gelecekbilimde.scienceplatform.common.exception.AbstractServerExcepti
 
 import java.io.Serial;
 
-public class KeyPairGenerationException extends AbstractServerException {
+public final class KeyPairGenerationException extends AbstractServerException {
 
 	@Serial
-	private static final long serialVersionUID = 7666167175325870801L;
+	private static final long serialVersionUID = 6533777004102054133L;
 
 	public KeyPairGenerationException(Throwable cause) {
 		super("error occurred while generating key pair", cause);

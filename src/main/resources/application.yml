@@ -1,8 +1,11 @@
+server:
+  port: 9090
+
 spring:
   datasource:
-    url: jdbc:postgresql://${DATABASE_IP:localhost}:${DATABASE_PORT:5433}/postgres
-    username: ${DATABASE_USER:postgres}
-    password: ${DATABASE_PASSWORD:postgres}
+    url: jdbc:postgresql://${DATABASE_IP:localhost}:${DATABASE_PORT:5433}/gelecekbilimde
+    username: ${DATABASE_USER:gelecekbilimde}
+    password: ${DATABASE_PASSWORD:gelecekbilimdepass}
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
@@ -18,7 +21,7 @@ spring:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
     username: ${MAIL_USERNAME:noreplygelecekbilimde@gmail.com}
-    password: ${MAIL_PASSWORD:REDACTED}
+    password: ${MAIL_PASSWORD:}
     properties:
       mail:
         transport:
@@ -70,5 +73,5 @@ firebase:
 
 youtubeDataApi:
   playlistId: ${YOUTUBE_DATA_API_PLAYLIST_ID:UU03cpKIZShIWoSBhfVE5bog}
-  key: ${YOUTUBE_DATA_API_KEY:REDACTED}
+  key: ${YOUTUBE_DATA_API_KEY:}
   url: ${YOUTUBE_DATA_API_URL:https://www.googleapis.com/youtube/v3}

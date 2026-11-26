@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.gelecekbilimde.scienceplatform.common.util.validation.Username;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserDegree;
 import org.gelecekbilimde.scienceplatform.user.model.enums.UserGender;
 
@@ -27,6 +28,10 @@ public class RegisterRequest {
 	@NotBlank
 	@Size(min = 2, max = 25)
 	private String lastname;
+
+	@NotBlank
+	@Username
+	private String username;
 
 	@NotBlank
 	@Email

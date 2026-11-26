@@ -1,19 +1,23 @@
 package org.gelecekbilimde.scienceplatform.post.model.response;
 
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class CategoryResponse {
 	private Long id;
 	private String name;
-	private Long order;
+	private String description;
+	private Long orderNumber;
 	private String slug;
 	private String icon;
-
 	private Long parentId;
+	private String createdBy;
+	private LocalDateTime createdAt;
+	private String updatedBy;
+	private LocalDateTime updatedAt;
 }

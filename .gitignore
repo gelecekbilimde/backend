@@ -37,5 +37,15 @@ build/
 
 /src/main/resources/dev.properties
 /src/main/resources/serviceAccountKey.json
+/src/main/resources/certs/private.key
+
+# Environment & secret files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
 
 /docker

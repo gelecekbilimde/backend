@@ -1,5 +1,6 @@
 package org.gelecekbilimde.scienceplatform.auth.model;
 
+import org.gelecekbilimde.scienceplatform.auth.model.enums.RoleName;
 import org.gelecekbilimde.scienceplatform.auth.model.enums.TokenClaims;
 import org.gelecekbilimde.scienceplatform.auth.util.BeanScope;
 import org.springframework.context.annotation.Scope;
@@ -15,7 +16,14 @@ import java.util.Set;
 public class Identity {
 
 	public String getUserId() {
-		return this.getJwt().getClaim("userId");
+		return this.getJwt().getClaim(TokenClaims.USER_ID.getValue());
+	}
+
+	public boolean isAdmin() {
+		final RoleName roleName = RoleName.valueOf(
+			this.getJwt().getClaim(TokenClaims.USER_ROLE.getValue())
+		);
+		return RoleName.ADMIN == roleName;
 	}
 
 	public boolean hasPermission(String requiredPermission) {

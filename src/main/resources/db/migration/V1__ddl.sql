@@ -16,17 +16,15 @@ create table if not exists gb_permission
 create table if not exists gb_role
 (
   id          varchar(36)  not null primary key,
-  description varchar(255),
-  is_default  boolean default false,
   name        varchar(55)  not null,
-  is_hidden   boolean,
-  status      varchar(25),
+  description varchar(255) not null,
+  status      varchar(25)  not null,
   created_by  varchar(255) not null,
   created_at  timestamp(0) not null,
   updated_by  varchar(255),
   updated_at  timestamp(0),
   constraint u__gb_role__name unique (name),
-  constraint c__gb_role__status check ( status in ('ACTIVE', 'PASSIVE'))
+  constraint c__gb_role__status check (status in ('ACTIVE', 'PASSIVE'))
 );
 
 
@@ -45,10 +43,11 @@ create table if not exists gb_user
 (
   id          varchar(36)  not null primary key,
   role_id     varchar(36)  not null,
-  email       varchar(255) not null,
+  email       varchar(255) not null unique,
   password    varchar(255) not null,
   first_name  varchar(25)  not null,
   last_name   varchar(25)  not null,
+  username    varchar(20)  not null unique,
   avatar_path varchar(255),
   biography   text,
   birth_date  date,
@@ -66,7 +65,7 @@ create table if not exists gb_user
 
 create table if not exists gb_user_verification
 (
-  id varchar(36) not null primary key,
+  id         varchar(36)  not null primary key,
   user_id    varchar(36)  not null,
   status     varchar(25)  not null,
   created_by varchar(255) not null,
@@ -79,9 +78,15 @@ create table if not exists gb_user_verification
 create table if not exists gb_user_follow
 (
   id               bigint generated always as identity primary key,
-  follower_user_id varchar(36) not null,
-  followed_user_id varchar(36) not null,
+  follower_user_id
+                   varchar(36)  not null,
+  followed_user_id varchar(36)  not null,
+  created_by       varchar(255) not null,
+  created_at       timestamp(0) not null,
+  updated_by       varchar(255),
+  updated_at       timestamp(0),
   constraint u__gb_user_follow__follower_user_id__followed_user_id unique (follower_user_id, followed_user_id),
+  constraint c__gb_user_follow__follower_user_id__followed_user_id check (follower_user_id != followed_user_id),
   constraint fk__gb_user_follow__follower_user_id foreign key (follower_user_id) references gb_user (id),
   constraint fk__gb_user_follow__followed_user_id foreign key (followed_user_id) references gb_user (id)
 );
@@ -106,13 +111,16 @@ create table if not exists gb_category
   id           bigint generated always as identity primary key,
   order_number integer      not null,
   parent_id    bigint,
-  name         varchar(36)  not null,
-  slug         varchar(36)  not null,
-  icon         varchar(36),
+  name         varchar(50)  not null,
+  description  varchar(255) not null,
+  slug         varchar(50)  not null,
+  icon         varchar(50),
   created_by   varchar(255) not null,
   created_at   timestamp(0) not null,
   updated_by   varchar(255),
-  updated_at   timestamp(0)
+  updated_at   timestamp(0),
+  constraint u__gb_category__name unique (name),
+  constraint u__gb_category__slug unique (slug)
 );
 
 create table if not exists gb_media_group
@@ -255,26 +263,25 @@ create table if not exists gb_invalid_token
 );
 
 
-create table if not exists gb_setting
+create table if not exists gb_parameter
 (
   id         bigint generated always as identity primary key,
-  group_name varchar(100) not null,
   name       varchar(100) not null,
   definition text,
   is_hidden  boolean,
   created_by varchar(255) not null,
   created_at timestamp(0) not null,
   updated_by varchar(255),
-  updated_at timestamp(0),
-  constraint u__gb_setting__name__group_name unique (group_name, name)
+  updated_at timestamp(0)
 );
 
 
 create table if not exists gb_ticket
 (
-  id          varchar(36)  not null primary key,
+  id       bigint generated always as identity primary key,
   user_id     varchar(36)  not null,
-  subject     varchar(255) not null,
+  category varchar(255) not null,
+  title varchar(512) not null,
   description text         not null,
   status      varchar(50)  not null,
   created_by  varchar(255) not null,
@@ -282,21 +289,39 @@ create table if not exists gb_ticket
   updated_by  varchar(255),
   updated_at  timestamp(0),
   constraint fk__gb_ticket__user_id foreign key (user_id) references gb_user (id),
-  constraint c__gb_ticket__subject check ( status in ('TECHNICAL', 'POST', 'YOUR_QUESTION_REQUESTS', 'FEEDBACK',
-                                                      'COLLABORATION', 'OTHER')),
+  constraint c__gb_ticket__category check ( category in ('TECHNICAL', 'POST', 'YOUR_QUESTION_REQUESTS', 'FEEDBACK',
+                                                         'COLLABORATION', 'OTHER')),
   constraint c__gb_ticket__status check ( status in ('OPEN', 'IN_PROGRESS', 'ON_HOLD', 'CLOSED',
                                                      'REOPENED', 'CANCELED', 'RESOLVED'))
 );
 
 
-create table if not exists gb_ticket_message
+create table if not exists gb_ticket_comment
 (
   id         bigint generated always as identity primary key,
-  ticket_id  varchar(36)  not null,
+  ticket_id bigint not null,
   user_id    varchar(36)  not null,
-  message    text,
+  content    text,
   created_by varchar(255) not null,
   created_at timestamp(0) not null,
   updated_by varchar(255),
-  updated_at timestamp(0)
+  updated_at timestamp(0),
+  constraint fk__gb_ticket_message__ticket_id foreign key (ticket_id) references gb_ticket (id),
+  constraint fk__gb_ticket_message__user_id foreign key (user_id) references gb_user (id)
+);
+
+
+create table if not exists gb_role_application
+(
+  id         varchar(36)  not null primary key,
+  user_id    varchar(36)  not null,
+  role_id    varchar(36)  not null,
+  status     varchar(10)  not null,
+  created_by varchar(255) not null,
+  created_at timestamp(0) not null,
+  updated_by varchar(255),
+  updated_at timestamp(0),
+  constraint fk__gb_role_application__user_id foreign key (user_id) references gb_user (id),
+  constraint fk__gb_role_application__role_id foreign key (role_id) references gb_role (id),
+  constraint c__gb_role_application__status check ( status in ('IN_REVIEW', 'CANCELLED', 'APPROVED', 'REJECTED'))
 );

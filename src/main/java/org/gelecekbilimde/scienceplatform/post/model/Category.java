@@ -14,10 +14,15 @@ public class Category extends BaseDomainModel {
 
 	private Long id;
 	private String name;
-	private Integer order;
+	private String description;
+	private Integer orderNumber;
 	private String slug;
 	private String icon;
-
 	private Long parentId;
+
+
+	public void increaseOrderNumber() {
+		this.orderNumber++;
+	}
 
 }

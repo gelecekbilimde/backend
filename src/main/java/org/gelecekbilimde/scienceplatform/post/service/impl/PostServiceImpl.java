@@ -2,8 +2,9 @@ package org.gelecekbilimde.scienceplatform.post.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gelecekbilimde.scienceplatform.auth.model.Identity;
+import org.gelecekbilimde.scienceplatform.common.model.BasePage;
 import org.gelecekbilimde.scienceplatform.common.model.BaseSpecification;
-import org.gelecekbilimde.scienceplatform.common.model.Paging;
+import org.gelecekbilimde.scienceplatform.media.util.SlugUtil;
 import org.gelecekbilimde.scienceplatform.post.model.Post;
 import org.gelecekbilimde.scienceplatform.post.model.entity.PostEntity;
 import org.gelecekbilimde.scienceplatform.post.model.enums.Process;
@@ -16,7 +17,6 @@ import org.gelecekbilimde.scienceplatform.post.repository.PostRepository;
 import org.gelecekbilimde.scienceplatform.post.service.PostMediaService;
 import org.gelecekbilimde.scienceplatform.post.service.PostProcessService;
 import org.gelecekbilimde.scienceplatform.post.service.PostService;
-import org.gelecekbilimde.scienceplatform.post.util.PostUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ class PostServiceImpl implements PostService {
 		}
 
 		postCreateRequest.setLastProcess(Process.CREATE);
-		postCreateRequest.setSlug(PostUtil.slugging(postCreateRequest.getHeader()));
+		postCreateRequest.setSlug(SlugUtil.slugging(postCreateRequest.getHeader()));
 
 		final PostEntity postEntity = createRequestToEntityMapper.map(postCreateRequest);
 		postEntity.setUserId(identity.getUserId());
@@ -73,25 +73,26 @@ class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Paging<Post> getPostListAdmin(AdminPostListRequest listRequest) {
-		if (listRequest.getIsActive() == null) {
+	public BasePage<Post> getPostListAdmin(AdminPostListRequest listRequest) {
+		if (listRequest.getFilter() == null || listRequest.getFilter().getIsActive() == null) {
 			return this.getPostListForAdmin(listRequest);
 		}
 		return this.getFilteredPostListForAdmin(listRequest);
 	}
 
-	private Paging<Post> getPostListForAdmin(AdminPostListRequest listRequest) {
-		Page<PostEntity> postEntities = postRepository.findAll(listRequest.toPageable());
+	private BasePage<Post> getPostListForAdmin(AdminPostListRequest listRequest) {
+		Page<PostEntity> postEntities = postRepository.findAll(listRequest.getPageable().toPageable());
 		List<Post> posts = postEntityToPostMapper.map(postEntities.getContent());
-		return Paging.of(postEntities, posts);
+		return BasePage.of(postEntities, posts);
 	}
 
-	private Paging<Post> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
-		final Map<String, Object> filter = Map.of("active", listRequest.getIsActive());
+	private BasePage<Post> getFilteredPostListForAdmin(AdminPostListRequest listRequest) {
+		Boolean isActive = listRequest.getFilter().getIsActive();
+		final Map<String, Object> filter = Map.of("active", isActive);
 		final Specification<PostEntity> specification = BaseSpecification.<PostEntity>builder().and(filter);
-		final Page<PostEntity> postEntities = postRepository.findAll(specification, listRequest.toPageable());
+		final Page<PostEntity> postEntities = postRepository.findAll(specification, listRequest.getPageable().toPageable());
 		final List<Post> posts = postEntityToPostMapper.map(postEntities.getContent());
-		return Paging.of(postEntities, posts);
+		return BasePage.of(postEntities, posts);
 	}
 
 }

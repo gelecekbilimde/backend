@@ -1,9 +1,9 @@
 package org.gelecekbilimde.scienceplatform.common.model;
 
-public class PagingBuilder extends TestDataBuilder<Paging> {
+public class PagingBuilder extends TestDataBuilder<BasePage> {
 
 	public PagingBuilder() {
-		super(Paging.class);
+		super(BasePage.class);
 	}
 
 	public PagingBuilder withValidValues() {
